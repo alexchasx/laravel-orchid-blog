@@ -20,6 +20,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'avatar',
+        'active',
+        'email_verified_at',
         'password',
     ];
 
@@ -41,4 +44,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class)->orderBy('created_at');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->orderBy('created_at');
+        // return $this->morphMany(Comment::class, 'target');
+    }
 }

@@ -17,13 +17,13 @@ class ArticleFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => 1,
-            'category_id' => 1,
+            'user_id' => $this->faker->numberBetween(1, 16),
+            'category_id' => $this->faker->numberBetween(1, 8),
             'title' => $this->faker->text(20),
             'description' => $this->faker->text(50),
-            'content' => $this->faker->text(),
-            'image' => $this->faker->image('articles'),
-            'viewed' => $this->faker->numberBetween(1, 500000),
+            'content' => $this->faker->text(1000),
+            'image' => $this->faker->image('public/storage/articles', 640, 520, null, false),
+            'viewed' => $this->faker->numberBetween(1, 10000),
             'keywords' => $this->faker->text(50),
             'meta_desc' => $this->faker->text(50),
             'published' => $this->faker->boolean(),

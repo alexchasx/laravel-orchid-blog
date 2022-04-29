@@ -41,7 +41,7 @@ class Article extends Model
      */
     public function category()
     {
-        return $this->belongsTo(Category::class, 'category_id');
+        return $this->belongsTo(Category::class);
     }
 
     /**
@@ -51,17 +51,18 @@ class Article extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 
     /**
      * Возращает все комментарии статьи.
      *
-     * @return MorphMany
+     * @return hasMany
      */
     public function comments()
     {
-        return $this->morphMany(Comment::class, 'target');
+        return $this->hasMany(Comment::class)->orderBy('created_at');
+        // return $this->morphMany(Comment::class, 'target');
     }
 
     /**

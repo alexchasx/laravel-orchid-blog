@@ -14,15 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('articles', function (Blueprint $table) {
-            $table->id()->from(1001);
+            $table->id();
             $table->timestamps();
 
             $table->string('title');
             $table->text('description')->nullable();
             $table->text('content');
 
-            $table->foreignId('category_id')->constrained('categories');
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->text('image')->nullable();
             $table->integer('viewed')->nullable(); // кол-во просмотров
@@ -31,7 +31,8 @@ return new class extends Migration
 
             $table->boolean('published')->default(true);
             $table->timestamp('published_at')->nullable();
-            $table->softDeletes();
+
+            // $table->softDeletes(); // мягкое удаление
         });
     }
 
