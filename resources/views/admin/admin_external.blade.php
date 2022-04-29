@@ -16,7 +16,8 @@
           rel='stylesheet' type='text/css'>
     <!-- //font -->
     <!-- css -->
-    <link rel="stylesheet" href="{{ asset('GoEasyOn/css/style.css') }}" type="text/css" media="all"/>
+    <link rel="stylesheet" href="{{ asset('GoEasyOn/css/style.css') }}" type="text/css"
+          media="all"/>
     <link rel="stylesheet" href="{{ asset('GoEasyOn/css/component.css') }}" type="text/css"
           media="all"/>
     <!--// css -->
@@ -66,7 +67,9 @@
                                     </a>
                                 </li>
 
+
                             @else
+
                                 @if (isAdmin())
                                     <li class="m_nav_item" id="moble_nav_item_6">
                                         <a href="{{ route('adminIndex') }}"
@@ -97,38 +100,7 @@
         </div>
     </div>
 
-    @unless (empty($articles))
-        <div class="large-header" style="height: 350px;">
-            {{--<canvas id="demo-canvas"></canvas>--}}
-            <h1 class="main-title">
-                <a class="link link--takiri" href="#iakor">
-                    BeOnTopic
-                    <span class="wow fadeInUp animated animated" data-wow-delay=".5s">
-                        Будь в теме! (&copy;)
-                    </span>
-                </a>
-            </h1>
-
-        </div>
-    @endunless
-
 </div>
-{{--@unless (empty($errors->all()))--}}
-
-    {{--<div class="alert alert-danger">--}}
-        {{--<ul>--}}
-
-            {{--@foreach($errors->all() as $error)--}}
-                {{--<li>{{ $error }}</li>--}}
-            {{--@endforeach--}}
-
-        {{--</ul>--}}
-    {{--</div>--}}
-
-{{--@endunless--}}
-
-<a name="iakor" ></a>
-<div class="wrap">
 
 @yield('content')
 
@@ -136,13 +108,12 @@
 
     <!-- //blog -->
     <!--//end-inner-content-->
-    <div class="empty"></div>
-</div>
+
     <!--copy-right-->
     <div class="copy">
         <p class="wow fadeInUp animated animated" data-wow-delay=".5s">
             <a href="{{ route('contact') }}">© {{ config('app.name') }}</a>, 2017
-            @if (date('Y', time()) > 2018)
+            @if (date('Y', time()) > 2017)
                 - {!! date('Y', time()) !!}
             @endif
             .
@@ -166,8 +137,7 @@
     <script src="{{ asset('GoEasyOn/js/jquery-2.1.4.min.js') }}"></script>
     <script src="{{ asset('GoEasyOn/js/modernizr.custom.js') }}"></script>
     <script type="text/javascript" src="{{ asset('GoEasyOn/js/menu.js') }}"></script>
-    <script type="text/javascript"
-            src="{{ asset('GoEasyOn/js/jquery.magnific-popup.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('GoEasyOn/js/jquery.magnific-popup.js') }}"></script>
     <link href="{{ asset('GoEasyOn/css/magnific-popup.css') }}" rel="stylesheet" type="text/css">
     <script>
         $(document).ready(function () {
@@ -240,12 +210,14 @@
     <!--start-smooth-scrolling-->
     <script type="text/javascript">
         $(document).ready(function () {
+            /*
             var defaults = {
                   containerID: 'toTop', // fading element id
                 containerHoverID: 'toTopHover', // fading element hover id
                 scrollSpeed:1000,
                 easingType: 'linear'
              };
+            */
 
             $().UItoTop({easingType: 'easeOutQuart'});
 
@@ -253,7 +225,6 @@
     </script>
     <!-- for bootstrap working -->
     <script src="{{ asset('GoEasyOn/js/bootstrap.js') }}"></script>
-    <script src="{{ asset('js/hidden_screen.js') }}"></script>
     <!-- //for bootstrap working -->
     <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
     <script src="/vendor/unisharp/laravel-ckeditor/adapters/jquery.js"></script>
