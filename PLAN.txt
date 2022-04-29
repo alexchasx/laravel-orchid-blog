@@ -1,0 +1,7 @@
+Сущности:
+
+AdminUser
+Category
+Article
+Comment
+Contact
