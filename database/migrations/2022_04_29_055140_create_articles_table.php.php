@@ -21,11 +21,13 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('content');
 
-            $table->foreignId('category_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete()
+                ->cascadeOnUpdate();
 
             $table->text('image')->nullable();
-            $table->integer('viewed')->nullable(); // кол-во просмотров
+            $table->integer('viewed')->nullable()->comment('Кол-во просмотров');
             $table->string('keywords')->nullable();
             $table->string('meta_desc')->nullable();
 

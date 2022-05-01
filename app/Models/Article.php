@@ -10,11 +10,11 @@ class Article extends Model
     use HasFactory;
 
     public $fillable = [
-        'user_id',
-        'category_id',
         'title',
         'description',
         'content',
+        'user_id',
+        'category_id',
         'image',
         'viewed',
         'keywords',
@@ -30,7 +30,6 @@ class Article extends Model
     protected $dates = [
         'created_at',
         'updated_at',
-        'deleted_at',
         'published_at',
     ];
 
@@ -80,23 +79,23 @@ class Article extends Model
      *
      * @return BelongsToMany
      */
-    // public function tags()
-    // {
-    //     return $this->belongsToMany(
-    //         Tag::class,
-    //         ArticleTag::TABLE_NAME/*,
-    //         'article_id',
-    //         'tag_id'*/
-    //     );
-    // }
+    public function tags()
+    {
+        return $this->belongsToMany(
+            Tag::class,
+            'article_tags'/*,
+            'article_id',
+            'tag_id'*/
+        );
+    }
 
     /**
      * Возращает все комментарии пользователя.
      *
      * @return HasMany
      */
-    // public function articleTags()
-    // {
-    //     return $this->hasMany(ArticleTag::class, 'article_id');
-    // }
+    public function articleTags()
+    {
+        return $this->hasMany(ArticleTag::class, 'article_id');
+    }
 }

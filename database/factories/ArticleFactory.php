@@ -19,9 +19,9 @@ class ArticleFactory extends Factory
         return [
             'user_id' => $this->faker->numberBetween(1, 16),
             'category_id' => $this->faker->numberBetween(1, 8),
-            'title' => $this->faker->text(20),
-            'description' => $this->faker->text(50),
-            'content' => $this->faker->text(1000),
+            'title' => $this->faker->text(80),
+            'description' => $this->faker->text(400),
+            'content' => $this->faker->text(3000),
             'image' => $this->faker->image('public/storage/articles', 640, 520, null, false),
             'viewed' => $this->faker->numberBetween(1, 10000),
             'keywords' => $this->faker->text(50),

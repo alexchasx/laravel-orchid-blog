@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Tag extends Model
 {
     use HasFactory;
 
@@ -23,15 +23,22 @@ class Category extends Model
      */
     protected $fillable = [
         'title',
-        'image',
-        'published',
+        'popular',
+        'active',
     ];
 
     /**
-     * Возращает все статьи к данной категории.
+     * Статьи, принадлежащие тегу.
+     *
+     * @return BelongsToMany
      */
     public function articles()
     {
-        return $this->hasMany(Article::class, 'category_id');
+        return $this->belongsToMany(
+            Article::class,
+            'article_tags',
+            // 'tag_id',
+            // 'article_id'
+        );
     }
 }

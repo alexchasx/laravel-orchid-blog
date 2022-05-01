@@ -17,8 +17,10 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
 
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('article_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignId('article_id')->constrained()->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->text('content');
             $table->boolean('active')->default(true);
 

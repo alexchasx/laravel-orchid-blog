@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class ArticleTag extends Model
 {
     use HasFactory;
-
     /**
      * Определяет необходимость отметок времени для модели.
      *
@@ -22,16 +21,17 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
-        'title',
-        'image',
-        'published',
+        'article_id',
+        'tag_id',
     ];
 
     /**
-     * Возращает все статьи к данной категории.
+     * Возращает статью, владеющую данным тегом
+     *
+     * @return HasOne
      */
-    public function articles()
+    public function article()
     {
-        return $this->hasMany(Article::class, 'category_id');
+        return $this->hasOne(Article::class, 'id');
     }
 }
