@@ -24,12 +24,15 @@ Route::get('/dashboard', function () {
 
 require __DIR__ . '/auth.php';
 
+// Contact
+Route::get('contact', function () {
+    return view('contact');
+})->name('contact');
+
 Route::controller(ArticleController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('article.{id}', 'show')->name('articleShow');
+    Route::get('category.{categoryId}', 'showByCategory')->name('showByCategory');
 });
 
-// Route::get('/', ['as' => 'index', 'uses' => 'SiteController@index']);
-// Route::get('article.{id}', 'SiteController@show')->name('articleShow');
-// Route::get('category.{categoryId}', 'SiteController@showByCategory')->name('showByCategory');
 // Route::get('tag.{tagId}', 'SiteController@showByTag')->name('showByTag');

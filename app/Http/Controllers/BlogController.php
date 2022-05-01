@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
@@ -56,18 +57,18 @@ class BlogController extends Controller
     }
 
 
-    // /**
-    //  * Возращает список категорий
-    //  *
-    //  * @return Category[] | Collection
-    //  */
-    // protected function showCategories()
-    // {
-    //     return Category::select(['id', 'title'])
-    //         ->orderBy('title')
-    //         ->where('status', true)
-    //         ->get();
-    // }
+    /**
+     * Возращает список категорий
+     *
+     * @return Category[] | Collection
+     */
+    protected function showCategories()
+    {
+        return Category::select(['id', 'title'])
+            ->orderBy('title')
+            ->where('published', true)
+            ->get();
+    }
 
     // /**
     //  * Возращает список тегов

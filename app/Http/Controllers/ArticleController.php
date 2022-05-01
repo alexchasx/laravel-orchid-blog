@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ArticleController extends BlogController
@@ -25,7 +26,7 @@ class ArticleController extends BlogController
             'articles' => $articles->paginate(self::PAGINATE),
             // 'popular' => $this->popularArticles($articles),
             // 'recent' => $this->recentArticles($articles),
-            // 'categories' => $this->showCategories(),
+            'categories' => $this->showCategories(),
             // 'tags' => $this->showTags(),
             // 'empty' => self::EMPTY_IMAGE,
         ]);
@@ -55,7 +56,7 @@ class ArticleController extends BlogController
             'article' => $article,
             // 'popular' => $this->popularArticles($articles),
             // 'recent' => $this->recentArticles($articles),
-            // 'categories' => $this->showCategories(),
+            'categories' => $this->showCategories(),
             // 'tags' => $this->showTags(),
             // 'image' => $this->getFiles($articleId),
             // 'comments' => $this->getComments($articleId),
@@ -63,29 +64,29 @@ class ArticleController extends BlogController
         ]);
     }
 
-    // /**
-    //  * Показывает статьи по категории
-    //  *
-    //  * @param $categoryId
-    //  *
-    //  * @return $this
-    //  */
-    // public function showByCategory($categoryId)
-    // {
-    //     $category = (new Category)->find($categoryId)->first(['title']);
+    /**
+     * Показывает статьи по категории
+     *
+     * @param $categoryId
+     *
+     * @return $this
+     */
+    public function showByCategory($categoryId)
+    {
+        $category = (new Category())->find($categoryId)->first(['title']);
 
-    //     $articles = $this->allArticles(null, $categoryId);
+        $articles = $this->allArticles(null, $categoryId);
 
-    //     return view('index')->with([
-    //         'articles' => $articles->paginate(self::PAGINATE),
-    //         'category' => $category,
-    //         'popular' => $this->popularArticles($articles),
-    //         'recent' => $this->recentArticles($articles),
-    //         'categories' => $this->showCategories(),
-    //         'tags' => $this->showTags(),
-    //         'empty' => self::EMPTY_IMAGE,
-    //     ]);
-    // }
+        return view('index')->with([
+            'articles' => $articles->paginate(self::PAGINATE),
+            'category' => $category,
+            // 'popular' => $this->popularArticles($articles),
+            // 'recent' => $this->recentArticles($articles),
+            // 'categories' => $this->showCategories(),
+            // 'tags' => $this->showTags(),
+            // 'empty' => self::EMPTY_IMAGE,
+        ]);
+    }
 
     // /**
     //  * Показывает статьи по тегу
