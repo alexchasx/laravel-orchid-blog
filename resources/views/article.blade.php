@@ -8,7 +8,7 @@
 
         @unless(empty($article))
 
-        <h3 class="tittle">{{ $article->title }}</h3>
+        <h3 class="text-center">{{ $article->title }}</h3>
         @if (isAdmin())
         <a class="btn btn-warning" href="{{ route('articleEdit',['id'=>$article->id]) }}" role="button">Редактировать
         </a>
@@ -180,7 +180,8 @@
         <div class="col-md-4 blog-top-right-grid">
             <div class="categories">
                 <h3 class="wow fadeInLeft animated animated" data-wow-delay=".5s">
-                    Категории</h3>
+                    {{ __('Категории') }}</h3>
+
                 <ul>
 
                     @if (!empty($categories))
@@ -208,81 +209,83 @@
                 @foreach($popular as $pop)
 
                 <div class="comments-text wow fadeInLeft animated animated" data-wow-delay=".5s">
-                    <div class="col-md-3 comments-left">
+                    {{-- <div class="col-md-3 comments-left">
                         <a href="{{ route('articleShow', ['id' => $pop->id]) }}">
-                            {{-- @if (!empty($avatar = $pop->files->last()))
-                            <img class="media-object" src="{{ asset('storage/app/'. $avatar->path) }}" alt="image">
-                            @else
-                            <img class="media-object" src="{{ asset('storage/app/'. $empty) }}" alt="image">
-                            @endif --}}
-                        </a>
-                    </div>
-                    <div class="col-md-9 comments-right">
-                        <a href="{{ route('articleShow', ['id' => $pop->id]) }}">
-                            {{$pop->title}}
-                        </a>
-                        <p>
-                            <?/*= $article->getDate() */?>
-                        </p>
-                    </div>
-                    <div class="clearfix"></div>
+                    @if (!empty($avatar = $pop->files->last()))
+                    <img class="media-object" src="{{ asset('storage/app/'. $avatar->path) }}" alt="image">
+                    @else
+                    <img class="media-object" src="{{ asset('storage/app/'. $empty) }}" alt="image">
+                    @endif
+                    </a>
+                </div> --}}
+                {{-- <div class="col-md-9 comments-right"> --}}
+                <div class="comments-right">
+                    <a href="{{ route('articleShow', ['id' => $pop->id]) }}">
+                        {{$pop->title}}
+                    </a>
+                    <p>
+                        <?/*= $article->getDate() */?>
+                    </p>
                 </div>
-
-                @endforeach
-                @endunless
-
+                <div class="clearfix"></div>
             </div>
-            <div class="comments">
-                <h3 class="wow fadeInLeft animated animated" data-wow-delay=".5s">Последние
-                    статьи</h3>
-                @unless (empty($recent))
-                @foreach($recent as $rec)
 
-                <div class="comments-text wow fadeInLeft animated animated" data-wow-delay=".5s">
-                    <div class="col-md-3 comments-left">
-                        <a href="{{ route('articleShow', ['id' => $rec->id]) }}">
-                            {{-- @if (!empty($avatar = $rec->files->last()))
-                            <img class="media-object" src="{{ asset('storage/app/'. $avatar->path) }}" alt="image">
-                            @else
-                            <img class="media-object" src="{{ asset('storage/app/'. $empty) }}" alt="image">
-                            @endif --}}
-                        </a>
-                    </div>
-                    <div class="col-md-9 comments-right">
-                        <a href="{{ route('articleShow', ['id' => $rec->id]) }}">
-                            {{ $rec->title }}
-                        </a>
-                        <p>
-                            <?/*= $article->getDate() */?>
-                        </p>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-
-                @endforeach
-                @endunless
-
-            </div>
-            @unless (empty($tags[0]))
-            <div class="comments">
-                <h3 class="wow fadeInLeft animated animated" data-wow-delay=".5s">Поиск по тегам:</h3>
-                <div style="border: solid 1px #000;
-                                        border-radius: 5px;
-                                        padding: 5px; ">
-                    @foreach($tags as $tag)
-                    <button class="tags">
-                        <a href="{{ route('showByTag', ['id' => $tag->id]) }}">
-                            {{ $tag->title }}
-                        </a>
-                    </button>
-                    @endforeach
-                </div>
-            </div>
+            @endforeach
             @endunless
+
+        </div>
+        <div class="comments">
+            <h3 class="wow fadeInLeft animated animated" data-wow-delay=".5s">Последние
+                статьи</h3>
+            @unless (empty($recent))
+            @foreach($recent as $rec)
+
+            <div class="comments-text wow fadeInLeft animated animated" data-wow-delay=".5s">
+                {{-- <div class="col-md-3 comments-left">
+                    <a href="{{ route('articleShow', ['id' => $rec->id]) }}">
+                @if (!empty($avatar = $rec->files->last()))
+                <img class="media-object" src="{{ asset('storage/app/'. $avatar->path) }}" alt="image">
+                @else
+                <img class="media-object" src="{{ asset('storage/app/'. $empty) }}" alt="image">
+                @endif
+                </a>
+            </div> --}}
+            {{-- <div class="col-md-9 comments-right"> --}}
+            <div class="comments-right">
+                <a href="{{ route('articleShow', ['id' => $rec->id]) }}">
+                    {{ $rec->title }}
+                </a>
+                <p>
+                    <?/*= $article->getDate() */?>
+                </p>
+            </div>
+            <div class="clearfix"></div>
         </div>
 
-        <div class="clearfix"></div>
+        @endforeach
+        @endunless
+
     </div>
+    @unless (empty($tags[0]))
+    <div class="comments">
+        <h3 class="wow fadeInLeft animated animated" data-wow-delay=".5s">Поиск по тегам:</h3>
+        <div style="border: solid 1px #000;
+                                        border-radius: 5px;
+                                        padding: 5px; ">
+            @foreach($tags as $tag)
+            <button class="tags">
+                <a href="{{ route('showByTag', ['id' => $tag->id]) }}">
+                    {{ $tag->title }}
+                </a>
+            </button>
+            @endforeach
+        </div>
+    </div>
+    @endunless
+</div>
+
+<div class="clearfix"></div>
+</div>
 </div>
 <!-- //container -->
 <!-- //blog -->

@@ -46,7 +46,7 @@ h3,
 h4,
 h5,
 h6 {
-    margin: 0;
+    /* margin: 0; */
     /* font-family: 'Playfair Display', serif; */
     font-weight: 400;
 }
@@ -1662,7 +1662,7 @@ ul.pagination {
 .categories h3,
 .comments h3 {
     font-size: 1.5em;
-    margin: 0 0 1em 0;
+    margin: 1em 0 1em 0;
     padding-bottom: 0.5em;
     color: #2530bf;
     font-weight: 600;
@@ -2046,9 +2046,11 @@ ul.bottom i {
         opacity: 0;
         font-size: 0.75em !important;
     }
-    h3.tittle,
+    h3.tittle {
+        font-size: 1.5em;
+    }
     h2.tittle {
-        font-size: 2.5em;
+        font-size: 2em;
     }
 }
 @media (max-width: 1366px) {
@@ -3097,4 +3099,8 @@ label {
 select {
     background-color: transparent;
     color: inherit;
+}
+
+.tags {
+    margin: 4px;
 }

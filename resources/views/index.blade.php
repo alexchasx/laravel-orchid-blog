@@ -30,27 +30,27 @@
             <div class="categories">
                 {{-- <h4 class="wow fadeInLeft animated animated" data-wow-delay=".5s"></h4>
                 <br> --}}
-                <h4 class="wow fadeInLeft animated animated" data-wow-delay=".5s">
+                <h3 class="wow fadeInLeft animated animated" data-wow-delay=".5s">
                     Категории
-                    </h3>
-                    <ul>
+                </h3>
+                <ul>
 
-                        @if (!empty($categories))
-                        @foreach($categories as $category)
+                    @if (!empty($categories))
+                    @foreach($categories as $category)
 
-                        @unless (empty($articleCount = $category->articles->count()))
-                        <li class="wow fadeInLeft animated animated" data-wow-delay=".5s">
-                            <a href="{{ route('showByCategory', ['id' => $category->id] ) }}">{{$category->title}}</a>
-                            <span class="post-count pull-right">
-                                ({{ $articleCount }})
-                            </span>
-                        </li>
-                        @endunless
+                    @unless (empty($articleCount = $category->articles->count()))
+                    <li class="wow fadeInLeft animated animated" data-wow-delay=".5s">
+                        <a href="{{ route('showByCategory', ['id' => $category->id] ) }}">{{$category->title}}</a>
+                        <span class="post-count pull-right">
+                            ({{ $articleCount }})
+                        </span>
+                    </li>
+                    @endunless
 
-                        @endforeach
-                        @endif
+                    @endforeach
+                    @endif
 
-                    </ul>
+                </ul>
             </div>
         </div>
 
