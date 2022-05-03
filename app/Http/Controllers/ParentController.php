@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ParentController extends Controller
 {
@@ -21,14 +24,18 @@ class ParentController extends Controller
      *
      * @throws HttpException
      */
-    // public static function checkAdmin()
-    // {
-    //     if (\Auth::check() && isAdmin()) {
-    //         return true;
-    //     }
+    public static function checkAdmin()
+    {
 
-    //     abort(403, 'Доступ запрещён!');
-    // }
+        if (
+            // Auth::check() &&
+            isAdmin()
+        ) {
+            return true;
+        }
+
+        abort(403, 'Доступ запрещён!');
+    }
 
     /**
      * Возращает список категорий
@@ -39,7 +46,7 @@ class ParentController extends Controller
     {
         return Category::select(['id', 'title'])
             ->orderBy('title')
-            ->where('status', true)
+            ->where('published', true)
             ->get();
     }
 
@@ -48,13 +55,13 @@ class ParentController extends Controller
      *
      * @return Tag[] | Collection
      */
-    // protected function showTags()
-    // {
-    //     return Tag::select()
-    //         ->orderBy('title')
-    //         ->where('status', true)
-    //         ->get();
-    // }
+    protected function showTags()
+    {
+        return Tag::select()
+            ->orderBy('title')
+            ->where('active', true)
+            ->get();
+    }
 
     /**
      * Возращает список статей, разрешенных к показу
@@ -68,17 +75,17 @@ class ParentController extends Controller
     {
         $articles = Article::latest()
             //            ->where('published_at', '<=', Carbon::now()) //TODO Реализовать постепенную самопубликацию по устанновленным датам
-            ->where('status', true);
+            ->where('published', true);
 
         if (!empty($categoryId)) {
-            $articles = $articles->where('categories_id', $categoryId);
+            $articles = $articles->where('category_id', $categoryId);
         }
 
-        // if (!empty($tagId)) {
-        //     $articles = $articles->whereHas('tags', function (Builder $builder) use ($tagId) {
-        //         $builder->where('tag_id', $tagId);
-        //     });
-        // }
+        if (!empty($tagId)) {
+            $articles = $articles->whereHas('tags', function (Builder $builder) use ($tagId) {
+                $builder->where('tag_id', $tagId);
+            });
+        }
 
         return $articles;
     }
@@ -118,12 +125,12 @@ class ParentController extends Controller
      *
      * @return File[]
      */
-    protected function getFiles($id)
-    {
-        return Article::find($id)
-            ->files
-            ->last();
-    }
+    // protected function getFiles($id)
+    // {
+    //     return Article::find($id)
+    //         ->files
+    //         ->last();
+    // }
 
     /**
      * Возращает комментарии к статье

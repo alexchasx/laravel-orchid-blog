@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class CommentController extends ParentController
@@ -40,7 +42,7 @@ class CommentController extends ParentController
             'content' => 'required',
         ]);
 
-        Article::find($request->input('target_id'))
+        Article::find($request->input('article_id'))
             ->comments()
             ->save(new Comment([
                 'content' => $request->input('content'),

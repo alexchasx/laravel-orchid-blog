@@ -19,7 +19,7 @@ class UserFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'role' => null,
+            'role' => '',
             'email' => $this->faker->unique()->safeEmail(),
             'avatar' => $this->faker->image('public/storage/avatars', 165, 165, null, false),
             'active' => $this->faker->boolean(),

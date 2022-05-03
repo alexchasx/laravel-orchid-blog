@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->string('name');
-            $table->string('role')->nullable();
+            $table->string('role')->default('');
             $table->string('email')->unique();
             $table->text('avatar')->nullable();
             $table->boolean('active')->default(true)->comment('Не забанен?');

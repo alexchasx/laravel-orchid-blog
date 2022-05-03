@@ -184,18 +184,18 @@
                 <ul>
 
                     @if (!empty($categories))
-                    @foreach($categories as $category)
+                    {{-- @foreach($categories as $category)
 
                     @unless (empty($articleCount = $category->articles->count()))
                     <li class="wow fadeInLeft animated animated" data-wow-delay=".5s">
                         <a href="{{ route('showByCategory', ['id' => $category->id] ) }}">{{$category->title}}</a>
-                        <span class="post-count pull-right">
-                            ({{$articleCount}})
-                        </span>
+                    <span class="post-count pull-right">
+                        ({{$articleCount}})
+                    </span>
                     </li>
                     @endunless
 
-                    @endforeach
+                    @endforeach --}}
                     @endif
 
                 </ul>
@@ -210,11 +210,11 @@
                 <div class="comments-text wow fadeInLeft animated animated" data-wow-delay=".5s">
                     <div class="col-md-3 comments-left">
                         <a href="{{ route('articleShow', ['id' => $pop->id]) }}">
-                            @if (!empty($avatar = $pop->files->last()))
+                            {{-- @if (!empty($avatar = $pop->files->last()))
                             <img class="media-object" src="{{ asset('storage/app/'. $avatar->path) }}" alt="image">
                             @else
                             <img class="media-object" src="{{ asset('storage/app/'. $empty) }}" alt="image">
-                            @endif
+                            @endif --}}
                         </a>
                     </div>
                     <div class="col-md-9 comments-right">
@@ -241,11 +241,11 @@
                 <div class="comments-text wow fadeInLeft animated animated" data-wow-delay=".5s">
                     <div class="col-md-3 comments-left">
                         <a href="{{ route('articleShow', ['id' => $rec->id]) }}">
-                            @if (!empty($avatar = $rec->files->last()))
+                            {{-- @if (!empty($avatar = $rec->files->last()))
                             <img class="media-object" src="{{ asset('storage/app/'. $avatar->path) }}" alt="image">
                             @else
                             <img class="media-object" src="{{ asset('storage/app/'. $empty) }}" alt="image">
-                            @endif
+                            @endif --}}
                         </a>
                     </div>
                     <div class="col-md-9 comments-right">

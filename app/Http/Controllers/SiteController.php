@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
+use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class SiteController extends ParentController
@@ -53,9 +56,10 @@ class SiteController extends ParentController
             'article' => $article,
             'popular' => $this->popularArticles($articles),
             'recent' => $this->recentArticles($articles),
-            'categories' => $this->showCategories(),
+            // 'categories' => $this->showCategories(),
+            'categories' => 'asasas',
             'tags' => $this->showTags(),
-            'image' => $this->getFiles($articleId),
+            // 'image' => $this->getFiles($articleId),
             'comments' => $this->getComments($articleId),
             'empty' => self::EMPTY_IMAGE,
         ]);
@@ -70,7 +74,7 @@ class SiteController extends ParentController
      */
     public function showByCategory($categoryId)
     {
-        $category = (new Category)->find($categoryId)->first(['title']);
+        $category = (new Category())->find($categoryId)->first(['title']);
 
         $articles = $this->allArticles(null, $categoryId);
 

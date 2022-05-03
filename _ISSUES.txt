@@ -1,0 +1,2 @@
+- http://blog-laravel9/article.3
+Attempt to read property "role" on null

@@ -1,12 +1,12 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-
-define('IS_ADMIN', config('ADMIN_TOKEN', 'admin545'));
 
 if (!function_exists('isAdmin')) {
     function isAdmin()
     {
-        return Auth::user()->role === IS_ADMIN;
+        // return Auth::user()->role === env('ADMIN_TOKEN');
+        return (new User())->role === env('ADMIN_TOKEN');
     }
 }
