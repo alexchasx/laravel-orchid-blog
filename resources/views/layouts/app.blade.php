@@ -182,7 +182,7 @@
 
     </script>
     <!--animate-->
-    <link href="{{ asset('GoEasyOn/css/animate.css') }}" rel="stylesheet" type="text/css" media="all">
+    {{-- <link href="{{ asset('GoEasyOn/css/animate.css') }}" rel="stylesheet" type="text/css" media="all"> --}}
     <script src="{{ asset('GoEasyOn/js/wow.min.js') }}"></script>
     <script>
         new WOW().init();
@@ -190,10 +190,10 @@
     </script>
     <!--//end-animate-->
     <!-- menu -->
-    <script type="text/javascript" src="{{ asset('GoEasyOn/js/main.js') }}"></script>
+    {{-- <script type="text/javascript" src="{{ asset('GoEasyOn/js/main.js') }}"></script> --}}
     <!-- //menu -->
     <script src="{{ asset('GoEasyOn/js/rAF.js') }}"></script>
-    <script src="{{ asset('GoEasyOn/js/demo-2.js') }}"></script>
+    {{-- <script src="{{ asset('GoEasyOn/js/demo-2.js') }}"></script> --}}
     <script>
         (function(i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
@@ -248,22 +248,22 @@
                 , easingType: 'linear'
             };
 
-            $().UItoTop({
-                easingType: 'easeOutQuart'
-            });
+            // $().UItoTop({
+            //     easingType: 'easeOutQuart'
+            // });
 
         });
 
     </script>
     <!-- for bootstrap working -->
     <script src="{{ asset('GoEasyOn/js/bootstrap.js') }}"></script>
-    <script src="{{ asset('js/hidden_screen.js') }}"></script>
+    {{-- <script src="{{ asset('js/hidden_screen.js') }}"></script> --}}
     <!-- //for bootstrap working -->
-    <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
-    <script src="/vendor/unisharp/laravel-ckeditor/adapters/jquery.js"></script>
+    {{-- <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script> --}}
+    {{-- <script src="/vendor/unisharp/laravel-ckeditor/adapters/jquery.js"></script> --}}
     <script>
         //        $('textarea').ckeditor();
-        $('.textarea').ckeditor(); // if class is prefered.
+        // $('.textarea').ckeditor(); // if class is prefered.
 
     </script>
 

@@ -22,11 +22,19 @@ class SiteController extends ParentController
     {
         $articles = $this->allArticles();
 
+        $categories = Category::select(['id', 'title'])
+            ->orderBy('title')
+            ->where('published', true)
+            ->get();
+
+        // dd($categories);
+
         return view('index')->with([
             'articles' => $articles->paginate(self::PAGINATE),
             'popular' => $this->popularArticles($articles),
             'recent' => $this->recentArticles($articles),
-            'categories' => $this->showCategories(),
+            // 'categories' => $this->showCategories(),
+            'categories' => $categories,
             'tags' => $this->showTags(),
             'empty' => self::EMPTY_IMAGE,
         ]);
