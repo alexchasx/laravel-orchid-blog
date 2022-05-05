@@ -28,12 +28,12 @@ class SiteController extends ParentController
         //     ->get();
         // dd($categories);
 
-        return view('blog.index')->with([
+        return view('index')->with([
             // 'articles' => $articles->paginate(self::PAGINATE),
             'articles' => $articles->paginate(self::PAGINATE),
             'categories' => $this->showCategories(),
             // 'popular' => $this->popularArticles($articles),
-            // 'recent' => $this->recentArticles($articles),
+            'recents' => $this->recentArticles($articles),
             // 'tags' => $this->showTags(),
             // 'empty' => self::EMPTY_IMAGE,
         ]);
@@ -54,21 +54,20 @@ class SiteController extends ParentController
          * @var Article $article
          */
         $article = Article::findOrFail($articleId);
-        $article->viewed += 1;
-        $article->save();
+        // $article->viewed += 1;
+        // $article->save();
 
         $articles = $this->allArticles();
 
         return view('article')->with([
             'article' => $article,
-            'popular' => $this->popularArticles($articles),
-            'recent' => $this->recentArticles($articles),
-            // 'categories' => $this->showCategories(),
-            'categories' => 'asasas',
-            'tags' => $this->showTags(),
+            // 'popular' => $this->popularArticles($articles),
+            'recents' => $this->recentArticles($articles),
+            'categories' => $this->showCategories(),
+            // 'tags' => $this->showTags(),
             // 'image' => $this->getFiles($articleId),
-            'comments' => $this->getComments($articleId),
-            'empty' => self::EMPTY_IMAGE,
+            // 'comments' => $this->getComments($articleId),
+            // 'empty' => self::EMPTY_IMAGE,
         ]);
     }
 
