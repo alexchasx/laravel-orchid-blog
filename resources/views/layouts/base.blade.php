@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('page.title', config('app.name'))</title>
-    <link rel="stylesheet" href="my3/css/style.css" />
+    <link rel="stylesheet" href="css/style.css" />
 
 </head>
 
@@ -24,12 +24,11 @@
                 </div>
                 <div class="right_block">
                     @include('includes.catogories')
-
                 </div>
             </div>
         </section>
 
-        {{-- @include('includes.footer') --}}
+        @include('includes.footer')
     </div>
 
     {{-- @stack('js') --}}

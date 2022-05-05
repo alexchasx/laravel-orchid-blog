@@ -16,9 +16,12 @@
 
     <a href="{{route('articleShow', ['id' => $article->id])}}" class="continue_read">Читать далее</a>
 </div>
+@unless ($loop->last)
 <br />
 <hr />
 <br />
+@endunless
+
 @endforeach
 @endunless
 

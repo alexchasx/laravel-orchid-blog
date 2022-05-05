@@ -8,7 +8,7 @@
                     <li id="logo">
                         <a href="{{ route('blog') }}" class="link">{{ config('app.name') }}
                             <div class="sub_logo">
-                                ПЕРСОНАЛЬНЫЙ БЛОГ
+                                {{ __('Мама, я блогер :)') }}
                             </div>
                         </a>
                     </li>

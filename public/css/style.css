@@ -148,12 +148,12 @@ hr {
     max-width: 1170px;
 }
 .sub_logo {
-    font-size: 8px;
+    font-size: 12px;
 }
 .link,
 .category_link,
 .continue_read {
-    color: blue;
+    color: #5d92b7;
 }
 .link:hover,
 .category_link:hover,
@@ -171,4 +171,13 @@ hr {
 .category_link {
     margin-bottom: 0.8em;
     list-style-type: circle;
+}
+.footer {
+    margin: 24px auto;
+    padding-bottom: 15px;
+    max-width: 1170px;
+    text-align: center;
+}
+.made_in {
+    padding-top: 8px;
 }
