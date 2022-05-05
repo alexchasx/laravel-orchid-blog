@@ -22,21 +22,20 @@ class SiteController extends ParentController
     {
         $articles = $this->allArticles();
 
-        $categories = Category::select(['id', 'title'])
-            ->orderBy('title')
-            ->where('published', true)
-            ->get();
-
+        // $categories = Category::select(['id', 'title'])
+        //     ->orderBy('title')
+        //     ->where('published', true)
+        //     ->get();
         // dd($categories);
 
-        return view('index')->with([
+        return view('blog.index')->with([
+            // 'articles' => $articles->paginate(self::PAGINATE),
             'articles' => $articles->paginate(self::PAGINATE),
-            'popular' => $this->popularArticles($articles),
-            'recent' => $this->recentArticles($articles),
-            // 'categories' => $this->showCategories(),
-            'categories' => $categories,
-            'tags' => $this->showTags(),
-            'empty' => self::EMPTY_IMAGE,
+            'categories' => $this->showCategories(),
+            // 'popular' => $this->popularArticles($articles),
+            // 'recent' => $this->recentArticles($articles),
+            // 'tags' => $this->showTags(),
+            // 'empty' => self::EMPTY_IMAGE,
         ]);
     }
 

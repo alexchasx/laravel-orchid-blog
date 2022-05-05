@@ -1,6 +1,9 @@
 /node_modules
 /public/hot
 /public/storage
+/public/hbgl
+/public/Less
+/public/my
 /storage/*.key
 /vendor
 .env

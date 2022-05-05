@@ -32,7 +32,7 @@ Route::get('contact', function () {
 })->name('contact');
 
 Route::controller(SiteController::class)->group(function () {
-    Route::get('/', 'index');
+    Route::get('/', 'index')->name('blog');
     Route::get('article.{id}', 'show')->name('articleShow');
     Route::get('category.{id}', 'showByCategory')->name('showByCategory');
     Route::get('tag.{id}', 'showByTag')->name('showByTag');
