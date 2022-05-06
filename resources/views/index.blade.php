@@ -1,8 +1,10 @@
 @extends('layouts.base')
 
 @section('content')
+
 @unless (empty($articles))
 @foreach ($articles as $article)
+
 <div class="article_card">
     <h3><a href="{{route('articleShow', ['id' => $article->id])}}" class="continue_read">
 
@@ -16,6 +18,7 @@
 
     <a href="{{route('articleShow', ['id' => $article->id])}}" class="continue_read">Читать далее</a>
 </div>
+
 @unless ($loop->last)
 <br />
 <hr />

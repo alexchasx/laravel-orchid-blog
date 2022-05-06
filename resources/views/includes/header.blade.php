@@ -12,8 +12,8 @@
                             </div>
                         </a>
                     </li>
-                    <li><a href="" class="link">GitHub</a></li>
-                    <li><a href="" class="link">Контакты</a></li>
+                    <li><a href="https://github.com/chasovnikov" class="link">GitHub</a></li>
+                    <li><a href="{{ route('contact') }}" class="link">Контакты</a></li>
                 </ul>
             </div>
         </div>

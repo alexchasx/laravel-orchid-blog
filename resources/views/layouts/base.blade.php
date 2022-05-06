@@ -23,7 +23,7 @@
                     @yield('content')
                 </div>
                 <div class="right_block">
-                    @include('includes.catogories')
+                    @include('includes.block_categories')
                 </div>
             </div>
         </section>

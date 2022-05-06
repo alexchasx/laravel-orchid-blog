@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Tag;
-use Illuminate\Http\Request;
 
 class SiteController extends ParentController
 {
@@ -22,20 +21,13 @@ class SiteController extends ParentController
     {
         $articles = $this->allArticles();
 
-        // $categories = Category::select(['id', 'title'])
-        //     ->orderBy('title')
-        //     ->where('published', true)
-        //     ->get();
-        // dd($categories);
-
         return view('index')->with([
-            // 'articles' => $articles->paginate(self::PAGINATE),
             'articles' => $articles->paginate(self::PAGINATE),
             'categories' => $this->showCategories(),
             // 'popular' => $this->popularArticles($articles),
             'recents' => $this->recentArticles($articles),
-            // 'tags' => $this->showTags(),
-            // 'empty' => self::EMPTY_IMAGE,
+            'tags' => $this->showTags(),
+            'empty' => self::EMPTY_IMAGE,
         ]);
     }
 
@@ -64,10 +56,10 @@ class SiteController extends ParentController
             // 'popular' => $this->popularArticles($articles),
             'recents' => $this->recentArticles($articles),
             'categories' => $this->showCategories(),
-            // 'tags' => $this->showTags(),
+            'tags' => $this->showTags(),
             // 'image' => $this->getFiles($articleId),
-            // 'comments' => $this->getComments($articleId),
-            // 'empty' => self::EMPTY_IMAGE,
+            'comments' => $this->getComments($articleId),
+            'empty' => self::EMPTY_IMAGE,
         ]);
     }
 
@@ -88,7 +80,7 @@ class SiteController extends ParentController
             'articles' => $articles->paginate(self::PAGINATE),
             'category' => $category,
             'popular' => $this->popularArticles($articles),
-            'recent' => $this->recentArticles($articles),
+            'recents' => $this->recentArticles($articles),
             'categories' => $this->showCategories(),
             'tags' => $this->showTags(),
             'empty' => self::EMPTY_IMAGE,
@@ -112,7 +104,7 @@ class SiteController extends ParentController
             'articles' => $articles->paginate(self::PAGINATE),
             'tag' => $tag,
             'popular' => $this->popularArticles($articles),
-            'recent' => $this->recentArticles($articles),
+            'recents' => $this->recentArticles($articles),
             'categories' => $this->showCategories(),
             'tags' => $this->showTags(),
             'empty' => self::EMPTY_IMAGE,

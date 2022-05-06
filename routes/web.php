@@ -26,7 +26,6 @@ Route::get('/dashboard', function () {
 
 require __DIR__ . '/auth.php';
 
-// Contact
 Route::get('contact', function () {
     return view('contact');
 })->name('contact');
