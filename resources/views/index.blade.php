@@ -16,7 +16,9 @@
 
     <p>{!! $article->description !!}</p>
 
-    <a href="{{route('articleShow', ['id' => $article->id])}}" class="continue_read">Читать далее</a>
+    <a href="{{route('articleShow', ['id' => $article->id])}}" class="continue_read">
+        Читать далее
+    </a>
 </div>
 
 @unless ($loop->last)

@@ -46,6 +46,11 @@ a {
 }
 @media (max-widht: 767px) {
     .wrap {
+        max-width: 320;
+    }
+}
+@media (max-widht: 350px) {
+    .wrap {
         max-width: none;
     }
 }

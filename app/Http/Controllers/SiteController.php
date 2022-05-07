@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Tag;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class SiteController extends ParentController
 {
@@ -12,21 +13,17 @@ class SiteController extends ParentController
 
     /**
      * Показывает все статьи
-     *
-     * GET /
-     *
-     * @return View
      */
     public function index()
     {
-        $articles = $this->allArticles();
+        $articles = Article::allPublished();
 
         return view('index')->with([
             'articles' => $articles->paginate(self::PAGINATE),
-            'categories' => $this->showCategories(),
-            // 'popular' => $this->popularArticles($articles),
-            'recents' => $this->recentArticles($articles),
-            'tags' => $this->showTags(),
+            'categories' => Category::allPublished(),
+            // 'popular' => Article::populars($articles),
+            'recents' => Article::recents($articles),
+            'tags' => Tag::allActive(),
             'empty' => self::EMPTY_IMAGE,
         ]);
     }
@@ -35,28 +32,22 @@ class SiteController extends ParentController
      * Показывает одну статью
      *
      * GET /article.{id}
-     *
-     * @param $articleId
-     *
-     * @return $this
      */
     public function show($articleId)
     {
-        /**
-         * @var Article $article
-         */
+        // TODO: сделать один запрос к базе
+        $articles = Article::allPublished();
         $article = Article::findOrFail($articleId);
         // $article->viewed += 1;
         // $article->save();
 
-        $articles = $this->allArticles();
 
         return view('article')->with([
             'article' => $article,
-            // 'popular' => $this->popularArticles($articles),
-            'recents' => $this->recentArticles($articles),
-            'categories' => $this->showCategories(),
-            'tags' => $this->showTags(),
+            // 'popular' => Article::populars($articles),
+            'recents' => Article::recents($articles),
+            'categories' => Category::allPublished(),
+            'tags' => Tag::allActive(),
             // 'image' => $this->getFiles($articleId),
             'comments' => $this->getComments($articleId),
             'empty' => self::EMPTY_IMAGE,
@@ -65,48 +56,60 @@ class SiteController extends ParentController
 
     /**
      * Показывает статьи по категории
-     *
-     * @param $categoryId
-     *
-     * @return $this
      */
     public function showByCategory($categoryId)
     {
         $category = (new Category())->find($categoryId)->first(['title']);
 
-        $articles = $this->allArticles(null, $categoryId);
+        $articles = Article::allPublished();
+        $articlesByCategory = $articles->where('category_id', $categoryId);
 
         return view('index')->with([
-            'articles' => $articles->paginate(self::PAGINATE),
+            'articles' => $articlesByCategory->paginate(self::PAGINATE),
             'category' => $category,
-            'popular' => $this->popularArticles($articles),
-            'recents' => $this->recentArticles($articles),
-            'categories' => $this->showCategories(),
-            'tags' => $this->showTags(),
+            // 'popular' => Article::populars($articles),
+            'recents' => Article::recents($articles),
+            'categories' => Category::allPublished(),
+            'tags' => Tag::allActive(),
             'empty' => self::EMPTY_IMAGE,
         ]);
     }
 
     /**
      * Показывает статьи по тегу
-     *
-     * @param $tagId
-     *
-     * @return $this
      */
     public function showByTag($tagId)
     {
         $tag = Tag::find($tagId);
+        $articles = Article::allPublished();
+        $articlesByTag = $articles->whereHas('tags', function (Builder $builder) use ($tagId) {
+            $builder->where('tag_id', $tagId);
+        });
 
-        $articles = $this->allArticles($tagId);
+        return view('index')->with([
+            'articles' => $articlesByTag->paginate(self::PAGINATE),
+            'tag' => $tag,
+            // 'popular' => Article::populars($articles),
+            'recents' => Article::recents($articles),
+            'categories' => Category::allPublished(),
+            'tags' => Tag::allActive(),
+            'empty' => self::EMPTY_IMAGE,
+        ]);
+    }
+
+    /**
+     * Страница "Контакты"
+     */
+    public function contacts($tagId)
+    {
+        $articles = Article::allPublished();
 
         return view('index')->with([
             'articles' => $articles->paginate(self::PAGINATE),
-            'tag' => $tag,
-            'popular' => $this->popularArticles($articles),
-            'recents' => $this->recentArticles($articles),
-            'categories' => $this->showCategories(),
-            'tags' => $this->showTags(),
+            // 'popular' => Article::populars($articles),
+            'recents' => Article::recents($articles),
+            'categories' => Category::allPublished(),
+            'tags' => Tag::allActive(),
             'empty' => self::EMPTY_IMAGE,
         ]);
     }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class Article extends Model
 {
@@ -97,5 +98,38 @@ class Article extends Model
     public function articleTags()
     {
         return $this->hasMany(ArticleTag::class, 'article_id');
+    }
+
+    public static function allPublished($tagId = null)
+    {
+        return self::latest()
+            //            ->where('published_at', '<=', Carbon::now()) //TODO Реализовать постепенную самопубликацию по устанновленным датам
+            ->where('published', true);
+    }
+
+    public static function byCategory(Builder $articles, $categoryId)
+    {
+        return $articles->where('category_id', $categoryId);
+    }
+
+    public static function byTag(Builder $articles, $tagId)
+    {
+        return $articles->whereHas('tags', function (Builder $builder) use ($tagId) {
+            $builder->where('tag_id', $tagId);
+        });
+    }
+
+    public static function recents(Builder $articles)
+    {
+        return $articles->orderBy('created_at', 'desc')
+            ->limit(3)
+            ->get();
+    }
+
+    public static function populars(Builder $articles)
+    {
+        return $articles->orderBy('viewed', 'desc')
+            ->limit(3)
+            ->get();
     }
 }

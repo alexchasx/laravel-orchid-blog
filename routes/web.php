@@ -46,3 +46,5 @@ Route::controller(CommentController::class)->group(function () {
     Route::get('restore.{comment}', 'restore')->name('commentRestore');
     Route::get('comment.status.{comment}', 'statusChange')->name('commentStatusChange');
 });
+
+Route::post('send.simple.email', 'MailController@simplePHPEmail')->name('simplePHPEmail');

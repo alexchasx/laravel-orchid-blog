@@ -34,4 +34,12 @@ class Category extends Model
     {
         return $this->hasMany(Article::class, 'category_id');
     }
+
+    public static function allPublished()
+    {
+        return Category::select(['id', 'title'])
+            ->orderBy('title')
+            ->where('published', true)
+            ->get();
+    }
 }

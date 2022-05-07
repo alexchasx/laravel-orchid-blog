@@ -41,4 +41,17 @@ class Tag extends Model
             // 'article_id'
         );
     }
+
+    /**
+     * Возращает список всех тегов
+     *
+     * @return Tag[] | Collection
+     */
+    public static function allActive()
+    {
+        return Tag::select()
+            ->orderBy('title')
+            ->where('active', true)
+            ->get();
+    }
 }

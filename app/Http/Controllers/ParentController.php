@@ -42,26 +42,13 @@ class ParentController extends Controller
      *
      * @return Category[] | Collection
      */
-    protected function showCategories()
-    {
-        return Category::select(['id', 'title'])
-            ->orderBy('title')
-            ->where('published', true)
-            ->get();
-    }
-
-    /**
-     * Возращает список тегов
-     *
-     * @return Tag[] | Collection
-     */
-    protected function showTags()
-    {
-        return Tag::select()
-            ->orderBy('title')
-            ->where('active', true)
-            ->get();
-    }
+    // protected function showCategories()
+    // {
+    //     return Category::select(['id', 'title'])
+    //         ->orderBy('title')
+    //         ->where('published', true)
+    //         ->get();
+    // }
 
     /**
      * Возращает список статей, разрешенных к показу
@@ -71,24 +58,24 @@ class ParentController extends Controller
      *
      * @return Builder
      */
-    protected function allArticles($tagId = null, $categoryId = null)
-    {
-        $articles = Article::latest()
-            //            ->where('published_at', '<=', Carbon::now()) //TODO Реализовать постепенную самопубликацию по устанновленным датам
-            ->where('published', true);
+    // protected function allArticles($tagId = null, $categoryId = null)
+    // {
+    //     $articles = Article::latest()
+    //         //            ->where('published_at', '<=', Carbon::now()) //TODO Реализовать постепенную самопубликацию по устанновленным датам
+    //         ->where('published', true);
 
-        if (!empty($categoryId)) {
-            $articles = $articles->where('category_id', $categoryId);
-        }
+    //     if (!empty($categoryId)) {
+    //         $articles = $articles->where('category_id', $categoryId);
+    //     }
 
-        if (!empty($tagId)) {
-            $articles = $articles->whereHas('tags', function (Builder $builder) use ($tagId) {
-                $builder->where('tag_id', $tagId);
-            });
-        }
+    //     if (!empty($tagId)) {
+    //         $articles = $articles->whereHas('tags', function (Builder $builder) use ($tagId) {
+    //             $builder->where('tag_id', $tagId);
+    //         });
+    //     }
 
-        return $articles;
-    }
+    //     return $articles;
+    // }
 
     /**
      * Возращает три последние статьи
@@ -97,26 +84,26 @@ class ParentController extends Controller
      *
      * @return Article[] | Collection
      */
-    protected function recentArticles(Builder $articles)
-    {
-        return $articles->orderBy('created_at', 'desc')
-            ->limit(3)
-            ->get();
-    }
+    // protected function recentArticles(Builder $articles)
+    // {
+    //     return $articles->orderBy('created_at', 'desc')
+    //         ->limit(3)
+    //         ->get();
+    // }
 
-    /**
-     * Возращает три самые популярные статьи
-     *
-     * @param Builder $articles
-     *
-     * @return Article[] | Collection
-     */
-    protected function popularArticles(Builder $articles)
-    {
-        return $articles->orderBy('viewed', 'desc')
-            ->limit(3)
-            ->get();
-    }
+    // /**
+    //  * Возращает три самые популярные статьи
+    //  *
+    //  * @param Builder $articles
+    //  *
+    //  * @return Article[] | Collection
+    //  */
+    // protected function popularArticles(Builder $articles)
+    // {
+    //     return $articles->orderBy('viewed', 'desc')
+    //         ->limit(3)
+    //         ->get();
+    // }
 
     /**
      * Возращает последний файл к статье
