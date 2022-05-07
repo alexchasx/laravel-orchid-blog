@@ -100,16 +100,16 @@ class Article extends Model
         return $this->hasMany(ArticleTag::class, 'article_id');
     }
 
-    public static function allPublished($tagId = null)
+    public static function allPublished()
     {
         return self::latest()
             //            ->where('published_at', '<=', Carbon::now()) //TODO Реализовать постепенную самопубликацию по устанновленным датам
             ->where('published', true);
     }
 
-    public static function byCategory(Builder $articles, $categoryId)
+    public static function byCategory(Builder $builder, $categoryId)
     {
-        return $articles->where('category_id', $categoryId);
+        return $builder->where('category_id', $categoryId);
     }
 
     public static function byTag(Builder $articles, $tagId)
@@ -119,16 +119,16 @@ class Article extends Model
         });
     }
 
-    public static function recents(Builder $articles)
+    public static function recents(Builder $builder)
     {
-        return $articles->orderBy('created_at', 'desc')
+        return $builder->orderBy('created_at', 'desc')
             ->limit(3)
             ->get();
     }
 
-    public static function populars(Builder $articles)
+    public static function populars(Builder $builder)
     {
-        return $articles->orderBy('viewed', 'desc')
+        return $builder->orderBy('viewed', 'desc')
             ->limit(3)
             ->get();
     }

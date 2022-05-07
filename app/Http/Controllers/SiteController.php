@@ -35,17 +35,16 @@ class SiteController extends ParentController
      */
     public function show($articleId)
     {
-        // TODO: сделать один запрос к базе
-        $articles = Article::allPublished();
-        $article = Article::findOrFail($articleId);
+        $builder = Article::allPublished();
+        $recents = Article::recents($builder);
+        $article = $builder->findOrFail($articleId);
         // $article->viewed += 1;
         // $article->save();
-
 
         return view('article')->with([
             'article' => $article,
             // 'popular' => Article::populars($articles),
-            'recents' => Article::recents($articles),
+            'recents' => $recents,
             'categories' => Category::allPublished(),
             'tags' => Tag::allActive(),
             // 'image' => $this->getFiles($articleId),
@@ -61,14 +60,15 @@ class SiteController extends ParentController
     {
         $category = (new Category())->find($categoryId)->first(['title']);
 
-        $articles = Article::allPublished();
-        $articlesByCategory = $articles->where('category_id', $categoryId);
+        $builder = Article::allPublished();
+        $recents = Article::recents($builder);
+        $articlesByCategory = Article::byCategory($builder, $categoryId);
 
         return view('index')->with([
             'articles' => $articlesByCategory->paginate(self::PAGINATE),
             'category' => $category,
             // 'popular' => Article::populars($articles),
-            'recents' => Article::recents($articles),
+            'recents' => $recents,
             'categories' => Category::allPublished(),
             'tags' => Tag::allActive(),
             'empty' => self::EMPTY_IMAGE,
@@ -81,8 +81,9 @@ class SiteController extends ParentController
     public function showByTag($tagId)
     {
         $tag = Tag::find($tagId);
-        $articles = Article::allPublished();
-        $articlesByTag = $articles->whereHas('tags', function (Builder $builder) use ($tagId) {
+        $builders = Article::allPublished();
+        $recents = Article::recents($builders);
+        $articlesByTag = $builders->whereHas('tags', function (Builder $builder) use ($tagId) {
             $builder->where('tag_id', $tagId);
         });
 
@@ -90,7 +91,7 @@ class SiteController extends ParentController
             'articles' => $articlesByTag->paginate(self::PAGINATE),
             'tag' => $tag,
             // 'popular' => Article::populars($articles),
-            'recents' => Article::recents($articles),
+            'recents' => $recents,
             'categories' => Category::allPublished(),
             'tags' => Tag::allActive(),
             'empty' => self::EMPTY_IMAGE,
