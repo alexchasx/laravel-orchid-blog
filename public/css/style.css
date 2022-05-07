@@ -175,7 +175,7 @@ hr {
 }
 .category_link {
     margin-bottom: 0.8em;
-    list-style-type: circle;
+    /* list-style-type: circle; */
 }
 .footer {
     margin: 24px auto;
@@ -191,4 +191,15 @@ hr {
 }
 .tag {
     margin-bottom: 5px;
+}
+.wrap_img {
+    overflow: hidden;
+}
+
+.wrap_img img {
+    /* height: auto;
+    width: 100%; */
+    /* еще больше контроля с max-width */
+    max-width: 100%;
+    object-fit: contain;
 }

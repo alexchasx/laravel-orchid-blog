@@ -11,11 +11,15 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <p class="text-center">
-                        Если у вас есть предложения или вопросы, то отправьте мне письмо на
-                        <strong>{{ env('CONTACT_EMAIL') }}</strong>
+                        <div class="wrap_img">
+                            Если у вас есть предложения или вопросы, то отправьте мне письмо на
+                            <strong>{{ env('CONTACT_EMAIL') }}</strong>
+                            {{-- или используйте форму: --}}
+                            <br />
+                            <br />
+                            <img {{-- style="max-width: 700px" --}} class="img_contact" src="{{ asset('images/banner.jpg') }}" alt="image">
 
-
-                        {{-- или используйте форму: --}}
+                        </div>
                     </p>
                     <br />
 
@@ -70,6 +74,7 @@
         </div>
     </div>
 </div>
+{{-- <br />
 <br />
 <br />
 <br />
@@ -78,7 +83,6 @@
 <br />
 <br />
 <br />
-<br />
-<br />
+<br /> --}}
 
 @endsection

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,9 +27,7 @@ Route::get('/dashboard', function () {
 
 require __DIR__ . '/auth.php';
 
-Route::get('contact', function () {
-    return view('contact');
-})->name('contact');
+Route::get('contact', [ContactController::class, 'show'])->name('contact');
 
 Route::controller(SiteController::class)->group(function () {
     Route::get('/', 'index')->name('blog');
