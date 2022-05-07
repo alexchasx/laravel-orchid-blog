@@ -39,7 +39,7 @@ class CommentController extends ParentController
     public function store(Request $request)
     {
         $this->validate($request, [
-            'content' => 'required',
+            'content' => ['required', 'max:5000'],
         ]);
 
         Article::find($request->input('article_id'))
@@ -62,7 +62,7 @@ class CommentController extends ParentController
     public function update(Request $request)
     {
         $this->validate($request, [
-            'content' => 'required|max:255',
+            'content' => ['required', 'max:255'],
         ]);
 
         Comment::find($request->id)

@@ -11,7 +11,7 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <p class="text-center">
-                        Если у вас есть предложения или вопросы, то отправьте мне сообщение на
+                        Если у вас есть предложения или вопросы, то отправьте мне письмо на
                         <strong>{{ env('CONTACT_EMAIL') }}</strong>
 
 

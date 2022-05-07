@@ -7,11 +7,93 @@
 <div class="article_card">
     <h3>{{ $article->title }}</h3>
     <div class="publication_date">{{ $article->published_at }}</div>
+
+    {{-- @if (isAdmin()) --}}
+    @if (true)
+    <button class="tag">
+        <a href="{{-- {{ route('articleEdit',['id'=>$article->id]) }} --}}">
+            Редактировать из админки
+        </a>
+    </button>
+    @endif
+
     <p>{!! $article->content !!}</p>
 </div>
 <br />
 <hr />
 
+<div class="comments">
+
+    {{-- @php(dd($comments)) --}}
+    {{-- @if(!empty($comments)) --}}
+    @if(true)
+    <h3><a name="comments">Комментарии</a></h3>
+
+    @foreach($comments as $comment)
+    <div>
+        <div class="response-text-left ">
+            {{--@if (!empty($avatar = $comment->user->files->last()))--}}
+            {{--<img style="max-width: 70px" class="media-object"--}}
+            {{--src="{{ asset('storage/app/'. $avatar->path) }}"--}}
+            {{--alt="image">--}}
+            {{--@else--}}
+            {{--<img style="max-width: 70px" class="media-object"--}}
+            {{--src="{{ asset('storage/app/'. $empty) }}"--}}
+            {{--alt="image">--}}
+            {{--@endif--}}
+            <div class="comment_user">{{$comment->user->name}}:</div class="comment_user">
+            <div class="publication_date">{{$comment->created_at}}</div>
+        </div>
+
+        <div class="response-text-right">
+            <p class="" data-wow-delay=".5s">
+                {{$comment->content}}
+            </p>
+
+            @if ((Auth::check())
+            && ((Auth::user()->id)
+            === $comment->user_id || isAdmin()))
+            <form action="{{ route('commentDelete', ['comment'=>$comment->id]) }}" method="post">
+                {{method_field('DELETE')}}
+                {{csrf_field()}}
+                <button type="submit" class="btn btn-danger">Удалить
+                </button>
+            </form>
+            @endif
+
+
+            <!-- end foreach -->
+
+            <!-- 			<div class="media response-info">
+                                                <div class="media-left response-text-left wow fadeInRight animated animated" data-wow-delay=".5s">
+                                                <a href="#">
+                                                <img class="media-object" src="GoEasyOn/images/t2.jpg" alt="">
+                                                </a>
+                                                <h5><a href="#">Admin</a></h5>
+                                                </div>
+                                                <div class="media-body response-text-right wow fadeInRight animated animated" data-wow-delay=".5s">
+                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,There are many variations of passages of Lorem Ipsum available,
+                                                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                                <ul>
+                                                <li>Mar 28,2016</li>
+                                                <li><a href="single.html">Ответить</a></li>
+                                                </ul>
+                                                </div>
+                                                <div class="clearfix"> </div>
+                                                </div> -->
+
+            <!-- end foreach -->
+
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+
+    @endforeach
+    @endif
+</div>
+
+<hr>
 <div class="article_card">
     <h3>Оставить ответ</h3>
     <form action="https://hbgl.dev/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate="">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Tag;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 
@@ -41,6 +42,9 @@ class SiteController extends ParentController
         // $article->viewed += 1;
         // $article->save();
 
+        // dd($article->comments());
+        // $comments = Article::find($articleId)->comments;
+
         return view('article')->with([
             'article' => $article,
             // 'popular' => Article::populars($articles),
@@ -48,7 +52,7 @@ class SiteController extends ParentController
             'categories' => Category::allPublished(),
             'tags' => Tag::allActive(),
             // 'image' => $this->getFiles($articleId),
-            'comments' => $this->getComments($articleId),
+            'comments' => $article->comments,
             'empty' => self::EMPTY_IMAGE,
         ]);
     }

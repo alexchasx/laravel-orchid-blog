@@ -10,3 +10,6 @@ Attempt to read property "role" on null
 - админка
 - статьи в блоке "Последние статьи" показываются в зависимости от
 выбранной категории (не должно)
+- оформление пустой страницы
+- сделать ContactController ?
+- SiteController --> ArticleController ?
