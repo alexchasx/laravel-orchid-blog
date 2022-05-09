@@ -20,7 +20,13 @@ class ParentController extends Controller
      */
     public static function checkAdmin()
     {
-        return true; //TODO убрать
+
+        // $dfdf = auth()->user();
+
+        // dd($dfdf->role);
+
+        // return true; //TODO убрать
+
 
         if (
             Auth::check() &&
