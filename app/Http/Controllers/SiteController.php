@@ -13,7 +13,7 @@ class SiteController extends ParentController
     const EMPTY_IMAGE = 'upload/no-image.png';
 
     /**
-     * Показывает все статьи
+     * Показывает все опубликованные статьи
      */
     public function index()
     {
@@ -41,9 +41,6 @@ class SiteController extends ParentController
         $article = $builder->findOrFail($articleId);
         // $article->viewed += 1;
         // $article->save();
-
-        // dd($article->comments());
-        // $comments = Article::find($articleId)->comments;
 
         return view('article')->with([
             'article' => $article,

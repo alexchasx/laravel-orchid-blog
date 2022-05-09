@@ -2,12 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Article;
-use App\Models\Category;
-use App\Models\Tag;
-use App\Models\User;
-use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ParentController extends Controller
@@ -26,9 +20,10 @@ class ParentController extends Controller
      */
     public static function checkAdmin()
     {
+        return true; //TODO убрать
 
         if (
-            // Auth::check() &&
+            Auth::check() &&
             isAdmin()
         ) {
             return true;
