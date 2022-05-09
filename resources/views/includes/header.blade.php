@@ -16,6 +16,17 @@
                     </li>
                     <li><a href="https://github.com/chasovnikov" class="link">GitHub</a></li>
                     <li><a href="{{ route('contact') }}" class="link">Контакты</a></li>
+
+                    @if (! Auth::guest() && isAdmin())
+
+                    <li>
+                        <a href="{{ route('adminIndex') }}" class="link">
+                            <span>Админ-панель</span>
+                        </a>
+                    </li>
+
+                    @endif
+
                 </ul>
             </div>
         </div>

@@ -73,10 +73,10 @@ class AdminArticleController extends ParentController
         ]);
 
         $article = Article::create(
-            Arr::except($request->all(), ['tags_id'])
+            Arr::except($request->all(), ['tag_ids'])
         );
 
-        foreach ($request->input('tags_id') as $tagId) {
+        foreach ($request->input('tag_ids') as $tagId) {
             $article->tags()->save(new ArticleTag([
                 'article_id' => $article->id,
                 'tag_id' => $tagId,
@@ -134,12 +134,12 @@ class AdminArticleController extends ParentController
 
         // $article = Article::withTrashed()
         $article = Article::where('id', $request->id)
-            ->update(Arr::except($request->all(), ['tags_id', '_token']));
+            ->update(Arr::except($request->all(), ['tag_ids', '_token']));
 
-        $tagIds = $request->input('tags_id');
+        $tagIds = $request->input('tag_ids');
 
         if (is_array($tagIds)) {
-            foreach ($request->input('tags_id') as $tagId) {
+            foreach ($request->input('tag_ids') as $tagId) {
                 ArticleTag::create([
                     'article_id' => $request->id,
                     'tag_id' => $tagId,

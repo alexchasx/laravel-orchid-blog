@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SiteController;
@@ -17,8 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/dashboard', function () {
-    return redirect('admin/article/index');
+Route::get('/', function () {
+    // return redirect('admin/article/index');
+    return redirect('adminIndex');
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__ . '/auth.php';
@@ -42,4 +42,6 @@ Route::controller(CommentController::class)->group(function () {
     Route::get('comment.status.{comment}', 'statusChange')->name('commentStatusChange');
 });
 
-Route::post('send.simple.email', 'MailController@simplePHPEmail')->name('simplePHPEmail');
+Route::fallback(function () {
+    return 'fallback';
+});
