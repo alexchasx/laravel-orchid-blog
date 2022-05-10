@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    // return redirect('admin/article/index');
     return redirect('adminIndex');
 })->middleware(['auth'])->name('dashboard');
 
@@ -43,5 +42,5 @@ Route::controller(CommentController::class)->group(function () {
 });
 
 Route::fallback(function () {
-    return 'fallback';
+    return '404';
 });
