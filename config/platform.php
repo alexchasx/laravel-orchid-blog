@@ -48,7 +48,7 @@ return [
     */
 
     'middleware' => [
-        'public'  => ['web'],
+        // 'public'  => ['web'],
         'private' => ['web', 'platform'],
     ],
 

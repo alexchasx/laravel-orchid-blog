@@ -8,25 +8,23 @@
     <h3>{{ $article->title }}</h3>
     <div class="publication_date">{{ $article->published_at }}</div>
 
-    {{-- @if (isAdmin()) --}}
-    @if (true)
+    {{-- @if (isAdmin())
     <button class="tag">
-        <a href="{{-- {{ route('articleEdit',['id'=>$article->id]) }} --}}">
-            Редактировать из админки
-        </a>
+        <a href="{{ route('articleEdit',['id'=>$article->id]) }}">
+    Редактировать
+    </a>
     </button>
-    @endif
+    @endif --}}
 
     <p>{!! $article->content !!}</p>
 </div>
 <br />
-<hr />
 
 <div class="comments">
 
-    {{-- @php(dd($comments)) --}}
     {{-- @if(!empty($comments)) --}}
-    @if(true)
+    @if($comments->first())
+    <hr />
     <h3><a name="comments">Комментарии</a></h3>
 
     @foreach($comments as $comment)

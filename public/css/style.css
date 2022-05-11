@@ -62,7 +62,7 @@ a {
 }
 
 .nav_wrap {
-    max-width: 1024px;
+    max-width: 1170px;
     padding: 0 30px;
     margin: 0 auto;
 }
@@ -79,8 +79,16 @@ nav .nav_wrap {
 .menu {
 }
 
-.menu li {
+/* .menu li {
     float: left;
+} */
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
 }
 
 .menu li a {
@@ -202,4 +210,10 @@ hr {
     /* еще больше контроля с max-width */
     max-width: 100%;
     object-fit: contain;
+}
+.align-left {
+    float: left !important;
+}
+.align-rigt {
+    float: rigt !important;
 }
