@@ -5,6 +5,7 @@ namespace App\Orchid\Layouts\Article;
 use App\Models\Article;
 use App\Models\Category;
 use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -35,16 +36,21 @@ class ArticleListTable extends Table
         return [
             TD::make('id', 'ID')->sort(),
             TD::make('title', 'Заголовок'),
+
             TD::make('published', 'Видна?')->render(function (Article $article) {
-                return $article->published ? 'Видна' : 'Скрыта';
-            })/* ->width('80px') */->popover('Опубликована?')->sort(),
+                return CheckBox::make('users[]')
+                    ->value($article->published)->disabled();
+            })->sort(),
+
+            TD::make('category_id', 'ID К.')
+                ->popover('ID Категории (для сортировки по категориям)')->sort(),
+
             TD::make('category_title', 'Категория')->render(
                 function (Article $article) {
                     return Category::findOrfail($article->category_id)->title;
                 }
-            )->sort(),
-            TD::make('created_at', 'Дата создания')->defaultHidden(),
-            TD::make('updated_at', 'Дата обновления')->defaultHidden(),
+            ),
+
             TD::make('Edit')->render(function (Article $article) {
                 return ModalToggle::make('')
                     ->modal('editArticle')
@@ -53,7 +59,10 @@ class ArticleListTable extends Table
                     ->asyncParameters([
                         'article' => $article->id
                     ])->icon('note');
-            })
+            }),
+
+            TD::make('created_at', 'Дата создания')->defaultHidden(),
+            TD::make('updated_at', 'Дата обновления')->defaultHidden(),
         ];
     }
 }

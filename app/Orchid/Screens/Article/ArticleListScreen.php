@@ -88,7 +88,7 @@ class ArticleListScreen extends Screen
             'category_id' => $request->input('article.category_id'),
             'keywords' => $request->input('article.keywords'),
             'meta_desc' => $request->input('article.meta_desc'),
-            'published' => $request->input('article.published'),
+            'published' => $request->boolean('article.published'),
             'published_at' => $request->input('article.published_at'),
         ]);
 
