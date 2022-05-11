@@ -5,23 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Orchid\Screen\AsSource;
 
 class Article extends Model
 {
     use HasFactory;
+    use AsSource;
 
     public $fillable = [
-        'title',
-        'description',
-        'content',
-        'user_id',
-        'category_id',
-        'image',
-        'viewed',
-        'keywords',
-        'meta_desc',
-        'published',
-        'published_at',
+        'title',        'description',     'content',
+        'user_id',      'category_id',     'image',
+        'viewed',       'keywords',        'meta_desc',
+        'published',    'published_at',
     ];
 
     protected $casts = [

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\Article\ArticleListScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
@@ -31,7 +32,10 @@ use Tabuna\Breadcrumbs\Trail;
 
 // Main
 Route::screen('/main', PlatformScreen::class)
-    ->name('platform.main');
+    ->name('platform.main')->middleware(['auth']);
+
+Route::screen('articles', ArticleListScreen::class)
+    ->name('platform.articles');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
