@@ -63,7 +63,7 @@ class ArticleListScreen extends Screen
             Layout::modal('createArticle', CreateOrUpdateArticle::class)
                 ->title('Создание статьи')->applyButton('Создать'),
             Layout::modal('editArticle', CreateOrUpdateArticle::class)
-                ->title('Редактирование статьи')->async('asyncGetArticle')
+                ->async('asyncGetArticle')
 
         ];
     }
@@ -80,6 +80,7 @@ class ArticleListScreen extends Screen
         $articleId = $request->input('article.id');
         Article::updateOrCreate([
             'id' => $articleId,
+        ], [
             'title' => $request->input('article.title'),
             'description' => $request->input('article.description'),
             'content' => $request->input('article.content'),

@@ -21,6 +21,16 @@
 
 
                     @if (! Auth::guest())
+
+                    <li class="right">
+                        <a href="{{ route('logout') }}" class="link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            {{ __('Выход') }}
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                    </li>
+
                     @if (isAdmin())
 
                     <li class="right">
@@ -31,14 +41,6 @@
 
                     @endif
 
-                    <li class="right">
-                        <a href="{{ route('logout') }}" class="link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            {{ __('Выход') }}
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            {{ csrf_field() }}
-                        </form>
-                    </li>
 
                     @else
 

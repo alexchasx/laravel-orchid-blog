@@ -20,6 +20,11 @@ class ArticleListTable extends Table
      */
     protected $target = 'articles';
 
+    protected function striped(): bool
+    {
+        return true;
+    }
+
     /**
      * Get the table cells to be displayed.
      *
@@ -40,14 +45,14 @@ class ArticleListTable extends Table
             )->sort(),
             TD::make('created_at', 'Дата создания')->defaultHidden(),
             TD::make('updated_at', 'Дата обновления')->defaultHidden(),
-            TD::make('action')->render(function (Article $article) {
-                return ModalToggle::make('Редактировать')
-                    ->modal('Редактировать статью')
+            TD::make('Edit')->render(function (Article $article) {
+                return ModalToggle::make('')
+                    ->modal('editArticle')
                     ->method('createOrUpdateArticle')
-                    ->modalTitle('Редактирование статьи ' . $article->phone)
+                    ->modalTitle('Редактирование статьи ' . $article->title)
                     ->asyncParameters([
                         'article' => $article->id
-                    ]);
+                    ])->icon('note');
             })
         ];
     }
