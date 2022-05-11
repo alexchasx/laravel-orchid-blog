@@ -20,14 +20,6 @@ class ParentController extends Controller
      */
     public static function checkAdmin()
     {
-
-        // $dfdf = auth()->user();
-
-        // dd($dfdf->role);
-
-        // return true; //TODO убрать
-
-
         if (
             Auth::check() &&
             isAdmin()
@@ -35,6 +27,6 @@ class ParentController extends Controller
             return true;
         }
 
-        abort(403, 'Доступ запрещён!');
+        abort(403, 'Доступ запрещён11!');
     }
 }

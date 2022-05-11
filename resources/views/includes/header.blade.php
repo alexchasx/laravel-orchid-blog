@@ -20,7 +20,7 @@
                     @if (! Auth::guest() && isAdmin())
 
                     <li>
-                        <a href="{{ route('adminIndex') }}" class="link">
+                        <a href="{{ route('platform.main') }}" class="link">
                             <span>Админ-панель</span>
                         </a>
                     </li>

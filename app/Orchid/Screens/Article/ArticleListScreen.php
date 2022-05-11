@@ -2,10 +2,16 @@
 
 namespace App\Orchid\Screens\Article;
 
+use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
+use App\Orchid\Layouts\Article\ArticleListTable;
+use App\Orchid\Layouts\CreateOrUpdateArticle;
+use Orchid\Screen\Actions\ModalToggle;
+use Orchid\Screen\Fields\Input;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Screen;
-use Orchid\Screen\TD;
+use Orchid\Support\Facades\Alert as FacadesAlert;
+use Orchid\Support\Facades\Toast;
 
 class ArticleListScreen extends Screen
 {
@@ -17,7 +23,8 @@ class ArticleListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'articles' => Article::paginate(24),
+            'articles' => Article::filters()->defaultSort('published', 'desc')
+                ->paginate(24),
         ];
     }
 
@@ -38,7 +45,10 @@ class ArticleListScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [];
+        return [
+            ModalToggle::make('Создать статью')->modal('createArticle')
+                ->method('createOrUpdateArticle'),
+        ];
     }
 
     /**
@@ -49,17 +59,38 @@ class ArticleListScreen extends Screen
     public function layout(): iterable
     {
         return [
-            Layout::table('articles', [
-                TD::make('id', 'ID'),
-                TD::make('title', 'Заголовок'),
-                TD::make('published', 'Видна?')->render(function (Article $article) {
-                    return $article->published ? 'Видна' : 'Скрыта';
-                }),
-                // TD::make('user_id', 'Автор'),
-                TD::make('category_id', 'Категория'),
-                TD::make('created_at', 'Дата создания')->defaultHidden(),
-                TD::make('updated_at', 'Дата обновления')->defaultHidden(),
-            ])
+            ArticleListTable::class,
+            Layout::modal('createArticle', CreateOrUpdateArticle::class)
+                ->title('Создание статьи')->applyButton('Создать'),
+            Layout::modal('editArticle', CreateOrUpdateArticle::class)
+                ->title('Редактирование статьи')->async('asyncGetArticle')
+
         ];
+    }
+
+    public function asyncGetArticle(Article $article): array
+    {
+        return [
+            'article' => $article
+        ];
+    }
+
+    public function createOrUpdateArticle(ArticleRequest $request): void
+    {
+        $articleId = $request->input('article.id');
+        Article::updateOrCreate([
+            'id' => $articleId,
+            'title' => $request->input('article.title'),
+            'description' => $request->input('article.description'),
+            'content' => $request->input('article.content'),
+            'user_id' => auth()->user()->id,
+            'category_id' => $request->input('article.category_id'),
+            'keywords' => $request->input('article.keywords'),
+            'meta_desc' => $request->input('article.meta_desc'),
+            'published' => $request->input('article.published'),
+            'published_at' => $request->input('article.published_at'),
+        ]);
+
+        is_null($articleId) ? Toast::info('Статья создана') : Toast::info('Статья обновлена');
     }
 }

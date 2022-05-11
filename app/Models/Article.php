@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
 class Article extends Model
 {
     use HasFactory;
     use AsSource;
+    use Filterable;
 
     public $fillable = [
         'title',        'description',     'content',
@@ -27,6 +29,14 @@ class Article extends Model
         'created_at',
         'updated_at',
         'published_at',
+    ];
+
+    protected $allowedSorts = [
+        'published', 'id', 'category_id'
+    ];
+
+    protected $allowedFilters = [
+        'category_id',
     ];
 
     /**
