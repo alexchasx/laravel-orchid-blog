@@ -32,7 +32,7 @@ use Tabuna\Breadcrumbs\Trail;
 
 // Main
 Route::screen('/main', PlatformScreen::class)
-    ->name('platform.main')->middleware(['auth']);
+    ->name('platform.main');
 
 Route::screen('articles', ArticleListScreen::class)
     ->name('platform.articles');

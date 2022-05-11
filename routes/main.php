@@ -25,7 +25,7 @@ require __DIR__ . '/auth.php';
 Route::get('contact', [ContactController::class, 'show'])->name('contact');
 
 Route::controller(SiteController::class)->group(function () {
-    Route::get('/', 'index')->name('blog');
+    Route::get('/', 'index')->name('home');
     Route::get('article.{id}', 'show')->name('articleShow');
     Route::get('category.{id}', 'showByCategory')->name('showByCategory');
     Route::get('tag.{id}', 'showByTag')->name('showByTag');

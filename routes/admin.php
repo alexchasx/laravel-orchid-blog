@@ -6,6 +6,11 @@ use App\Http\Controllers\Admin\AdminTagController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'admin'], function () {
+
+    Route::get('/login', function () {
+        return redirect('login');
+    });
+
     Route::group(['prefix' => 'article'], function () {
         // Route::group(['prefix' => 'admin/article', 'middleware' => ['auth', 'admin']], function () {
 

@@ -58,7 +58,7 @@ class ArticleListTable extends Table
                     ->modalTitle('Редактирование статьи ' . $article->title)
                     ->asyncParameters([
                         'article' => $article->id
-                    ])->icon('note');
+                    ])->icon('pencil');
             }),
 
             TD::make('created_at', 'Дата создания')->defaultHidden(),
