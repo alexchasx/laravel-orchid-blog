@@ -24,7 +24,7 @@
                     @yield('content')
                 </div>
                 <div class="right_block">
-                    @include('includes.block_right')
+                    @include('includes.right_block')
                 </div>
             </div>
         </section>

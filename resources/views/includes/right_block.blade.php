@@ -47,11 +47,13 @@
         <nav class="category_list tags_list">
             @foreach($tags as $tag)
 
+            @unless (empty($articleCount = $tag->articles->count()))
             <button class="tag">
                 <a href="{{ route('showByTag', ['id' => $tag->id]) }}">
                     {{ $tag->title }}
                 </a>
             </button>
+            @endunless
 
             @endforeach
         </nav>

@@ -2,7 +2,8 @@
 
 @section('content')
 
-@unless (empty($articles))
+@if (!empty($articles[0]))
+
 @foreach ($articles as $article)
 
 <div class="article_card">
@@ -28,6 +29,9 @@
 @endunless
 
 @endforeach
-@endunless
+
+@else
+Ничего не нашлось
+@endif
 
 @endsection
