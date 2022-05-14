@@ -49,9 +49,9 @@ class PlatformScreen extends Screen
     {
         return [
 
-            Link::make('На главную')
-                ->route('home')
-                ->icon('home'),
+            // Link::make('На главную')
+            //     ->route('home')
+            //     ->icon('home'),
 
             Link::make('Website Orchid')
                 ->href('http://orchid.software')
