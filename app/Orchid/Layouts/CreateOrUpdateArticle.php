@@ -3,12 +3,17 @@
 namespace App\Orchid\Layouts;
 
 use App\Models\Category;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Fields\Code as FieldsCode;
 use Orchid\Screen\Fields\DateTimer;
+use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Fields\SimpleMDE;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Layouts\Rows;
 
@@ -31,31 +36,47 @@ class CreateOrUpdateArticle extends Rows
         return [
             Input::make('article.id')->type('hidden'),
 
-            Input::make('article.title')->required()->title('Заголовок'),
+            Group::make([
+                Input::make('article.title')->required()->title('Заголовок'),
+                CheckBox::make('article.published')
+                    ->value(1)
+                    ->sendTrueOrFalse()
+                    ->title('Опубликована?'),
+            ]),
 
-            TextArea::make('article.description')
-                ->rows(8)->required()->title('Кратко'),
+            Group::make([
+                Select::make('article.category_id')
+                    ->fromQuery(Category::where('published', true), 'title')
+                    ->title('Категория')->required(),
+                DateTimer::make('article.published_at')
+                    ->title('Дата публикации')
+                    ->format('d-m-Y')
+                    ->allowInput()
+                    ->required(),
+            ]),
 
-            TextArea::make('article.content')
-                ->rows(12)->required()->title('Контент'),
+            // TextArea::make('article.description')
+            //     ->rows(8)->required()->title('Кратко'),
 
-            Select::make('article.category_id')
-                ->fromQuery(Category::where('published', true), 'title')
-                ->title('Категория')->required(),
+            // TextArea::make('article.content')
+            //     ->rows(12)->required()->title('Контент'),
+            // SimpleMDE::make('article.content')->title('Контент'),
+            // FieldsCode::make('article.content')->language(FieldsCode::MARKUP)->title('Контент'),
 
-            Input::make('article.keywords')->title('Ключевые слова'),
 
-            Input::make('article.meta_desc')->title('Мета деск'),
+            Quill::make('article.description')
+                ->toolbar(["text", "color", "header", "list", "format", "media"])
+                ->title('Предпросмотр')->required(),
 
-            CheckBox::make('article.published')
-                ->value(1)
-                ->placeholder('Опубликована?'),
+            Quill::make('article.content')
+                ->toolbar(["text", "color", "header", "list", "format", "media"])
+                ->title('Контент')->required(),
 
-            DateTimer::make('article.published_at')
-                ->title('Дата публикации')
-                ->format('d-m-Y')
-                ->allowInput()
-                ->required(),
+
+            Group::make([
+                Input::make('article.keywords')->title('Ключевые слова'),
+                Input::make('article.meta_desc')->title('Мета деск'),
+            ]),
         ];
     }
 }

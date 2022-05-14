@@ -35,17 +35,20 @@ class ArticleListTable extends Table
     {
         return [
             TD::make('id', 'ID')->sort(),
-            TD::make('title', 'Заголовок'),
 
             TD::make('published', 'Видна?')->render(function (Article $article) {
                 return CheckBox::make('users[]')
                     ->value($article->published)->disabled();
             })->sort(),
 
-            TD::make('category_id', 'ID К.')
-                ->popover('ID Категории (для сортировки по категориям)')->sort(),
+            TD::make('title', 'Заголовок'),
 
-            TD::make('category_title', 'Категория')->render(
+            TD::make('category_id', 'ID К.')
+                ->alignRight()
+                ->popover('ID Категории (для сортировки по категориям)')
+                ->sort(),
+
+            TD::make('category_title', 'Категория')->alignLeft()->render(
                 function (Article $article) {
                     return Category::findOrfail($article->category_id)->title;
                 }
@@ -55,7 +58,7 @@ class ArticleListTable extends Table
                 return ModalToggle::make('')
                     ->modal('editArticle')
                     ->method('createOrUpdateArticle')
-                    ->modalTitle('Редактирование статьи ' . $article->title)
+                    ->modalTitle('Редактирование')
                     ->asyncParameters([
                         'article' => $article->id
                     ])->icon('pencil');

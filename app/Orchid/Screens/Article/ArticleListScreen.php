@@ -8,6 +8,7 @@ use App\Orchid\Layouts\Article\ArticleListTable;
 use App\Orchid\Layouts\CreateOrUpdateArticle;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Layouts\Modal;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Alert as FacadesAlert;
@@ -60,11 +61,15 @@ class ArticleListScreen extends Screen
     {
         return [
             ArticleListTable::class,
-            Layout::modal('createArticle', CreateOrUpdateArticle::class)
-                ->title('Создание статьи')->applyButton('Создать'),
-            Layout::modal('editArticle', CreateOrUpdateArticle::class)
-                ->async('asyncGetArticle')
 
+            Layout::modal('createArticle', CreateOrUpdateArticle::class)
+                ->title('Создание статьи')
+                ->size(Modal::SIZE_LG)
+                ->applyButton('Создать'),
+
+            Layout::modal('editArticle', CreateOrUpdateArticle::class)
+                ->size(Modal::SIZE_LG)
+                ->async('asyncGetArticle')
         ];
     }
 

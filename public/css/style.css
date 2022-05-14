@@ -26,6 +26,7 @@ a {
     padding: 0 30px;
     margin: 0 auto;
 } */
+
 /* END basic CSS*/
 
 .main_block {
@@ -216,4 +217,10 @@ hr {
 }
 .align-rigt {
     float: rigt !important;
+}
+.article_card li {
+    margin: 0.05em;
+    margin-left: 0.8em;
+    padding: 0.05em;
+    list-style-type: circle;
 }
