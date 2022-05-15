@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Orchid\Screens\Article\ArticleListScreen;
+use App\Orchid\Screens\Category\CategoryListScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
@@ -36,6 +37,9 @@ Route::screen('/main', PlatformScreen::class)
 
 Route::screen('articles', ArticleListScreen::class)
     ->name('platform.articles');
+
+Route::screen('categories', CategoryListScreen::class)
+    ->name('platform.categories');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

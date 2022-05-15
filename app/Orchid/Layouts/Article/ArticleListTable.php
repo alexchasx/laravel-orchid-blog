@@ -37,7 +37,7 @@ class ArticleListTable extends Table
             TD::make('id', 'ID')->sort(),
 
             TD::make('published', 'Видна?')->render(function (Article $article) {
-                return CheckBox::make('users[]')
+                return CheckBox::make('articles[]')
                     ->value($article->published)->disabled();
             })->sort(),
 
@@ -58,12 +58,13 @@ class ArticleListTable extends Table
                 return ModalToggle::make('')
                     ->modal('editArticle')
                     ->method('createOrUpdateArticle')
-                    ->modalTitle('Редактирование')
+                    ->modalTitle('Редакт.')
                     ->asyncParameters([
                         'article' => $article->id
                     ])->icon('pencil');
             }),
 
+            TD::make('published_at', 'Дата публикации')->defaultHidden(),
             TD::make('created_at', 'Дата создания')->defaultHidden(),
             TD::make('updated_at', 'Дата обновления')->defaultHidden(),
         ];

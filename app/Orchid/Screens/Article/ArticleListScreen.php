@@ -75,9 +75,7 @@ class ArticleListScreen extends Screen
 
     public function asyncGetArticle(Article $article): array
     {
-        return [
-            'article' => $article
-        ];
+        return ['article' => $article];
     }
 
     public function createOrUpdateArticle(ArticleRequest $request): void

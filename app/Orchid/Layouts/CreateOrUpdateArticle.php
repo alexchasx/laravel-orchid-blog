@@ -3,18 +3,13 @@
 namespace App\Orchid\Layouts;
 
 use App\Models\Category;
-use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\CheckBox;
-use Orchid\Screen\Fields\Code as FieldsCode;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Quill;
-use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\Select;
-use Orchid\Screen\Fields\SimpleMDE;
-use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Layouts\Rows;
 
 class CreateOrUpdateArticle extends Rows
