@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -108,7 +109,7 @@ class Article extends Model
     public static function allPublished()
     {
         return self::latest()
-            //            ->where('published_at', '<=', Carbon::now()) //TODO Реализовать постепенную самопубликацию по устанновленным датам
+            ->where('published_at', '<=', Carbon::now())
             ->where('published', true);
     }
 

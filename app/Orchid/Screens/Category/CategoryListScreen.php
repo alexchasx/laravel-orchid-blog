@@ -65,7 +65,7 @@ class CategoryListScreen extends Screen
                     return ModalToggle::make('')
                         ->modal('editCategory')
                         ->method('createOrUpdateCategory')
-                        ->modalTitle('Редакт.')
+                        ->modalTitle('Редактирование')
                         ->asyncParameters([
                             'category' => $category->id
                         ])->icon('pencil');

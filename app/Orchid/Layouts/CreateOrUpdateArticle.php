@@ -45,7 +45,7 @@ class CreateOrUpdateArticle extends Rows
                     ->title('Категория')->required(),
                 DateTimer::make('article.published_at')
                     ->title('Дата публикации')
-                    ->format('d-m-Y')
+                    ->format('Y-m-d')
                     ->allowInput()
                     ->required(),
             ]),

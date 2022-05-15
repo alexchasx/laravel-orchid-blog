@@ -28,7 +28,7 @@ class ArticleRequest extends FormRequest
             'article.description' => ['required'],
             'article.content' => ['required'],
             'article.category_id' => ['required'],
-            'article.published_at' => ['required', 'date_format:d-m-Y'],
+            'article.published_at' => ['required', 'date_format:Y-m-d'],
         ];
     }
 
