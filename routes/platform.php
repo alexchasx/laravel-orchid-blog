@@ -14,6 +14,7 @@ use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
+use App\Orchid\Screens\Tag\TagListScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
@@ -40,6 +41,9 @@ Route::screen('articles', ArticleListScreen::class)
 
 Route::screen('categories', CategoryListScreen::class)
     ->name('platform.categories');
+
+Route::screen('tags', TagListScreen::class)
+    ->name('platform.tags');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

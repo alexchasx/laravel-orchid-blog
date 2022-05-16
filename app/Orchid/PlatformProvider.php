@@ -42,7 +42,7 @@ class PlatformProvider extends OrchidServiceProvider
 
             Menu::make(__('Метки'))
                 ->icon('tag')
-                ->route('platform.categories'),
+                ->route('platform.tags'),
 
             Menu::make(__('Комментарии'))
                 ->icon('bubble')
@@ -51,13 +51,13 @@ class PlatformProvider extends OrchidServiceProvider
                     return 6;
                 }),
 
-            Menu::make(__('Users'))
+            Menu::make(__('Пользователи'))
                 ->icon('user')
                 ->route('platform.systems.users')
                 ->permission('platform.systems.users')
                 ->title(__('Access rights')),
 
-            Menu::make(__('Roles'))
+            Menu::make(__('Роли'))
                 ->icon('lock')
                 ->route('platform.systems.roles')
                 ->permission('platform.systems.roles'),

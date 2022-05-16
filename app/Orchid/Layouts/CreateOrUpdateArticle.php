@@ -42,7 +42,7 @@ class CreateOrUpdateArticle extends Rows
             Group::make([
                 Select::make('article.category_id')
                     ->fromQuery(Category::where('published', true), 'title')
-                    ->title('Категория')->required(),
+                    ->title('Рубрика')->required(),
                 DateTimer::make('article.published_at')
                     ->title('Дата публикации')
                     ->format('Y-m-d')

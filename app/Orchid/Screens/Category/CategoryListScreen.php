@@ -65,7 +65,7 @@ class CategoryListScreen extends Screen
                     return ModalToggle::make('')
                         ->modal('editCategory')
                         ->method('createOrUpdateCategory')
-                        ->modalTitle('Редактирование')
+                        ->modalTitle('Редактирование рубрики')
                         ->asyncParameters([
                             'category' => $category->id
                         ])->icon('pencil');
@@ -105,6 +105,6 @@ class CategoryListScreen extends Screen
             'published' => $request->boolean('category.published'),
         ]);
 
-        is_null($categoryId) ? Toast::info('Статья создана') : Toast::info('Статья обновлена');
+        is_null($categoryId) ? Toast::info('Рубрика создана') : Toast::info('Рубрика обновлена');
     }
 }

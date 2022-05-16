@@ -68,6 +68,7 @@ class ArticleListScreen extends Screen
                 ->applyButton('Создать'),
 
             Layout::modal('editArticle', CreateOrUpdateArticle::class)
+                ->title('Редактирование статьи')
                 ->size(Modal::SIZE_LG)
                 ->async('asyncGetArticle')
         ];
