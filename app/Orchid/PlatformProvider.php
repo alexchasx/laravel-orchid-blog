@@ -28,17 +28,42 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         return [
-            Menu::make('На главную')
+            Menu::make(__('На главную'))
                 ->icon('home')
                 ->route('home'),
 
-            Menu::make('Статьи')
+            Menu::make(__('Статьи'))
                 ->icon('paste')
                 ->route('platform.articles'),
 
-            Menu::make('Категории')
+            Menu::make(__('Рубрики'))
                 ->icon('list')
                 ->route('platform.categories'),
+
+            Menu::make(__('Метки'))
+                ->icon('tag')
+                ->route('platform.categories'),
+
+            Menu::make(__('Комментарии'))
+                ->icon('bubble')
+                ->route('platform.example')
+                ->badge(function () {
+                    return 6;
+                }),
+
+            Menu::make(__('Users'))
+                ->icon('user')
+                ->route('platform.systems.users')
+                ->permission('platform.systems.users')
+                ->title(__('Access rights')),
+
+            Menu::make(__('Roles'))
+                ->icon('lock')
+                ->route('platform.systems.roles')
+                ->permission('platform.systems.roles'),
+
+            // Menu::make(__(''))
+            //     ->title('========= Examples ========='),
 
             // Menu::make('Example screen')
             //     ->icon('monitor')
@@ -95,16 +120,6 @@ class PlatformProvider extends OrchidServiceProvider
             //         return Dashboard::version();
             //     }, Color::DARK()),
 
-            // Menu::make(__('Users'))
-            //     ->icon('user')
-            //     ->route('platform.systems.users')
-            //     ->permission('platform.systems.users')
-            //     ->title(__('Access rights')),
-
-            // Menu::make(__('Roles'))
-            //     ->icon('lock')
-            //     ->route('platform.systems.roles')
-            //     ->permission('platform.systems.roles'),
         ];
     }
 

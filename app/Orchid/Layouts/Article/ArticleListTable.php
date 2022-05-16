@@ -52,6 +52,8 @@ class ArticleListTable extends Table
                     ])->icon('pencil');
             }),
 
+            // TD::make('delete', 'Удалить')->but,
+
             TD::make('title', 'Заголовок'),
 
             TD::make('category_id', 'ID_К.')

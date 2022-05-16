@@ -42,5 +42,5 @@ Route::controller(CommentController::class)->group(function () {
 });
 
 Route::fallback(function () {
-    return '404';
+    return view('errors.404');
 });
