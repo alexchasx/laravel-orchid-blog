@@ -1,6 +1,6 @@
 @if (!empty($categories))
 <div class="category_block">
-    <h3>Категории</h2>
+    <h3>{{ __('Рубрики') }}</h2>
         <nav class="category_list">
             <ul>
                 @foreach($categories as $category)
@@ -23,7 +23,7 @@
 @if (!empty($recents[0]))
 <hr />
 <div class="category_block">
-    <h3>Последние статьи</h2>
+    <h3>{{ __('Последние статьи') }}</h2>
         <nav class="category_list">
             <ul>
                 @foreach($recents as $recent)
@@ -43,7 +43,7 @@
 @if (!empty($tags[0]))
 <hr />
 <div class="category_block">
-    <h3>Поиск по тегам</h2>
+    <h3>{{ __('Поиск по меткам') }}</h2>
         <nav class="category_list tags_list">
             @foreach($tags as $tag)
 

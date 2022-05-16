@@ -5,16 +5,21 @@
 @unless (empty($article))
 
 <div class="article_card">
-    <h3>{{ $article->title }}</h3>
+    <h3> @if (! Auth::guest() && isAdmin())
+        [ID={{ $article->id }}]
+        @endif
+
+        {{ $article->title }}</h3>
+
     <div class="publication_date">{{ $article->published_at }}</div>
 
-    {{-- @if (isAdmin())
-    <button class="tag">
+    {{-- @if (! Auth::guest() && isAdmin()) --}}
+    {{-- <button class="tag">
         <a href="{{ route('articleEdit',['id'=>$article->id]) }}">
-    Редактировать
+    {{ __('Редактировать') }}
     </a>
-    </button>
-    @endif --}}
+    </button> --}}
+    {{-- @endif --}}
 
     <p>{!! $article->content !!}</p>
 </div>
@@ -25,7 +30,7 @@
     {{-- @if(!empty($comments)) --}}
     @if($comments->first())
     <hr />
-    <h3><a name="comments">Комментарии</a></h3>
+    <h3><a name="comments">{{ __('Комментарии') }}</a></h3>
 
     @foreach($comments as $comment)
     <div>
@@ -54,8 +59,7 @@
             <form action="{{ route('commentDelete', ['comment'=>$comment->id]) }}" method="post">
                 {{method_field('DELETE')}}
                 {{csrf_field()}}
-                <button type="submit" class="btn btn-danger">Удалить
-                </button>
+                <button type="submit" class="btn btn-danger">{{ __('Удалить') }}</button>
             </form>
             @endif
 
@@ -93,7 +97,7 @@
 
 <hr>
 <div class="article_card">
-    <h3>Оставить ответ</h3>
+    <h3>{{ __('Оставить ответ') }}</h3>
     <form action="https://hbgl.dev/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate="">
         <p class="comment-notes">
             <span id="email-notes">{{ __('Ваш адрес электронной почты не будет опубликован.') }}</span>
@@ -127,7 +131,7 @@
         <p class="comment-form-cookies-consent">
             <input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes">
             <label for="wp-comment-cookies-consent">
-                Сохраните мои данные в этом браузере для следующего комментария.
+                {{ __('Сохраните мои данные в этом браузере для следующего комментария.') }}
             </label>
             <br>
         </p>

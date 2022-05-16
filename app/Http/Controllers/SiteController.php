@@ -31,7 +31,6 @@ class SiteController extends ParentController
 
     /**
      * Показывает одну статью
-     *
      * GET /article.{id}
      */
     public function show($articleId)

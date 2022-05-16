@@ -2,12 +2,18 @@
 
 @section('content')
 
+{{-- {{ memory_get_usage() }} --}}
+
 @if (!empty($articles[0]))
 
 @foreach ($articles as $article)
 
 <div class="article_card">
     <h3><a href="{{route('articleShow', ['id' => $article->id])}}" class="continue_read">
+
+            @if (! Auth::guest() && isAdmin())
+            [ID={{ $article->id }}]
+            @endif
 
             {{ $article->title }}
         </a>
@@ -18,7 +24,7 @@
     <p>{!! $article->description !!}</p>
 
     <a href="{{route('articleShow', ['id' => $article->id])}}" class="continue_read">
-        Читать далее
+        {{ __('Читать далее') }}
     </a>
 </div>
 
@@ -31,7 +37,9 @@
 @endforeach
 
 @else
-Ничего не нашлось
+<div class="article_card">
+    {{ __('Ничего не нашлось') }}
+</div>
 @endif
 
 @endsection
