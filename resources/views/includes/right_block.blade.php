@@ -1,16 +1,17 @@
-{{-- @if (true) --}}
+
+@if (!empty($categories)) {{-- Чтобы не отображалось на /login и /register --}}
 <section id="search" class="category_block">
     <form role="search" method="get" class="search-form" action="{{ route('search') }}">
         <label>
             {{-- <span class="screen-reader-text">{{ __('Поиск для:') }}</span> --}}
             <input type="search" class="search-field" placeholder="{{-- {{ __('Поиск') }} --}} …" value="" name="query">
         </label>
-        <button type="submit" class="search-submit">
+        <button type="submit" class="submit">
             <span class="screen-reader-text">{{ __('Поиск') }}</span>
         </button>
     </form>
 </section>
-{{-- @endif --}}
+@endif
 
 @if (!empty($categories))
 <hr />

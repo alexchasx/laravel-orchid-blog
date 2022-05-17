@@ -54,13 +54,15 @@
 
         <div class="form-group">
             <div class="col-md-8 col-md-offset-4">
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary submit">
                     {{ __('Войти') }}
                 </button>
 
-                <a class="btn btn-link" href="{{ route('password.request') }}">
-                    {{ __('Восстановить пароль?') }}
-                </a>
+                {{-- <a class="btn btn-link" href="{{ route('password.request') }}">
+                    <button type="submit" class="btn btn-primary submit">
+                        {{ __('Восстановить пароль?') }}
+                    </button>
+                </a> --}}
             </div>
         </div>
         </form>

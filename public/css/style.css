@@ -224,3 +224,10 @@ hr {
     padding: 0.05em;
     list-style-type: circle;
 }
+
+.submit {
+    margin-top: 5px;
+}
+.form-group {
+    margin-top: 10px;
+}
