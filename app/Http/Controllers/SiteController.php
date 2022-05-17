@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Tag;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class SiteController extends ParentController
 {
@@ -109,6 +110,25 @@ class SiteController extends ParentController
             'articles' => $articles->paginate(self::PAGINATE),
             // 'popular' => Article::populars($articles),
             'recents' => Article::recents($articles),
+            'categories' => Category::allPublished(),
+            'tags' => Tag::allActive(),
+            'empty' => self::EMPTY_IMAGE,
+        ]);
+    }
+
+    /**
+     * Поиск
+     */
+    public function search(Request $request)
+    {
+        $articlesAll = Article::allPublished();
+        $recents = Article::recents($articlesAll);
+        $articles = $articlesAll->where('content', 'LIKE', "%{$request['query']}%");
+
+        return view('index')->with([
+            'articles' => $articles->paginate(self::PAGINATE),
+            // 'popular' => Article::populars($articles),
+            'recents' => $recents,
             'categories' => Category::allPublished(),
             'tags' => Tag::allActive(),
             'empty' => self::EMPTY_IMAGE,

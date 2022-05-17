@@ -132,10 +132,10 @@ class Article extends Model
             ->get();
     }
 
-    public static function populars(Builder $builder)
-    {
-        return $builder->orderBy('viewed', 'desc')
-            ->limit(3)
-            ->get();
-    }
+    // public static function populars(Builder $builder)
+    // {
+    //     return $builder->orderBy('viewed', 'desc')
+    //         ->limit(3)
+    //         ->get();
+    // }
 }

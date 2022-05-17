@@ -17,16 +17,15 @@
 
         <section>
             <div class="wrap">
-                <div class="left_block">
 
+                <main class="left_block">
                     @yield('content')
+                </main>
 
-                </div>
-                <div class="right_block">
-
+                <aside class="right_block">
                     @include('includes.right_block')
+                </aside>
 
-                </div>
             </div>
         </section>
 

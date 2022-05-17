@@ -29,6 +29,7 @@ Route::controller(SiteController::class)->group(function () {
     Route::get('article.{id}', 'show')->name('articleShow');
     Route::get('category.{id}', 'showByCategory')->name('showByCategory');
     Route::get('tag.{id}', 'showByTag')->name('showByTag');
+    Route::get('serach', 'search')->name('search');
 });
 
 Route::controller(CommentController::class)->group(function () {

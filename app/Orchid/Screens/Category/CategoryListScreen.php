@@ -34,7 +34,7 @@ class CategoryListScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Категории статей';
+        return 'Рубрики статей';
     }
 
     /**
@@ -45,7 +45,7 @@ class CategoryListScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            ModalToggle::make('Создать категорию')->modal('createCategory')
+            ModalToggle::make('Создать рубрику')->modal('createCategory')
                 ->method('createOrUpdateCategory'),
         ];
     }
@@ -80,7 +80,7 @@ class CategoryListScreen extends Screen
             ]),
 
             Layout::modal('createCategory', CreateOrUpdateCategory::class)
-                ->title('Создание категории')
+                ->title('Создание рубрики')
                 ->size(Modal::SIZE_LG)
                 ->applyButton('Создать'),
 

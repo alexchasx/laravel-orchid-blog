@@ -1,5 +1,20 @@
+{{-- @if (true) --}}
+<section id="search" class="category_block">
+    <form role="search" method="get" class="search-form" action="{{ route('search') }}">
+        <label>
+            {{-- <span class="screen-reader-text">{{ __('Поиск для:') }}</span> --}}
+            <input type="search" class="search-field" placeholder="{{-- {{ __('Поиск') }} --}} …" value="" name="query">
+        </label>
+        <button type="submit" class="search-submit">
+            <span class="screen-reader-text">{{ __('Поиск') }}</span>
+        </button>
+    </form>
+</section>
+{{-- @endif --}}
+
 @if (!empty($categories))
-<div class="category_block">
+<hr />
+<section id="categories" class="category_block">
     <h3>{{ __('Рубрики') }}</h2>
         <nav class="category_list">
             <ul>
@@ -16,13 +31,12 @@
                 @endforeach
             </ul>
         </nav>
-</div>
+</section>
 @endif
-
 
 @if (!empty($recents[0]))
 <hr />
-<div class="category_block">
+<section id="recent" class="category_block">
     <h3>{{ __('Последние статьи') }}</h2>
         <nav class="category_list">
             <ul>
@@ -37,12 +51,12 @@
                 @endforeach
             </ul>
         </nav>
-</div>
+</section>
 @endif
 
 @if (!empty($tags[0]))
 <hr />
-<div class="category_block">
+<section id="tags" class="category_block">
     <h3>{{ __('Поиск по меткам') }}</h2>
         <nav class="category_list tags_list">
             @foreach($tags as $tag)
@@ -57,5 +71,5 @@
 
             @endforeach
         </nav>
-</div>
+</section>
 @endif
