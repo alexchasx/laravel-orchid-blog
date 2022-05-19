@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Blog;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
 
-class Category extends Model
+class Rubric extends Model
 {
     use HasFactory;
     use AsSource;
-
 
     /**
      * Определяет необходимость отметок времени для модели.
@@ -25,24 +24,17 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
+        'parent_id',
+        'slug',
         'title',
-        'image',
-        'published',
+        'description',
     ];
 
     /**
      * Возращает все статьи к данной категории.
      */
-    public function articles()
+    public function posts()
     {
-        return $this->hasMany(Article::class, 'category_id');
-    }
-
-    public static function allPublished()
-    {
-        return Category::select(['id', 'title'])
-            ->orderBy('title')
-            ->where('published', true)
-            ->get();
+        return $this->hasMany(Article::class, 'rubric_id');
     }
 }

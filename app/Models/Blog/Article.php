@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Blog;
 
+use App\Models\Blog\Rubric;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
@@ -14,30 +16,40 @@ class Article extends Model
     use HasFactory;
     use AsSource;
     use Filterable;
+    use SoftDeletes;
 
     public $fillable = [
-        'title',        'description',     'content',
-        'user_id',      'category_id',     'image',
-        'viewed',       'keywords',        'meta_desc',
-        'published',    'published_at',
+        'user_id',
+        'rubric_id',
+        'image',
+        'slug',
+        'title',
+        'excert',
+        'content_html',
+        'content_raw',
+        'is_published',
+        'viewed',
+        'keywords',
+        'meta_desc',
     ];
 
     protected $casts = [
-        'published' => 'boolean',
+        'is_published' => 'boolean',
     ];
 
     protected $dates = [
         'created_at',
         'updated_at',
         'published_at',
+        'delete_at',
     ];
 
     protected $allowedSorts = [
-        'published', 'id', 'category_id'
+        'is_published', 'id', 'rubric_id'
     ];
 
     protected $allowedFilters = [
-        'category_id',
+        'rubric_id',
     ];
 
     /**
@@ -45,9 +57,9 @@ class Article extends Model
      *
      * @return BelongsTo
      */
-    public function category()
+    public function rubric()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Rubric::class);
     }
 
     /**
@@ -65,11 +77,11 @@ class Article extends Model
      *
      * @return hasMany
      */
-    public function comments()
-    {
-        return $this->hasMany(Comment::class)->orderBy('created_at');
-        // return $this->morphMany(Comment::class, 'target');
-    }
+    // public function comments()
+    // {
+    //     return $this->hasMany(Comment::class)->orderBy('created_at');
+    //     // return $this->morphMany(Comment::class, 'target');
+    // }
 
     /**
      * Возращает все файлы к статье.
@@ -89,33 +101,33 @@ class Article extends Model
     public function tags()
     {
         return $this->belongsToMany(
-            Tag::class,
+            BlogTag::class,
             'article_tags'/*,
             'article_id',
             'tag_id'*/
         );
     }
 
-    /**
-     * Возращает все комментарии пользователя.
-     *
-     * @return HasMany
-     */
-    public function articleTags()
-    {
-        return $this->hasMany(ArticleTag::class, 'article_id');
-    }
+    // /**
+    //  * Возращает все комментарии пользователя.
+    //  *
+    //  * @return HasMany
+    //  */
+    // public function articleTags()
+    // {
+    //     return $this->hasMany(ArticleTag::class, 'article_id');
+    // }
 
     public static function allPublished()
     {
         return self::latest()
             ->where('published_at', '<=', Carbon::now())
-            ->where('published', true);
+            ->where('is_published', true);
     }
 
-    public static function byCategory(Builder $builder, $categoryId)
+    public static function byRubric(Builder $builder, $rubricId)
     {
-        return $builder->where('category_id', $categoryId);
+        return $builder->where('rubric_id', $rubricId);
     }
 
     public static function byTag(Builder $articles, $tagId)

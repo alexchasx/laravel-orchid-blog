@@ -15,26 +15,33 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
 
+            $table->foreignId('rubric_id')->constrained()
+                ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('user_id')->constrained()
+                ->cascadeOnDelete()->cascadeOnUpdate();
+
+            $table->string('slug')->unique();
             $table->string('title');
-            $table->text('description')->nullable();
-            $table->text('content');
 
-            $table->foreignId('category_id')->constrained()->cascadeOnDelete()
-                ->cascadeOnUpdate();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete()
-                ->cascadeOnUpdate();
+            $table->text('excert')->nullable();
+
+            $table->text('content_raw');
+
+            $table->text('content_html');
+
+            $table->boolean('is_published')->default(false);
+            $table->timestamp('published_at')->nullable();
 
             $table->text('image')->nullable();
+
             $table->integer('viewed')->nullable()->comment('Кол-во просмотров');
+
             $table->string('keywords')->nullable();
             $table->string('meta_desc')->nullable();
 
-            $table->boolean('published')->default(true);
-            $table->timestamp('published_at')->nullable();
-
-            // $table->softDeletes(); // мягкое удаление
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

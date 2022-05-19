@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Blog;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ArticleTag>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Blog\ArticleTag>
  */
 class ArticleTagFactory extends Factory
 {
