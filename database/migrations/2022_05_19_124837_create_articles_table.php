@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('blog_articles', function (Blueprint $table) {
+        Schema::create('articles', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('category_id')->constrained()->cascadeOnDelete()
-                ->cascadeOnUpdate();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete()
-                ->cascadeOnUpdate();
+            $table->foreignId('rubric_id')->constrained()
+                ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('user_id')->constrained()
+                ->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->string('slug')->unique();
             $table->string('title');
@@ -52,6 +52,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blog_articles');
+        Schema::dropIfExists('articles');
     }
 };

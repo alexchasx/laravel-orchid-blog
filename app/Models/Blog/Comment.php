@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Blog;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     public $fillable = [
         'user_id',
@@ -24,6 +26,7 @@ class Comment extends Model
     protected $dates = [
         'created_at',
         'updated_at',
+        'delete_at',
     ];
 
     /**

@@ -7,7 +7,8 @@
                 <ul class="menu clearfix">
                     <li id="logo" class="left">
                         <a href="{{ route('home') }}" class="link">{{ config('app.name') }}
-                            <div class="sub_logo">{{ __('персональный блог') }}</div>
+                            {{-- <div class="sub_logo">{{ __('персональный блог') }}</div> --}}
+                            <div class="sub_logo">{{ __('блокнот веб-разработчика') }}</div>
                         </a>
                     </li>
                     <li class="left"><a href="https://github.com/chasovnikov" class="link">{{ __('GitHub') }}</a></li>

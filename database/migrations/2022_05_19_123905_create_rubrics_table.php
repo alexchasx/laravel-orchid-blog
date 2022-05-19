@@ -13,16 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('blog_categories', function (Blueprint $table) {
+        Schema::create('rubrics', function (Blueprint $table) {
             $table->id();
-            $table->integer('parent_id')->unsigned()->default(0);
 
+            $table->integer('parent_id')->default(0);
             $table->string('slug')->unique();
             $table->string('title');
-            $table->string('description')->nullable();
-
-            $table->timestamps();
-            $table->softDeletes();
+            $table->string('description');
         });
     }
 
@@ -33,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blog_categories');
+        Schema::dropIfExists('rubrics');
     }
 };

@@ -49,7 +49,7 @@ class SiteController extends ParentController
             'categories' => Category::allPublished(),
             'tags' => Tag::allActive(),
             // 'image' => $this->getFiles($articleId),
-            // 'comments' => $article->comments,
+            'comments' => $article->comments,
             'empty' => self::EMPTY_IMAGE,
         ]);
     }

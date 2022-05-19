@@ -1,17 +1,22 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Blog;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Orchid\Screen\AsSource;
 
-class BlogCategory extends Model
+class Rubric extends Model
 {
     use HasFactory;
     use AsSource;
-    use SoftDeletes;
+
+    /**
+     * Определяет необходимость отметок времени для модели.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
     /**
      * Атрибуты, для которых запрещено массовое назначение.
@@ -30,6 +35,6 @@ class BlogCategory extends Model
      */
     public function posts()
     {
-        return $this->hasMany(BlogPost::class, 'category_id');
+        return $this->hasMany(Article::class, 'rubric_id');
     }
 }

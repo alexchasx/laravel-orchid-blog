@@ -1,11 +1,11 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Blog;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Article>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Blog\Article>
  */
 class ArticleFactory extends Factory
 {
@@ -17,16 +17,18 @@ class ArticleFactory extends Factory
     public function definition()
     {
         return [
+            'rubric_id' => $this->faker->numberBetween(1, 8),
             'user_id' => $this->faker->numberBetween(1, 16),
-            'category_id' => $this->faker->numberBetween(1, 8),
+            'slug' => $this->faker->slug(),
             'title' => $this->faker->text(80),
-            'description' => $this->faker->text(400),
-            'content' => $this->faker->text(3000),
-            'image' => $this->faker->image('public/storage/articles', 640, 520, null, false),
+            'excert' => $this->faker->text(400),
+            'content_raw' => $this->faker->text(3000),
+            'content_html' => $this->faker->text(3000),
+            'image' => $this->faker->image('public/storage/posts', 640, 520, null, false),
             'viewed' => $this->faker->numberBetween(1, 10000),
             'keywords' => $this->faker->text(50),
             'meta_desc' => $this->faker->text(50),
-            'published' => $this->faker->boolean(),
+            'is_published' => $this->faker->boolean(),
             'published_at' => $this->faker->date(),
         ];
     }

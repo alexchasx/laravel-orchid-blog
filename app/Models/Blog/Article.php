@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Blog;
 
+use App\Models\Blog\Rubric;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
-class BlogArticle extends Model
+class Article extends Model
 {
-
     use HasFactory;
     use AsSource;
     use Filterable;
@@ -20,7 +20,7 @@ class BlogArticle extends Model
 
     public $fillable = [
         'user_id',
-        'category_id',
+        'rubric_id',
         'image',
         'slug',
         'title',
@@ -41,14 +41,15 @@ class BlogArticle extends Model
         'created_at',
         'updated_at',
         'published_at',
+        'delete_at',
     ];
 
     protected $allowedSorts = [
-        'is_published', 'id', 'category_id'
+        'is_published', 'id', 'rubric_id'
     ];
 
     protected $allowedFilters = [
-        'category_id',
+        'rubric_id',
     ];
 
     /**
@@ -56,9 +57,9 @@ class BlogArticle extends Model
      *
      * @return BelongsTo
      */
-    public function category()
+    public function rubric()
     {
-        return $this->belongsTo(BlogCategory::class);
+        return $this->belongsTo(Rubric::class);
     }
 
     /**
@@ -100,18 +101,18 @@ class BlogArticle extends Model
     public function tags()
     {
         return $this->belongsToMany(
-            Tag::class,
+            BlogTag::class,
             'article_tags'/*,
             'article_id',
             'tag_id'*/
         );
     }
 
-    /**
-     * Возращает все комментарии пользователя.
-     *
-     * @return HasMany
-     */
+    // /**
+    //  * Возращает все комментарии пользователя.
+    //  *
+    //  * @return HasMany
+    //  */
     // public function articleTags()
     // {
     //     return $this->hasMany(ArticleTag::class, 'article_id');
@@ -124,9 +125,9 @@ class BlogArticle extends Model
             ->where('is_published', true);
     }
 
-    public static function byCategory(Builder $builder, $categoryId)
+    public static function byRubric(Builder $builder, $rubricId)
     {
-        return $builder->where('category_id', $categoryId);
+        return $builder->where('rubric_id', $rubricId);
     }
 
     public static function byTag(Builder $articles, $tagId)
