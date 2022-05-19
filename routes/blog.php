@@ -29,7 +29,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Blog', /* 'prefix' => 'blog' 
     Route::controller(ArticleController::class)->group(function () {
         Route::get('/', 'index')->name('home');
         Route::get('article.{id}', 'show')->name('articleShow');
-        Route::get('category.{id}', 'showByCategory')->name('showByCategory');
+        Route::get('category.{id}', 'showByRubric')->name('showByRubric');
         Route::get('tag.{id}', 'showByTag')->name('showByTag');
         Route::get('serach', 'search')->name('search');
     });

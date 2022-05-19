@@ -33,8 +33,16 @@ class Rubric extends Model
     /**
      * Возращает все статьи к данной категории.
      */
-    public function posts()
+    public function articles()
     {
         return $this->hasMany(Article::class, 'rubric_id');
     }
+
+    // public static function allPublished()
+    // {
+    //     return self::select(['id', 'title', 'description'])
+    //         ->orderBy('title')
+    //         ->where('published', true)
+    //         ->get();
+    // }
 }

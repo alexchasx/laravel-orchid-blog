@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Blog;
 
 use App\Http\Controllers\Controller;
-use App\Models\BlogArticle;
-use App\Models\BlogCategory;
-use App\Models\BlogComment;
-use App\Models\BlogTag;
+use App\Models\Blog\Article;
+use App\Models\Blog\Rubric;
+use App\Models\Blog\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -19,18 +18,14 @@ class ArticleController extends BaseController
      */
     public function index()
     {
-        dd(__METHOD__);
+        $articlesAll = Article::allPublished();
 
-        $articles = BlogArticle::allPublished();
+        $articles = $articlesAll->paginate(self::PAGINATE);
+        $recents = Article::recents($articlesAll);
+        $rubrics = Rubric::all();
+        $tags = Tag::allActive();
 
-        return view('blog.index')->with([
-            'articles' => $articles->paginate(self::PAGINATE),
-            'categories' => BlogCategory::allPublished(),
-            // 'popular' => Article::populars($articles),
-            'recents' => BlogArticle::recents($articles),
-            'tags' => BlogTag::allActive(),
-            'empty' => self::EMPTY_IMAGE,
-        ]);
+        return view('blog.index', compact('articles', 'recents', 'rubrics', 'tags'));
     }
 
     /**
@@ -41,45 +36,38 @@ class ArticleController extends BaseController
      */
     public function show($id)
     {
-        dd(__METHOD__);
+        $articlesAll = Article::allPublished();
 
-        $builder = BlogArticle::allPublished();
-        $recents = BlogArticle::recents($builder);
-        $article = $builder->findOrFail($id);
-        // $article->viewed += 1;
-        // $article->save();
+        $article = $articlesAll->findOrFail($id);
+        $recents = Article::recents($articlesAll);
+        $rubrics = Rubric::all();
+        $tags = Tag::allActive();
+        $comments = $article->comments;
 
-        return view('blog.article')->with([
-            'article' => $article,
-            // 'popular' => Article::populars($articles),
-            'recents' => $recents,
-            'categories' => BlogCategory::allPublished(),
-            'tags' => BlogTag::allActive(),
-            // 'image' => $this->getFiles($id),
-            'comments' => $article->comments,
-            'empty' => self::EMPTY_IMAGE,
-        ]);
+        return view('blog.article', compact(
+            'article',
+            'recents',
+            'rubrics',
+            'tags',
+            'comments'
+        ));
     }
+
     /**
      * Показывает статьи по категории
      */
-    public function showByCategory($categoryId)
+    public function showByRubric($id)
     {
-        $category = (new BlogCategory())->find($categoryId)->first(['title']);
+        $articlesAll = Article::allPublished();
+        $articlesByRubruc = Article::byRubric($articlesAll, $id);
 
-        $builder = BlogArticle::allPublished();
-        $recents = BlogArticle::recents($builder);
-        $articlesByCategory = BlogArticle::byCategory($builder, $categoryId);
+        $articles = $articlesByRubruc->paginate(self::PAGINATE);
+        $recents = Article::recents($articlesAll);
+        $rubric = Rubric::find($id)->first(['title']);
+        $rubrics = Rubric::all();
+        $tags = Tag::allActive();
 
-        return view('blog.index')->with([
-            'articles' => $articlesByCategory->paginate(self::PAGINATE),
-            'category' => $category,
-            // 'popular' => Article::populars($articles),
-            'recents' => $recents,
-            'categories' => BlogCategory::allPublished(),
-            'tags' => BlogTag::allActive(),
-            'empty' => self::EMPTY_IMAGE,
-        ]);
+        return view('blog.index', compact('articles', 'recents', 'rubric', 'rubrics', 'tags'));
     }
 
     /**
@@ -87,9 +75,9 @@ class ArticleController extends BaseController
      */
     public function showByTag($tagId)
     {
-        $tag = BlogTag::find($tagId);
-        $builders = BlogArticle::allPublished();
-        $recents = BlogArticle::recents($builders);
+        $tag = Tag::find($tagId);
+        $builders = Article::allPublished();
+        $recents = Article::recents($builders);
         $articlesByTag = $builders->whereHas('tags', function (Builder $builder) use ($tagId) {
             $builder->where('tag_id', $tagId);
         });
@@ -99,8 +87,8 @@ class ArticleController extends BaseController
             'tag' => $tag,
             // 'popular' => Article::populars($articles),
             'recents' => $recents,
-            'categories' => BlogCategory::allPublished(),
-            'tags' => BlogTag::allActive(),
+            'rubrics' => Rubric::allPublished(),
+            'tags' => Tag::allActive(),
             'empty' => self::EMPTY_IMAGE,
         ]);
     }
@@ -110,16 +98,16 @@ class ArticleController extends BaseController
      */
     public function search(Request $request)
     {
-        $articlesAll = BlogArticle::allPublished();
-        $recents = BlogArticle::recents($articlesAll);
+        $articlesAll = Article::allPublished();
+        $recents = Article::recents($articlesAll);
         $articles = $articlesAll->where('content', 'LIKE', "%{$request['query']}%");
 
         return view('blog.index')->with([
             'articles' => $articles->paginate(self::PAGINATE),
-            // 'popular' => BlogArticle::populars($articles),
+            // 'popular' => Article::populars($articles),
             'recents' => $recents,
-            'categories' => BlogCategory::allPublished(),
-            'tags' => BlogTag::allActive(),
+            'rubrics' => Rubric::allPublished(),
+            'tags' => Tag::allActive(),
             'empty' => self::EMPTY_IMAGE,
         ]);
     }

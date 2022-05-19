@@ -21,7 +21,7 @@
 
     <div class="publication_date">{{ $article->published_at }}</div>
 
-    <p>{!! $article->description !!}</p>
+    <p>{!! $article->excert !!}</p>
 
     <a href="{{route('articleShow', ['id' => $article->id])}}" class="continue_read">
         {{ __('Читать далее') }}
