@@ -10,8 +10,9 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
-class BlogPost extends Model
+class BlogArticle extends Model
 {
+
     use HasFactory;
     use AsSource;
     use Filterable;
@@ -100,8 +101,8 @@ class BlogPost extends Model
     {
         return $this->belongsToMany(
             Tag::class,
-            'post_tags'/*,
-            'post_id',
+            'article_tags'/*,
+            'article_id',
             'tag_id'*/
         );
     }
@@ -111,9 +112,9 @@ class BlogPost extends Model
      *
      * @return HasMany
      */
-    // public function postTags()
+    // public function articleTags()
     // {
-    //     return $this->hasMany(PostTag::class, 'post_id');
+    //     return $this->hasMany(ArticleTag::class, 'article_id');
     // }
 
     public static function allPublished()
@@ -128,9 +129,9 @@ class BlogPost extends Model
         return $builder->where('category_id', $categoryId);
     }
 
-    public static function byTag(Builder $posts, $tagId)
+    public static function byTag(Builder $articles, $tagId)
     {
-        return $posts->whereHas('tags', function (Builder $builder) use ($tagId) {
+        return $articles->whereHas('tags', function (Builder $builder) use ($tagId) {
             $builder->where('tag_id', $tagId);
         });
     }
