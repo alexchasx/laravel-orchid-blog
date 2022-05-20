@@ -1,5 +1,5 @@
 
-@if (!empty($categories)) {{-- Чтобы не отображалось на /login и /register --}}
+@if (!empty($rubrics)) {{-- Чтобы не отображалось на /login и /register --}}
 <section id="search" class="category_block">
     <form role="search" method="get" class="search-form" action="{{ route('search') }}">
         <label>
@@ -13,21 +13,29 @@
 </section>
 @endif
 
-@if (!empty($categories))
+@if (!empty($rubrics))
 <hr />
 <section id="categories" class="category_block">
     <h3>{{ __('Рубрики') }}</h2>
         <nav class="category_list">
             <ul>
-                @foreach($categories as $category)
+                @foreach($rubrics as $rubrics)
 
-                @unless (empty($articleCount = $category->articles->count()))
+                {{-- @unless (empty($articleCount = $rubrics->articles->count()))
                 <li class="category_link">
-                    <a href="{{ route('showByCategory', ['id' => $category->id] ) }}">
-                        {{ $category->title }}
+                    <a href="{{ route('showByRubric', ['id' => $rubrics->id] ) }}">
+                        {{ $rubrics->title }}
                     </a>
                 </li>
-                @endunless
+                @endunless --}}
+
+                @if ($rubrics->exists)
+                <li class="category_link">
+                    <a href="{{ route('showByRubric', ['id' => $rubrics->id] ) }}">
+                        {{ $rubrics->title }}
+                    </a>
+                </li>
+                @endif
 
                 @endforeach
             </ul>

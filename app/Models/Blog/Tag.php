@@ -51,8 +51,8 @@ class Tag extends Model
      */
     public static function allActive()
     {
-        return self::select()
-            ->orderBy('title')
+        return self::select('id', 'title', 'active')
+            // ->orderBy('title')
             ->where('active', true)
             ->get();
     }

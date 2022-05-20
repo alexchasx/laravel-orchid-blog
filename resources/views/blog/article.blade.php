@@ -21,14 +21,14 @@
     </button> --}}
     {{-- @endif --}}
 
-    <p>{!! $article->content !!}</p>
+    <p>{!! $article->content_html !!}</p>
 </div>
 <br />
 
 <div class="comments">
 
     {{-- @if(!empty($comments)) --}}
-    @if($comments->first())
+    @if($comments)
     <hr />
     <h3><a name="comments">{{ __('Комментарии') }}</a></h3>
 
