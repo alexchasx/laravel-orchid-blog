@@ -36,6 +36,7 @@ class Tag extends Model
      */
     public function articles()
     {
+        // Не адекватно работает для статей с active=0
         return $this->belongsToMany(
             Article::class,
             'article_tags',
@@ -55,5 +56,11 @@ class Tag extends Model
             // ->orderBy('title')
             ->where('active', true)
             ->get();
+
+        // self::disableEmpty($tags);
+    }
+
+    public static function disableEmpty()
+    {
     }
 }

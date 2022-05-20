@@ -80,34 +80,32 @@ class Article extends Model
     public function tags()
     {
         return $this->belongsToMany(
-            BlogTag::class,
+            Tag::class,
             'article_tags'/*,
             'article_id',
             'tag_id'*/
         );
     }
 
-    public static function allPublished()
+    public static function published(?Builder $builder = null)
     {
-        // return self::latest()
-        //     ->whereDate('published_at', '<=', Carbon::now())
-        //     ->where('is_published', true);
-
-        return self::select(
-            'id',
-            'title',
-            'excert',
-            'published_at',
-            'is_published',
-        )
-            ->orderBy('published_at')
-            ->whereDate('published_at', '<=', Carbon::now())
-            ->where('is_published', true);
+        if (!$builder) {
+            $builder = self::select(
+                'id',
+                'title',
+                'excert',
+                'published_at',
+                'is_published',
+            );
+        }
+        return $builder->whereDate('published_at', '<=', Carbon::now())
+            ->where('is_published', true)
+            ->orderBy('published_at', 'desc');
     }
 
-    public static function byRubric(Builder $builder, $rubricId)
+    public static function byRubric($rubricId)
     {
-        return $builder->where('rubric_id', $rubricId);
+        return self::published()->where('rubric_id', $rubricId);
     }
 
     public static function byTag(Builder $articles, $tagId)
@@ -119,7 +117,7 @@ class Article extends Model
 
     public static function recents(Builder $builder)
     {
-        return $builder->orderBy('created_at', 'desc')->limit(4)->get();
+        return $builder->orderBy('published_at', 'desc')->limit(4)->get();
     }
 
     // /**

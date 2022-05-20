@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('page.title', config('app.name'))</title>
     <link rel="icon" href="favicon.ico"><!-- 32×32 -->
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
     <div class="main_block">

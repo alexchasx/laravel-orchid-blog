@@ -2,6 +2,8 @@
 
 namespace App\Models\Blog;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
@@ -38,11 +40,11 @@ class Rubric extends Model
         return $this->hasMany(Article::class, 'rubric_id');
     }
 
-    // public static function allPublished()
-    // {
-    //     return self::select(['id', 'title', 'description'])
-    //         ->orderBy('title')
-    //         ->where('published', true)
-    //         ->get();
-    // }
+    public static function notEmpties()
+    {
+        return self::select(['id', 'title'])
+            ->whereHas('articles', function (Builder $builder) {
+                $builder = Article::published($builder);
+            })->get();
+    }
 }

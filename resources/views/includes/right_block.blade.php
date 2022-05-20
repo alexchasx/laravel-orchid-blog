@@ -43,7 +43,7 @@
 </section>
 @endif
 
-@if (!empty($recents[0]))
+{{-- @if (!empty($recents[0]))
 <hr />
 <section id="recent" class="category_block">
     <h3>{{ __('Последние статьи') }}</h2>
@@ -61,7 +61,7 @@
             </ul>
         </nav>
 </section>
-@endif
+@endif --}}
 
 @if (!empty($tags[0]))
 <hr />
@@ -71,6 +71,7 @@
             @foreach($tags as $tag)
 
             @unless (empty($articleCount = $tag->articles->count()))
+            {{-- @unless (empty($tag->articles)) --}}
             <button class="tag">
                 <a href="{{ route('showByTag', ['id' => $tag->id]) }}">
                     {{ $tag->title }}

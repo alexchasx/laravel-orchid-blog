@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Blog;
 
-use App\Http\Controllers\Controller;
 use App\Models\Blog\Article;
 use App\Models\Blog\Rubric;
 use App\Models\Blog\Tag;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -19,18 +17,11 @@ class ArticleController extends BaseController
      */
     public function index()
     {
-        $articlesAll = Article::allPublished();
-
-        $articles = $articlesAll->paginate(self::PAGINATE);
-        // $articles = $articlesAll->simplePaginate(self::PAGINATE);
-
-        // dd($articles);
-
-        $recents = Article::recents($articlesAll);
-        $rubrics = Rubric::all(['id', 'title']);
-        $tags = Tag::allActive();
-
-        return view('blog.index', compact('articles', 'recents', 'rubrics', 'tags'));
+        return view('blog.index')->with([
+            'articles' => Article::published()->paginate(self::PAGINATE),
+            'rubrics' => Rubric::notEmpties(),
+            'tags' => Tag::allActive(),
+        ]);
     }
 
     /**
@@ -41,21 +32,16 @@ class ArticleController extends BaseController
      */
     public function show($id)
     {
-        $articlesAll = Article::allPublished();
+        $article =  Article::findOrFail($id);
+        // $article->comments_count = $article->comments()->count();
+        // dd($article->comments_count);
 
-        $article = $articlesAll->findOrFail($id);
-        $recents = Article::recents($articlesAll);
-        $rubrics = Rubric::all();
-        $tags = Tag::allActive();
-        $comments = $article->comments;
-
-        return view('blog.article', compact(
-            'article',
-            'recents',
-            'rubrics',
-            'tags',
-            'comments'
-        ));
+        return view('blog.article')->with([
+            'article' => $article,
+            'rubrics' => Rubric::notEmpties(),
+            'tags' => Tag::allActive(),
+            'comments' => $article->comments,
+        ]);
     }
 
     /**
@@ -63,16 +49,14 @@ class ArticleController extends BaseController
      */
     public function showByRubric($id)
     {
-        $articlesAll = Article::allPublished();
-        $articlesByRubruc = Article::byRubric($articlesAll, $id);
+        $rubrics = Rubric::notEmpties();
 
-        $articles = $articlesByRubruc->paginate(self::PAGINATE);
-        $recents = Article::recents($articlesAll);
-        $rubric = Rubric::find($id)->first(['title']);
-        $rubrics = Rubric::all();
-        $tags = Tag::allActive();
-
-        return view('blog.index', compact('articles', 'recents', 'rubric', 'rubrics', 'tags'));
+        return view('blog.index')->with([
+            'articles' => Article::byRubric($id)->paginate(self::PAGINATE),
+            'rubric' => $rubrics->find($id),
+            'rubrics' => $rubrics,
+            'tags' => Tag::allActive(),
+        ]);
     }
 
     /**
@@ -80,40 +64,32 @@ class ArticleController extends BaseController
      */
     public function showByTag($tagId)
     {
-        $tag = Tag::find($tagId);
-        $builders = Article::allPublished();
-        $recents = Article::recents($builders);
-        $articlesByTag = $builders->whereHas('tags', function (Builder $builder) use ($tagId) {
-            $builder->where('tag_id', $tagId);
-        });
+        $tags = Tag::allActive();
+        $articlesByTag = Article::published()
+            ->whereHas('tags', function (Builder $builder) use ($tagId) {
+                $builder->where('tag_id', $tagId);
+            });
 
         return view('blog.index')->with([
             'articles' => $articlesByTag->paginate(self::PAGINATE),
-            'tag' => $tag,
-            // 'popular' => Article::populars($articles),
-            'recents' => $recents,
-            'rubrics' => Rubric::allPublished(),
-            'tags' => Tag::allActive(),
-            'empty' => self::EMPTY_IMAGE,
+            'tag' => $tags->find($tagId),
+            'rubrics' => Rubric::notEmpties(),
+            'tags' => $tags,
         ]);
     }
 
     /**
-     * Поиск
+     * Поиск статей по словам в контексте
      */
     public function search(Request $request)
     {
-        $articlesAll = Article::allPublished();
-        $recents = Article::recents($articlesAll);
-        $articles = $articlesAll->where('content', 'LIKE', "%{$request['query']}%");
+        $builder =  Article::published()
+            ->where('content', 'LIKE', "%{$request['query']}%");
 
         return view('blog.index')->with([
-            'articles' => $articles->paginate(self::PAGINATE),
-            // 'popular' => Article::populars($articles),
-            'recents' => $recents,
-            'rubrics' => Rubric::allPublished(),
+            'articles' => $builder->paginate(self::PAGINATE),
+            'rubrics' => Rubric::notEmpties(),
             'tags' => Tag::allActive(),
-            'empty' => self::EMPTY_IMAGE,
         ]);
     }
 }
