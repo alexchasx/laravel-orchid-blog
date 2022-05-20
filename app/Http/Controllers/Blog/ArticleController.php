@@ -20,7 +20,7 @@ class ArticleController extends BaseController
         return view('blog.index')->with([
             'articles' => Article::published()->paginate(self::PAGINATE),
             'rubrics' => Rubric::notEmpties(),
-            'tags' => Tag::allActive(),
+            'tags' => Tag::notEmpties(),
         ]);
     }
 
@@ -39,7 +39,7 @@ class ArticleController extends BaseController
         return view('blog.article')->with([
             'article' => $article,
             'rubrics' => Rubric::notEmpties(),
-            'tags' => Tag::allActive(),
+            'tags' => Tag::notEmpties(),
             'comments' => $article->comments,
         ]);
     }
@@ -55,7 +55,7 @@ class ArticleController extends BaseController
             'articles' => Article::byRubric($id)->paginate(self::PAGINATE),
             'rubric' => $rubrics->find($id),
             'rubrics' => $rubrics,
-            'tags' => Tag::allActive(),
+            'tags' => Tag::notEmpties(),
         ]);
     }
 
@@ -64,7 +64,7 @@ class ArticleController extends BaseController
      */
     public function showByTag($tagId)
     {
-        $tags = Tag::allActive();
+        $tags = Tag::notEmpties();
         $articlesByTag = Article::published()
             ->whereHas('tags', function (Builder $builder) use ($tagId) {
                 $builder->where('tag_id', $tagId);
@@ -89,7 +89,7 @@ class ArticleController extends BaseController
         return view('blog.index')->with([
             'articles' => $builder->paginate(self::PAGINATE),
             'rubrics' => Rubric::notEmpties(),
-            'tags' => Tag::allActive(),
+            'tags' => Tag::notEmpties(),
         ]);
     }
 }

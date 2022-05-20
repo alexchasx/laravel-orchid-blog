@@ -26,12 +26,12 @@ class ArticleTag extends Model
     ];
 
     /**
-     * Возращает статью, владеющую данным тегом
+     * Возращает статьи, владеющие данным тегом
      *
      * @return HasOne
      */
-    public function article()
+    public function articles()
     {
-        return $this->hasOne(Article::class, 'id');
+        return $this->hasMany(Article::class, 'id');
     }
 }

@@ -42,7 +42,7 @@ class Rubric extends Model
 
     public static function notEmpties()
     {
-        return self::select(['id', 'title'])
+        return self::select('id', 'title')
             ->whereHas('articles', function (Builder $builder) {
                 $builder = Article::published($builder);
             })->get();

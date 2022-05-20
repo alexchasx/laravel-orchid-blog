@@ -2,6 +2,7 @@
 
 namespace App\Models\Blog;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
@@ -36,7 +37,6 @@ class Tag extends Model
      */
     public function articles()
     {
-        // Не адекватно работает для статей с active=0
         return $this->belongsToMany(
             Article::class,
             'article_tags',
@@ -45,22 +45,21 @@ class Tag extends Model
         );
     }
 
+    public function article_tags()
+    {
+        return $this->hasMany(ArticleTag::class, 'tag_id');
+    }
+
     /**
      * Возращает список всех тегов
      *
      * @return Tag[] | Collection
      */
-    public static function allActive()
+    public static function notEmpties()
     {
         return self::select('id', 'title', 'active')
-            // ->orderBy('title')
-            ->where('active', true)
-            ->get();
-
-        // self::disableEmpty($tags);
-    }
-
-    public static function disableEmpty()
-    {
+            ->whereHas('articles', function (Builder $builder) {
+                $builder = Article::published($builder);
+            })->where('active', true)->get();
     }
 }
