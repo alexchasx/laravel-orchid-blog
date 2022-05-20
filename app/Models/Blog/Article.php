@@ -120,16 +120,16 @@ class Article extends Model
         return $builder->orderBy('published_at', 'desc')->limit(4)->get();
     }
 
-    // /**
-    //  * Возращает все комментарии статьи.
-    //  *
-    //  * @return hasMany
-    //  */
-    // public function comments()
-    // {
-    //     return $this->hasMany(Comment::class)->orderBy('created_at');
-    //     // return $this->morphMany(Comment::class, 'target');
-    // }
+    /**
+     * Возращает все комментарии статьи.
+     *
+     * @return hasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->orderBy('created_at');
+        // return $this->morphMany(Comment::class, 'target');
+    }
 
     // /**
     //  * Возращает все файлы к статье.

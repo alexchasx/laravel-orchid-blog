@@ -16,8 +16,11 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('user_id')->constrained()
-                ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('name')->nullable();
+            $table->string('email')->nullable();
+            $table->string('website')->nullable();
+
+            $table->bigInteger('user_id')->nullable();
             $table->foreignId('article_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
 

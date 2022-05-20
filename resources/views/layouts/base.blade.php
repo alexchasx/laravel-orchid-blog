@@ -11,7 +11,7 @@
 <body>
     <div class="main_block">
 
-        {{-- @include('includes.alert') --}}
+        @include('includes.alert')
 
         @include('includes.header')
 

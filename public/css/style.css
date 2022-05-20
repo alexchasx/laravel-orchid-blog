@@ -257,3 +257,10 @@ ul.pagination li {
     margin: 0;
     padding: 0 2px;
 }
+textarea {
+    width: 100%;
+}
+.textwrapper {
+    margin: 5px 0;
+    padding: 3px;
+}

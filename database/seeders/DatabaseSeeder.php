@@ -19,16 +19,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory(16)->create();
+        // \App\Models\User::factory(16)->create();
         // // AdminUser::factory(1)->create([
         // //     'name' => 'admin',
         // //     'email' => 'laravel@laravel.com',
         // //     'password' => bcrypt('1234'),
         // // ]);
-        Rubric::factory(12)->create();
-        Article::factory(32)->create();
-        Tag::factory(24)->create();
-        ArticleTag::factory(16)->create();
+        // Rubric::factory(12)->create();
+        // Article::factory(32)->create();
+        // Tag::factory(24)->create();
+        // ArticleTag::factory(16)->create();
         Comment::factory(32)->create();
     }
 }

@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Blog;
 
-use App\Models\Article;
-use App\Models\Category;
-use App\Models\Tag;
+use App\Models\Blog\Article;
+use App\Models\Blog\Tag;
 
-class ContactController extends ParentController
+class ContactController extends BaseController
 {
     public function show()
     {

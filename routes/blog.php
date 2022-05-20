@@ -1,9 +1,8 @@
 <?php
 
 use App\Http\Controllers\Blog\ArticleController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\SiteController;
+use App\Http\Controllers\Blog\CommentController;
+use App\Http\Controllers\Blog\ContactController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +24,8 @@ require __DIR__ . '/auth.php';
 
 Route::get('contact', [ContactController::class, 'show'])->name('contact');
 
+Route::redirect('/', '/blog');
+
 Route::group(['namespace' => 'App\Http\Controllers\Blog', 'prefix' => 'blog'], function () {
     Route::controller(ArticleController::class)->group(function () {
         Route::get('/', 'index')->name('home');
@@ -32,6 +33,13 @@ Route::group(['namespace' => 'App\Http\Controllers\Blog', 'prefix' => 'blog'], f
         Route::get('category.{id}', 'showByRubric')->name('showByRubric');
         Route::get('tag.{id}', 'showByTag')->name('showByTag');
         Route::get('search', 'search')->name('search');
+    });
+
+    Route::controller(CommentController::class)->group(function () {
+        Route::post('comment.create', 'store')->name('commentStore');
+        Route::post('comment.update', 'update')->name('commentUpdate');
+        Route::delete('delete.{comment}', 'delete')->name('commentDelete');
+        // Route::get('comment.status.{comment}', 'statusChange')->name('commentStatusChange');
     });
 });
 
@@ -43,15 +51,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Blog', 'prefix' => 'blog'], f
 //     Route::get('serach', 'search')->name('search');
 // });
 
-Route::controller(CommentController::class)->group(function () {
-    Route::get('comment.index', 'index')->name('commentIndex');
-    Route::get('comment.{id}', 'show')->name('commentShow');
-    Route::post('comment.create', 'store')->name('commentStore');
-    Route::post('comment.update', 'update')->name('commentUpdate');
-    Route::delete('delete.{comment}', 'delete')->name('commentDelete');
-    Route::get('restore.{comment}', 'restore')->name('commentRestore');
-    Route::get('comment.status.{comment}', 'statusChange')->name('commentStatusChange');
-});
 
 Route::fallback(function () {
     return view('errors.404');
