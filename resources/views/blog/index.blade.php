@@ -28,7 +28,7 @@
     </a>
 </div>
 
-@unless ($loop->last)
+@unless ($loop->last) {{-- не показывать последнюю полосу --}}
 <br />
 <hr />
 <br />
@@ -41,5 +41,10 @@
     {{ __('Ничего не нашлось') }}
 </div>
 @endif
+<nav>
+    <ul class="pagination">
+        {{ $articles->links('vendor.pagination.default') }}
+    </ul>
+</nav>
 
 @endsection

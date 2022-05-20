@@ -231,3 +231,29 @@ hr {
 .form-group {
     margin-top: 10px;
 }
+
+ul.pagination {
+    clear: both;
+    font-size: 0;
+    line-height: 1.4;
+    margin: 20px 0;
+    padding: 0;
+    text-align: center;
+}
+ul.pagination li a {
+    text-decoration: underline;
+}
+ul.pagination li a,
+ul.pagination li span {
+    background: #eee;
+    color: #333;
+    display: inline-block;
+    margin: 0;
+    padding: 6px 12px;
+}
+ul.pagination li {
+    display: inline-block;
+    font-size: 13px;
+    margin: 0;
+    padding: 0 2px;
+}

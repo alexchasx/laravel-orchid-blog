@@ -73,27 +73,6 @@ class Article extends Model
     }
 
     /**
-     * Возращает все комментарии статьи.
-     *
-     * @return hasMany
-     */
-    // public function comments()
-    // {
-    //     return $this->hasMany(Comment::class)->orderBy('created_at');
-    //     // return $this->morphMany(Comment::class, 'target');
-    // }
-
-    /**
-     * Возращает все файлы к статье.
-     *
-     * @return MorphMany
-     */
-    // public function files()
-    // {
-    //     return $this->morphMany(File::class, 'target');
-    // }
-
-    /**
      * Возращает тэги статьи.
      *
      * @return BelongsToMany
@@ -108,20 +87,21 @@ class Article extends Model
         );
     }
 
-    // /**
-    //  * Возращает все комментарии пользователя.
-    //  *
-    //  * @return HasMany
-    //  */
-    // public function articleTags()
-    // {
-    //     return $this->hasMany(ArticleTag::class, 'article_id');
-    // }
-
     public static function allPublished()
     {
-        return self::latest()
-            ->where('published_at', '<=', Carbon::now())
+        // return self::latest()
+        //     ->whereDate('published_at', '<=', Carbon::now())
+        //     ->where('is_published', true);
+
+        return self::select(
+            'id',
+            'title',
+            'excert',
+            'published_at',
+            'is_published',
+        )
+            ->orderBy('published_at')
+            ->whereDate('published_at', '<=', Carbon::now())
             ->where('is_published', true);
     }
 
@@ -139,15 +119,44 @@ class Article extends Model
 
     public static function recents(Builder $builder)
     {
-        return $builder->orderBy('created_at', 'desc')
-            ->limit(3)
-            ->get();
+        return $builder->orderBy('created_at', 'desc')->limit(4)->get();
     }
+
+    // /**
+    //  * Возращает все комментарии статьи.
+    //  *
+    //  * @return hasMany
+    //  */
+    // public function comments()
+    // {
+    //     return $this->hasMany(Comment::class)->orderBy('created_at');
+    //     // return $this->morphMany(Comment::class, 'target');
+    // }
+
+    // /**
+    //  * Возращает все файлы к статье.
+    //  *
+    //  * @return MorphMany
+    //  */
+    // public function files()
+    // {
+    //     return $this->morphMany(File::class, 'target');
+    // }
 
     // public static function populars(Builder $builder)
     // {
     //     return $builder->orderBy('viewed', 'desc')
     //         ->limit(3)
     //         ->get();
+    // }
+
+    // /**
+    //  * Возращает все комментарии пользователя.
+    //  *
+    //  * @return HasMany
+    //  */
+    // public function articleTags()
+    // {
+    //     return $this->hasMany(ArticleTag::class, 'article_id');
     // }
 }

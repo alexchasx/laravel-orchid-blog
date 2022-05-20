@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Blog\Article;
 use App\Models\Blog\Rubric;
 use App\Models\Blog\Tag;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -21,8 +22,12 @@ class ArticleController extends BaseController
         $articlesAll = Article::allPublished();
 
         $articles = $articlesAll->paginate(self::PAGINATE);
+        // $articles = $articlesAll->simplePaginate(self::PAGINATE);
+
+        // dd($articles);
+
         $recents = Article::recents($articlesAll);
-        $rubrics = Rubric::all();
+        $rubrics = Rubric::all(['id', 'title']);
         $tags = Tag::allActive();
 
         return view('blog.index', compact('articles', 'recents', 'rubrics', 'tags'));
