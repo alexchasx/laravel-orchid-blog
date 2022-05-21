@@ -7,6 +7,7 @@
     <title>@yield('page.title', config('app.name'))</title>
     <link rel="icon" href="favicon.ico"><!-- 32×32 -->
     <link rel="stylesheet" href="/css/style.css" />
+    @stack('scripts')
 </head>
 <body>
     <div class="main_block">

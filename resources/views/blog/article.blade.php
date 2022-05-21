@@ -45,6 +45,7 @@
             {{--alt="image">--}}
             {{--@endif--}}
             <div class="comment_user">{{$comment->name}}:</div class="comment_user">
+                <br>
             <div class="publication_date">{{$comment->created_at}}</div>
         </div>
 
@@ -105,38 +106,58 @@
         <p class="comment-notes">
             <span id="email-notes">{{ __('Ваш адрес электронной почты не будет опубликован.') }}</span>
             <span class="required-field-message" aria-hidden="true">
-                {{ __('Обязательные поля отмечены') }}<span class="required" aria-hidden="true">*</span>
+                {{ __('Обязательные поля отмечены') }}<span class="required star" aria-hidden="true">*</span>
             </span>
         </p>
         <p class="comment-form-comment textwrapper">
             <label for="comment">
-                {{ __('Комментарий') }} <span class="required" aria-hidden="true">*</span>
+                {{ __('Комментарий') }} <span class="required star" aria-hidden="true">*</span>
+                @error('comment')
+                    <br>
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
             </label>
             <br>
-            <textarea id="comment" name="comment" cols="35" rows="8" maxlength="65525" required="required"></textarea>
+            <textarea id="comment" name="comment" cols="35" rows="8" maxlength="65525" required="required">{{ old('comment') }}</textarea>
         </p>
         <p class="comment-form-author">
-            <label for="author">{{ __('Ваше имя') }} <span class="required" aria-hidden="true">*</span></label>
+            <label for="author">{{ __('Ваше имя') }} <span class="required star" aria-hidden="true">*</span></label>
+                @error('author')
+                    <br>
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
             <br>
-            <input id="author" name="author" type="text" value="" size="30" maxlength="245" required="">
+            <input id="author" name="author" type="text" value="{{ old('author') }}" size="30" maxlength="245" required="">
         </p>
         <p class="comment-form-email">
-            <label for="email">{{ __('Ваш email') }} <span class="required" aria-hidden="true">* (никто не увидит)</span></label>
+            <label for="email">{{ __('Ваш email') }} <span class="required star" aria-hidden="true">*</span> (никто не увидит)</label>
+                @error('email')
+                    <br>
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
             <br>
-            <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" required="">
+            <input id="email" name="email" type="email" value="{{ old('email') }}" size="30" maxlength="100" aria-describedby="email-notes" required="">
         </p>
         <p class="comment-form-url">
-            <label for="website">{{ __('Веб-сайт') }}</label>
+            <label for="website">{{ __('Веб-сайт (если есть)') }}</label>
+                @error('website')
+                    <br>
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
             <br>
-            <input id="website" name="website" type="url" value="" size="30" maxlength="200">
+            <input id="website" name="website" type="url" value="{{ old('website') }}" size="30" maxlength="200">
         </p>
-        <p class="comment-form-cookies-consent">
-            <input id="check_bot" name="check_bot" type="checkbox" value="yes">
-            <label for="check_bot">
-                {{ __('Я – человек') }}
+        {{-- <p class="comment-form-cookies-consent">
+            <label for="checkbot">
+                {{ __('1 + 2 =') }}
             </label>
+                @error('checkbot')
+                    <br>
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
             <br>
-        </p>
+            <input id="checkbot" name="checkbot" type="url" value="" size="30" maxlength="200">
+        </p> --}}
         {{-- <p class="comment-form-cookies-consent">
             <input id="check_save_data" name="check_save_data" type="checkbox" value="yes">
             <label for="check_save_data">
@@ -163,5 +184,100 @@
 </div>
 
 @endunless
+
+@push('scripts')
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script> --}}
+<script type="text/javascript">
+// $(document).ready(function () {
+//     $('#commentform').on('submit', function (e) {
+//         e.preventDefault();
+
+//         $.ajax({
+//             type: 'POST',
+//             url: '/blog/ajax/validation/store',
+//             data: $('#commentform').serialize(),
+//             success: function (data) {
+//                 if (data.result) {
+//                     $('#senderror').hide();
+//                     $('#sendmessage').show();
+//                 } else {
+//                     $('#senderror').show();
+//                     $('#sendmessage').hide();
+//                 }
+//             },
+//             error: function () {
+//                 $('#senderror').show();
+//                 $('#sendmessage').hide();
+//             }
+//         });
+//     });
+// });
+
+    // $(document).ready(function() {
+    //     $(".submit").click(function(e) {
+            // e.preventDefault();
+
+            // const data = new FormData(this);
+            // $.ajax({
+            //     type: 'POST',
+            //     url: ' ',
+            //     data: data,
+            //     dataType: 'json',
+            //     processData: false,
+            //     contentType: false,
+
+            //     success: function(data) {
+            //         console.log(data);
+            //     },
+
+            //     error: function(data) {
+            //         console.log(data);
+            //     }
+            // })
+
+            // let _token = $("input[name='_token']").val();
+            // let comment = $("#comment").val();
+            // let author = $("#author").val();
+            // let email = $("#email").val();
+            // let website = $("#website").val();
+            // let check_bot = $("#check_bot").val();
+
+            // $.ajax({
+            //     type: 'POST',
+            //     url: " ",
+            //     data: {
+            //         _token:_token,
+            //         comment:comment,
+            //         author:author,
+            //         email:email,
+            //         website:website
+            //     },
+            //     success: function(data) {
+            //       console.log(data);
+            //         // if($.isEmptyObject(data.error)){
+            //         //     alert(data.success);
+            //         // }
+            //         // else{
+            //         //     printErrorMsg(data.error);
+            //         // }
+            //         if (data.error.comment || data.error.check_bot || data.error.author) {
+            //             alert('Обязательное поле (с символом *) не заполнено.');
+            //         } else {
+
+            //         }
+            //     }
+            // });
+        // });
+
+        // function printErrorMsg (msg) {
+        //     $.each( msg, function( key, value ) {
+        //     console.log(key);
+        //       $('.'+key+'_err').text(value);
+        //     });
+        // }
+    // });
+</script>
+@endpush
 
 @endsection

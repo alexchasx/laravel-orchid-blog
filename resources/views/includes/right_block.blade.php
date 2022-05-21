@@ -4,7 +4,7 @@
     <form role="search" method="get" class="search-form" action="{{ route('search') }}">
         <label>
             {{-- <span class="screen-reader-text">{{ __('Поиск для:') }}</span> --}}
-            <input type="search" class="search-field" placeholder="{{-- {{ __('Поиск') }} --}} …" value="" name="query">
+            <input type="search" class="search-field" placeholder=" {{ __('Поиск по сайту') }} …" value="" name="query">
         </label>
         <button type="submit" class="submit">
             <span class="screen-reader-text">{{ __('Поиск') }}</span>

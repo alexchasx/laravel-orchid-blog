@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Blog;
 use App\Models\Blog\Article;
 use App\Models\Blog\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CommentController extends BaseController
 {
@@ -18,6 +19,7 @@ class CommentController extends BaseController
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         // "comment" => "asdad"
         // "author" => "asdas"
         // "email" => "asd"
@@ -30,14 +32,16 @@ class CommentController extends BaseController
         $this->validate($request, [
             'comment' => ['required', 'max:5000'],
             'author' => ['required', 'max:250'],
-            'email' => ['required', 'max:250'],
-            // 'check_bot' => ['required'],
+            'email' => ['required', 'max:250', 'email'],
+            // 'checkbot' => ['required'],
             'website' => ['max:250'],
         ]);
 
-        if (!$request->input('check_bot')) {
-            return redirect()->back();
-        }
+        // if ($request->input('check_bot') != 3) {
+        //     // return redirect()->back();
+        //     return back()
+        //         ->withErrors(['msg' => 'Не правильно.']);
+        // }
 
         Article::find($request->input('article_id'))
             ->comments()
@@ -50,7 +54,9 @@ class CommentController extends BaseController
                 'active' => true,
             ]));
 
-        return redirect()->back();
+        return back()
+            // ->withErrors(['msg' => 'Запись не найдена.'])
+            ->withInput();
     }
 
     /**
@@ -91,4 +97,52 @@ class CommentController extends BaseController
 
         return redirect()->back();
     }
+
+    // /**
+    //  * Display a listing of the myformPost.
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function ajaxValidation()
+    // {
+    //     return view('post.ajaxValidation.ajaxValidation');
+    // }
+
+    // /**
+    //  * Display a listing of the myformPost.
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function ajaxValidationStore(Request $request)
+    // {
+    //     $validator = Validator::make(
+    //         $request->all(),
+    //         [
+    //             'comment' => ['required'],
+    //             'author' => ['required'],
+    //             'check_bot' => ['required'],
+
+    //             // TODO: образать строки
+    //             // 'email' => ['required', 'max:250', 'email'],
+    //             // 'website' => ['max:250'],
+    //         ],
+    //         // [
+    //         //     'required' => 'Обязательное поле (с символом *) не заполнено.',
+    //         // ]
+    //     );
+
+    //     // if ($validator->fails()) {
+    //     //     return back()
+    //     //         ->withErrors($validator)
+    //     //         ->withInput();
+    //     // }
+
+    //     // $validated = $validator->validated();
+
+    //     // if ($validator->validated()) {
+    //     //     return response()->json(['success' => 'Added new records.']);
+    //     // }
+
+    //     return response()->json(['error' => $validator->errors()]);
+    // }
 }

@@ -40,6 +40,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Blog', 'prefix' => 'blog'], f
         Route::post('comment.update', 'update')->name('commentUpdate');
         Route::delete('delete.{comment}', 'delete')->name('commentDelete');
         // Route::get('comment.status.{comment}', 'statusChange')->name('commentStatusChange');
+        // Route::get('ajax/ validation', 'ajaxValidation')->name('ajax_validation');
+        // Route::post('ajax/validation/store', 'ajaxValidationStore')->name('ajax_validation_store');
     });
 });
 
