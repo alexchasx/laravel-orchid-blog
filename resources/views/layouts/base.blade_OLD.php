@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('page.title', config('app.name'))</title>
     <link rel="icon" href="favicon.ico"><!-- 32×32 -->
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}" />
-    {{-- <link rel="stylesheet" href="/css/style.css" /> --}}
+    <link rel="stylesheet" href="/css/style.css" />
+    <script src="/js/app.js"></script>
+    @stack('scripts')
 </head>
-<body class="antialiased text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900">
+<body>
     <div class="main_block">
 
         @include('includes.alert')
@@ -34,7 +34,6 @@
         @include('includes.footer')
 
     </div>
+    {{-- @stack('js') --}}
 </body>
-@stack('js')
-    <script src="/js/app.js"></script>
 </html>

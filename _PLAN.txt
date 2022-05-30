@@ -5,3 +5,5 @@ Category
 Article
 Comment
 Contact
+
+npm install vue vue-template-compiler vue-loader
