@@ -1,13 +1,16 @@
-require("./bootstrap");
+import "./bootstrap";
+import "./vue";
 
-// import Alpine from "alpinejs";
+// require("./bootstrap");
 
-import { createApp } from "vue";
-import App from "./App.vue";
+// // import Alpine from "alpinejs";
 
-// window.Alpine = Alpine;
+// import { createApp } from "vue";
+// import App from "./App.vue";
 
-// Alpine.start();
+// // window.Alpine = Alpine;
 
-const app = createApp(App);
-createApp(App).mount("#app");
+// // Alpine.start();
+
+// const app = createApp(App);
+// createApp(App).mount("#app");

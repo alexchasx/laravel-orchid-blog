@@ -1,8 +1,8 @@
 @extends('layouts.base')
 
-@section('content')
+@section('title', 'Главная')
 
-{{-- {{ memory_get_usage() }} --}}
+@section('content')
 
 @if (!empty($articles[0]))
 
