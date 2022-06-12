@@ -200,6 +200,7 @@ hr {
 }
 .tag {
     margin-bottom: 5px;
+    margin-right: 5px;
 }
 .wrap_img {
     overflow: hidden;
@@ -227,6 +228,7 @@ hr {
 
 .submit {
     margin-top: 5px;
+    margin-left: 5px;
 }
 .form-group {
     margin-top: 10px;

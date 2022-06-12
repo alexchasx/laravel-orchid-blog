@@ -2,7 +2,8 @@
 
 namespace App\Orchid\Screens\Category;
 
-use App\Models\Category;
+use App\Models\Blog\Category;
+use App\Models\Blog\Rubric;
 use App\Orchid\Layouts\CreateOrUpdateCategory;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\CheckBox;
@@ -23,7 +24,7 @@ class CategoryListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'categories' => Category::all(),
+            'categories' => Rubric::all(),
         ];
     }
 
@@ -61,20 +62,20 @@ class CategoryListScreen extends Screen
             Layout::table('categories', [
                 TD::make('id', 'ID')->sort(),
 
-                TD::make('Edit')->render(function (Category $category) {
+                TD::make('Edit')->render(function (Rubric $rubric) {
                     return ModalToggle::make('')
-                        ->modal('editCategory')
+                        ->modal('ediRubricCategory')
                         ->method('createOrUpdateCategory')
                         ->modalTitle('Редактирование рубрики')
                         ->asyncParameters([
-                            'category' => $category->id
+                            'category' => $rubric->id
                         ])->icon('pencil');
                 }),
 
-                TD::make('published', 'Видна?')->render(function (Category $category) {
-                    return CheckBox::make('categories[]')
-                        ->value($category->published)->disabled();
-                })->sort(),
+                // TD::make('published', 'Видна?')->render(function (Rubric $rubric) {
+                //     return CheckBox::make('categories[]')
+                //         ->value($rubric->published)->disabled();
+                // })->sort(),
 
                 TD::make('title', 'Заголовок'),
             ]),
@@ -90,21 +91,20 @@ class CategoryListScreen extends Screen
         ];
     }
 
-    public function asyncGetCategory(Category $category): array
+    public function asyncGetCategory(Rubric $rubric): array
     {
-        return ['category' => $category];
+        return ['rubric' => $rubric];
     }
 
     public function createOrUpdateCategory(Request $request): void
     {
-        $categoryId = $request->input('category.id');
-        Category::updateOrCreate([
-            'id' => $categoryId,
+        $rubricId = $request->input('rubric.id');
+        Rubric::updateOrCreate([
+            'id' => $rubricId,
         ], [
-            'title' => $request->input('category.title'),
-            'published' => $request->boolean('category.published'),
+            'title' => $request->input('rubric.title'),
         ]);
 
-        is_null($categoryId) ? Toast::info('Рубрика создана') : Toast::info('Рубрика обновлена');
+        is_null($rubricId) ? Toast::info('Рубрика создана') : Toast::info('Рубрика обновлена');
     }
 }

@@ -24,14 +24,14 @@ class CreateOrUpdateCategory extends Rows
     protected function fields(): iterable
     {
         return [
-            Input::make('category.id')->type('hidden'),
+            Input::make('rubric.id')->type('hidden'),
 
-            Input::make('category.title')->required()->title('Заголовок'),
+            Input::make('rubric.title')->required()->title('Заголовок'),
 
-            CheckBox::make('category.published')
-                ->value(1)
-                ->sendTrueOrFalse()
-                ->placeholder('Опубликована?'),
+            // CheckBox::make('rubric.published')
+            //     ->value(1)
+            //     ->sendTrueOrFalse()
+            //     ->placeholder('Опубликована?'),
         ];
     }
 }

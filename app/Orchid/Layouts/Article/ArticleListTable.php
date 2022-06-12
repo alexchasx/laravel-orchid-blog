@@ -2,8 +2,8 @@
 
 namespace App\Orchid\Layouts\Article;
 
-use App\Models\Article;
-use App\Models\Category;
+use App\Models\Blog\Article;
+use App\Models\Blog\Rubric;
 use Carbon\Carbon;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\CheckBox;
@@ -37,9 +37,9 @@ class ArticleListTable extends Table
         return [
             TD::make('id', 'ID')->sort(),
 
-            TD::make('published', 'Видна?')->render(function (Article $article) {
+            TD::make('is_published', 'Видна?')->render(function (Article $article) {
                 return CheckBox::make('articles[]')
-                    ->value($article->published)->disabled();
+                    ->value($article->is_published)->disabled();
             })->sort(),
 
             TD::make('Edit')->render(function (Article $article) {
@@ -56,14 +56,14 @@ class ArticleListTable extends Table
 
             TD::make('title', 'Заголовок'),
 
-            TD::make('category_id', 'ID_К.')
+            TD::make('rubric_id', 'ID_К.')
                 ->alignRight()
                 ->popover('ID Категории (для сортировки по категориям)')
                 ->sort(),
 
-            TD::make('category_title', 'Категория')->alignLeft()->render(
+            TD::make('rubric_title', 'Категория')->alignLeft()->render(
                 function (Article $article) {
-                    return Category::findOrfail($article->category_id)->title;
+                    return Rubric::findOrfail($article->rubric_id)->title;
                 }
             )->width(300),
 

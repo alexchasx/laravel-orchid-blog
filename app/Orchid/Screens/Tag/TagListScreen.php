@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Screens\Tag;
 
-use App\Models\Tag;
+use App\Models\Blog\Tag;
 use App\Orchid\Layouts\CreateOrUpdateTag;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\CheckBox;

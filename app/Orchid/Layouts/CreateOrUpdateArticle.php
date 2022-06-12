@@ -2,7 +2,7 @@
 
 namespace App\Orchid\Layouts;
 
-use App\Models\Category;
+use App\Models\Blog\Rubric;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\DateTimer;
@@ -33,15 +33,14 @@ class CreateOrUpdateArticle extends Rows
 
             Group::make([
                 Input::make('article.title')->required()->title('Заголовок'),
-                CheckBox::make('article.published')
+                CheckBox::make('article.is_published')
                     ->value(1)
                     ->sendTrueOrFalse()
                     ->title('Опубликована?'),
             ]),
 
             Group::make([
-                Select::make('article.category_id')
-                    ->fromQuery(Category::where('published', true), 'title')
+                Select::make('article.rubric_id')
                     ->title('Рубрика')->required(),
                 DateTimer::make('article.published_at')
                     ->title('Дата публикации')
@@ -50,7 +49,7 @@ class CreateOrUpdateArticle extends Rows
                     ->required(),
             ]),
 
-            // TextArea::make('article.description')
+            // TextArea::make('article.excert')
             //     ->rows(8)->required()->title('Кратко'),
 
             // TextArea::make('article.content')
@@ -59,11 +58,11 @@ class CreateOrUpdateArticle extends Rows
             // FieldsCode::make('article.content')->language(FieldsCode::MARKUP)->title('Контент'),
 
 
-            Quill::make('article.description')
+            Quill::make('article.excert')
                 ->toolbar(["text", "color", "header", "list", "format", "media"])
                 ->title('Предпросмотр')->required(),
 
-            Quill::make('article.content')
+            Quill::make('article.content_raw')
                 ->toolbar(["text", "color", "header", "list", "format", "media"])
                 ->title('Контент')->required(),
 

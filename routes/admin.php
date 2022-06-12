@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'admin'], function () {
 
     Route::get('/login', function () {
-        return redirect('login');
+        return redirect('/');
     });
 
     Route::group(['prefix' => 'article'], function () {

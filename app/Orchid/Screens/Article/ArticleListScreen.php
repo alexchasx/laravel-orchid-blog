@@ -3,15 +3,13 @@
 namespace App\Orchid\Screens\Article;
 
 use App\Http\Requests\ArticleRequest;
-use App\Models\Article;
+use App\Models\Blog\Article;
 use App\Orchid\Layouts\Article\ArticleListTable;
 use App\Orchid\Layouts\CreateOrUpdateArticle;
 use Orchid\Screen\Actions\ModalToggle;
-use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Modal;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Screen;
-use Orchid\Support\Facades\Alert as FacadesAlert;
 use Orchid\Support\Facades\Toast;
 
 class ArticleListScreen extends Screen
@@ -24,7 +22,7 @@ class ArticleListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'articles' => Article::filters()->defaultSort('published', 'desc')
+            'articles' => Article::filters()->defaultSort('published_at', 'desc')
                 ->paginate(14),
         ];
     }
@@ -92,7 +90,7 @@ class ArticleListScreen extends Screen
             'category_id' => $request->input('article.category_id'),
             'keywords' => $request->input('article.keywords'),
             'meta_desc' => $request->input('article.meta_desc'),
-            'published' => $request->boolean('article.published'),
+            'is_published' => $request->boolean('article.is_published'),
             'published_at' => $request->input('article.published_at'),
         ]);
 
