@@ -1,7 +1,7 @@
-<header class="">
-    <nav class="">
-        <div class="nav_wrap">
-            <div class="menu_block">
+<header>
+    <nav>
+        <div class="nav_wrap md:container mx-auto">
+            <div class="menu_block flex items-center">
                 <label class="menuToggle" for="menuCheck" class="link">{{ __('Меню') }}</label>
                 <input id="menuCheck" type="checkbox" />
                 <ul class="menu clearfix">
@@ -12,8 +12,7 @@
             <div class="sub_logo">{{ __('блокнот веб-разработчика') }}</div>
             </a>
             </li>
-            <li class="left"><a href="https://github.com/chasovnikov" class="link">{{ __('GitHub') }}</a>
-            </li>
+            <li class="left"><a href="https://github.com/chasovnikov" class="link">{{ __('GitHub') }}</a></li>
 
             <li class="left"><a href="{{ route('contact') }}" class="link">{{ __('Контакты') }}</a></li>
 
@@ -52,6 +51,8 @@
 
             </ul>
         </div>
+        </div>
         <hr />
-    </nav>
+    </nav
+>
 </header>
