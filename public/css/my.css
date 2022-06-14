@@ -24,12 +24,9 @@ body {
     outline: none;
     border: none;
     border-radius: 5px;
-    background: rgb(66, 98, 133)
-        radial-gradient(
-            150% 100% at 50% 5px,
+    background: rgb(66, 98, 133) radial-gradient(150% 100% at 50% 5px,
             rgba(255, 255, 255, 0.2),
-            rgba(0, 0, 0, 0)
-        );
+            rgba(0, 0, 0, 0));
     box-shadow: inset rgba(0, 0, 0, 0.6) 0 -2px 5px,
         inset rgba(252, 255, 255, 0.7) 0 2px 5px,
         rgba(0, 0, 0, 0.8) 0 2px 5px -1px;
@@ -39,11 +36,13 @@ body {
     transform: skewX(-10deg);
     transition: 0.5s;
 }
+
 .knopka01:hover {
     background-color: #cb541e;
     color: black;
     cursor: pointer;
 }
+
 .knopka01:active {
     padding-bottom: 1px;
     box-shadow: inset rgba(0, 0, 0, 1) 0 1px 3px,
@@ -52,6 +51,7 @@ body {
         0 1px rgba(255, 255, 255, 0.08);
     background-color: #cb541e;
 }
+
 /*---------------------------------------------*/
 a.button11 {
     position: relative;
@@ -60,16 +60,17 @@ a.button11 {
     text-decoration: none;
     padding: 0.25em 0.8em;
 }
+
 a.button11:after {
-    content: "Пополнить"; /* здесь 9 букв */
+    content: "Пополнить";
+    /* здесь 9 букв */
     position: absolute;
     z-index: -1;
     top: -2px;
     bottom: -2px;
     left: 2px;
-    width: calc(
-        100% + 7 * (1em * 90 / 140) - 2px * 2 * 2
-    ); /* где 6*(1em*90/135), где 6 - это 6 букв, 90 - это font-size after, а 135 - это font-size родителя */
+    width: calc(100% + 7 * (1em * 90 / 140) - 2px * 2 * 2);
+    /* где 6*(1em*90/135), где 6 - это 6 букв, 90 - это font-size after, а 135 - это font-size родителя */
     text-align: right;
     color: #fff;
     font-size: 100%;
@@ -78,45 +79,35 @@ a.button11:after {
     border: 2px solid #cb541e;
     -webkit-transform: skewX(-10deg);
     transform: skewX(-10deg);
-    background: linear-gradient(rgba(203, 84, 30, 0.55), #cb541e) no-repeat 100%
-        0;
+    background: linear-gradient(rgba(203, 84, 30, 0.55), #cb541e) no-repeat 100% 0;
     background-size: calc(8 * (1em * 90 / 135) + 0.5em) 100%;
-    box-shadow: inset calc(-8 * (1em * 90 / 135) + 0.5em) 0
-        rgba(255, 255, 255, 0);
+    box-shadow: inset calc(-8 * (1em * 90 / 135) + 0.5em) 0 rgba(255, 255, 255, 0);
     transition: 0.3s;
 }
+
 a.button11:hover:after {
-    box-shadow: inset calc(-9 * (1em * 90 / 135) - 0.5em) 0
-        rgba(255, 255, 255, 0.2);
+    box-shadow: inset calc(-9 * (1em * 90 / 135) - 0.5em) 0 rgba(255, 255, 255, 0.2);
 }
+
 a.button11:active:after {
     background-image: linear-gradient(#cb541e, rgba(203, 84, 30, 0.55));
 }
+
 /*---------------------------------------------*/
 
 .button {
     transition: 0.5s;
     text-align: center;
-    background-image: -webkit-linear-gradient(
-        hsla(0, 0%, 100%, 0.05),
-        hsla(0, 0%, 0%, 0.1)
-    );
-    background-image: -moz-linear-gradient(
-        hsla(0, 0%, 100%, 0.05),
-        hsla(0, 0%, 0%, 0.1)
-    );
-    background-image: -ms-linear-gradient(
-        hsla(0, 0%, 100%, 0.05),
-        hsla(0, 0%, 0%, 0.1)
-    );
-    background-image: -o-linear-gradient(
-        hsla(0, 0%, 100%, 0.05),
-        hsla(0, 0%, 0%, 0.1)
-    );
-    background-image: linear-gradient(
-        hsla(0, 0%, 100%, 0.05),
-        hsla(0, 0%, 0%, 0.1)
-    );
+    background-image: -webkit-linear-gradient(hsla(0, 0%, 100%, 0.05),
+            hsla(0, 0%, 0%, 0.1));
+    background-image: -moz-linear-gradient(hsla(0, 0%, 100%, 0.05),
+            hsla(0, 0%, 0%, 0.1));
+    background-image: -ms-linear-gradient(hsla(0, 0%, 100%, 0.05),
+            hsla(0, 0%, 0%, 0.1));
+    background-image: -o-linear-gradient(hsla(0, 0%, 100%, 0.05),
+            hsla(0, 0%, 0%, 0.1));
+    background-image: linear-gradient(hsla(0, 0%, 100%, 0.05),
+            hsla(0, 0%, 0%, 0.1));
     border: none;
     border-radius: 0.5em;
     box-shadow: inset 0 0 0 1px hsla(0, 0%, 0%, 0.2),
@@ -138,14 +129,17 @@ a.button11:active:after {
     vertical-align: middle;
     margin: 5px 10px 5px 0;
 }
+
 .button:hover {
     outline: none;
 }
+
 .button:hover,
 .button:focus {
     background-color: #cb541e;
     color: black;
 }
+
 .button:active {
     box-shadow: inset 0 0 0 1px hsla(0, 0%, 0%, 0.2),
         inset 0 2px 0 hsla(0, 0%, 100%, 0.1),
@@ -157,28 +151,36 @@ a.button11:active:after {
     outline: none;
     padding-bottom: 0.5em;
 }
+
 .large {
     font-size: 16px;
 }
+
 .round {
     border-radius: 1.25em;
 }
+
 .width70px {
     width: 60px;
 }
+
 .width232px {
     width: 232px;
 }
+
 .width200px {
     margin-left: 15px;
     width: 200px;
 }
+
 .magazin {
     margin-left: 110px;
 }
+
 .bg {
     background-color: #0e2231;
 }
+
 .btn-admin {
     background-color: #0e2231;
     top: 40px;
@@ -191,4 +193,12 @@ a.button11:active:after {
 .rubric-link {
     opacity: 1;
     color: #0e2231;
+}
+
+.no_underline {
+    text-decoration: none;
+}
+
+.tag_link:hover {
+    text-color: #000;
 }
