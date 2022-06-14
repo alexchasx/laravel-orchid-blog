@@ -27,7 +27,8 @@
             <header class="p-3 bg-primary text-white">
                 <div class="container">
                     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                        <a href="{{ route('home') }}"
+                            class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="d-block my-1"
                                 viewBox="0 0 118 94" role="img">
                                 <title>ChasDev</title>
@@ -39,8 +40,12 @@
                         </a>
 
                         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                            <li><a href="#" class="nav-link px-2 text-white">GitHub</a></li>
-                            <li><a href="#" class="nav-link px-2 text-white">Контакты</a></li>
+                            <li>
+                                <a href="https://github.com/chasovnikov" class="nav-link px-2 text-white">
+                                    GitHub
+                                </a>
+                            </li>
+                            <li><a href="{{ route('contact') }}" class="nav-link px-2 text-white">Контакты</a></li>
                         </ul>
 
                         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
@@ -64,41 +69,9 @@
                     <div class="row">
 
                         <!-- Side bar -->
-                        <aside class="col-lg-4 opacity-75" id="sidebar">
+                        <aside class="col-lg-4" id="sidebar">
 
-                            <div class="list-group">
-                                <a href="#"
-                                    class="rubric-link list-group-item list-group-item-action d-flex justify-content-between align-items-center active"
-                                    aria-current="true">
-                                    The current link item
-
-                                    <span class="badge bg-primary rounded-pill">5</span>
-                                </a>
-                                <a href="#"
-                                    class="rubric-link list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                    A second link item
-
-                                    <span class="badge bg-primary rounded-pill">14</span>
-                                </a>
-                                <a href="#"
-                                    class="rubric-link list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                    A third link item
-
-                                    <span class="badge bg-primary rounded-pill">102</span>
-                                </a>
-                                <a href="#"
-                                    class="rubric-link list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-                                    A fourth link item
-
-                                    <span class="badge bg-primary rounded-pill">32</span>
-                                </a>
-                                <a
-                                    class="rubric-link list-group-item list-group-item-action disabled d-flex justify-content-between align-items-center">
-                                    A disabled link item
-
-                                    <span class="badge bg-primary rounded-pill">0</span>
-                                </a>
-                            </div>
+                            @include('includes.right_block')
 
                             <br>
 
@@ -171,6 +144,12 @@
 @stack('js')
 {{-- <s
 cript src="{{ mix('/js/app.js') }}"></s> --}}
+
+
+
+
+
+
 
 
 

@@ -1,5 +1,5 @@
 @if (!empty($rubrics))
-<section id="search" class="category_block">
+<!-- <section id="search" class="category_block">
     <form role="search" method="get" class="search-form" action="{{ route('search') }}">
         <label for="search" class="block text-sm font-medium text-gray-700">
             {{-- <span class="screen-reader-text">{{ __('Поиск для:') }}</span> --}}
@@ -9,58 +9,26 @@
             <span class="screen-reader-text">{{ __('Поиск') }}</span>
         </button>
     </form>
-</section>
+</section> -->
 @endif
 
 @if (!empty($rubrics))
-<hr />
-<section id="categories" class="category_block">
-    <h3>{{ __('Рубрики') }}</h2>
-        <nav class="category_list">
-            <ul>
-                @foreach($rubrics as $rubrics)
+<div class="list-group">
 
-                {{-- @unless (empty($articleCount = $rubrics->articles->count()))
-                <li class="category_link">
-                    <a href="{{ route('showByRubric', ['id' => $rubrics->id] ) }}">
-                {{ $rubrics->title }}
-                </a>
-                </li>
-                @endunless --}}
+    @foreach($rubrics as $rubric)
+    @if ($rubric->exists)
+    <a href="{{ route('showByRubric', ['id' => $rubric->id] ) }}" class="rubric-link list-group-item list-group-item-action d-flex justify-content-between align-items-center
+        @if($currentRubric && $rubric->id == $currentRubric->id) active @endif" aria-current="true">
+        {{ $rubric->title }}
 
-                @if ($rubrics->exists)
-                <li class="category_link">
-                    <a href="{{ route('showByRubric', ['id' => $rubrics->id] ) }}">
-                        {{ $rubrics->title }}
-                    </a>
-                </li>
-                @endif
+        <span class="badge bg-primary rounded-pill">5</span>
+    </a>
+    @endif
+    @endforeach
 
-                @endforeach
-            </ul>
-        </nav>
-</section>
+</div>
+
 @endif
-
-{{-- @if (!empty($recents[0]))
-<hr />
-<section id="recent" class="category_block">
-    <h3>{{ __('Последние статьи') }}</h2>
-<nav class="category_list">
-    <ul>
-        @foreach($recents as $recent)
-
-        <li class="category_link">
-            <a href="{{ route('articleShow', ['id' => $recent->id]) }}">
-                {{ $recent->title }}
-            </a>
-        </li>
-
-        @endforeach
-    </ul>
-</nav>
-</section>
-@endif --}}
 
 @if (!empty($tags[0]))
 <hr />
@@ -75,10 +43,18 @@
                 <a href="{{ route('showByTag', ['id' => $tag->id]) }}">
                     {{ $tag->title }}
                 </a>
+
+
+
             </button>
             @endunless
 
             @endforeach
+
+
+
+
+
         </nav>
 </section>
 @endif

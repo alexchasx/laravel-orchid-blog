@@ -20,6 +20,7 @@ class ArticleController extends BaseController
         return view('blog.index')->with([
             'articles' => Article::published()->paginate(self::PAGINATE),
             'rubrics' => Rubric::notEmpties(),
+            'currentRubric' => null,
             'tags' => Tag::notEmpties(),
         ]);
     }
@@ -53,7 +54,7 @@ class ArticleController extends BaseController
 
         return view('blog.index')->with([
             'articles' => Article::byRubric($id)->paginate(self::PAGINATE),
-            'rubric' => $rubrics->find($id),
+            'currentRubric' => $rubrics->find($id),
             'rubrics' => $rubrics,
             'tags' => Tag::notEmpties(),
         ]);
