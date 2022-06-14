@@ -20,8 +20,8 @@ class ArticleController extends BaseController
         return view('blog.index')->with([
             'articles' => Article::published()->paginate(self::PAGINATE),
             'rubrics' => Rubric::notEmpties(),
-            'currentRubric' => null,
             'tags' => Tag::notEmpties(),
+            'currentRubric' => null,
         ]);
     }
 
@@ -42,8 +42,24 @@ class ArticleController extends BaseController
             'rubrics' => Rubric::notEmpties(),
             'tags' => Tag::notEmpties(),
             'comments' => $article->comments,
+            'currentRubric' => null,
         ]);
     }
+
+    // /**
+    //  * Показывает статьи по категории
+    //  */
+    // public function showByRubric(Rubric $rubric)
+    // {
+    //     $rubrics = Rubric::notEmpties();
+
+    //     return view('blog.index')->with([
+    //         'articles' => $rubric->articles()->paginate(self::PAGINATE),
+    //         'currentRubric' => $rubric,
+    //         'rubrics' => $rubrics,
+    //         'tags' => Tag::notEmpties(),
+    //     ]);
+    // }
 
     /**
      * Показывает статьи по категории
@@ -76,6 +92,7 @@ class ArticleController extends BaseController
             'tag' => $tags->find($tagId),
             'rubrics' => Rubric::notEmpties(),
             'tags' => $tags,
+            'currentRubric' => null,
         ]);
     }
 
@@ -91,6 +108,7 @@ class ArticleController extends BaseController
             'articles' => $builder->paginate(self::PAGINATE),
             'rubrics' => Rubric::notEmpties(),
             'tags' => Tag::notEmpties(),
+            'currentRubric' => null,
         ]);
     }
 }
