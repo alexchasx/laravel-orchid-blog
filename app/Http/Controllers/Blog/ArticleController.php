@@ -41,24 +41,8 @@ class ArticleController extends BaseController
             'rubrics' => Rubric::notEmpties(),
             'tags' => Tag::notEmpties(),
             'comments' => $article->comments,
-
         ]);
     }
-
-    // /**
-    //  * Показывает статьи по категории
-    //  */
-    // public function showByRubric(Rubric $rubric)
-    // {
-    //     $rubrics = Rubric::notEmpties();
-
-    //     return view('blog.index')->with([
-    //         'articles' => $rubric->articles()->paginate(self::PAGINATE),
-    //         'currentRubric' => $rubric,
-    //         'rubrics' => $rubrics,
-    //         'tags' => Tag::notEmpties(),
-    //     ]);
-    // }
 
     /**
      * Показывает статьи по категории
