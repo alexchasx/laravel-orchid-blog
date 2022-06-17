@@ -15,47 +15,48 @@
     integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous"> -->
     <!-- <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" /> -->
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/dark.css" />
+    <link rel="stylesheet" href="/css/my.css" />
 
     <title>@yield('page.title', config('app.name'))</title>
 </head>
 
 <body>
-    <div class="main_block container border">
+    <div class="main_block container">
         <div class="row">
 
             @include('includes.alert')
 
             @include('includes.header')
 
+            <section class="">
+                <br>
 
-            <!-- Side bar -->
-            <!-- <aside class="col-lg-4" id="sidebar">
-
-
-                </aside> -->
-            <section class="mt-3 mb-4">
-                <div class="container">
+                <div class="container text-bg-primary mb-3">
                     <div class="row">
 
-                        @include('includes.tags_list')
+                        <!-- Side bar -->
+                        <aside class="col-lg-4" id="sidebar">
 
+                            @include('includes.right_block')
+
+                        </aside>
+
+                        <main class="col-lg-8">
+
+                            <div class="row">
+
+                                @yield('content')
+
+                            </div>
+
+                        </main>
                     </div>
+
                 </div>
             </section>
 
-            <main class="col-lg-12">
-                <div class="container mb-3">
 
-                    <div class="row">
-
-                        @yield('content')
-
-                    </div>
-                </div>
-            </main>
-
-            <footer>Footer</footer>
+            @include('includes.footer')
 
         </div>
     </div>

@@ -17,6 +17,12 @@
 
     <!-- <h3 class="border">{{ __('Поиск по меткам') }}</h2> -->
 
+    <a href="{{ route('home') }}" class="knopka01">
+
+        {{ __('Все') }}
+        <span class="tag_count">(150)</span>
+    </a>
+
     @foreach($tags as $tag)
     @unless (empty($articleCount = $tag->articles->count()))
     <a href="{{ route('showByTag', ['id' => $tag->id]) }}" class="knopka01">

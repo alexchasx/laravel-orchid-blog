@@ -8,7 +8,7 @@
 
 @foreach ($articles as $article)
 
-<div class="col-md-4">
+<div class="col-md-6">
     <div class="card mb-4">
         <svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg"
             role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false">

@@ -7,10 +7,22 @@ body {
     -moz-background-size: 100%;
     -o-background-size: 100%;
     background-size: 100%;
+
+    background-image: url(/storage/bg-ski-fi-2.jpg);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-attachment: fixed;
+
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+}
+
+.main_row {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 button,
@@ -19,9 +31,9 @@ a {
     cursor: pointer;
 }
 
-button {
+/* button {
     background-color: #0f0e7d;
-}
+} */
 
 a {
     text-decoration: none;
@@ -153,6 +165,7 @@ a {
     text-decoration: none;
     padding: 0.25em 0.8em;
     margin-right: 80px;
+    height: 36px;;
 }
 
 .search:after {
@@ -190,6 +203,32 @@ a {
 .search input {
     -webkit-transform: skewX(-10deg);
         transform: skewX(-10deg);
+}
+
+@media (min-width: 768px) {
+    .search:after {
+            content: "Поиск";
+            /* здесь 9 букв */
+            position: absolute;
+            z-index: -1;
+            top: -2px;
+            bottom: -2px;
+            left: 8px;
+            width: calc(85% + 7 * (1em * 90 / 140) - 2px * 2 * 2);
+            /* где 6*(1em*90/135), где 6 - это 6 букв, 90 - это font-size after, а 135 - это font-size родителя */
+            text-align: right;
+            color: #fff;
+            font-size: 100%;
+            padding: 0.25em 0.6em;
+            border-radius: 5px;
+            border: 2px solid #cb541e;
+            -webkit-transform: skewX(-10deg);
+            transform: skewX(-10deg);
+            background: linear-gradient(rgba(203, 84, 30, 0.55), #cb541e) no-repeat 100% 0;
+            background-size: calc(5 * (1em * 90 / 135) + 0.5em) 100%;
+            box-shadow: inset calc(-8 * (1em * 90 / 135) + 0.5em) 0 rgba(255, 255, 255, 0);
+            transition: 0.3s;
+        }
 }
 
 /*---------------------------------------------*/
@@ -323,4 +362,8 @@ a {
 
 .tags_list {
 
+}
+
+.card-body {
+    color: #99b7d3;
 }

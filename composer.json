@@ -64,7 +64,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "ext-pcntl": "8.0"
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
