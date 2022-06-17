@@ -2,12 +2,9 @@
 
 @section('content')
 
-<div class="card">
+<div class="card card_body">
 
     <div class="col-md-8 col-md-offset-2">
-        <br />
-        <br />
-        <br />
         <div class="panel panel-default">
             <div class="panel-body">
                 <p class="text-center">
@@ -33,8 +30,7 @@
                         e-mail</label>
 
                     <div class="col-md-6">
-                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}"
-                            required @if ($errors->has('name') || !$errors) autofocus @endif>
+                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required @if ($errors->has('name') || !$errors) autofocus @endif>
 
                         @if ($errors->has('email'))
                         <div class="help-block">
@@ -48,8 +44,7 @@
                     <label for="message" class="col-md-4 control-label">Сообщение:</label>
 
                     <div class="col-md-6">
-                        <textarea style="border-color: #2e3436;" name="message" id="message" rows="10" required @if
-                            ($errors->has('name')) autofocus @endif> {{ old('message') }} </textarea>
+                        <textarea style="border-color: #2e3436;" name="message" id="message" rows="10" required @if ($errors->has('name')) autofocus @endif> {{ old('message') }} </textarea>
 
                         @if ($errors->has('message'))
                         <div class="help-block">

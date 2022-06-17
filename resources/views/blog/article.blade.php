@@ -4,7 +4,7 @@
 
 @unless (empty($article))
 
-<div class="card">
+<div class="card card_body">
     <!-- <img src="..." class="card-img-top" alt="..."> -->
     <div class="card-body">
         <h4 class="card-title text-center mt-2 mb-4">{{ $article->title }}</h4>

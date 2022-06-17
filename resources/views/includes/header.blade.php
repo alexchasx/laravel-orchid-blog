@@ -23,14 +23,13 @@
 
                 @if (isAdmin())
                 <li>
-                    <a href="{{ route('platform.main') }}" class="nav-link px-2 text-white">
+                    <a style="position: absolute;" href="{{ route('platform.main') }}" class="nav-link px-2 text-white">
                         <span>{{ __('Админ-панель') }}</span>
                     </a>
                 </li>
                 @endif
 
             </ul>
-
 
             <div class="search">
                 <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
@@ -40,17 +39,19 @@
 
             <div class="text-end">
 
+                @if (config('app.env') == 'local')
                 @if (Auth::guest())
-                <!-- <button type="button" class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Войти</button>
-                <button type=" button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registerModal">Регистрация</button> -->
+                <button style="position: absolute;" type="button" class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Войти</button>
+                <!-- <button type=" button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registerModal">Регистрация</button> -->
                 @else
-                <a href="{{ route('logout') }}" class="nav-link px-2 border rounded text-white" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <a style="position: absolute;" href="{{ route('logout') }}" class="nav-link px-2 border rounded text-white" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     {{ __('Выход') }}
                 </a>
 
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     {{ csrf_field() }}
                 </form>
+                @endif
                 @endif
             </div>
         </div>

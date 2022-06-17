@@ -25,6 +25,10 @@ body {
     margin-right: auto;
 }
 
+.card_body {
+    background: #121924 url('../../images/profile/profile1.jpg') no-repeat;
+}
+
 button,
 a {
     transition: .3s;
@@ -364,6 +368,6 @@ a {
 
 }
 
-.card-body {
+.card, .card-body {
     color: #99b7d3;
 }
