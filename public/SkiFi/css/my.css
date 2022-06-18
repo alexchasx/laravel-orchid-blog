@@ -1,3 +1,8 @@
+ul {
+    margin: 0;
+    padding: 0;
+}
+
 .card_body {
     background: #121924 url('../../images/profile/profile1.jpg') no-repeat;
 }
@@ -5,6 +10,8 @@
 .rubric-title {
     text-align: center;
     color: #fff;
+    text-transform: uppercase;
+    /* font-weight: 800; */
 }
 
 button,
@@ -28,9 +35,20 @@ a {
     min-height: 580px;
 }
 
-.pick {
-    color: #c1e2b3;
+.logo {
+    margin: 0;
+    font-weight: 800;
+    font-size: 3em;
+    line-height: 1.2;
 }
+
+.logo span {
+    display: block;
+    padding: 0 0 0.6em 0.1em;
+    font-weight: 300;
+    font-size: 40%;
+}
+
 /* Кнопки
 -----------------------------------------------------------------------------*/
 .knopka01 {
@@ -131,7 +149,10 @@ a {
     padding: 0.25em 0.8em;
     margin-right: 80px;
     height: 36px;
-    ;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-top: 5px;
+    margin-bottom: 40px;
 }
 
 .search:after {
@@ -196,6 +217,7 @@ a {
         transition: 0.3s;
     }
 }
+
 
 /*---------------------------------------------*/
 
@@ -275,6 +297,7 @@ ul > li {
 }
 .article-date {
     font-size: 0.9rem;
+    /* font-style: italic; */
 }
 
 .rubric-title h2 {
@@ -284,3 +307,113 @@ ul > li {
 li {
     list-style-type: none;
 }
+
+/* Эффект 5: смена */
+h2 a {
+    position: relative;
+    display: inline-block;
+    /* margin: 15px 25px; */
+    outline: none;
+    color: #fff;
+    text-decoration: none;
+    /* text-transform: uppercase; */
+    letter-spacing: 1px;
+    font-weight: 400;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.3);
+    font-size: 1em;
+}
+
+.reverse-effect a {
+    overflow: hidden;
+    padding: 0 4px;
+    height: 1em;
+}
+
+.reverse-effect a div {
+    position: relative;
+    display: inline-block;
+    -webkit-transition: -webkit-transform 0.3s;
+    -moz-transition: -moz-transform 0.3s;
+    transition: transform 0.3s;
+}
+
+.reverse-effect a div::before {
+    position: absolute;
+    top: 100%;
+    content: attr(data-hover);
+    /* font-weight: 700; */
+    color: #cb541e;
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
+.reverse-effect a:hover div,
+.reverse-effect a:focus div {
+    -webkit-transform: translateY(-100%);
+    -moz-transform: translateY(-100%);
+    transform: translateY(-100%);
+}
+
+.menu_list li {
+    display: inline;
+}
+
+/* ------------------------------------------ */
+.button_01 {
+    transition: 0.5s;
+        text-align: center;
+        background-image: -webkit-linear-gradient(hsla(0, 0%, 100%, 0.05),
+                hsla(0, 0%, 0%, 0.1));
+        background-image: -moz-linear-gradient(hsla(0, 0%, 100%, 0.05),
+                hsla(0, 0%, 0%, 0.1));
+        background-image: -ms-linear-gradient(hsla(0, 0%, 100%, 0.05),
+                hsla(0, 0%, 0%, 0.1));
+        background-image: -o-linear-gradient(hsla(0, 0%, 100%, 0.05),
+                hsla(0, 0%, 0%, 0.1));
+        background-image: linear-gradient(hsla(0, 0%, 100%, 0.05),
+                hsla(0, 0%, 0%, 0.1));
+        border: none;
+        border-radius: 0.5em;
+        box-shadow: inset 0 0 0 1px hsla(0, 0%, 0%, 0.2),
+            inset 0 2px 0 hsla(0, 0%, 100%, 0.1),
+            inset 0 1.2em 0 hsla(0, 0%, 100%, 0.1),
+            inset 0 -0.2em 0 hsla(0, 0%, 100%, 0.1),
+            inset 0 -0.25em 0 hsla(0, 0%, 0%, 0.25),
+            0 0.25em 0.25em hsla(0, 0%, 0%, 0.05);
+        color: #d2d2d2;
+        cursor: pointer;
+        display: inline-block;
+        font-family: sans-serif;
+        font-size: 1em;
+        font-weight: bold;
+        padding: 0.5em 1.5em 0.5em;
+        position: relative;
+        text-decoration: none;
+        text-shadow: 0 1px 1px hsla(0, 0%, 100%, 0.25);
+        vertical-align: middle;
+        margin: 5px 10px 5px 0;
+}
+
+.button_01:hover {
+    outline: none;
+}
+
+.button_01:hover,
+.button_01:focus {
+    background-color: #cb541e;
+    color: black;
+}
+
+.button_01:active {
+    box-shadow: inset 0 0 0 1px hsla(0, 0%, 0%, 0.2),
+        inset 0 2px 0 hsla(0, 0%, 100%, 0.1),
+        inset 0 1.2em 0 hsla(0, 0%, 100%, 0.1),
+        inset 0 0 0 3em hsla(0, 0%, 100%, 0.2),
+        inset 0 0.25em 0.5em hsla(0, 0%, 0%, 0.05),
+        0 -1px 1px hsla(0, 0%, 0%, 0.1), 0 1px 1px hsla(0, 0%, 100%, 0.25);
+    margin-top: 0.25em;
+    outline: none;
+    padding-bottom: 0.5em;
+}
+/* ------------------------------------------ */

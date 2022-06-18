@@ -17,9 +17,9 @@
 
         @foreach ($articles as $article)
         <li class="article-card">
-            <h2>
+            <h2 class="reverse-effect">
                 <a href="{{route('articleShow', ['id' => $article->id])}}" class="article-title">
-                    {{ $article->title }}
+                    <div data-hover="{{ $article->title }}">{{ $article->title }}</div>
                 </a>
             </h2>
             <div class="article-date">16 января 2021</div>

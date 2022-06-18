@@ -57,7 +57,7 @@ section {
 
 .codrops-header {
 	margin: 0 auto;
-	padding: 4em 1em;
+	padding: 3em 1em;
 	text-align: center;
 }
 
@@ -72,21 +72,6 @@ section {
 	display: block;
 	padding: 0 0 0.6em 0.1em;
 	color: #74777b;
-	font-weight: 300;
-	font-size: 45%;
-}
-
-.codrops-header h3 {
-	margin: 0;
-	font-weight: 800;
-	font-size: 3em;
-	line-height: 1.2;
-}
-
-.codrops-header h3 span {
-	display: block;
-	padding: 0 0 0.6em 0.1em;
-	color: #000;
 	font-weight: 300;
 	font-size: 45%;
 }

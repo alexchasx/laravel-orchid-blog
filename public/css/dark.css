@@ -146,13 +146,13 @@ a {
     transition: 0.5s;
 }
 
-.knopka01:hover {
+.knopka02:hover {
     background-color: #cb541e;
     color: black;
     cursor: pointer;
 }
 
-.knopka01:active {
+.knopka02:active {
     padding-bottom: 1px;
     box-shadow: inset rgba(0, 0, 0, 1) 0 1px 3px,
         inset rgba(0, 0, 0, 0.6) 0 -2px 5px,
