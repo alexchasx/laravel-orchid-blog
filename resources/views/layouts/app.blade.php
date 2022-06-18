@@ -4,36 +4,47 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Laravel</title>
 
     <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"> -->
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <!-- <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/my_tw.css"> -->
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+
+    <link rel="stylesheet" type="text/css" href="/SkiFi/css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="/SkiFi/css/demo.css" />
+    <link rel="stylesheet" type="text/css" href="/SkiFi/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="/SkiFi/css/my.css" />
+
 </head>
+<!-- <body class="antialiased"> -->
 
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
-        @include('layouts.navigation')
+<body>
+    <div class="content">
 
-        <!-- Page Heading -->
-        <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                {{ $header }}
-            </div>
-        </header>
+        @include('includes.alert')
 
-        <!-- Page Content -->
-        <main>
-            {{ $slot }}
-        </main>
+        @include('includes.header')
+
+        @yield('content')
+
+        <nav class="codrops-demos" style="margin-bottom:120px;">
+            <a class="current-demo" href="index.html">Набор 1</a>
+            <a href="index2.html">Набор 2</a>
+        </nav>
     </div>
+    <script>
+        // Только для демострации (данный код нужен для показа эффектов на мобильных устройствах)
+        [].slice.call(document.querySelectorAll('a[href="#"')).forEach(function(el) {
+            el.addEventListener('click', function(ev) {
+                ev.preventDefault();
+            });
+        });
+    </script>
 </body>
 
 </html>

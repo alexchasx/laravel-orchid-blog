@@ -13,11 +13,11 @@
 @endif
 
 @if (!empty($tags[0]))
-<nav class="">
+<div class="d-flex flex-wrap align-items-center justify-content-center">
 
     <!-- <h3 class="border">{{ __('Поиск по меткам') }}</h2> -->
 
-    <a href="{{ route('home') }}" class="knopka01 current-demo">
+    <a href="{{ route('home') }}" class="knopka01">
 
         {{ __('Все') }}
         <!-- <span style="position: absolute;" class="tag_count">(150)</span> -->
@@ -35,5 +35,5 @@
     </a>
     @endunless
     @endforeach
-</nav>
+</div>
 @endif

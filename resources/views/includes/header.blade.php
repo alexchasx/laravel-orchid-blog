@@ -1,19 +1,10 @@
-<header>
-    <nav>
-        <div>Logo</div>
-        <ul>
-            <li><a href="">GitHub</a></li>
-            <li><a href="">Контакты</a></li>
-        </ul>
-        <div class="search">
-            <form class="" role="search">
-                <input type="search" class="button11" placeholder="Search..." aria-label="Search">
-            </form>
-        </div>
-        <hr />
-    </nav>
+<!-- <div class="codrops-top clearfix">
+    <span class="right"><a href="http://www.sitehere.ru/nabor-effektov-pri-navedenii-css" title="Вернуться к статье"><span>Вернуться к статье</span></a></span>
+</div> -->
+<header class="codrops-header">
+    <a href="/">
+        <h3>IT-Инженер <span>записки веб-разработчика</span></h3>
+    </a>
 
-    <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
-
-
+    @include('includes.tags_list')
 </header>
