@@ -17,9 +17,17 @@ class ArticleController extends BaseController
      */
     public function index()
     {
-        return view('blog.index')->with([
-            'articles' => Article::published()->paginate(self::PAGINATE),
-            'rubrics' => Rubric::notEmpties(),
+        // $dd = Article::published()->paginate(self::PAGINATE);
+        // dd($dd);
+
+        return view('welcome')->with([
+            'articles' => Article::published()->paginate(self::PAGINATE, [
+                'id',
+                'title',
+                'excert',
+                'published_at',
+            ]),
+            // 'rubrics' => Rubric::notEmpties(),
             'tags' => Tag::notEmpties(),
         ]);
     }
@@ -38,7 +46,7 @@ class ArticleController extends BaseController
 
         return view('blog.article')->with([
             'article' => $article,
-            'rubrics' => Rubric::notEmpties(),
+            // 'rubrics' => Rubric::notEmpties(),
             'tags' => Tag::notEmpties(),
             'comments' => $article->comments,
         ]);
@@ -51,7 +59,7 @@ class ArticleController extends BaseController
     {
         $rubrics = Rubric::notEmpties();
 
-        return view('blog.index')->with([
+        return view('welcome')->with([
             'articles' => Article::byRubric($id)->paginate(self::PAGINATE),
             'currentRubric' => $rubrics->find($id),
             'rubrics' => $rubrics,
@@ -70,10 +78,10 @@ class ArticleController extends BaseController
                 $builder->where('tag_id', $tagId);
             });
 
-        return view('blog.index')->with([
+        return view('welcome')->with([
             'articles' => $articlesByTag->paginate(self::PAGINATE),
             'tag' => $tags->find($tagId),
-            'rubrics' => Rubric::notEmpties(),
+            // 'rubrics' => Rubric::notEmpties(),
             'tags' => $tags,
         ]);
     }
@@ -86,9 +94,9 @@ class ArticleController extends BaseController
         $builder =  Article::published()
             ->where('content', 'LIKE', "%{$request['query']}%");
 
-        return view('blog.index')->with([
+        return view('welcome')->with([
             'articles' => $builder->paginate(self::PAGINATE),
-            'rubrics' => Rubric::notEmpties(),
+            // 'rubrics' => Rubric::notEmpties(),
             'tags' => Tag::notEmpties(),
         ]);
     }
