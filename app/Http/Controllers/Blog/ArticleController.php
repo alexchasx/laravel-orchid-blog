@@ -92,7 +92,9 @@ class ArticleController extends BaseController
     public function search(Request $request)
     {
         $builder =  Article::published()
-            ->where('content', 'LIKE', "%{$request['query']}%");
+            ->where('title', 'LIKE', "%{$request['query']}%")
+            ->orWhere('excert', 'LIKE', "%{$request['query']}%")
+            ->orWhere('content_raw', 'LIKE', "%{$request['query']}%");
 
         return view('welcome')->with([
             'articles' => $builder->paginate(self::PAGINATE),

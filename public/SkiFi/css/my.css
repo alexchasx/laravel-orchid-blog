@@ -64,13 +64,14 @@ a {
     outline: none;
     border: none;
     border-radius: 5px;
-    background: rgb(66, 98, 133) radial-gradient(150% 100% at 50% 5px,
+    /* background: rgb(66, 98, 133) radial-gradient(150% 100% at 50% 5px,
             rgba(255, 255, 255, 0.2),
-            rgba(0, 0, 0, 0));
+            rgba(0, 0, 0, 0)); */
     box-shadow: inset rgba(0, 0, 0, 0.6) 0 -2px 5px,
         inset rgba(252, 255, 255, 0.7) 0 2px 5px,
         rgba(0, 0, 0, 0.8) 0 2px 5px -1px;
-    color: rgb(30, 52, 69);
+    /* color: rgb(30, 52, 69); */
+    color: #99b7d3;
     user-select: none;
     -webkit-transform: skewX(-10deg);
     transform: skewX(-10deg);
@@ -125,13 +126,13 @@ a {
     transition: 0.5s;
 }
 
-.knopka01:hover {
+.knopka02:hover {
     background-color: #cb541e;
     color: black;
     cursor: pointer;
 }
 
-.knopka01:active {
+.knopka02:active {
     padding-bottom: 1px;
     box-shadow: inset rgba(0, 0, 0, 1) 0 1px 3px,
         inset rgba(0, 0, 0, 0.6) 0 -2px 5px,
@@ -144,20 +145,19 @@ a {
 .search {
     position: relative;
     z-index: 1;
-    color: #7e93af;
+    color: #99b7d3;
     text-decoration: none;
     padding: 0.25em 0.8em;
     margin-right: 80px;
     height: 36px;
     max-width: 400px;
     margin: 0 auto;
-    margin-top: 5px;
+    margin-top: 15px;
     margin-bottom: 40px;
 }
 
 .search:after {
     content: "Поиск";
-    /* здесь 9 букв */
     position: absolute;
     z-index: -1;
     top: -2px;
@@ -173,7 +173,7 @@ a {
     border: 2px solid #cb541e;
     -webkit-transform: skewX(-10deg);
     transform: skewX(-10deg);
-    background: linear-gradient(rgba(203, 84, 30, 0.55), #cb541e) no-repeat 100% 0;
+    /* background: linear-gradient(rgba(203, 84, 30, 0.55), #cb541e) no-repeat 100% 0; */
     background-size: calc(5 * (1em * 90 / 135) + 0.5em) 100%;
     box-shadow: inset calc(-8 * (1em * 90 / 135) + 0.5em) 0 rgba(255, 255, 255, 0);
     transition: 0.3s;
@@ -194,7 +194,7 @@ a {
 
 @media (min-width: 768px) {
     .search:after {
-        content: "Поиск";
+        /* content: "Поиск"; */
         /* здесь 9 букв */
         position: absolute;
         z-index: -1;
@@ -417,3 +417,21 @@ h2 a {
     padding-bottom: 0.5em;
 }
 /* ------------------------------------------ */
+
+.logo:hover {
+    color: #99b7d3;
+}
+
+.nav_list {
+    margin-top: 15px;
+}
+
+.search_2 a {
+    height: 30px;
+}
+
+.button-search {
+    background-color: #99b7d3;
+    width: 30px;
+    height: 30px;
+}

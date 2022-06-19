@@ -95,6 +95,7 @@ class Article extends Model
                 'id',
                 'title',
                 'excert',
+                'content_raw',
                 'published_at',
                 'is_published',
             );
