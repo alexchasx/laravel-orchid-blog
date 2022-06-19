@@ -17,7 +17,7 @@
 
         @foreach ($articles as $article)
         <li class="article-card">
-            <h2 class="reverse-effect">
+            <h2 class="reverse-effect ">
                 <a href="{{route('articleShow', ['id' => $article->id])}}" class="article-title">
                     <div data-hover="{{ $article->title }}">{{ $article->title }}</div>
                 </a>
@@ -34,12 +34,13 @@
         {{ __('Ничего не нашлось') }}
     </div>
     @endif
-    <nav>
-        <ul class="pagination">
-            pagination
-        </ul>
-    </nav>
 
 </div>
+
+<nav>
+    <ul class="pagination">
+        {{ $articles->links('pagination.tailwind') }}
+    </ul>
+</nav>
 
 @endsection

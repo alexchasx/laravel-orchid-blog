@@ -15,7 +15,8 @@
     <link rel="stylesheet" href="/css/my_tw.css"> -->
 
 
-    <link rel="stylesheet" type="text/css" href="/SkiFi/css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="/css/app.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="/SkiFi/css/normalize.css" /> -->
     <link rel="stylesheet" type="text/css" href="/SkiFi/css/demo.css" />
     <link rel="stylesheet" type="text/css" href="/SkiFi/css/main.css" />
     <link rel="stylesheet" type="text/css" href="/SkiFi/css/my.css" />
@@ -32,19 +33,7 @@
 
         @yield('content')
 
-        <nav class="codrops-demos" style="margin-bottom:120px;">
-            <a class="current-demo" href="index.html">Набор 1</a>
-            <a href="index2.html">Набор 2</a>
-        </nav>
     </div>
-    <script>
-        // Только для демострации (данный код нужен для показа эффектов на мобильных устройствах)
-        [].slice.call(document.querySelectorAll('a[href="#"')).forEach(function(el) {
-            el.addEventListener('click', function(ev) {
-                ev.preventDefault();
-            });
-        });
-    </script>
 </body>
 
 </html>

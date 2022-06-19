@@ -297,7 +297,7 @@ ul > li {
 }
 .article-date {
     font-size: 0.9rem;
-    /* font-style: italic; */
+    margin-top: -12px;
 }
 
 .rubric-title h2 {
@@ -325,8 +325,9 @@ h2 a {
 
 .reverse-effect a {
     overflow: hidden;
-    padding: 0 4px;
-    height: 1em;
+    /* padding: 0 4px;
+    height: 1em; */
+    font-size: 1.5em;
 }
 
 .reverse-effect a div {
@@ -434,4 +435,8 @@ h2 a {
     background-color: #99b7d3;
     width: 30px;
     height: 30px;
+}
+
+.pagination {
+    margin: 50px auto;
 }
