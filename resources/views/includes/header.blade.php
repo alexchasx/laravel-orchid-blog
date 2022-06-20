@@ -18,8 +18,9 @@
     </nav>
 
     <div class="search">
-        <form action="{{ route('search') }}" method="GET" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-            <input type="search" class="button11" placeholder="Search..." aria-label="Search">
+        <form action="{{ route('search') }}" method="GET" role="search">
+            <input type="search" class="button11" placeholder="Поиск..." aria-label="Search">
+            <button type="submit">Поиск</button>
         </form>
     </div>
 

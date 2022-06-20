@@ -9,7 +9,7 @@
     @if (!empty($articles[0]))
 
     <div class="rubric-title">
-        <h2>Все статьи</h2>
+        <h2>Найдено ... статей</h2>
         <!-- <p>Приятного чтения!</p> -->
     </div>
 
@@ -27,7 +27,6 @@
         @endforeach
 
     </ul>
-
 
     @else
     <div class="article_card">

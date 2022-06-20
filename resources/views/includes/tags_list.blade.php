@@ -17,7 +17,11 @@
 
     <!-- <h3 class="border">{{ __('Поиск по меткам') }}</h2> -->
 
-    <a href="{{ route('home') }}" class="knopka01 current-demo">
+    @empty($currentTagId)
+    @php($currentTagId = 0)
+    @endempty
+
+    <a href="{{ route('home') }}" class="knopka01 @if($currentTagId == 'all') active @endif">
 
         {{ __('Все') }}
         <!-- <span style="position: absolute;" class="tag_count">(150)</span> -->
@@ -25,7 +29,7 @@
 
     @foreach($tags as $tag)
     @unless (empty($articleCount = $tag->articles->count()))
-    <a href="{{ route('showByTag', ['id' => $tag->id]) }}" class="knopka01">
+    <a href="{{ route('showByTag', ['id' => $tag->id]) }}" class="knopka01 @if($currentTagId == $tag->id) active @endif">
 
         {{ $tag->title }}
         <!-- <span class="badge bg-primary rounded-pill">

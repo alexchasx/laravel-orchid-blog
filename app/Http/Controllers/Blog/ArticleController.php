@@ -28,6 +28,7 @@ class ArticleController extends BaseController
                 'published_at',
             ]),
             // 'rubrics' => Rubric::notEmpties(),
+            'currentTagId' => 'all',
             'tags' => Tag::notEmpties(),
         ]);
     }
@@ -80,7 +81,7 @@ class ArticleController extends BaseController
 
         return view('welcome')->with([
             'articles' => $articlesByTag->paginate(self::PAGINATE),
-            'tag' => $tags->find($tagId),
+            'currentTagId' => $tagId,
             // 'rubrics' => Rubric::notEmpties(),
             'tags' => $tags,
         ]);
@@ -91,13 +92,21 @@ class ArticleController extends BaseController
      */
     public function search(Request $request)
     {
-        $builder =  Article::published()
-            ->where('title', 'LIKE', "%{$request['query']}%")
-            ->orWhere('excert', 'LIKE', "%{$request['query']}%")
-            ->orWhere('content_raw', 'LIKE', "%{$request['query']}%");
+        $query = $request->query();
+
+        dd($query);
+
+        $articles = [];
+        if ($query) {
+            $articles = Article::published()
+                ->where('title', 'LIKE', "%{$query}%")
+                ->orWhere('excert', 'LIKE', "%{$query}%")
+                ->orWhere('content_raw', 'LIKE', "%{$query}%")
+                ->paginate(self::PAGINATE);
+        }
 
         return view('welcome')->with([
-            'articles' => $builder->paginate(self::PAGINATE),
+            'articles' => $articles,
             // 'rubrics' => Rubric::notEmpties(),
             'tags' => Tag::notEmpties(),
         ]);
