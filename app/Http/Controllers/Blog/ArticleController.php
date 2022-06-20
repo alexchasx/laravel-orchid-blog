@@ -29,7 +29,7 @@ class ArticleController extends BaseController
             ]),
             // 'rubrics' => Rubric::notEmpties(),
             'currentTagId' => 'all',
-            'tags' => Tag::notEmpties(),
+            'tags' => Tag::articlePublished()->get(),
         ]);
     }
 

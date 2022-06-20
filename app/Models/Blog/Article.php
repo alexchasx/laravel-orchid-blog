@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
+use Illuminate\Support\Str;
 
 class Article extends Model
 {
@@ -53,6 +54,11 @@ class Article extends Model
         'rubric_id',
     ];
 
+    // public function getTitleAttribute($value)
+    // {
+    //     return Str::title($value); // первые буквы слов - заглавные
+    // }
+
     /**
      * Возращает категорию данной статьи.
      *
@@ -87,6 +93,20 @@ class Article extends Model
             'tag_id'*/
         );
     }
+
+    // public function scopePublished($query)
+    // {
+    //     return $query->addSelect(
+    //         'id',
+    //         'title',
+    //         'excert',
+    //         'content_raw',
+    //         'published_at',
+    //         'is_published',
+    //     )->whereDate('published_at', '<=', Carbon::now())
+    //         ->where('is_published', true)
+    //         ->orderBy('published_at', 'desc');
+    // }
 
     public static function published(?Builder $builder = null)
     {

@@ -55,11 +55,11 @@ class Tag extends Model
      *
      * @return Tag[] | Collection
      */
-    public static function notEmpties()
+    public function scopeArticlePublished($query)
     {
-        return self::select('id', 'title', 'active')
+        return $query->addSelect('id', 'title', 'active')
             ->whereHas('articles', function (Builder $builder) {
                 $builder = Article::published($builder);
-            })->where('active', true)->get();
+            })->where('active', true);
     }
 }
