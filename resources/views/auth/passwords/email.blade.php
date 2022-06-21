@@ -1,31 +1,47 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row justify-content-md-center m-3">
-    <div class="col-md-6">
-        <h1>@lang('auth.reset_password')</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('Reset Password') }}</div>
 
-        @if (session('status'))
-            <x-alert type="success" :dismissible="true">
-                {{ session('status') }}
-            </x-alert>
-        @endif
+                <div class="card-body">
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
 
-        {!! Form::open(['route' => 'password.email', 'role' => 'form', 'method' => 'POST']) !!}
-            <div class="form-group">
-                {!! Form::label('email', __('validation.attributes.email'), ['class' => 'control-label']) !!}
-                {!! Form::email('email', old('email'), ['class' => 'form-control' . ($errors->has('email') ? ' is-invalid' : ''), 'required']) !!}
+                    <form method="POST" action="{{ route('password.email') }}">
+                        @csrf
 
-                @error('email')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
+                        <div class="row mb-3">
+                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-0">
+                            <div class="col-md-6 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    {{ __('Send Password Reset Link') }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            <div class="form-group">
-                {!! Form::submit(__('auth.send_password_reset_link'), ['class' => 'btn btn-primary']) !!}
-            </div>
-
-        {!! Form::close() !!}
+        </div>
     </div>
 </div>
 @endsection
