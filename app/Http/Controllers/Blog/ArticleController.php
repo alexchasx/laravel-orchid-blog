@@ -17,10 +17,10 @@ class ArticleController extends BaseController
      */
     public function index()
     {
-        // $dd = Article::published()->paginate(self::PAGINATE);
-        // dd($dd);
+        // $query = Article::published();
+        // dd($query->toSql(), $query->getBindings());
 
-        return view('welcome')->with([
+        return view('blog.index')->with([
             'articles' => Article::published()->paginate(self::PAGINATE, [
                 'id',
                 'title',

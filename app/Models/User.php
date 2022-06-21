@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Blog\Article;
 use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable
@@ -63,4 +64,9 @@ class User extends Authenticatable
         'updated_at',
         'created_at',
     ];
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class, 'user_id');
+    }
 }

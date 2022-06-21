@@ -1,0 +1,1 @@
+@lang('posts.empty')

@@ -1,56 +1,60 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+@extends('layouts.app')
 
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
+@section('content')
+<div class="row justify-content-md-center">
+    <div class="col-md-6">
+        <h1>@lang('auth.login')</h1>
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+        {!! Form::open(['route' => 'login', 'role' => 'form', 'method' => 'POST']) !!}
+            <div class="form-group">
+                {!! Form::label('email', __('validation.attributes.email'), ['class' => 'control-label']) !!}
+                {!! Form::email('email', old('email'), ['class' => 'form-control' . ($errors->has('email') ? ' is-invalid' : ''), 'required', 'autofocus']) !!}
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
-
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                @error('email')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
             </div>
 
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
+            <div class="form-group">
+                {!! Form::label('password', __('validation.attributes.password'), ['class' => 'control-label']) !!}
+                {!! Form::password('password', ['class' => 'form-control' . ($errors->has('password') ? ' is-invalid' : ''), 'required']) !!}
 
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
+                @error('password')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
             </div>
 
-            <!-- Remember Me -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        {!! Form::checkbox('remember', null, old('remember')) !!} @lang('auth.remember_me')
+                    </label>
+                </div>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-
-                <x-button class="ml-3">
-                    {{ __('Log in') }}
-                </x-button>
+            <div class="form-group">
+                {!! Form::submit(__('auth.login'), ['class' => 'btn btn-primary']) !!}
+                {{ link_to('/password/reset', __('auth.forgotten_password'), ['class' => 'btn btn-link'])}}
             </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+        {!! Form::close() !!}
+
+        <hr>
+
+        <div class="d-flex justify-content-between flex-wrap">
+            @if (env('GITHUB_ID'))
+                <a href="{{ route('auth.provider', ['provider' => 'github']) }}" class="btn btn-secondary mb-2">
+                    @lang('auth.services.github')
+                    <i class="fa fa-github" aria-hidden="true"></i>
+                </a>
+            @endif
+
+            @if (env('TWITTER_ID'))
+                <a href="{{ route('auth.provider', ['provider' => 'twitter']) }}" class="btn btn-secondary mb-2">
+                    @lang('auth.services.twitter')
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            @endif
+        </div>
+    </div>
+</div>
+@endsection

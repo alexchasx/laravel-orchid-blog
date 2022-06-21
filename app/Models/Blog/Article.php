@@ -2,6 +2,7 @@
 
 namespace App\Models\Blog;
 
+use App\Models\User;
 use App\Models\Blog\Rubric;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
-use Illuminate\Support\Str;
 
 class Article extends Model
 {

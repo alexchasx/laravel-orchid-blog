@@ -1,39 +1,40 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
+<!doctype html>
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    @auth
+        <meta name="api-token" content="{{ auth()->user()->api_token }}">
+    @endauth
 
-    <!-- Fonts -->
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"> -->
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <!-- <link rel="stylesheet" href="/css/app.css">
-    <link rel="stylesheet" href="/css/my_tw.css"> -->
-
-
-    <link rel="stylesheet" type="text/css" href="/css/app.css" />
-    <!-- <link rel="stylesheet" type="text/css" href="/SkiFi/css/normalize.css" /> -->
-    <link rel="stylesheet" type="text/css" href="/SkiFi/css/demo.css" />
-    <link rel="stylesheet" type="text/css" href="/SkiFi/css/main.css" />
-    <link rel="stylesheet" type="text/css" href="/SkiFi/css/my.css" />
-
+    <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
 </head>
-<!-- <body class="antialiased"> -->
+<body class="bg-light">
+    <div id="app">
+        @include('shared/navbar')
 
-<body>
-    <div class="content">
+        <div class="container">
+            @include('shared/alerts')
 
-        @include('includes.alert')
+            <div class="row">
+                <div class="col-md-12">
+                    @yield('content')
+                </div>
+            </div>
+        </div>
 
-        @include('includes.header')
-
-        @yield('content')
-
+        @include('shared/footer')
     </div>
-</body>
 
+    <!-- Scripts -->
+    <script src="{{ mix('/js/app.js') }}"></script>
+    @stack('inline-scripts')
+</body>
 </html>
