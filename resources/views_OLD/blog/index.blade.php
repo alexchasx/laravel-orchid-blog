@@ -1,8 +1,8 @@
 @extends('layouts.base')
 
-@section('content')
+@section('title', 'Главная')
 
-{{-- {{ memory_get_usage() }} --}}
+@section('content')
 
 @if (!empty($articles[0]))
 
@@ -27,12 +27,6 @@
         {{ __('Читать далее') }}
     </a>
 </div>
-
-@unless ($loop->last) {{-- не показывать последнюю полосу --}}
-<br />
-<hr />
-<br />
-@endunless
 
 @endforeach
 

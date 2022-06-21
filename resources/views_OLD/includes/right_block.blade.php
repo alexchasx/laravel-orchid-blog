@@ -1,8 +1,7 @@
-
-@if (!empty($rubrics)) {{-- Чтобы не отображалось на /login и /register --}}
+@if (!empty($rubrics))
 <section id="search" class="category_block">
     <form role="search" method="get" class="search-form" action="{{ route('search') }}">
-        <label>
+        <label for="search" class="block text-sm font-medium text-gray-700">
             {{-- <span class="screen-reader-text">{{ __('Поиск для:') }}</span> --}}
             <input type="search" class="search-field" placeholder=" {{ __('Поиск по сайту') }} …" value="" name="query">
         </label>
@@ -24,8 +23,8 @@
                 {{-- @unless (empty($articleCount = $rubrics->articles->count()))
                 <li class="category_link">
                     <a href="{{ route('showByRubric', ['id' => $rubrics->id] ) }}">
-                        {{ $rubrics->title }}
-                    </a>
+                {{ $rubrics->title }}
+                </a>
                 </li>
                 @endunless --}}
 
@@ -47,19 +46,19 @@
 <hr />
 <section id="recent" class="category_block">
     <h3>{{ __('Последние статьи') }}</h2>
-        <nav class="category_list">
-            <ul>
-                @foreach($recents as $recent)
+<nav class="category_list">
+    <ul>
+        @foreach($recents as $recent)
 
-                <li class="category_link">
-                    <a href="{{ route('articleShow', ['id' => $recent->id]) }}">
-                        {{ $recent->title }}
-                    </a>
-                </li>
+        <li class="category_link">
+            <a href="{{ route('articleShow', ['id' => $recent->id]) }}">
+                {{ $recent->title }}
+            </a>
+        </li>
 
-                @endforeach
-            </ul>
-        </nav>
+        @endforeach
+    </ul>
+</nav>
 </section>
 @endif --}}
 
