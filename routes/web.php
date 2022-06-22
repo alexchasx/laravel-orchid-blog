@@ -22,14 +22,13 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/auth.php';
 
-Route::get('contact', [ContactController::class, 'show'])->name('contact');
+Route::get('contact', ContactController::class)->name('contact');
 
 Route::controller(ArticleController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('article.{id}', 'show')->name('articleShow');
     Route::get('rubric.{id}', 'showByRubric')->name('showByRubric');
     Route::get('tag.{id}', 'showByTag')->name('showByTag');
-    // Route::get('search', 'search')->name('search');
 });
 
 Route::controller(CommentController::class)->group(function () {

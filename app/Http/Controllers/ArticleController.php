@@ -21,18 +21,6 @@ class ArticleController extends ParentController
         // $query = Article::published();
         // dd($query->toSql(), $query->getBindings());
 
-        // return view('index')->with([
-        //     'articles' => Article::published()->paginate(self::PAGINATE, [
-        //         'id',
-        //         'title',
-        //         'excert',
-        //         'published_at',
-        //     ]),
-        //     'rubrics' => Rubric::articlePublished()->get(),
-        //     'currentTagId' => 'all',
-        //     'tags' => Tag::articlePublished()->get(),
-        // ]);
-
         return view('index', [
             'articles' => Article::search($request->input('search'))
                 // ->with('author', 'likes')

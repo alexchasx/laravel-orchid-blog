@@ -1,4 +1,4 @@
-### Установка проекта 
+### Project Installation (Установка проекта)
 
 ```bash
 composer install    # установка composer-зависимости (см. composer.json)
