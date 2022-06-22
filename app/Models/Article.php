@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Blog;
+namespace App\Models;
 
 use App\Models\User;
 use App\Models\Blog\Rubric;

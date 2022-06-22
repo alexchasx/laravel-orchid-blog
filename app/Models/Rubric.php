@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Blog;
+namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Blog;
+namespace App\Http\Controllers;
 
-use App\Models\Blog\Article;
-use App\Models\Blog\Rubric;
-use App\Models\Blog\Tag;
+use App\Models\Article;
+use App\Models\Rubric;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-class ArticleController extends BaseController
+class ArticleController extends ParentController
 {
     /**
      * Display a listing of the resource.
@@ -20,7 +20,7 @@ class ArticleController extends BaseController
         // $query = Article::published();
         // dd($query->toSql(), $query->getBindings());
 
-        return view('blog.index')->with([
+        return view('index')->with([
             'articles' => Article::published()->paginate(self::PAGINATE, [
                 'id',
                 'title',
@@ -45,7 +45,7 @@ class ArticleController extends BaseController
         // $article->comments_count = $article->comments()->count();
         // dd($article->comments_count);
 
-        return view('blog.article')->with([
+        return view('article')->with([
             'article' => $article,
             // 'rubrics' => Rubric::notEmpties(),
             'tags' => Tag::notEmpties(),
@@ -60,7 +60,7 @@ class ArticleController extends BaseController
     {
         $rubrics = Rubric::notEmpties();
 
-        return view('welcome')->with([
+        return view('index')->with([
             'articles' => Article::byRubric($id)->paginate(self::PAGINATE),
             'currentRubric' => $rubrics->find($id),
             'rubrics' => $rubrics,
@@ -79,7 +79,7 @@ class ArticleController extends BaseController
                 $builder->where('tag_id', $tagId);
             });
 
-        return view('welcome')->with([
+        return view('index')->with([
             'articles' => $articlesByTag->paginate(self::PAGINATE),
             'currentTagId' => $tagId,
             // 'rubrics' => Rubric::notEmpties(),
@@ -105,7 +105,7 @@ class ArticleController extends BaseController
                 ->paginate(self::PAGINATE);
         }
 
-        return view('welcome')->with([
+        return view('index')->with([
             'articles' => $articles,
             // 'rubrics' => Rubric::notEmpties(),
             'tags' => Tag::notEmpties(),

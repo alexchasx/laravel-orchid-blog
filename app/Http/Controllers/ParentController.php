@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Blog;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-abstract class BaseController extends Controller
+abstract class ParentController extends Controller
 {
     const EMPTY_IMAGE = 'upload/no-image.png';
-    const PAGINATE = 7; //TODO Создать AdminProfileController для настройки админ-панели из браузера
+    const PAGINATE = 7;
 
     /**
      * Проверяет пользователя на наличие администраторских прав
