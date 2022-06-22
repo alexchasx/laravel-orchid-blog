@@ -94,6 +94,7 @@ class Article extends Model
         );
     }
 
+    // С этим методом не работает фильтрация по тегам
     // public function scopePublished($query)
     // {
     //     return $query->addSelect(

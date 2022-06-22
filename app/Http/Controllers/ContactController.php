@@ -11,7 +11,7 @@ class ContactController extends ParentController
     {
         return view('contact', [
             'rubrics' => Rubric::notEmpties(),
-            'tags' => Tag::notEmpties(),
+            'tags' => Tag::articlePublished()->get(),
         ]);
     }
 }

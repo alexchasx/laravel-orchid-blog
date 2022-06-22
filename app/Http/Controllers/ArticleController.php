@@ -27,7 +27,7 @@ class ArticleController extends ParentController
                 'excert',
                 'published_at',
             ]),
-            // 'rubrics' => Rubric::notEmpties(),
+            'rubrics' => Rubric::notEmpties(),
             'currentTagId' => 'all',
             'tags' => Tag::articlePublished()->get(),
         ]);
@@ -48,7 +48,7 @@ class ArticleController extends ParentController
         return view('article')->with([
             'article' => $article,
             // 'rubrics' => Rubric::notEmpties(),
-            'tags' => Tag::notEmpties(),
+            'tags' => Tag::articlePublished()->get(),
             'comments' => $article->comments,
         ]);
     }
@@ -64,7 +64,7 @@ class ArticleController extends ParentController
             'articles' => Article::byRubric($id)->paginate(self::PAGINATE),
             'currentRubric' => $rubrics->find($id),
             'rubrics' => $rubrics,
-            'tags' => Tag::notEmpties(),
+            'tags' => Tag::articlePublished()->get(),
         ]);
     }
 
@@ -73,7 +73,7 @@ class ArticleController extends ParentController
      */
     public function showByTag($tagId)
     {
-        $tags = Tag::notEmpties();
+        $tags = Tag::articlePublished()->get();
         $articlesByTag = Article::published()
             ->whereHas('tags', function (Builder $builder) use ($tagId) {
                 $builder->where('tag_id', $tagId);
@@ -108,7 +108,7 @@ class ArticleController extends ParentController
         return view('index')->with([
             'articles' => $articles,
             // 'rubrics' => Rubric::notEmpties(),
-            'tags' => Tag::notEmpties(),
+            'tags' => Tag::articlePublished()->get(),
         ]);
     }
 }
