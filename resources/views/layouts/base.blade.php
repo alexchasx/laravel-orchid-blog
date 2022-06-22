@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
@@ -7,8 +8,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('page.title', config('app.name'))</title>
     <link rel="icon" href="favicon.ico"><!-- 32×32 -->
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
 </head>
+
 <body>
     <div class="main_block">
 
@@ -24,7 +26,7 @@
                 </main>
 
                 <aside class="right_block">
-                    @include('includes.right_block')
+                    @include('includes.sidebar')
                 </aside>
 
             </div>
@@ -34,6 +36,9 @@
 
     </div>
 </body>
+
 @stack('js')
-    <script src="/js/app.js"></script>
+
+<script src="{{ asset('js/app.js') }}"></script>
+
 </html>
