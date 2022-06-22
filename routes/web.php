@@ -29,7 +29,7 @@ Route::controller(ArticleController::class)->group(function () {
     Route::get('article.{id}', 'show')->name('articleShow');
     Route::get('rubric.{id}', 'showByRubric')->name('showByRubric');
     Route::get('tag.{id}', 'showByTag')->name('showByTag');
-    Route::get('search', 'search')->name('search');
+    // Route::get('search', 'search')->name('search');
 });
 
 Route::controller(CommentController::class)->group(function () {

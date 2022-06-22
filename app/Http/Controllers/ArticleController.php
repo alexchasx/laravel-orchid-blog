@@ -7,6 +7,7 @@ use App\Models\Rubric;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ArticleController extends ParentController
 {
@@ -15,18 +16,29 @@ class ArticleController extends ParentController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request): View
     {
         // $query = Article::published();
         // dd($query->toSql(), $query->getBindings());
 
-        return view('index')->with([
-            'articles' => Article::published()->paginate(self::PAGINATE, [
-                'id',
-                'title',
-                'excert',
-                'published_at',
-            ]),
+        // return view('index')->with([
+        //     'articles' => Article::published()->paginate(self::PAGINATE, [
+        //         'id',
+        //         'title',
+        //         'excert',
+        //         'published_at',
+        //     ]),
+        //     'rubrics' => Rubric::articlePublished()->get(),
+        //     'currentTagId' => 'all',
+        //     'tags' => Tag::articlePublished()->get(),
+        // ]);
+
+        return view('index', [
+            'articles' => Article::search($request->input('search'))
+                // ->with('author', 'likes')
+                // ->withCount('comments', 'thumbnail', 'likes')
+                // ->latest()
+                ->paginate(self::PAGINATE),
             'rubrics' => Rubric::articlePublished()->get(),
             'currentTagId' => 'all',
             'tags' => Tag::articlePublished()->get(),

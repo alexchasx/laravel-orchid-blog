@@ -94,6 +94,18 @@ class Article extends Model
         );
     }
 
+    /**
+     * Scope a query to search posts
+     */
+    public function scopeSearch(Builder $builder, ?string $query)
+    {
+        if ($query) {
+            return $builder->where('title', 'LIKE', "%{$query}%");
+                // ->orWhere('excert', 'LIKE', "%{$query}%")
+                // ->orWhere('content_raw', 'LIKE', "%{$query}%");
+        }
+    }
+
     // С этим методом не работает фильтрация по тегам
     // public function scopePublished($query)
     // {
