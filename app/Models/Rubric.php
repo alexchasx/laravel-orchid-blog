@@ -40,11 +40,16 @@ class Rubric extends Model
         return $this->hasMany(Article::class, 'rubric_id');
     }
 
-    public static function notEmpties()
+    /**
+     * Возращает список всех рубрик
+     *
+     * @return Rubric[] | Collection
+     */
+    public function scopeArticlePublished($query)
     {
-        return self::select('id', 'title')
-            ->whereHas('articles', function (Builder $builder) {
-                $builder = Article::published($builder);
-            })->get();
+        return $query->addSelect('id', 'title')
+        ->whereHas('articles', function (Builder $builder) {
+            $builder = Article::published($builder);
+        });
     }
 }
