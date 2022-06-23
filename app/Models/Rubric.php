@@ -6,12 +6,14 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Orchid\Screen\AsSource;
 
 class Rubric extends Model
 {
     use HasFactory;
     use AsSource;
+    use SoftDeletes;
 
     /**
      * Определяет необходимость отметок времени для модели.

@@ -9,7 +9,7 @@
 @foreach ($articles as $article)
 
 <div class="article_card">
-    <h3><a href="{{route('articleShow', ['article' => $article->id])}}" class="continue_read">
+    <h3><a href="{{route('articleShow', $article->id)}}" class="continue_read">
 
             @if (! Auth::guest() && isAdmin())
             [ID={{ $article->id }}]
@@ -23,7 +23,7 @@
 
     <p>{!! $article->excert !!}</p>
 
-    <a href="{{route('articleShow', ['article' => $article->id])}}" class="continue_read">
+    <a href="{{route('articleShow', $article->id)}}" class="continue_read">
         {{ __('Читать далее') }}
     </a>
 </div>
