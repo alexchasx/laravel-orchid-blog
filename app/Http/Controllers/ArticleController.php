@@ -25,7 +25,6 @@ class ArticleController extends ParentController
             'articles' => Article::search($request->input('search'))
                 // ->with('author', 'likes')
                 // ->withCount('comments', 'thumbnail', 'likes')
-                // ->latest()
                 ->paginate(self::PAGINATE),
             'rubrics' => Rubric::articlePublished()->get(),
             'currentTagId' => 'all',
@@ -39,13 +38,13 @@ class ArticleController extends ParentController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Article $article)
     {
-        $article =  Article::findOrFail($id);
+        // $article =  Article::findOrFail($id);
         // $article->comments_count = $article->comments()->count();
         // dd($article->comments_count);
 
-        return view('article')->with([
+        return view('article', [
             'article' => $article,
             'rubrics' => Rubric::articlePublished()->get(),
             'tags' => Tag::articlePublished()->get(),
@@ -60,7 +59,7 @@ class ArticleController extends ParentController
     {
         $rubrics = Rubric::articlePublished()->get();
 
-        return view('index')->with([
+        return view('index', [
             'articles' => Article::byRubric($id)->paginate(self::PAGINATE),
             'currentRubric' => $rubrics->find($id),
             'rubrics' => $rubrics,
@@ -79,36 +78,11 @@ class ArticleController extends ParentController
                 $builder->where('tag_id', $tagId);
             });
 
-        return view('index')->with([
+        return view('index', [
             'articles' => $articlesByTag->paginate(self::PAGINATE),
             'currentTagId' => $tagId,
             'rubrics' => Rubric::articlePublished()->get(),
             'tags' => $tags,
-        ]);
-    }
-
-    /**
-     * Поиск статей по словам в контексте
-     */
-    public function search(Request $request)
-    {
-        $query = $request->query();
-
-        dd($query);
-
-        $articles = [];
-        if ($query) {
-            $articles = Article::published()
-                ->where('title', 'LIKE', "%{$query}%")
-                ->orWhere('excert', 'LIKE', "%{$query}%")
-                ->orWhere('content_raw', 'LIKE', "%{$query}%")
-                ->paginate(self::PAGINATE);
-        }
-
-        return view('index')->with([
-            'articles' => $articles,
-            'rubrics' => Rubric::articlePublished()->get(),
-            'tags' => Tag::articlePublished()->get(),
         ]);
     }
 }

@@ -26,7 +26,7 @@ Route::get('contact', ContactController::class)->name('contact');
 
 Route::controller(ArticleController::class)->group(function () {
     Route::get('/', 'index')->name('home');
-    Route::get('article.{id}', 'show')->name('articleShow');
+    Route::get('/{article}', 'show')->name('articleShow');
     Route::get('rubric.{id}', 'showByRubric')->name('showByRubric');
     Route::get('tag.{id}', 'showByTag')->name('showByTag');
 });
