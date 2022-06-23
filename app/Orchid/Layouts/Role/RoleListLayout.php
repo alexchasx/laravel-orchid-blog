@@ -40,7 +40,8 @@ class RoleListLayout extends Table
             TD::make('created_at', __('Created'))
                 ->sort()
                 ->render(function (Role $role) {
-                    return $role->created_at->toDateTimeString();
+                    return $role->created_at;
+                    // ->toDateTimeString();
                 }),
         ];
     }

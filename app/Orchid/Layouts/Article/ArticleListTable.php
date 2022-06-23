@@ -2,8 +2,8 @@
 
 namespace App\Orchid\Layouts\Article;
 
-use App\Models\Blog\Article;
-use App\Models\Blog\Rubric;
+use App\Models\Article;
+use App\Models\Rubric;
 use Carbon\Carbon;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\CheckBox;

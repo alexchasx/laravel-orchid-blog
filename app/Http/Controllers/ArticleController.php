@@ -12,9 +12,7 @@ use Illuminate\View\View;
 class ArticleController extends ParentController
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Display a listing of the resource
      */
     public function index(Request $request): View
     {
@@ -33,12 +31,9 @@ class ArticleController extends ParentController
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Display the specified resource
      */
-    public function show(Article $article)
+    public function show(Article $article): View
     {
         // $article =  Article::findOrFail($id);
         // $article->comments_count = $article->comments()->count();

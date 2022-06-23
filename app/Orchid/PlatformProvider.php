@@ -8,7 +8,6 @@ use Orchid\Platform\Dashboard;
 use Orchid\Platform\ItemPermission;
 use Orchid\Platform\OrchidServiceProvider;
 use Orchid\Screen\Actions\Menu;
-use Orchid\Support\Color;
 
 class PlatformProvider extends OrchidServiceProvider
 {
@@ -34,19 +33,23 @@ class PlatformProvider extends OrchidServiceProvider
 
             Menu::make(__('Статьи'))
                 ->icon('paste')
+                ->permission('platform.custom.articles')
                 ->route('platform.articles'),
 
             Menu::make(__('Рубрики'))
                 ->icon('list')
+                ->permission('platform.custom.rubrics')
                 ->route('platform.categories'),
 
             Menu::make(__('Метки'))
                 ->icon('tag')
+                ->permission('platform.custom.rubrics')
                 ->route('platform.tags'),
 
             Menu::make(__('Комментарии'))
                 ->icon('bubble')
                 ->route('platform.example')
+                ->permission('platform.custom.comments')
                 ->badge(function () {
                     return 6;
                 }),
@@ -144,6 +147,10 @@ class PlatformProvider extends OrchidServiceProvider
             ItemPermission::group(__('System'))
                 ->addPermission('platform.systems.roles', __('Roles'))
                 ->addPermission('platform.systems.users', __('Users')),
+            ItemPermission::group(__('Дополнительные'))
+                ->addPermission('platform.custom.articles', __('Статьи'))
+                ->addPermission('platform.custom.rubrics', __('Рубрики и метки'))
+                ->addPermission('platform.custom.comments', __('Комментарии')),
         ];
     }
 }

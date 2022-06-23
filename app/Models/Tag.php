@@ -34,8 +34,6 @@ class Tag extends Model
 
     /**
      * Статьи, принадлежащие тегу.
-     *
-     * @return BelongsToMany
      */
     public function articles()
     {

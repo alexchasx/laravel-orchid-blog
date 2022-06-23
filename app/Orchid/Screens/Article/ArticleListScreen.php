@@ -3,7 +3,7 @@
 namespace App\Orchid\Screens\Article;
 
 use App\Http\Requests\ArticleRequest;
-use App\Models\Blog\Article;
+use App\Models\Article;
 use App\Orchid\Layouts\Article\ArticleListTable;
 use App\Orchid\Layouts\CreateOrUpdateArticle;
 use Orchid\Screen\Actions\ModalToggle;

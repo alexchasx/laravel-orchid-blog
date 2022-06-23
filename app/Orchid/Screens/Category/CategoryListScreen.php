@@ -2,11 +2,9 @@
 
 namespace App\Orchid\Screens\Category;
 
-use App\Models\Blog\Category;
-use App\Models\Blog\Rubric;
+use App\Models\Rubric;
 use App\Orchid\Layouts\CreateOrUpdateCategory;
 use Orchid\Screen\Actions\ModalToggle;
-use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Layouts\Modal;
 use Orchid\Screen\Screen;
 use Orchid\Screen\TD;
