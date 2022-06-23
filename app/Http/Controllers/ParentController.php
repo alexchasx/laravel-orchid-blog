@@ -19,7 +19,7 @@ abstract class ParentController extends Controller
      */
     public static function checkAdmin()
     {
-        if (Auth::check() && isAdmin()) {
+        if (Auth::check()) {
             return true;
         }
 

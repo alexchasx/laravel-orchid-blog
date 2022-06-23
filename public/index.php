@@ -44,18 +44,6 @@ require __DIR__ . '/../vendor/autoload.php';
 |
 */
 
-
-//===== My cods =====
-// define('ROOT', __DIR__);
-// define('IS_ADMIN', 'admin545');
-
-// function isAdmin()
-// {
-//     return Auth::user()->role === IS_ADMIN;
-// }
-
-//===== My cods END =====
-
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 
 $kernel = $app->make(Kernel::class);

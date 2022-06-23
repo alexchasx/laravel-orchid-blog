@@ -14,7 +14,7 @@
 
     <a href="{{ route('home') }}" class="link">{{ __('На главную') }}</a>
 
-    @if (! Auth::guest() && isAdmin())
+    @if (! Auth::guest())
 
     <p>{{ class_basename($exception->getPrevious() ? : $exception) }}</p>
 

@@ -11,7 +11,7 @@
 <div class="article_card">
     <h3><a href="{{route('articleShow', $article->id)}}" class="continue_read">
 
-            @if (! Auth::guest() && isAdmin())
+            @if (! Auth::guest())
             [ID={{ $article->id }}]
             @endif
 

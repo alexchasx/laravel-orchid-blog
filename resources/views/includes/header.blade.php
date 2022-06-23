@@ -25,13 +25,13 @@
                         </form>
                     </li>
 
-                    @if (isAdmin())
+
                     <li class="right">
                         <a href="{{ route('platform.main') }}" class="link">
                             <span>{{ __('Админ-панель') }}</span>
                         </a>
                     </li>
-                    @endif
+
 
                     @else
                     <li class="right">

@@ -5,7 +5,7 @@
 @unless (empty($article))
 
 <div class="article_card">
-    <h3> @if (! Auth::guest() && isAdmin())
+    <h3> @if (! Auth::guest())
         [ID={{ $article->id }}]
         @endif
 
@@ -13,7 +13,7 @@
 
     <div class="publication_date">{{ $article->published_at }}</div>
 
-    {{-- @if (! Auth::guest() && isAdmin()) --}}
+    {{-- @if (! Auth::guest()) --}}
     {{-- <button class="tag">
         <a href="{{ route('articleEdit',['id'=>$article->id]) }}">
     {{ __('Редактировать') }}

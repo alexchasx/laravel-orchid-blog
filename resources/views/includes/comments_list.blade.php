@@ -29,7 +29,7 @@
 
             @if ((Auth::check())
             && ((Auth::user()->id)
-            === $comment->user_id || isAdmin()))
+            === $comment->user_id))
             <form action="{{ route('commentDelete', ['comment'=>$comment->id]) }}" method="post">
                 {{method_field('DELETE')}}
                 {{csrf_field()}}
