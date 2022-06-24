@@ -2,49 +2,50 @@
 
 @section('content')
 
-{{-- {{ memory_get_usage() }} --}}
+    {{-- {{ memory_get_usage() }} --}}
 
-@if (!empty($articles[0]))
+    @if (!empty($articles[0]))
 
-@foreach ($articles as $article)
+        @foreach ($articles as $article)
 
-<div class="article_card">
-    <h3><a href="{{route('articleShow', $article->id)}}" class="continue_read">
+            <div class="article_card">
+                <h3><a href="{{route('articleShow', $article->id)}}" class="continue_read">
 
-            @if (! Auth::guest())
-            [ID={{ $article->id }}]
-            @endif
+                        @if (! Auth::guest())
+                            [ID={{ $article->id }}]
+                        @endif
 
-            {{ $article->title }}
-        </a>
-    </h3>
+                        {{ $article->title }}
+                    </a>
+                </h3>
 
-    <div class="publication_date">{{ $article->published_at }}</div>
+                <div class="publication_date">{{ $article->published_at }}</div>
 
-    <p>{!! $article->excert !!}</p>
+                <p>{!! $article->excert !!}</p>
 
-    <a href="{{route('articleShow', $article->id)}}" class="continue_read">
-        {{ __('Читать далее') }}
-    </a>
-</div>
+                <a href="{{route('articleShow', $article->id)}}" class="continue_read">
+                    {{ __('Читать далее') }}
+                </a>
+            </div>
 
-@unless ($loop->last) {{-- не показывать последнюю полосу --}}
-<br />
-<hr />
-<br />
-@endunless
+            @unless ($loop->last)
+                {{-- не показывать последнюю полосу --}}
+                <br/>
+                <hr/>
+                <br/>
+            @endunless
 
-@endforeach
+        @endforeach
 
-@else
-<div class="article_card">
-    {{ __('Ничего не нашлось') }}
-</div>
-@endif
-<nav>
-    <ul class="pagination">
-        {{ $articles->links('vendor.pagination.default') }}
-    </ul>
-</nav>
+    @else
+        <div class="article_card">
+            {{ __('Ничего не нашлось') }}
+        </div>
+    @endif
+    <nav>
+        <ul class="pagination">
+            {{ $articles->links('vendor.pagination.default') }}
+        </ul>
+    </nav>
 
 @endsection
