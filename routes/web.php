@@ -26,9 +26,9 @@ Route::get('contact', ContactController::class)->name('contact');
 
 Route::controller(ArticleController::class)->group(function () {
     Route::get('/', 'index')->name('home');
-    Route::get('/{article}', 'show')->name('articleShow');
     Route::get('rubric.{id}', 'showByRubric')->name('showByRubric');
     Route::get('tag.{id}', 'showByTag')->name('showByTag');
+    Route::get('/{article}', 'show')->name('articleShow');
 });
 
 Route::controller(CommentController::class)->group(function () {
@@ -40,8 +40,8 @@ Route::controller(CommentController::class)->group(function () {
     // Route::post('ajax/validation/store', 'ajaxValidationStore')->name('ajax_validation_store');
 });
 
-Route::fallback(function () {
-    return view('errors.404');
-});
+//Route::fallback(function () {
+//    return view('errors.404');
+//});
 
 Auth::routes();

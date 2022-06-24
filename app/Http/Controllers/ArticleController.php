@@ -50,7 +50,7 @@ class ArticleController extends ParentController
     /**
      * Показывает статьи по категории
      */
-    public function showByRubric($id)
+    public function showByRubric($id): View
     {
         $rubrics = Rubric::articlePublished()->get();
 
@@ -65,7 +65,7 @@ class ArticleController extends ParentController
     /**
      * Показывает статьи по тегу
      */
-    public function showByTag($tagId)
+    public function showByTag($tagId): View
     {
         $tags = Tag::articlePublished()->get();
         $articlesByTag = Article::published()

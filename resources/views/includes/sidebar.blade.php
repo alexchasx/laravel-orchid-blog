@@ -15,10 +15,10 @@
 @if (!empty($rubrics))
 <hr />
 <section id="categories" class="category_block">
-    <h3>{{ __('Рубрики') }}</h2>
+    <h3>{{ __('Рубрики') }}</h3>
         <nav class="category_list">
             <ul>
-                @foreach($rubrics as $rubrics)
+                @foreach($rubrics as $rubric)
 
                 {{-- @unless (empty($articleCount = $rubrics->articles->count()))
                 <li class="category_link">
@@ -28,10 +28,10 @@
                 </li>
                 @endunless --}}
 
-                @if ($rubrics->exists)
+                @if ($rubric->exists)
                 <li class="category_link">
-                    <a href="{{ route('showByRubric', ['id' => $rubrics->id] ) }}">
-                        {{ $rubrics->title }}
+                    <a href="{{ route('showByRubric', $rubric->id ) }}">
+                        {{ $rubric->title }}
                     </a>
                 </li>
                 @endif
@@ -65,7 +65,7 @@
 @if (!empty($tags[0]))
 <hr />
 <section id="tags" class="category_block">
-    <h3>{{ __('Поиск по меткам') }}</h2>
+    <h3>{{ __('Поиск по меткам') }}</h3>
         <nav class="category_list tags_list">
             @foreach($tags as $tag)
 
