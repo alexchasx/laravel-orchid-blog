@@ -25,13 +25,13 @@
                         </form>
                     </li>
 
-                    @if (Auth::user()->hasAccess('platform.*'))
+                    @hasAccess('platform.index')
                     <li class="right">
                         <a href="{{ route('platform.main') }}" class="link">
                             <span>{{ __('Админ-панель') }}</span>
                         </a>
                     </li>
-                    @endif
+                    @endhasAccess
 
                     @else
                     <li class="right">
