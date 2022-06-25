@@ -39,7 +39,7 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make(__('Рубрики'))
                 ->icon('list')
                 ->permission('platform.custom.rubrics')
-                ->route('platform.categories'),
+                ->route('platform.rubrics'),
 
             Menu::make(__('Метки'))
                 ->icon('tag')

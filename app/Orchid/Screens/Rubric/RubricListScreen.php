@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Orchid\Screens\Category;
+namespace App\Orchid\Screens\Rubric;
 
 use App\Models\Rubric;
-use App\Orchid\Layouts\CreateOrUpdateCategory;
+use App\Orchid\Layouts\CreateOrUpdateRubric;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Layouts\Modal;
 use Orchid\Screen\Screen;
@@ -12,7 +12,7 @@ use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 use Illuminate\Http\Request;
 
-class CategoryListScreen extends Screen
+class RubricListScreen extends Screen
 {
     /**
      * Query data.
@@ -44,8 +44,8 @@ class CategoryListScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-            ModalToggle::make('Создать рубрику')->modal('createCategory')
-                ->method('createOrUpdateCategory'),
+            ModalToggle::make('Создать рубрику')->modal('createRubric')
+                ->method('createOrUpdateRubric'),
         ];
     }
 
@@ -62,11 +62,11 @@ class CategoryListScreen extends Screen
 
                 TD::make('Edit')->render(function (Rubric $rubric) {
                     return ModalToggle::make('')
-                        ->modal('ediRubricCategory')
-                        ->method('createOrUpdateCategory')
+                        ->modal('editRubric')
+                        ->method('createOrUpdateRubric')
                         ->modalTitle('Редактирование рубрики')
                         ->asyncParameters([
-                            'category' => $rubric->id
+                            'rubric' => $rubric->id
                         ])->icon('pencil');
                 }),
 
@@ -78,23 +78,23 @@ class CategoryListScreen extends Screen
                 TD::make('title', 'Заголовок'),
             ]),
 
-            Layout::modal('createCategory', CreateOrUpdateCategory::class)
+            Layout::modal('createRubric', CreateOrUpdateRubric::class)
                 ->title('Создание рубрики')
                 ->size(Modal::SIZE_LG)
                 ->applyButton('Создать'),
 
-            Layout::modal('editCategory', CreateOrUpdateCategory::class)
+            Layout::modal('editRubric', CreateOrUpdateRubric::class)
                 ->size(Modal::SIZE_LG)
-                ->async('asyncGetCategory')
+                ->async('asyncGetRubric')
         ];
     }
 
-    public function asyncGetCategory(Rubric $rubric): array
+    public function asyncGetRubric(Rubric $rubric): array
     {
         return ['rubric' => $rubric];
     }
 
-    public function createOrUpdateCategory(Request $request): void
+    public function createOrUpdateRubric(Request $request): void
     {
         $rubricId = $request->input('rubric.id');
         Rubric::updateOrCreate([

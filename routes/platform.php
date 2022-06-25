@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use App\Orchid\Screens\Article\ArticleListScreen;
-use App\Orchid\Screens\Category\CategoryListScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
 use App\Orchid\Screens\Examples\ExampleFieldsAdvancedScreen;
@@ -14,6 +13,7 @@ use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
+use App\Orchid\Screens\Rubric\RubricListScreen;
 use App\Orchid\Screens\Tag\TagListScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
@@ -39,8 +39,8 @@ Route::screen('/main', PlatformScreen::class)
 Route::screen('articles', ArticleListScreen::class)
     ->name('platform.articles');
 
-Route::screen('categories', CategoryListScreen::class)
-    ->name('platform.categories');
+Route::screen('rubrics', RubricListScreen::class)
+    ->name('platform.rubrics');
 
 Route::screen('tags', TagListScreen::class)
     ->name('platform.tags');

@@ -7,7 +7,7 @@ use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Rows;
 
-class CreateOrUpdateCategory extends Rows
+class CreateOrUpdateRubric extends Rows
 {
     /**
      * Used to create the title of a group of form elements.
