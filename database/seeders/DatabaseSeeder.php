@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\AdminUser;
-use App\Models\Blog\Article;
-use App\Models\Blog\ArticleTag;
-use App\Models\Blog\Comment;
-use App\Models\Blog\Rubric;
-use App\Models\Blog\Tag;
+use App\Models\Article;
+use App\Models\ArticleTag;
+use App\Models\Comment;
+use App\Models\Rubric;
+use App\Models\Tag;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,16 +18,44 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(16)->create();
-        // // AdminUser::factory(1)->create([
-        // //     'name' => 'admin',
-        // //     'email' => 'laravel@laravel.com',
-        // //     'password' => bcrypt('1234'),
-        // // ]);
-        // Rubric::factory(12)->create();
-        // Article::factory(32)->create();
-        // Tag::factory(24)->create();
-        // ArticleTag::factory(16)->create();
+        \App\Models\User::factory(16)->create();
+        // AdminUser::factory(1)->create([
+        //     'name' => 'admin',
+        //     'email' => 'laravel@laravel.com',
+        //     'password' => bcrypt('1234'),
+        // ]);
+
+        foreach([
+            'Администрирование',
+            'Backend-разработка',
+            'Frontend-разработка',
+            'Вёрстка',
+            'Computer Science',
+            'Инструменты веб-разработки',
+        ] as $title) {
+            Rubric::factory(1)->create([
+                'title' => $title,
+                'parent_id' => 0,
+            ]);
+        }
+
+        foreach([
+            'PHP',
+            'Laravel',
+            'JavaScript',
+            'NodeJS',
+            'Git',
+        ] as $title) {
+            Tag::factory(1)->create([
+                'title' => $title,
+                'active' => true,
+            ]);
+        }
+
+        Article::factory(32)->create();
+
+        ArticleTag::factory(16)->create();
+
         Comment::factory(32)->create();
     }
 }

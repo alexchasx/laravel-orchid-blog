@@ -21,14 +21,14 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()
                 ->cascadeOnDelete()->cascadeOnUpdate();
 
-            $table->string('slug')->unique();
+            $table->string('slug')->unique()->nullable();
             $table->string('title');
 
             $table->text('excert')->nullable();
 
             $table->text('content_raw');
 
-            $table->text('content_html');
+            $table->text('content_html')->nullable();
 
             $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();

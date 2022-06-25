@@ -103,7 +103,7 @@ class TagListScreen extends Screen
     {
         $request->validate([
             'tag.title' => ['required', 'min:3', 'max:254'],
-            'tag.popular' => ['required', 'min:0', 'numeric'],
+            'tag.popular' => ['min:0', 'numeric'],
             'tag.active' => ['required', 'boolean'],
         ]);
 

@@ -25,7 +25,7 @@ return new class extends Migration
                 ->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->text('content');
-            $table->boolean('active');
+            $table->boolean('active')->default(true);
 
             $table->timestamps();
             $table->softDeletes();

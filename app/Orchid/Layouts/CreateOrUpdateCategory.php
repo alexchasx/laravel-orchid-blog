@@ -26,6 +26,8 @@ class CreateOrUpdateCategory extends Rows
         return [
             Input::make('rubric.id')->type('hidden'),
 
+            // Input::make('rubric.slug')->title('Слаг'),
+
             Input::make('rubric.title')->required()->title('Заголовок'),
 
             // CheckBox::make('rubric.published')

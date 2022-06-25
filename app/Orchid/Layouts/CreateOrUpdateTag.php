@@ -28,7 +28,7 @@ class CreateOrUpdateTag extends Rows
 
             Input::make('tag.title')->required()->title('Заголовок'),
 
-            Input::make('tag.popular')->required()->title('Популярность'),
+            // Input::make('tag.popular')->title('Популярность'),
 
             CheckBox::make('tag.active')
                 ->value(1)

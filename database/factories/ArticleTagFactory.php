@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories\Blog;
+namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,7 +18,7 @@ class ArticleTagFactory extends Factory
     {
         return [
             'article_id' => $this->faker->numberBetween(1, 24),
-            'tag_id' => $this->faker->numberBetween(1, 16),
+            'tag_id' => $this->faker->numberBetween(1, 5),
         ];
     }
 }

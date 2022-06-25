@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
 
             $table->string('title');
-            $table->integer('popular')->default(0);
+            $table->string('slug')->unique()->nullable();
+            $table->integer('popular')->nullable();
             $table->boolean('active')->default(true);
         });
     }

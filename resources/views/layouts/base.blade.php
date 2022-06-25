@@ -45,7 +45,7 @@
 
                             <li class="left"><a href="{{ route('contact') }}" class="link">{{ __('Контакты') }}</a></li>
 
-                            @if (! Auth::guest())
+                            @auth
                                 <li class="right">
                                     <a href="{{ route('logout') }}" class="link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         {{ __('Выход') }}
@@ -75,7 +75,7 @@
                                     </a>
                                 </li>
 
-                            @endif
+                            @endauth
 
                         </ul>
                     </div>

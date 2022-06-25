@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories\Blog;
+namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -17,14 +17,14 @@ class ArticleFactory extends Factory
     public function definition()
     {
         return [
-            'rubric_id' => $this->faker->numberBetween(1, 8),
+            'rubric_id' => $this->faker->numberBetween(1, 6),
             'user_id' => $this->faker->numberBetween(1, 16),
             'slug' => $this->faker->slug(),
             'title' => $this->faker->text(80),
             'excert' => $this->faker->text(400),
             'content_raw' => $this->faker->text(3000),
             'content_html' => $this->faker->text(3000),
-            'image' => $this->faker->image('public/storage/posts', 640, 520, null, false),
+            // 'image' => $this->faker->image('public/storage/posts', 640, 520, null, false),
             'viewed' => $this->faker->numberBetween(1, 10000),
             'keywords' => $this->faker->text(50),
             'meta_desc' => $this->faker->text(50),

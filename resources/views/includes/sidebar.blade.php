@@ -12,7 +12,7 @@
 </section>
 @endif
 
-@if (!empty($rubrics))
+@if ($rubrics->isNotEmpty())
 <hr />
 <section id="categories" class="category_block">
     <h3>{{ __('Рубрики') }}</h3>
@@ -62,7 +62,7 @@
 </section>
 @endif --}}
 
-@if (!empty($tags[0]))
+@if ($tags->isNotEmpty())
 <hr />
 <section id="tags" class="category_block">
     <h3>{{ __('Поиск по меткам') }}</h3>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories\Blog;
+namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,8 +19,7 @@ class RubricFactory extends Factory
         return [
             'title' => $this->faker->text(50),
             'slug' => $this->faker->slug(),
-            'parent_id' => $this->faker->numberBetween(1, 8),
-            'description' => $this->faker->text(200),
+            'parent_id' => $this->faker->numberBetween(1, 5),
         ];
     }
 }
