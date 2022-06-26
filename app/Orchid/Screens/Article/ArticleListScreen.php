@@ -6,6 +6,7 @@ use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use App\Orchid\Layouts\Article\ArticleListTable;
 use App\Orchid\Layouts\CreateOrUpdateArticle;
+use Illuminate\Http\Request;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Layouts\Modal;
 use Orchid\Support\Facades\Layout;
@@ -77,9 +78,9 @@ class ArticleListScreen extends Screen
         return ['article' => $article];
     }
 
-    public function createOrUpdateArticle($request): void
+    public function createOrUpdateArticle(Request $request): void
     {
-        dd($request->all());
+        // dd($request->all());
 
         $articleId = $request->input('article.id');
         Article::updateOrCreate([

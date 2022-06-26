@@ -29,6 +29,7 @@ class Article extends Model
         'content_html',
         'content_raw',
         'is_published',
+        'published_at',
         'viewed',
         'keywords',
         'meta_desc',
@@ -47,7 +48,7 @@ class Article extends Model
     ];
 
     protected $allowedSorts = [
-        'is_published', 'id', 'rubric_id'
+        'published_at', 'id', 'rubric_id'
     ];
 
     protected $allowedFilters = [

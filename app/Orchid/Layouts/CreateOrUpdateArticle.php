@@ -61,7 +61,7 @@ class CreateOrUpdateArticle extends Rows
             //     ->rows(12)->required()->title('Контент'),
             // SimpleMDE::make('article.content_raw')->title('Контент'),
 
-            // Code::make('article.content_raw')->title('Контент'),
+            Code::make('article.content_raw')->title('Контент'),
             // FieldsCode::make('article.content')->language(FieldsCode::MARKUP)->title('Контент'),
 
 
@@ -69,9 +69,7 @@ class CreateOrUpdateArticle extends Rows
             //     ->toolbar(["text", "color", "header", "list", "format", "media"])
             //     ->title('Предпросмотр')->required(),
 
-            // Quill::make('article.content_raw')
-            //     ->toolbar(["text", "color", "header", "list", "format", "media"])
-            //     ->title('Контент')->required(),
+            // Quill::make('article.content_raw'),
 
             Group::make([
                 Input::make('article.keywords')->title('Ключевые слова'),

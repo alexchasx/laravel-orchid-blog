@@ -22,12 +22,12 @@
     {{-- @endif --}}
 
     <pre>
-
-        <p>{!! $article->content_raw !!}</p>
-
+        <!-- <p>{!! $article->content_raw !!}</p> -->
     </pre>
-    <br>
+
     <p>{!! $article->content_raw !!}</p>
+
+    <br>
 </div>
 <br />
 
