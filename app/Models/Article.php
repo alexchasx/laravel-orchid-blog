@@ -127,7 +127,7 @@ class Article extends Model
             $builder = self::select(
                 'id',
                 'title',
-                'excert',
+                // 'excert',
                 'content_raw',
                 'published_at',
                 'is_published',

@@ -25,9 +25,9 @@ class ArticleRequest extends FormRequest
     {
         return [
             'article.title' => ['required', 'max:255'],
-            'article.description' => ['required'],
-            'article.content' => ['required'],
-            'article.category_id' => ['required'],
+            // 'article.excert' => ['required'],
+            'article.content_raw' => ['required'],
+            'article.rubric_id' => ['required'],
             'article.published_at' => ['required', 'date_format:Y-m-d'],
         ];
     }

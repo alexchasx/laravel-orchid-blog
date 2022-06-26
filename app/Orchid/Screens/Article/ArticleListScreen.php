@@ -77,17 +77,19 @@ class ArticleListScreen extends Screen
         return ['article' => $article];
     }
 
-    public function createOrUpdateArticle(ArticleRequest $request): void
+    public function createOrUpdateArticle($request): void
     {
+        dd($request->all());
+
         $articleId = $request->input('article.id');
         Article::updateOrCreate([
             'id' => $articleId,
         ], [
             'title' => $request->input('article.title'),
-            'description' => $request->input('article.description'),
-            'content' => $request->input('article.content'),
+            // 'excert' => $request->input('article.excert'),
+            'content_raw' => $request->input('article.content_raw'),
             'user_id' => auth()->user()->id,
-            'category_id' => $request->input('article.category_id'),
+            'rubric_id' => $request->input('article.rubric_id'),
             'keywords' => $request->input('article.keywords'),
             'meta_desc' => $request->input('article.meta_desc'),
             'is_published' => $request->boolean('article.is_published'),

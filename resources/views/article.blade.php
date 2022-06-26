@@ -21,7 +21,13 @@
     </button> --}}
     {{-- @endif --}}
 
-    <p>{!! $article->content_html !!}</p>
+    <pre>
+
+        <p>{!! $article->content_raw !!}</p>
+
+    </pre>
+    <br>
+    <p>{!! $article->content_raw !!}</p>
 </div>
 <br />
 

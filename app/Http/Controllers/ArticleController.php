@@ -20,10 +20,11 @@ class ArticleController extends ParentController
         // dd($query->toSql(), $query->getBindings());
 
         return view('index', [
-            'articles' => Article::search($request->input('search'))
+            'articles' => Article::published(
+                Article::search($request->input('search')))
                 // ->with('author', 'likes')
                 // ->withCount('comments', 'thumbnail', 'likes')
-                ->paginate(self::PAGINATE),
+                    ->paginate(self::PAGINATE),
             'rubrics' => Rubric::articlePublished()->get(),
             'currentTagId' => 'all',
             'tags' => Tag::articlePublished()->get(),

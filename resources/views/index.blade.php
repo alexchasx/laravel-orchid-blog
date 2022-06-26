@@ -21,7 +21,7 @@
 
                 <div class="publication_date">{{ $article->published_at }}</div>
 
-                <p>{!! $article->excert !!}</p>
+                <p>{!! Str::limit($article->content_raw, 200) !!}</p>
 
                 <a href="{{route('articleShow', $article->id)}}" class="continue_read">
                     {{ __('Читать далее') }}

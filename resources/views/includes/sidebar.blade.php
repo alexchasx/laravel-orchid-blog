@@ -16,69 +16,40 @@
 <hr />
 <section id="categories" class="category_block">
     <h3>{{ __('Рубрики') }}</h3>
-        <nav class="category_list">
-            <ul>
-                @foreach($rubrics as $rubric)
+    <nav class="category_list">
+        <ul>
+            @foreach($rubrics as $rubric)
 
-                {{-- @unless (empty($articleCount = $rubrics->articles->count()))
-                <li class="category_link">
-                    <a href="{{ route('showByRubric', ['id' => $rubrics->id] ) }}">
-                {{ $rubrics->title }}
+            @if ($rubric->exists)
+            <li class="category_link">
+                <a href="{{ route('showByRubric', $rubric->id ) }}">
+                    {{ $rubric->title }}
                 </a>
-                </li>
-                @endunless --}}
+            </li>
+            @endif
 
-                @if ($rubric->exists)
-                <li class="category_link">
-                    <a href="{{ route('showByRubric', $rubric->id ) }}">
-                        {{ $rubric->title }}
-                    </a>
-                </li>
-                @endif
-
-                @endforeach
-            </ul>
-        </nav>
+            @endforeach
+        </ul>
+    </nav>
 </section>
 @endif
-
-{{-- @if (!empty($recents[0]))
-<hr />
-<section id="recent" class="category_block">
-    <h3>{{ __('Последние статьи') }}</h2>
-<nav class="category_list">
-    <ul>
-        @foreach($recents as $recent)
-
-        <li class="category_link">
-            <a href="{{ route('articleShow', ['id' => $recent->id]) }}">
-                {{ $recent->title }}
-            </a>
-        </li>
-
-        @endforeach
-    </ul>
-</nav>
-</section>
-@endif --}}
 
 @if ($tags->isNotEmpty())
 <hr />
 <section id="tags" class="category_block">
     <h3>{{ __('Поиск по меткам') }}</h3>
-        <nav class="category_list tags_list">
-            @foreach($tags as $tag)
+    <nav class="category_list tags_list">
+        @foreach($tags as $tag)
 
-            @unless (empty($articleCount = $tag->articles->count()))
-            {{-- @unless (empty($tag->articles)) --}}
-            <button class="tag">
-                <a href="{{ route('showByTag', ['id' => $tag->id]) }}">
-                    {{ $tag->title }}
-                </a>
-            </button>
-            @endunless
+        @if ($rubric->exists)
+        <button class="tag">
+            <a href="{{ route('showByTag', ['id' => $tag->id]) }}">
+                {{ $tag->title }}
+            </a>
+        </button>
+        @endif
 
-            @endforeach
-        </nav>
+        @endforeach
+    </nav>
 </section>
 @endif

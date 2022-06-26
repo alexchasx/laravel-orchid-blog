@@ -2,14 +2,17 @@
 
 namespace App\Orchid\Layouts;
 
-use App\Models\Blog\Rubric;
+use App\Models\Rubric;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\CheckBox;
+use Orchid\Screen\Fields\Code;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Fields\SimpleMDE;
+use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Layouts\Rows;
 
 class CreateOrUpdateArticle extends Rows
@@ -41,7 +44,9 @@ class CreateOrUpdateArticle extends Rows
 
             Group::make([
                 Select::make('article.rubric_id')
-                    ->title('Рубрика')->required(),
+                    ->title('Рубрика')->required()
+                    ->fromModel(Rubric::class, 'title')
+                    ->empty('Не выбрано'),
                 DateTimer::make('article.published_at')
                     ->title('Дата публикации')
                     ->format('Y-m-d')
@@ -49,23 +54,24 @@ class CreateOrUpdateArticle extends Rows
                     ->required(),
             ]),
 
-            // TextArea::make('article.excert')
+            // TextArea::make('article.content_raw')
             //     ->rows(8)->required()->title('Кратко'),
 
             // TextArea::make('article.content')
             //     ->rows(12)->required()->title('Контент'),
-            // SimpleMDE::make('article.content')->title('Контент'),
+            // SimpleMDE::make('article.content_raw')->title('Контент'),
+
+            // Code::make('article.content_raw')->title('Контент'),
             // FieldsCode::make('article.content')->language(FieldsCode::MARKUP)->title('Контент'),
 
 
-            Quill::make('article.excert')
-                ->toolbar(["text", "color", "header", "list", "format", "media"])
-                ->title('Предпросмотр')->required(),
+            // Quill::make('article.excert')
+            //     ->toolbar(["text", "color", "header", "list", "format", "media"])
+            //     ->title('Предпросмотр')->required(),
 
-            Quill::make('article.content_raw')
-                ->toolbar(["text", "color", "header", "list", "format", "media"])
-                ->title('Контент')->required(),
-
+            // Quill::make('article.content_raw')
+            //     ->toolbar(["text", "color", "header", "list", "format", "media"])
+            //     ->title('Контент')->required(),
 
             Group::make([
                 Input::make('article.keywords')->title('Ключевые слова'),
