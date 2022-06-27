@@ -3,6 +3,7 @@
 namespace App\Orchid\Layouts;
 
 use App\Models\Rubric;
+use App\Models\Tag;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Code;
@@ -44,24 +45,32 @@ class CreateOrUpdateArticle extends Rows
 
             Group::make([
                 Select::make('article.rubric_id')
-                    ->title('Рубрика')->required()
+                    ->title('Рубрика')
+                    ->required()
                     ->fromModel(Rubric::class, 'title')
                     ->empty('Не выбрано'),
-                DateTimer::make('article.published_at')
-                    ->title('Дата публикации')
-                    ->format('Y-m-d')
-                    ->allowInput()
-                    ->required(),
+                Select::make('article.tag_id')
+                    ->title('Метка')
+                    ->required()
+                    // ->multiple()
+                    ->fromModel(Tag::class, 'title')
+                    ->empty('Не выбрано'),
             ]),
 
-            // TextArea::make('article.content_raw')
-            //     ->rows(8)->required()->title('Кратко'),
+            DateTimer::make('article.published_at')
+            ->title('Дата публикации')
+            ->format('Y-m-d')
+                ->allowInput()
+                ->required(),
+
+            TextArea::make('article.content_raw')
+                ->rows(8)->required()->title('Кратко'),
 
             // TextArea::make('article.content')
             //     ->rows(12)->required()->title('Контент'),
             // SimpleMDE::make('article.content_raw')->title('Контент'),
 
-            Code::make('article.content_raw')->title('Контент'),
+            // Code::make('article.content_raw')->title('Контент'),
             // FieldsCode::make('article.content')->language(FieldsCode::MARKUP)->title('Контент'),
 
 

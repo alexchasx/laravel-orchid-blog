@@ -9,21 +9,17 @@
         [ID={{ $article->id }}]
         @endif
 
-        {{ $article->title }}</h3>
+        {{ $article->title }}
+    </h3>
 
-    <div class="publication_date">{{ $article->published_at }}</div>
-
-    {{-- @if (! Auth::guest()) --}}
-    {{-- <button class="tag">
-        <a href="{{ route('articleEdit',['id'=>$article->id]) }}">
-    {{ __('Редактировать') }}
-    </a>
-    </button> --}}
-    {{-- @endif --}}
-
-    <pre>
-        <!-- <p>{!! $article->content_raw !!}</p> -->
-    </pre>
+    <div class="publication_date">
+        <span>{{ $article->published_at }}</span>
+        @foreach ($article->tags as $tag)
+        &nbsp;&nbsp;<span class="tag_title">
+            <a href="{{ route('showByTag', $tag->id) }}">{{ $tag->title }}</a>
+        </span>
+        @endforeach
+    </div>
 
     <p>{!! $article->content_raw !!}</p>
 

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
+use Illuminate\Support\Str;
 
 class Article extends Model
 {
@@ -18,6 +19,8 @@ class Article extends Model
     use AsSource;
     use Filterable;
     use SoftDeletes;
+
+    public const LENGTH_DATE = 10;
 
     public $fillable = [
         'user_id',
@@ -37,13 +40,13 @@ class Article extends Model
 
     protected $casts = [
         'is_published' => 'boolean',
-        'published_at' => 'datetime:d-m-Y',
+        // 'published_at' => 'datetime:d-m-Y',  // не работает?
     ];
 
     protected $dates = [
         'created_at',
         'updated_at',
-        'published_at',
+        // 'published_at',
         'delete_at',
     ];
 
@@ -59,6 +62,11 @@ class Article extends Model
     // {
     //     return Str::title($value); // первые буквы слов - заглавные
     // }
+
+    public function getPublishedAtAttribute($value)
+    {
+        return (new Carbon($value))->format('d-m-Y');
+    }
 
     /**
      * Возращает категорию данной статьи.

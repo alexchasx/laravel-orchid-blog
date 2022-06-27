@@ -83,7 +83,7 @@ class ArticleListScreen extends Screen
         // dd($request->all());
 
         $articleId = $request->input('article.id');
-        Article::updateOrCreate([
+        $article = Article::updateOrCreate([
             'id' => $articleId,
         ], [
             'title' => $request->input('article.title'),
@@ -96,6 +96,8 @@ class ArticleListScreen extends Screen
             'is_published' => $request->boolean('article.is_published'),
             'published_at' => $request->input('article.published_at'),
         ]);
+
+        $article->tags()->attach($request->input('article.tag_id'));
 
         is_null($articleId) ? Toast::info('Статья создана') : Toast::info('Статья обновлена');
     }
