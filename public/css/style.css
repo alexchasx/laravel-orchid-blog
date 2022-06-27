@@ -202,7 +202,8 @@ hr {
     margin-bottom: 5px;
 }
 .tag_title {
-    color: #5d92b7;
+    /* color: #5d92b7; */
+    color: chocolate;
 }
 .wrap_img {
     overflow: hidden;

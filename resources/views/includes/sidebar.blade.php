@@ -22,7 +22,7 @@
 
             @if ($rubric->exists)
             <li class="category_link">
-                <a href="{{ route('showByRubric', $rubric->id ) }}">
+                <a href="{{ route('showByRubric', $rubric->id ) }}" class="link">
                     {{ $rubric->title }}
                 </a>
             </li>

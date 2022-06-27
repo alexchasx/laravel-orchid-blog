@@ -80,8 +80,6 @@ class ArticleListScreen extends Screen
 
     public function createOrUpdateArticle(Request $request): void
     {
-        // dd($request->all());
-
         $articleId = $request->input('article.id');
         $article = Article::updateOrCreate([
             'id' => $articleId,

@@ -16,7 +16,8 @@
         <span>{{ $article->published_at }}</span>
         @foreach ($article->tags as $tag)
         &nbsp;&nbsp;<span class="tag_title">
-            <a href="{{ route('showByTag', $tag->id) }}">{{ $tag->title }}</a>
+            <!-- <a href="{{ route('showByTag', $tag->id) }}"></a> -->
+            {{ $tag->title }}
         </span>
         @endforeach
     </div>
