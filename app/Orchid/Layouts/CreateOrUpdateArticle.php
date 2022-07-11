@@ -63,16 +63,17 @@ class CreateOrUpdateArticle extends Rows
                 ->allowInput()
                 ->required(),
 
-            TextArea::make('article.content_raw')
-                ->rows(8)->required()->title('Кратко'),
+            // TextArea::make('article.content_raw')
+            //     ->rows(16)->required()->title('Контент'),
 
-            // TextArea::make('article.content')
+            // TextArea::make('article.content_raw')
             //     ->rows(12)->required()->title('Контент'),
-            // SimpleMDE::make('article.content_raw')->title('Контент'),
+
+            SimpleMDE::make('article.content_raw')->title('Контент'),
 
             // Code::make('article.content_raw')->title('Контент'),
-            // FieldsCode::make('article.content')->language(FieldsCode::MARKUP)->title('Контент'),
 
+            // FieldsCode::make('article.content')->language(FieldsCode::MARKUP)->title('Контент'),
 
             // Quill::make('article.excert')
             //     ->toolbar(["text", "color", "header", "list", "format", "media"])

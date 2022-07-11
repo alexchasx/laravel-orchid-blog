@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class CommentController extends ParentController
 {
@@ -19,16 +18,6 @@ class CommentController extends ParentController
      */
     public function store(Request $request)
     {
-        // dd($request->all());
-        // "comment" => "asdad"
-        // "author" => "asdas"
-        // "email" => "asd"
-        // "check_bot" => "yes"
-        // "submit" => "Отправить"
-        // "article_id" => "25"
-
-        // dd($request->all());
-
         $this->validate($request, [
             'comment' => ['required', 'max:5000'],
             'author' => ['required', 'max:250'],
@@ -37,11 +26,10 @@ class CommentController extends ParentController
             'website' => ['max:250'],
         ]);
 
-        // if ($request->input('check_bot') != 3) {
-        //     // return redirect()->back();
-        //     return back()
-        //         ->withErrors(['msg' => 'Не правильно.']);
-        // }
+        if ($request->input('checkbot') != 3) {
+            return back()
+                ->withErrors(['msg' => 'Не правильно.']);
+        }
 
         Article::find($request->input('article_id'))
             ->comments()

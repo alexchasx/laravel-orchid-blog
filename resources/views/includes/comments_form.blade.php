@@ -47,7 +47,8 @@
             <br>
             <input id="website" name="website" type="url" value="{{ old('website') }}" size="30" maxlength="200">
         </p>
-        {{-- <p class="comment-form-cookies-consent">
+
+        <p class="comment-form-cookies-consent">
             <label for="checkbot">
                 {{ __('1 + 2 =') }}
             </label>
@@ -57,7 +58,8 @@
                 @enderror
             <br>
             <input id="checkbot" name="checkbot" type="url" value="" size="30" maxlength="200">
-        </p> --}}
+        </p>
+
         {{-- <p class="comment-form-cookies-consent">
             <input id="check_save_data" name="check_save_data" type="checkbox" value="yes">
             <label for="check_save_data">
