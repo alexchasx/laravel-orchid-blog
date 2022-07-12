@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "..\\laravel-blog"
+		},
+		{
+			"path": "..\\laravel-blog-creative"
+		}
+	],
+	"settings": {}
+}

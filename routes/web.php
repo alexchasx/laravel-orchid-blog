@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +23,8 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/auth.php';
 
-Route::get('contact', ContactController::class)->name('contact');
+Route::get('contact', [ContactController::class, 'index'])->name('contact');
+Route::post('contact.store', [ContactController::class, 'store'])->name('contact.store');
 
 Route::controller(ArticleController::class)->group(function () {
     Route::get('/', 'index')->name('home');
