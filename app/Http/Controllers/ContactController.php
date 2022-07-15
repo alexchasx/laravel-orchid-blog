@@ -7,7 +7,7 @@ use App\Models\Rubric;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
-class ContactController extends ParentController
+class ContactController extends MainController
 {
     public function index()
     {

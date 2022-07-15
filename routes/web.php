@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 // })->middleware(['auth'])->name('dashboard');
 
 require __DIR__ . '/auth.php';
+
+Route::get('/setlocale/{locale}', [MainController::class, 'setLocale'])->name('setlocale');
 
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
 Route::post('contact.store', [ContactController::class, 'store'])->name('contact.store');

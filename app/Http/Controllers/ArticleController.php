@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class ArticleController extends ParentController
+class ArticleController extends MainController
 {
     /**
      * Display a listing of the resource

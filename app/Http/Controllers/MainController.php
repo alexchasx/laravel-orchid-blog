@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
-abstract class ParentController extends Controller
+class MainController extends Controller
 {
     const EMPTY_IMAGE = 'upload/no-image.png';
     const PAGINATE = 7;
@@ -24,5 +24,12 @@ abstract class ParentController extends Controller
         }
 
         abort(403, 'Доступ запрещён!');
+    }
+
+    public function setLocale($locale)
+    {
+        session(['user_locale' => $locale]);
+
+        return redirect()->back();
     }
 }
