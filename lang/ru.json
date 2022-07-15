@@ -1,0 +1,15 @@
+{
+    "Forgot Your Password?": "Забыли пароль",
+    "Login": "Вход",
+    "Register": "Регистрация",
+    "Remember Me": "Запомнить меня",
+    "Password": "Пароль",
+    "Confirm Password": "Подтвердите пароль",
+    "Email Address": "Email",
+    "Name": "Имя",
+    "Verify Your Email Address": "Подтвердите адрес электронной почты",
+    "A fresh verification link has been sent to your email address.": "На ваш адрес электронной почты была отправлена новая ссылка для подтверждения.",
+    "Before proceeding, please check your email for a verification link.": "Прежде чем продолжить, пожалуйста, проверьте свою электронную почту на наличие ссылки для подтверждения.",
+    "If you did not receive the email": "Если вы не получили электронное письмо",
+    "click here to request another": "нажмите здесь, чтобы запросить другую"
+}
