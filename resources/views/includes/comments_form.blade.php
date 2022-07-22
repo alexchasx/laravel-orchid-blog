@@ -3,59 +3,53 @@
     <h3>{{ __('Оставить ответ') }}</h3>
     <form action="{{ route('commentStore') }}" method="post" id="commentform" class="comment-form" novalidate="">
         @csrf
-        <p class="comment-notes">
-            <span id="email-notes">{{ __('Ваш адрес электронной почты не будет опубликован.') }}</span>
-            <span class="required-field-message" aria-hidden="true">
-                {{ __('Обязательные поля отмечены') }}<span class="required star" aria-hidden="true">*</span>
-            </span>
-        </p>
         <p class="comment-form-comment textwrapper">
             <label for="comment">
-                {{ __('Комментарий') }} <span class="required star" aria-hidden="true">*</span>
+                {{ __('Комментарий') }} <span class="required" aria-hidden="true">{{ __('(обязательно)') }}</span>
                 @error('comment')
-                    <br>
-                    <span class="invalid-feedback">{{ $message }}</span>
+                <br>
+                <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
             </label>
             <br>
             <textarea id="comment" name="comment" cols="35" rows="8" maxlength="65525" required="required">{{ old('comment') }}</textarea>
         </p>
         <p class="comment-form-author">
-            <label for="author">{{ __('Ваше имя') }} <span class="required star" aria-hidden="true">*</span></label>
-                @error('author')
-                    <br>
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
+            <label for="author">{{ __('Ваше имя') }} <span class="required" aria-hidden="true">{{ __('(обязательно)') }}</span></label>
+            @error('author')
+            <br>
+            <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
             <br>
             <input id="author" name="author" type="text" value="{{ old('author') }}" size="30" maxlength="245" required="">
         </p>
         <p class="comment-form-email">
-            <label for="email">{{ __('Ваш email') }} <span class="required star" aria-hidden="true">*</span> (никто не увидит)</label>
-                @error('email')
-                    <br>
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
+            <label for="email">{{ __('Ваш email') }} <span class="required" aria-hidden="true">{{ __('(обязательно)') }}</span></label>
+            @error('email')
+            <br>
+            <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
             <br>
             <input id="email" name="email" type="email" value="{{ old('email') }}" size="30" maxlength="100" aria-describedby="email-notes" required="">
         </p>
         <p class="comment-form-url">
             <label for="website">{{ __('Веб-сайт (если есть)') }}</label>
-                @error('website')
-                    <br>
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
+            @error('website')
+            <br>
+            <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
             <br>
             <input id="website" name="website" type="url" value="{{ old('website') }}" size="30" maxlength="200">
         </p>
 
         <p class="comment-form-cookies-consent">
             <label for="checkbot">
-                {{ __('1 + 2 =') }}
+                {{ __('1 + 2 =') }} {{ __('(обязательно)') }}
             </label>
-                @error('checkbot')
-                    <br>
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
+            @error('checkbot')
+            <br>
+            <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
             <br>
             <input id="checkbot" name="checkbot" type="url" value="" size="30" maxlength="200">
         </p>
@@ -64,8 +58,8 @@
             <input id="check_save_data" name="check_save_data" type="checkbox" value="yes">
             <label for="check_save_data">
                 {{ __('Сохраните мои данные в этом браузере для следующего комментария.') }}
-            </label>
-            <br>
+        </label>
+        <br>
         </p> --}}
         <p class="form-submit">
             <input name="submit" type="submit" id="submit" class="submit" value="{{ __('Отправить') }}">
@@ -78,7 +72,7 @@
         {{-- <p style="display: none !important;"><label>Δ
                 <textarea name="ak_hp_textarea" cols="35" rows="8" maxlength="100"></textarea></label>
             <input type="hidden" id="ak_js_1" name="ak_js" value="1651769329423"> --}}
-            {{-- <script>
+        {{-- <script>
                 document.getElementById("ak_js_1").setAttribute("value", (new Date()).getTime());
             </script> --}}
         </p>

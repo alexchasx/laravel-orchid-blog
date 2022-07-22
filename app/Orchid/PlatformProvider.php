@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Orchid;
 
+use Illuminate\Support\Facades\Auth;
 use Orchid\Platform\Dashboard;
 use Orchid\Platform\ItemPermission;
 use Orchid\Platform\OrchidServiceProvider;
 use Orchid\Screen\Actions\Menu;
+use Orchid\Support\Color;
 
 class PlatformProvider extends OrchidServiceProvider
 {
@@ -30,6 +32,12 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make(__('На главную'))
                 ->icon('home')
                 ->route('home'),
+
+            Menu::make(__('Контакты'))
+                ->icon('contacts')
+                // ->permission('platform.custom.articles')
+                // ->canSee(Auth::user()->hasAccess('platform.custom.articles'))
+                ->route('platform.contacts'),
 
             Menu::make(__('Статьи'))
                 ->icon('paste')
@@ -149,6 +157,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.users', __('Users')),
             ItemPermission::group(__('Дополнительные'))
                 ->addPermission('platform.custom.articles', __('Статьи'))
+                // ->addPermission('platform.custom.contacts', __('Контакты'))
                 ->addPermission('platform.custom.rubrics', __('Рубрики и метки'))
                 ->addPermission('platform.custom.comments', __('Комментарии')),
         ];
