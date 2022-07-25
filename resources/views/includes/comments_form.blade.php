@@ -1,8 +1,9 @@
 <div id="app" class="article_card">
 
-    <h3>{{ __('Оставить ответ') }}</h3>
+    <h3>{{ __('Оставить комментарий') }}</h3>
     <form action="{{ route('commentStore') }}" method="post" id="commentform" class="comment-form" novalidate="">
         @csrf
+
         <p class="comment-form-comment textwrapper">
             <label for="comment">
                 {{ __('Комментарий') }} <span class="required" aria-hidden="true">{{ __('(обязательно)') }}</span>
@@ -14,6 +15,7 @@
             <br>
             <textarea id="comment" name="comment" cols="35" rows="8" maxlength="65525" required="required">{{ old('comment') }}</textarea>
         </p>
+
         <p class="comment-form-author">
             <label for="author">{{ __('Ваше имя') }} <span class="required" aria-hidden="true">{{ __('(обязательно)') }}</span></label>
             @error('author')
@@ -23,7 +25,8 @@
             <br>
             <input id="author" name="author" type="text" value="{{ old('author') }}" size="30" maxlength="245" required="">
         </p>
-        <p class="comment-form-email">
+
+        <!-- <p class="comment-form-email">
             <label for="email">{{ __('Ваш email') }} <span class="required" aria-hidden="true">{{ __('(обязательно)') }}</span></label>
             @error('email')
             <br>
@@ -32,6 +35,7 @@
             <br>
             <input id="email" name="email" type="email" value="{{ old('email') }}" size="30" maxlength="100" aria-describedby="email-notes" required="">
         </p>
+
         <p class="comment-form-url">
             <label for="website">{{ __('Веб-сайт (если есть)') }}</label>
             @error('website')
@@ -40,7 +44,7 @@
             @enderror
             <br>
             <input id="website" name="website" type="url" value="{{ old('website') }}" size="30" maxlength="200">
-        </p>
+        </p> -->
 
         <p class="comment-form-cookies-consent">
             <label for="checkbot">

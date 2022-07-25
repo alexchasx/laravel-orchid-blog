@@ -1,7 +1,7 @@
 <div class="comments">
 
     {{-- @if(!empty($comments)) --}}
-    @if($comments)
+    @if($comments->isNotEmpty())
     <hr />
     <h3><a name="comments">{{ __('Комментарии') }}</a></h3>
 
@@ -18,7 +18,7 @@
             {{--alt="image">--}}
             {{--@endif--}}
             <div class="comment_user">{{$comment->name}}:</div class="comment_user">
-                <br>
+            <br>
             <div class="publication_date">{{$comment->created_at}}</div>
         </div>
 

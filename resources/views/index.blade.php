@@ -8,7 +8,7 @@
 
 @foreach ($articles as $article)
 
-<div class="article_card">
+<article class="article_card">
     <h3><a href="{{route('articleShow', $article->id)}}" class="continue_read">
 
             @if (! Auth::guest())
@@ -19,15 +19,7 @@
         </a>
     </h3>
 
-    <div class="publication_date">
-        <span>{{ $article->published_at }}</span>
-        @foreach ($article->tags as $tag)
-        &nbsp;&nbsp;<span class="tag_title">
-            <!-- <a href="{{ route('showByTag', $tag->id) }}"></a> -->
-            {{ $tag->title }}
-        </span>
-        @endforeach
-    </div>
+    @include('includes/publication_date')
 
     {{-- <p>{!! Str::limit($article->content_raw, 200) !!}</p>
 
@@ -35,7 +27,7 @@
     {{ __('Читать далее') }}
     </a>
     --}}
-</div>
+</article>
 
 @unless ($loop->last)
 {{-- не показывать последнюю полосу --}}

@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>@yield('page.title', config('app.name'))</title>
-    <link rel="icon" href="favicon.ico"><!-- 32×32 -->
+
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"><!-- 32×32 -->
+    <link rel="stylesheet" href="{{ asset('css/normalize.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
 </head>
 
@@ -86,12 +89,11 @@
 
                     </ul>
                 </div>
-    </div>
-    <hr />
-    </nav>
+        </div>
+        <hr />
+        </nav>
     </header>
 
-    <section>
         <div class="wrap">
 
             <main class="left_block">
@@ -103,7 +105,6 @@
             </aside>
 
         </div>
-    </section>
 
     <footer>
         <hr />

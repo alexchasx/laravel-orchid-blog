@@ -4,7 +4,7 @@
 
 @unless (empty($article))
 
-<div class="article_card">
+<article class="article_card">
     <h3> @if (! Auth::guest())
         [ID={{ $article->id }}]
         @endif
@@ -12,20 +12,12 @@
         {{ $article->title }}
     </h3>
 
-    <div class="publication_date">
-        <span>{{ $article->published_at }}</span>
-        @foreach ($article->tags as $tag)
-        &nbsp;&nbsp;<span class="tag_title">
-            <!-- <a href="{{ route('showByTag', $tag->id) }}"></a> -->
-            {{ $tag->title }}
-        </span>
-        @endforeach
-    </div>
+    @include('includes/publication_date')
 
     <p>{!! $article->content_raw !!}</p>
 
     <br>
-</div>
+</article>
 <br />
 
 @include('includes/comments_list')
