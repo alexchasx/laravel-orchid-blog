@@ -180,6 +180,7 @@ hr {
 } */
 .publication_date {
     margin-bottom: 0.8em;
+    margin-top: -10px;
     font-size: 0.8em;
 }
 .category_link {

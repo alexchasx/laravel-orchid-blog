@@ -36,7 +36,9 @@ class CreateOrUpdateArticle extends Rows
             Input::make('article.id')->type('hidden'),
 
             Group::make([
+
                 Input::make('article.title')->required()->title('Заголовок'),
+
                 CheckBox::make('article.is_published')
                     ->value(1)
                     ->sendTrueOrFalse()
@@ -44,30 +46,30 @@ class CreateOrUpdateArticle extends Rows
             ]),
 
             Group::make([
+
                 Select::make('article.rubric_id')
                     ->title('Рубрика')
                     ->required()
                     ->fromModel(Rubric::class, 'title')
                     ->empty('Не выбрано'),
-                Select::make('article.tag_id')
-                    ->title('Метка')
+
+                Select::make('article.')
+                    ->title('Метка (тэг)')
                     ->required()
-                    // ->multiple()
+                    ->multiple()
+                    ->rows(5)
                     ->fromModel(Tag::class, 'title')
                     ->empty('Не выбрано'),
             ]),
 
             DateTimer::make('article.published_at')
-            ->title('Дата публикации')
-            ->format('Y-m-d')
-                ->allowInput()
-                ->required(),
+                ->title('Дата публикации')
+                ->format('Y-m-d')
+                    ->allowInput()
+                    ->required(),
 
             // TextArea::make('article.content_raw')
             //     ->rows(16)->required()->title('Контент'),
-
-            // TextArea::make('article.content_raw')
-            //     ->rows(12)->required()->title('Контент'),
 
             SimpleMDE::make('article.content_raw')->title('Контент'),
 
@@ -78,8 +80,6 @@ class CreateOrUpdateArticle extends Rows
             // Quill::make('article.excert')
             //     ->toolbar(["text", "color", "header", "list", "format", "media"])
             //     ->title('Предпросмотр')->required(),
-
-            // Quill::make('article.content_raw'),
 
             Group::make([
                 Input::make('article.keywords')->title('Ключевые слова'),
