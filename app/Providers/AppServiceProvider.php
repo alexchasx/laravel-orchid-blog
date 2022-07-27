@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // Paginator::useBootstrap();
 
+        // Создание своей blade-директивы "@hasAccess"
         Blade::if('hasAccess', function (string $value) {
             $user = Auth::user();
 

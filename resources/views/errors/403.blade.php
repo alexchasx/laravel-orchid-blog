@@ -1,10 +1,10 @@
-{{-- @extends('layouts.base') --}}
+@extends('layouts.app')
 
-{{-- @section('content-title', '403 Error Page')
+@section('content-title', '403 Error Page')
 @section('content-subtitle', '')
 
-@section('content') --}}
-<div class="error-page">
+@section('content')
+<div class="error-page" style="text-align: center;">
     <h2 class="headline text-yellow">Forbidden (#403)</h2>
 
     <div class="error-content">
@@ -16,39 +16,7 @@
     <!-- /.error-content -->
 </div>
 <!-- /.error-page -->
+
 <br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-{{-- @endsection --}}
+
+@endsection

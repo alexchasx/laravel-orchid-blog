@@ -5,12 +5,7 @@
 @unless (empty($article))
 
 <article class="article_card">
-    <h3> @if (! Auth::guest())
-        [ID={{ $article->id }}]
-        @endif
-
-        {{ $article->title }}
-    </h3>
+    <h3>{{ $article->title }}</h3>
 
     @include('includes/publication_date')
 

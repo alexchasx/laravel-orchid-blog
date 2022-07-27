@@ -9,12 +9,7 @@
 @foreach ($articles as $article)
 
 <article class="article_card">
-    <h3><a href="{{route('articleShow', $article->id)}}" class="continue_read">
-
-            @if (! Auth::guest())
-            [ID={{ $article->id }}]
-            @endif
-
+    <h3 class="article_title"><a href="{{route('articleShow', $article->id)}}" class="continue_read">
             {{ $article->title }}
         </a>
     </h3>
@@ -32,7 +27,7 @@
 @unless ($loop->last)
 {{-- не показывать последнюю полосу --}}
 <br />
-<hr />
+<hr class="hr-lines" />
 <br />
 @endunless
 

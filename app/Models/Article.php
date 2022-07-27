@@ -63,10 +63,16 @@ class Article extends Model
     //     return Str::title($value); // первые буквы слов - заглавные
     // }
 
-    public function getPublishedAtAttribute($value)
-    {
-        return (new Carbon($value))->format('d-m-Y');
-    }
+    // public function getPublishedAtAttribute($value)
+    // {
+    //     return (new Carbon($value))->format('d-m-Y');
+    //     // ->diffForHumans(); // Вызывает ошибку в админке Orchid (не понимает русский формат "diffForHumans")
+    // }
+
+    // public function setPublishedAtAttribute($value)
+    // {
+    //     $this->attributes['published_at'] = Carbon::createFromFormat('m/d/Y', $value)->format('Y-m-d');
+    // }
 
     /**
      * Возращает категорию данной статьи.
