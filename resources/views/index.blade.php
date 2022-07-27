@@ -8,7 +8,7 @@
 
 @foreach ($articles as $article)
 
-<article class="article_card">
+<article class="article_card article_card_index">
     <h3 class="article_title"><a href="{{route('articleShow', $article->id)}}" class="continue_read">
             {{ $article->title }}
         </a>
@@ -16,20 +16,20 @@
 
     @include('includes/publication_date')
 
-    {{-- <p>{!! Str::limit($article->content_raw, 200) !!}</p>
+    <!-- <p>{{ Str::limit($article->excert, 200) }}</p> -->
 
-    <a href="{{route('articleShow', $article->id)}}" class="continue_read">
+    <!-- <a href="{{route('articleShow', $article->id)}}" class="continue_read">
     {{ __('Читать далее') }}
-    </a>
-    --}}
+    </a> -->
 </article>
 
+{{--
 @unless ($loop->last)
-{{-- не показывать последнюю полосу --}}
-<br />
-<hr class="hr-lines" />
-<br />
+<!-- <br /> -->
+<!-- <hr class="hr-lines" /> -->
+<!-- <br /> -->
 @endunless
+--}}
 
 @endforeach
 

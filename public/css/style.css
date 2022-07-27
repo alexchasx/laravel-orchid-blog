@@ -257,6 +257,9 @@ hr {
 .article_card h3 {
     text-align: center;
 }
+.article_card_index {
+    margin-bottom: 40px;;
+}
 
 .submit {
     margin-top: 5px;
