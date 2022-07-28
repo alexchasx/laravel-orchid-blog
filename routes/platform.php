@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use App\Orchid\Screens\Article\ArticleListScreen;
+use App\Orchid\Screens\Comment\CommentListScreen;
+use App\Orchid\Screens\Comment\CommentScreen;
 use App\Orchid\Screens\Contact\ContactListScreen;
 use App\Orchid\Screens\Contact\ContactScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
@@ -42,7 +44,13 @@ Route::screen('contact/{id}', ContactScreen::class)
     ->name('platform.contact');
 
 Route::screen('contacts', ContactListScreen::class)
-    ->name('platform.contacts');
+->name('platform.contacts');
+
+Route::screen('comment/{id}', CommentScreen::class)
+->name('platform.comment');
+
+Route::screen('comments', CommentListScreen::class)
+    ->name('platform.comments');
 
 Route::screen('articles', ArticleListScreen::class)
     ->name('platform.articles');

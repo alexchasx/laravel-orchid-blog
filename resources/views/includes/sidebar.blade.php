@@ -37,7 +37,7 @@
 @if ($tags->isNotEmpty())
 <hr />
 <section id="tags" class="category_block">
-    <h3>{{ __('Поиск по меткам') }}</h3>
+    <h3>{{ __('Метки (тэги)') }}</h3>
     <nav class="category_list tags_list">
         @foreach($tags as $tag)
 

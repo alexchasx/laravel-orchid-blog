@@ -95,7 +95,7 @@ class ArticleListScreen extends Screen
             'published_at' => $request->input('article.published_at'),
         ]);
 
-        $article->tags()->attach($request->input('article.tag_id'));
+        $article->tags()->sync($request->input('article.tags'));
 
         is_null($articleId) ? Toast::info('Статья создана') : Toast::info('Статья обновлена');
     }

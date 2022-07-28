@@ -53,7 +53,7 @@ class CreateOrUpdateArticle extends Rows
                     ->fromModel(Rubric::class, 'title')
                     ->empty('Не выбрано'),
 
-                Select::make('article.')
+                Select::make('article.tags.')
                     ->title('Метка (тэг)')
                     ->required()
                     ->multiple()
@@ -71,7 +71,7 @@ class CreateOrUpdateArticle extends Rows
             // TextArea::make('article.content_raw')
             //     ->rows(16)->required()->title('Контент'),
 
-            SimpleMDE::make('article.excert')->title('Краткое описание'),
+            // SimpleMDE::make('article.excert')->title('Краткое описание'),
 
             SimpleMDE::make('article.content_raw')->title('Контент'),
 

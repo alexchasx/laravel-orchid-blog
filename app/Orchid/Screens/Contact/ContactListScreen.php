@@ -94,6 +94,7 @@ class ContactListScreen extends Screen
 
                 TD::make('created_at', 'Дата создания')->render(function (Contact $contact) {
                     $carbon = Carbon::create($contact->created_at);
+
                     return $carbon->format('d.m.Y');
                 }),
 
@@ -102,8 +103,8 @@ class ContactListScreen extends Screen
         ];
     }
 
-    public function asyncGetContact(Contact $contact): array
-    {
-        return ['contact' => $contact];
-    }
+    // public function asyncGetContact(Contact $contact): array
+    // {
+    //     return ['contact' => $contact];
+    // }
 }

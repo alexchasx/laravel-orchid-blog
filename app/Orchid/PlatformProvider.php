@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid;
 
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Platform\Dashboard;
 use Orchid\Platform\ItemPermission;
@@ -56,10 +57,10 @@ class PlatformProvider extends OrchidServiceProvider
 
             Menu::make(__('Комментарии'))
                 ->icon('bubble')
-                ->route('platform.example')
+                ->route('platform.comments')
                 ->permission('platform.custom.comments')
                 ->badge(function () {
-                    return 6;
+                    return Comment::all('id')->count();
                 }),
 
             Menu::make(__('Пользователи'))
