@@ -10,7 +10,7 @@
     <title>@yield('page.title', config('app.name'))</title>
 
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"><!-- 32×32 -->
-    <link rel="stylesheet" href="{{ asset('css/normalize.css') }}" />
+    <!-- <link rel="stylesheet" href="{{ asset('css/normalize.css') }}" /> -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
 </head>
 
