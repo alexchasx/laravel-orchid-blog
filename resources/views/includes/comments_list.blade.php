@@ -3,7 +3,7 @@
     {{-- @if(!empty($comments)) --}}
     @if($comments->isNotEmpty())
     <hr />
-    <h3><a name="comments">{{ __('Комментарии') }}</a></h3>
+    <h3>{{ __('Комментарии') }}</h3>
 
     @foreach($comments as $comment)
     <div>

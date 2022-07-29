@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\ArticleController;
 use App\Orchid\Screens\Article\ArticleListScreen;
 use App\Orchid\Screens\Comment\CommentListScreen;
 use App\Orchid\Screens\Comment\CommentScreen;
@@ -37,29 +38,26 @@ use Tabuna\Breadcrumbs\Trail;
 */
 
 // Main
-Route::screen('/main', PlatformScreen::class)
-    ->name('platform.articles');
+// Route::screen('/main', PlatformScreen::class)
+//     ->name('platform.main');
+Route::screen('/main', ArticleListScreen::class)
+    ->name('platform.main');
 
 Route::screen('contact/{id}', ContactScreen::class)
     ->name('platform.contact');
-
 Route::screen('contacts', ContactListScreen::class)
-->name('platform.contacts');
+->name('platform.contact.list');
 
 Route::screen('comment/{id}', CommentScreen::class)
 ->name('platform.comment');
-
 Route::screen('comments', CommentListScreen::class)
-    ->name('platform.comments');
-
-Route::screen('articles', ArticleListScreen::class)
-    ->name('platform.articles');
+    ->name('platform.comment.list');
 
 Route::screen('rubrics', RubricListScreen::class)
-    ->name('platform.rubrics');
+    ->name('platform.rubric.list');
 
 Route::screen('tags', TagListScreen::class)
-    ->name('platform.tags');
+    ->name('platform.tag.list');
 
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)

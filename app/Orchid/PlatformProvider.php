@@ -38,26 +38,26 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('contacts')
                 // ->permission('platform.custom.articles')
                 // ->canSee(Auth::user()->hasAccess('platform.custom.articles'))
-                ->route('platform.contacts'),
+                ->route('platform.contact.list'),
 
             Menu::make(__('Статьи'))
                 ->icon('paste')
                 ->permission('platform.custom.articles')
-                ->route('platform.articles'),
+                ->route('platform.main'),
 
             Menu::make(__('Рубрики'))
                 ->icon('list')
                 ->permission('platform.custom.rubrics')
-                ->route('platform.rubrics'),
+                ->route('platform.rubric.list'),
 
             Menu::make(__('Метки'))
                 ->icon('tag')
                 ->permission('platform.custom.rubrics')
-                ->route('platform.tags'),
+                ->route('platform.tag.list'),
 
             Menu::make(__('Комментарии'))
                 ->icon('bubble')
-                ->route('platform.comments')
+                ->route('platform.comment.list')
                 ->permission('platform.custom.comments')
                 ->badge(function () {
                     return Comment::all('id')->count();

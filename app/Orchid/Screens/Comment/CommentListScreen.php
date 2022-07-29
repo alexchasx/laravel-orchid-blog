@@ -59,7 +59,7 @@ class CommentListScreen extends Screen
 
                 TD::make('Смотреть')->render(function (Comment $comment) {
                     return Link::make('')
-                        ->route('platform.comment', ['id' => $comment->id])
+                        ->route('platform.comment', $comment)
                         ->icon('eye');
                 }),
 
@@ -80,10 +80,11 @@ class CommentListScreen extends Screen
 
                 TD::make('article_id', 'Статья')
                     ->render(function (Comment $comment) {
-                        $str = '[ID=' . $comment->article->id . '] ' . $comment->article->title;
+                        $strTitle = '[ID=' . $comment->article->id . '] ' . $comment->article->title;
 
-                        return Str::limit($str, 50);
-                }),
+                        return Link::make( Str::limit($strTitle, 30) )
+                            ->route('articleShow', $comment->article->id);
+                    }),
 
                 // TD::make('email', 'Email')->defaultHidden(),
 
@@ -92,23 +93,23 @@ class CommentListScreen extends Screen
                     return $carbon->format('d.m.Y');
                 }),
 
-                TD::make('Удалить')
-                    ->render(function (Comment $comment) {
-                        return Link::make('')
-                            ->method('deleteComment')
-                            ->asyncParameters([
-                                'comment' => $comment->id
-                            ])
-                            ->icon('close');
-                    }),
+                // TD::make('Удалить')
+                //     ->render(function (Comment $comment) {
+                //         return Link::make('')
+                //             ->method('deleteComment')
+                //             ->asyncParameters([
+                //                 'comment' => $comment
+                //             ])
+                //             ->icon('trash');
+                //     }),
             ]),
         ];
     }
 
-    // public function deleteComment($id)
+    // public function deleteComment(Comment $comment)
     // {
-    //     Comment::destroy($id);
+    //     dd($comment->toArray());
 
-    //     return redirect()->back();
+    //     (new CommentScreen())->remove($comment);
     // }
 }

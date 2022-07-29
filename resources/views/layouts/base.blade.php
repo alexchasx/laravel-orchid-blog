@@ -67,7 +67,7 @@
 
                     @hasAccess('platform.index')
                     <li class="right">
-                        <a href="{{ route('platform.articles') }}" class="link">
+                        <a href="{{ route('platform.main') }}" class="link">
                             <span>{{ __('Админ-панель') }}</span>
                         </a>
                     </li>

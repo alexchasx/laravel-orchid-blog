@@ -310,3 +310,11 @@ textarea {
 input.contact {
     width: 100%;
 }
+
+.comment_user {
+    text-align: center;
+}
+
+.comments > h3 {
+    text-align: center;
+}

@@ -95,8 +95,7 @@ return [
     |
     */
 
-    // 'index' => 'platform.main',
-    'index' => 'platform.articles',
+    'index' => 'platform.main',
 
     /*
     |--------------------------------------------------------------------------
