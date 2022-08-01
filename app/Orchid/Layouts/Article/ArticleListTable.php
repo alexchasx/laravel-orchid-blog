@@ -63,7 +63,7 @@ class ArticleListTable extends Table
 
             TD::make('rubric_title', 'Категория')->alignLeft()->render(
                 function (Article $article) {
-                    return Rubric::findOrfail($article->rubric_id)->title;
+                    return $article->rubric->title;
                 }
             )->width(300),
 

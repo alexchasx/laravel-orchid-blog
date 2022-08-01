@@ -4,10 +4,16 @@ declare(strict_types=1);
 
 namespace App\Orchid;
 
+use App\Models\Article;
 use App\Models\Comment;
+use App\Models\Contact;
+use App\Models\Rubric;
+use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Platform\Dashboard;
 use Orchid\Platform\ItemPermission;
+use Orchid\Platform\Models\Role;
 use Orchid\Platform\OrchidServiceProvider;
 use Orchid\Screen\Actions\Menu;
 use Orchid\Support\Color;
@@ -38,22 +44,34 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('contacts')
                 // ->permission('platform.custom.articles')
                 // ->canSee(Auth::user()->hasAccess('platform.custom.articles'))
-                ->route('platform.contact.list'),
+                ->route('platform.contact.list')
+                ->badge(function () {
+                    return Contact::all('id')->count();
+                }),
 
             Menu::make(__('Статьи'))
                 ->icon('paste')
                 ->permission('platform.custom.articles')
-                ->route('platform.main'),
+                ->route('platform.main')
+                ->badge(function () {
+                    return Article::all('id')->count();
+                }),
 
             Menu::make(__('Рубрики'))
                 ->icon('list')
                 ->permission('platform.custom.rubrics')
-                ->route('platform.rubric.list'),
+                ->route('platform.rubric.list')
+                ->badge(function () {
+                    return Rubric::all('id')->count();
+                }),
 
             Menu::make(__('Метки'))
                 ->icon('tag')
                 ->permission('platform.custom.rubrics')
-                ->route('platform.tag.list'),
+                ->route('platform.tag.list')
+                ->badge(function () {
+                    return Tag::all('id')->count();
+                }),
 
             Menu::make(__('Комментарии'))
                 ->icon('bubble')
@@ -67,70 +85,79 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('user')
                 ->route('platform.systems.users')
                 ->permission('platform.systems.users')
-                ->title(__('Access rights')),
+                ->title(__('Access rights'))
+                ->badge(function () {
+                    return User::all('id')->count();
+                }),
 
             Menu::make(__('Роли'))
                 ->icon('lock')
                 ->route('platform.systems.roles')
-                ->permission('platform.systems.roles'),
-
-            Menu::make(__(''))
-                ->title('========= Examples ========='),
-
-            Menu::make('Example screen')
-                ->icon('monitor')
-                ->route('platform.example')
-                ->title('Navigation')
+                ->permission('platform.systems.roles')
                 ->badge(function () {
-                    return 6;
+                    return Role::all('id')->count();
                 }),
 
-            Menu::make('Dropdown menu')
-                ->icon('code')
-                ->list([
-                    Menu::make('Sub element item 1')->icon('bag'),
-                    Menu::make('Sub element item 2')->icon('heart'),
-                ]),
 
-            Menu::make('Basic Elements')
-                ->title('Form controls')
-                ->icon('note')
-                ->route('platform.example.fields'),
+            // Examples:
 
-            Menu::make('Advanced Elements')
-                ->icon('briefcase')
-                ->route('platform.example.advanced'),
+            // Menu::make(__(''))
+            //     ->title('========= Examples ========='),
 
-            Menu::make('Text Editors')
-                ->icon('list')
-                ->route('platform.example.editors'),
+            // Menu::make('Example screen')
+            //     ->icon('monitor')
+            //     ->route('platform.example')
+            //     ->title('Navigation')
+            //     ->badge(function () {
+            //         return 6;
+            //     }),
 
-            Menu::make('Overview layouts')
-                ->title('Layouts')
-                ->icon('layers')
-                ->route('platform.example.layouts'),
+            // Menu::make('Dropdown menu')
+            //     ->icon('code')
+            //     ->list([
+            //         Menu::make('Sub element item 1')->icon('bag'),
+            //         Menu::make('Sub element item 2')->icon('heart'),
+            //     ]),
 
-            Menu::make('Chart tools')
-                ->icon('bar-chart')
-                ->route('platform.example.charts'),
+            // Menu::make('Basic Elements')
+            //     ->title('Form controls')
+            //     ->icon('note')
+            //     ->route('platform.example.fields'),
 
-            Menu::make('Cards')
-                ->icon('grid')
-                ->route('platform.example.cards')
-                ->divider(),
+            // Menu::make('Advanced Elements')
+            //     ->icon('briefcase')
+            //     ->route('platform.example.advanced'),
 
-            Menu::make('Documentation')
-                ->title('Docs')
-                ->icon('docs')
-                ->url('https://orchid.software/en/docs'),
+            // Menu::make('Text Editors')
+            //     ->icon('list')
+            //     ->route('platform.example.editors'),
 
-            Menu::make('Changelog')
-                ->icon('shuffle')
-                ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
-                ->target('_blank')
-                ->badge(function () {
-                    return Dashboard::version();
-                }, Color::DARK()),
+            // Menu::make('Overview layouts')
+            //     ->title('Layouts')
+            //     ->icon('layers')
+            //     ->route('platform.example.layouts'),
+
+            // Menu::make('Chart tools')
+            //     ->icon('bar-chart')
+            //     ->route('platform.example.charts'),
+
+            // Menu::make('Cards')
+            //     ->icon('grid')
+            //     ->route('platform.example.cards')
+            //     ->divider(),
+
+            // Menu::make('Documentation')
+            //     ->title('Docs')
+            //     ->icon('docs')
+            //     ->url('https://orchid.software/en/docs'),
+
+            // Menu::make('Changelog')
+            //     ->icon('shuffle')
+            //     ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
+            //     ->target('_blank')
+            //     ->badge(function () {
+            //         return Dashboard::version();
+            //     }, Color::DARK()),
 
         ];
     }

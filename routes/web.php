@@ -22,6 +22,12 @@ use Illuminate\Support\Facades\Route;
 //     return redirect('adminIndex');
 // })->middleware(['auth'])->name('dashboard');
 
+
+
+Route::get('/issues', function () {
+    return view('issues');
+})->name('issues');
+
 require __DIR__ . '/auth.php';
 
 Route::get('/setlocale/{locale}', [MainController::class, 'setLocale'])->name('setlocale');
@@ -50,3 +56,4 @@ Route::controller(CommentController::class)->group(function () {
 //});
 
 Auth::routes();
+

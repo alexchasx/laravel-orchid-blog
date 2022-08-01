@@ -49,6 +49,10 @@
 
                     <li class="left"><a href="{{ route('contact') }}" class="link">{{ __('Контакты') }}</a></li>
 
+                    <li class="left"><a href="{{ route('contact') }}" class="link">{{ __('Поддержать п') }}</a></li>
+
+                    <li class="left"><a href="{{ route('issues') }}" class="link">{{ __('Задачи') }}</a></li>
+
                     <!-- @if (App::isLocale('ru'))
                     <li class="left"><a href="{{ route('setlocale', ['locale' => 'en']) }}" class="link">English</a></li>
                     @else
@@ -74,14 +78,16 @@
                     @endhasAccess
 
                     @else
-                    <li class="right">
-                        <a href="{{ route('login') }}" class="link login">
-                            <span>{{ __('Войти') }}</span>
-                        </a>
-                    </li>
+
                     <li class="right">
                         <a href="{{ route('register') }}" class="link login">
-                            <span>{{ __('Зарегистрироваться') }}</span>
+                            <span>{{ __('Регистрация') }}</span>
+                        </a>
+                    </li>
+
+                    <li class="right">
+                        <a href="{{ route('login') }}" class="link login">
+                            <span>{{ __('Вход') }}</span>
                         </a>
                     </li>
 
@@ -89,22 +95,24 @@
 
                     </ul>
                 </div>
-        </div>
-        <hr />
-        </nav>
+    </div>
+    <hr />
+    </nav>
     </header>
 
-        <div class="wrap">
+    <div class="wrap">
 
-            <main class="left_block">
-                @yield('content')
-            </main>
+        <main class="left_block">
+            @yield('content')
+        </main>
 
-            <aside class="right_block">
-                @include('includes.sidebar')
-            </aside>
+        @if (isset($rubrics))
+        <aside class="right_block">
+            @include('includes.sidebar')
+        </aside>
+        @endif
 
-        </div>
+    </div>
 
     <footer>
         <hr />

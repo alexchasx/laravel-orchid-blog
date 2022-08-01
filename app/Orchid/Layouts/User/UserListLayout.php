@@ -27,6 +27,8 @@ class UserListLayout extends Table
     public function columns(): array
     {
         return [
+            TD::make('id', 'ID')->sort(),
+
             TD::make('name', __('Name'))
                 ->sort()
                 ->cantHide()
