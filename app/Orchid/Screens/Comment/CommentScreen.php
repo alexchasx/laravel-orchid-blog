@@ -51,7 +51,6 @@ class CommentScreen extends Screen
     public function commandBar(): iterable
     {
         return [
-
             Button::make('Удалить')
                 ->icon('trash')
                 ->method('remove')

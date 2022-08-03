@@ -52,7 +52,7 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make(__('Статьи'))
                 ->icon('paste')
                 ->permission('platform.custom.articles')
-                ->route('platform.main')
+                ->route('platform.articles')
                 ->badge(function () {
                     return Article::all('id')->count();
                 }),

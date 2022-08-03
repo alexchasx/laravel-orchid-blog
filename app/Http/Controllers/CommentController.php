@@ -18,8 +18,6 @@ class CommentController extends MainController
      */
     public function store(Request $request)
     {
-        // dd($request->toArray());
-
         $this->validate($request, [
             'comment' => ['required', 'max:5000'],
             'author' => ['required', 'max:250'],
@@ -55,6 +53,22 @@ class CommentController extends MainController
             ->withInput();
     }
 
+    /**
+     * Удалить комментарий
+     *
+     * DELETE /admin/comment/delete/{id}
+     *
+     * @param $commentId
+     *
+     * @return RedirectResponse | HttpException
+     */
+    public function delete(Comment $comment)
+    {
+        $comment->delete();
+
+        return redirect()->back();
+    }
+
     // /**
     //  * Редактировать комментарий
     //  *
@@ -75,24 +89,6 @@ class CommentController extends MainController
 
     // //     return redirect()->back();
     // // }
-
-    /**
-     * Удалить комментарий
-     *
-     * DELETE /admin/comment/delete/{id}
-     *
-     * @param $commentId
-     *
-     * @return RedirectResponse | HttpException
-     */
-    public function delete($commentId)
-    {
-        dd(__METHOD__);
-
-        Comment::find($commentId)->delete();
-
-        return redirect()->back();
-    }
 
     // /**
     //  * Display a listing of the myformPost.

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Orchid\Screens\Article\ArticleListScreen;
 use App\Orchid\Screens\Comment\CommentListScreen;
 use App\Orchid\Screens\Comment\CommentScreen;
@@ -38,10 +39,11 @@ use Tabuna\Breadcrumbs\Trail;
 */
 
 // Main
-// Route::screen('/main', PlatformScreen::class)
-//     ->name('platform.main');
-Route::screen('/main', ArticleListScreen::class)
+Route::screen('/main', PlatformScreen::class)
     ->name('platform.main');
+
+Route::screen('/articles', ArticleListScreen::class)
+    ->name('platform.articles');
 
 Route::screen('contact/{id}', ContactScreen::class)
     ->name('platform.contact');
@@ -121,6 +123,10 @@ Route::screen('roles', RoleListScreen::class)
             ->parent('platform.index')
             ->push(__('Roles'), route('platform.systems.roles'));
     });
+
+
+// Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+//     ->name('platform.logout');
 
 // Example...
 Route::screen('example', ExampleScreen::class)

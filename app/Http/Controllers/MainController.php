@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class MainController extends Controller
 {
     const EMPTY_IMAGE = 'upload/no-image.png';
-    const PAGINATE = 7;
+    const PAGINATE = 24;
 
     /**
      * Проверяет пользователя на наличие администраторских прав
