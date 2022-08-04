@@ -29,6 +29,18 @@
             @endif
 
             @endforeach
+
+            @auth
+
+            @hasAccess('platform.index')
+            <li class="category_link">
+                <a href="{{ route('notpublic') }}" class="link">
+                    <span>{{ __('Неопубликованные') }}</span>
+                </a>
+            </li>
+            @endhasAccess
+
+            @endauth
         </ul>
     </nav>
 </section>
@@ -52,4 +64,9 @@
         @endforeach
     </nav>
 </section>
+<hr />
 @endif
+
+<section id="donate">
+    <a href="{{ route('contact') }}" class="link">{{ __('Поддержать проект') }}</a>
+</section>

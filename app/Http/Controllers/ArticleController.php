@@ -7,7 +7,9 @@ use App\Models\Rubric;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Orchid\Platform\Http\Middleware\Access;
 
 class ArticleController extends MainController
 {
@@ -32,6 +34,23 @@ class ArticleController extends MainController
     }
 
     /**
+     *
+     */
+    public function showNotPublic(): View
+    {
+        $articles = Article::orderBy('id', 'desc')
+            ->where('is_published', false)
+            ->paginate(self::PAGINATE);
+
+        return view('index', [
+            'articles' => $articles,
+            'rubrics' => Rubric::articlePublished()->get(),
+            'currentTagId' => 'all',
+            'tags' => Tag::articlePublished()->get(),
+        ]);
+    }
+
+    /**
      * Display the specified resource
      */
     public function show(Article $article): View
@@ -39,6 +58,13 @@ class ArticleController extends MainController
         // $article =  Article::findOrFail($id);
         // $article->comments_count = $article->comments()->count();
         // dd($article->comments_count);
+
+        if ($article->is_published == false && (!Auth::user()
+                || (Auth::user()
+                    && !Auth::user()->hasAccess('platform.custom.articles')))) {
+
+            abort(403);
+        }
 
         return view('article', [
             'article' => $article,

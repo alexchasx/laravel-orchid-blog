@@ -175,11 +175,22 @@ class PlatformProvider extends OrchidServiceProvider
     }
 
     /**
+     *
      * @return ItemPermission[]
      */
     public function registerPermissions(): array
     {
         return [
+            /**
+             * Все права:
+             * "platform.index",
+             * "platform.systems.roles",
+             * "platform.systems.users",
+             * "platform.custom.rubrics",
+             * "platform.custom.articles",
+             * "platform.custom.comments",
+             * "platform.systems.attachment"
+             */
             ItemPermission::group(__('System'))
                 ->addPermission('platform.systems.roles', __('Roles'))
                 ->addPermission('platform.systems.users', __('Users')),

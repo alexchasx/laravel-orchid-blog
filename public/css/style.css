@@ -371,6 +371,10 @@ a {
   text-decoration: none;
 }
 
+a.disabled {
+  pointer-events: none;
+}
+
 h3 {
   margin-top: 0px;
 }
@@ -500,6 +504,10 @@ body {
 
 hr {
   max-width: 1170px;
+}
+
+.logo {
+  text-align: center;
 }
 
 .sub_logo {

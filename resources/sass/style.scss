@@ -26,6 +26,10 @@ a {
     text-decoration: none;
 }
 
+a.disabled {
+    pointer-events: none;
+}
+
 h3 {
     margin-top: 0px;
 }
@@ -159,6 +163,9 @@ nav .nav_wrap {
 }
 hr {
     max-width: 1170px;
+}
+.logo {
+    text-align: center;
 }
 .sub_logo {
     font-size: 12px;
