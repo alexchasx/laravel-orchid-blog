@@ -14,6 +14,8 @@ class ContactController extends MainController
         return view('contact', [
             'rubrics' => Rubric::articlePublished()->get(),
             'tags' => Tag::articlePublished()->get(),
+            'meta_title' => 'Контактные данные',
+            'meta_desc' => 'Обратная связь, реквизиты и контактная информация'
         ]);
     }
 

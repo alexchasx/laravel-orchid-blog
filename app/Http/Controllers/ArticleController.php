@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Rubric;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,8 @@ class ArticleController extends MainController
             'rubrics' => Rubric::articlePublished()->get(),
             'currentTagId' => 'all',
             'tags' => Tag::articlePublished()->get(),
+            'meta_title' => env('APP_NAME') . ' - блокнот веб-разработчика',
+            'meta_desc' => 'Блог по веб-разработке.'
         ]);
     }
 

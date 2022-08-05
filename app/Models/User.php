@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\Blog\Article;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Orchid\Platform\Models\Role;
 use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    public const ROLE_USER = 'user';
+    public const ROLE_MODERATOR = 'moderator';
+    public const ROLE_ADMIN = 'admin';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -69,4 +74,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Article::class, 'user_id');
     }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Role::class,
+            'role_users'/*,
+            'user_id',
+            'role_id'*/
+        );
+    }
+
+    // public function isAdmin(): bool
+    // {
+    //     // return $this->roles()->where('slug', self::ROLE_ADMIN)->first();
+    //     // return $this->hasAccess('platform.custom.articles');
+    // }
 }

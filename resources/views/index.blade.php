@@ -23,13 +23,9 @@
     </a> -->
 </article>
 
-{{--
-@unless ($loop->last)
-<!-- <br /> -->
-<!-- <hr class="hr-lines" /> -->
-<!-- <br /> -->
-@endunless
---}}
+@php
+$article = null;  // влияет на работу мета-тегов
+@endphp
 
 @endforeach
 

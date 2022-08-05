@@ -33,6 +33,7 @@ class Article extends Model
         'content_raw',
         'is_published',
         'published_at',
+        'updated_at',
         'viewed',
         'keywords',
         'meta_desc',
