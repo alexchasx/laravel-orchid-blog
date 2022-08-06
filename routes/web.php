@@ -37,11 +37,11 @@ Route::post('contact.store', [ContactController::class, 'store'])->name('contact
 
 Route::controller(ArticleController::class)->group(function () {
     Route::get('/', 'index')->name('home');
-    Route::get('/notpublic', 'showNotPublic')->name('notpublic')
+    Route::get('notpublic', 'showNotPublic')->name('notpublic')
         ->middleware(['auth', 'access:platform.custom.articles']);
     Route::get('rubric.{id}', 'showByRubric')->name('showByRubric');
-    Route::get('tag.{id}', 'showByTag')->name('showByTag');
-    Route::get('/{article}', 'show')->name('articleShow');
+    Route::get('tag.{tag}', 'showByTag')->name('showByTag');
+    Route::get('article.{article}', 'show')->name('articleShow');
 });
 
 Route::controller(CommentController::class)->group(function () {

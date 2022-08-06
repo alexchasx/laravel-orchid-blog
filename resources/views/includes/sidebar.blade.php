@@ -55,7 +55,7 @@
 
         @if ($rubric->exists)
         <button class="tag">
-            <a href="{{ route('showByTag', ['id' => $tag->id]) }}">
+            <a href="{{ route('showByTag', $tag) }}">
                 {{ $tag->title }}
             </a>
         </button>

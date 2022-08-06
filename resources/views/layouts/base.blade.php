@@ -102,7 +102,15 @@
         <div class="wrap">
 
             <main class="left_block">
+
+                @if (isset($pageTitle))
+                <h1 class="pageTitle">{{ $pageTitle }}</h1>
+                <hr>
+                <br>
+                @endif
+
                 @yield('content')
+
             </main>
 
             @if (isset($rubrics))

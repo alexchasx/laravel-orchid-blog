@@ -14,9 +14,6 @@ use Orchid\Platform\Http\Middleware\Access;
 
 class ArticleController extends MainController
 {
-    /**
-     * Display a listing of the resource
-     */
     public function index(Request $request): View
     {
         // $query = Article::published();
@@ -29,16 +26,12 @@ class ArticleController extends MainController
                 // ->withCount('comments', 'thumbnail', 'likes')
                     ->paginate(self::PAGINATE),
             'rubrics' => Rubric::articlePublished()->get(),
-            'currentTagId' => 'all',
             'tags' => Tag::articlePublished()->get(),
             'meta_title' => env('APP_NAME') . ' - блокнот веб-разработчика',
             'meta_desc' => 'Блог по веб-разработке.'
         ]);
     }
 
-    /**
-     *
-     */
     public function showNotPublic(): View
     {
         $articles = Article::orderBy('id', 'desc')
@@ -48,25 +41,21 @@ class ArticleController extends MainController
         return view('index', [
             'articles' => $articles,
             'rubrics' => Rubric::articlePublished()->get(),
-            'currentTagId' => 'all',
             'tags' => Tag::articlePublished()->get(),
+            'pageTitle' => 'Неопубликованные статьи',
+            'meta_title' => 'Неопубликованные статьи',
+            'meta_desc' => ''
         ]);
     }
 
-    /**
-     * Display the specified resource
-     */
     public function show(Article $article): View
     {
         // $article =  Article::findOrFail($id);
         // $article->comments_count = $article->comments()->count();
         // dd($article->comments_count);
 
-        if ($article->is_published == false && (!Auth::user()
-                || (Auth::user()
-                    && !Auth::user()->hasAccess('platform.custom.articles')))) {
-
-            abort(403);
+        if (!$article->is_published) {
+            $this->accessToNotPublic();
         }
 
         return view('article', [
@@ -77,37 +66,45 @@ class ArticleController extends MainController
         ]);
     }
 
-    /**
-     * Показывает статьи по категории
-     */
     public function showByRubric($id): View
     {
         $rubrics = Rubric::articlePublished()->get();
+        $pageTitle = $rubrics->find($id)->title;
 
         return view('index', [
             'articles' => Article::byRubric($id)->paginate(self::PAGINATE),
-            'currentRubric' => $rubrics->find($id),
+            'pageTitle' => $pageTitle,
             'rubrics' => $rubrics,
             'tags' => Tag::articlePublished()->get(),
+            'meta_title' => $pageTitle,
+            'meta_desc' => '',
         ]);
     }
 
-    /**
-     * Показывает статьи по тегу
-     */
-    public function showByTag($tagId): View
+    public function showByTag(Tag $tag): View
     {
-        $tags = Tag::articlePublished()->get();
         $articlesByTag = Article::published()
-            ->whereHas('tags', function (Builder $builder) use ($tagId) {
-                $builder->where('tag_id', $tagId);
+            ->whereHas('tags', function (Builder $builder) use ($tag) {
+                $builder->where('tag_id', $tag->id);
             });
+        $pageTitle = $tag->title;
 
         return view('index', [
             'articles' => $articlesByTag->paginate(self::PAGINATE),
-            'currentTagId' => $tagId,
+            'pageTitle' => $pageTitle,
             'rubrics' => Rubric::articlePublished()->get(),
-            'tags' => $tags,
+            'tags' => Tag::articlePublished()->get(),
+            'meta_title' => $pageTitle,
+            'meta_desc' => ''
         ]);
+    }
+
+    protected function accessToNotPublic()
+    {
+        if ( (Auth::user() && !Auth::user()->hasAccess('platform.custom.articles')
+                || false == Auth::user())
+            ) {
+            abort(403);
+        }
     }
 }

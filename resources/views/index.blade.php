@@ -24,7 +24,7 @@
 </article>
 
 @php
-$article = null;  // влияет на работу мета-тегов
+$article = null; // влияет на работу мета-тегов
 @endphp
 
 @endforeach
