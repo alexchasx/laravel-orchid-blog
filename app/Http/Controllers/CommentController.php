@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CommentController extends MainController
 {
@@ -18,10 +19,10 @@ class CommentController extends MainController
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'comment' => ['required', 'max:5000'],
             'author' => ['required', 'max:250'],
-            'checkbot' => ['required', 'regex:/3/'],
+            'checkbot' => ['required', 'in:3'],
             // 'email' => ['required', 'max:250', 'email'],
             // 'website' => ['max:250'],
         ], [
@@ -30,14 +31,21 @@ class CommentController extends MainController
             'checkbot.required' => 'Это поле необходимо для заполнения',
             'comment.max' => 'Количество символов в поле не может превышать 5000',
             'author.max' => 'Количество символов в поле не может превышать 250',
-            'checkbot.regex' => 'Ответ неверный',
+            'checkbot.in' => 'Ответ неверный',
             // 'email.required' => 'Это поле необходимо для заполнения',
             // 'email.max' => 'Количество символов в поле не может превышать 250',
             // 'email.string' => 'Почта должно быть строкой',
             // 'email.email' => 'Ваша почта должна соответствовать формату mail@some.domain',
         ]);
 
-        Article::find($request->input('article_id'))
+        if ($validator->fails()) {
+            return redirect()
+                ->to(url()->previous() . '#comments_form')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $comment = Article::find($request->input('article_id'))
             ->comments()
             ->save(new Comment([
                 'content' => $request->input('comment'),
@@ -48,9 +56,10 @@ class CommentController extends MainController
                 'active' => true,
             ]));
 
-        return back()
-            // ->withErrors(['msg' => 'Запись не найдена.'])
-            ->withInput();
+        // return back()
+        //     // ->withErrors(['msg' => 'Запись не найдена.'])
+        //     ->withInput();
+        return redirect()->to(url()->previous() . '#comment' . $comment->id );
     }
 
     /**
@@ -66,75 +75,6 @@ class CommentController extends MainController
     {
         $comment->delete();
 
-        return redirect()->back();
+        return redirect()->to(url()->previous() . '#comments');
     }
-
-    // /**
-    //  * Редактировать комментарий
-    //  *
-    //  * @param Request $request
-    //  *
-    //  * @return $this
-    //  */
-    // // public function update(Request $request)
-    // // {
-    // //     dd(__METHOD__);
-
-    // //     $this->validate($request, [
-    // //         'content' => ['required', 'max:255'],
-    // //     ]);
-
-    // //     Comment::find($request->id)
-    // //         ->update($request->all());
-
-    // //     return redirect()->back();
-    // // }
-
-    // /**
-    //  * Display a listing of the myformPost.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function ajaxValidation()
-    // {
-    //     return view('post.ajaxValidation.ajaxValidation');
-    // }
-
-    // /**
-    //  * Display a listing of the myformPost.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function ajaxValidationStore(Request $request)
-    // {
-    //     $validator = Validator::make(
-    //         $request->all(),
-    //         [
-    //             'comment' => ['required'],
-    //             'author' => ['required'],
-    //             'check_bot' => ['required'],
-
-    //             // TODO: образать строки
-    //             // 'email' => ['required', 'max:250', 'email'],
-    //             // 'website' => ['max:250'],
-    //         ],
-    //         // [
-    //         //     'required' => 'Обязательное поле (с символом *) не заполнено.',
-    //         // ]
-    //     );
-
-    //     // if ($validator->fails()) {
-    //     //     return back()
-    //     //         ->withErrors($validator)
-    //     //         ->withInput();
-    //     // }
-
-    //     // $validated = $validator->validated();
-
-    //     // if ($validator->validated()) {
-    //     //     return response()->json(['success' => 'Added new records.']);
-    //     // }
-
-    //     return response()->json(['error' => $validator->errors()]);
-    // }
 }

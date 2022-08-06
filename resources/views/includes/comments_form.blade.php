@@ -1,5 +1,5 @@
 <div id="app" class="article_card">
-
+    <a name="comments_form"></a>
     <h3>{{ __('Оставить комментарий') }}</h3>
     <form action="{{ route('commentStore') }}" method="post" id="commentform" class="comment-form" novalidate="">
         @csrf

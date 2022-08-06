@@ -68,5 +68,5 @@
 @endif
 
 <section id="donate">
-    <a href="{{ route('contact') }}" class="link">{{ __('Поддержать проект') }}</a>
+    <a href="#" class="link">{{ __('Поддержать проект') }}</a>
 </section>
