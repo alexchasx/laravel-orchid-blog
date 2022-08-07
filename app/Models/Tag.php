@@ -57,7 +57,7 @@ class Tag extends Model
      */
     public function scopeArticlePublished($query)
     {
-        return $query->addSelect('id', 'title', 'active')
+        return $query->addSelect('id', 'title', 'active', 'popular')
             ->whereHas('articles', function (Builder $builder) {
                 $builder = Article::published($builder);
             })->where('active', true);

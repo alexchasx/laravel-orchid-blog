@@ -49,14 +49,14 @@
 @if ($tags->isNotEmpty())
 <hr />
 <section id="tags" class="category_block">
-    <h3>{{ __('Метки (тэги)') }}</h3>
-    <nav class="category_list tags_list">
+    <h3 class="tags_link_title">{{ __('Метки (тэги)') }}</h3>
+    <nav class="category_list">
         @foreach($tags as $tag)
 
-        @if ($rubric->exists)
-            <a class="link" href="{{ route('showByTag', $tag) }}">
-                {{ $tag->title }}
-            </a>
+        @if ($tag->exists)
+        <a class="link tags_link" href="{{ route('showByTag', $tag) }}" style="font-size: {{ $tag->popular ?: 10 }}pt">
+            {{ $tag->title }}
+        </a>
         @endif
 
         @endforeach

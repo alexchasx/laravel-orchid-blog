@@ -25,7 +25,7 @@ class ArticleListScreen extends Screen
     {
         return [
             'articles' => Article::filters()->defaultSort('published_at', 'desc')
-                ->paginate(36),
+                ->paginate(24),
         ];
     }
 
