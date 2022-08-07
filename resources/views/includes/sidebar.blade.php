@@ -54,19 +54,17 @@
         @foreach($tags as $tag)
 
         @if ($rubric->exists)
-        <button class="tag">
-            <a href="{{ route('showByTag', $tag) }}">
+            <a class="link" href="{{ route('showByTag', $tag) }}">
                 {{ $tag->title }}
             </a>
-        </button>
         @endif
 
         @endforeach
     </nav>
 </section>
-<hr />
 @endif
 
-<section id="donate">
+<!-- <section id="donate">
+    <hr />
     <a href="#" class="link">{{ __('Поддержать проект') }}</a>
-</section>
+</section> -->

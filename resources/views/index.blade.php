@@ -34,6 +34,7 @@ $article = null; // влияет на работу мета-тегов
     {{ __('Ничего не нашлось') }}
 </div>
 @endif
+
 <nav>
     <ul class="pagination">
         {{ $articles->links('vendor.pagination.default') }}

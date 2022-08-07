@@ -14,8 +14,8 @@ class ContactController extends MainController
         return view('contact', [
             'rubrics' => Rubric::articlePublished()->get(),
             'tags' => Tag::articlePublished()->get(),
-            'meta_title' => 'Контактные данные',
-            'meta_desc' => 'Обратная связь, реквизиты и контактная информация'
+            'meta_title' => 'Обратная связь',
+            'meta_desc' => 'Обратная связь',
         ]);
     }
 
@@ -26,7 +26,7 @@ class ContactController extends MainController
                 'name' => ['required', 'string', 'max:250'],
                 'email' => ['required', 'string', 'max:250', 'email'],
                 'title' => ['string', 'max:5000'],
-                'message' => ['max:500000'],
+                'message' => ['required', 'max:500000'],
         ], [
             'name.required' => 'Это поле необходимо для заполнения',
             'name.max' => 'Количество символов в поле не может превышать 250',

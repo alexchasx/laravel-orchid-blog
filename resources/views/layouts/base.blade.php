@@ -34,23 +34,19 @@
             <nav>
                 <div class="nav_wrap">
                     <div class="menu_block">
-                        <label class="menuToggle" for="menuCheck" class="link">{{ __('Меню') }}</label>
+                        <label class="menuToggle" for="menuCheck" class="link">{{ config('app.name') }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ __('Меню') }}<span class="caret"></span></label>
                         <input id="menuCheck" type="checkbox" />
                         <ul class="menu clearfix">
                             <li id="logo" class="left">
                                 <a href="{{ route('home') }}" class="link">{{ config('app.name') }}
-                                    <div class="sub_logo">{{ __('блокнот веб-разработчика') }}</div>
+                                    <div class="sub_logo">{{ env('SUB_LOGO') }}</div>
                                 </a>
                             </li>
                             <li class="left"><a href="https://github.com/chasovnikov" class="link">{{ __('GitHub') }}</a></li>
 
-                            <li class="left"><a href="{{ route('contact') }}" class="link">{{ __('Контакты') }}</a></li>
+                            <li class="left"><a href="{{ route('contact') }}" class="link">{{ __('Обратная связь') }}</a></li>
 
-                            <!-- @if (App::isLocale('ru'))
-                    <li class="left"><a href="{{ route('setlocale', ['locale' => 'en']) }}" class="link">English</a></li>
-                    @else
-                    <li class="left"><a href="{{ route('setlocale', ['locale' => 'ru']) }}" class="link">Русский</a></li>
-                    @endif -->
+                            <!-- @include('includes/locale_links') -->
 
                             @auth
                             <li class="right">
@@ -63,7 +59,7 @@
                             </li>
 
                             <li class="right">
-                                <a href="#" class="link disabled">
+                                <a href="#" class="user_name">
                                     <span>{{ Auth::user()->name }}</span>
                                 </a>
                             </li>

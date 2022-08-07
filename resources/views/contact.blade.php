@@ -61,7 +61,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('message') ? ' has-error' : '' }}">
-                            <label for="message" class="col-md-4 control-label">Сообщение:</label>
+                            <label for="message" class="col-md-4 control-label">Сообщение (обязательно)</label>
                             <div class="col-md-6">
                                 <textarea name="message" id="message" rows="20"
                                     required @if ($errors->has('name')) autofocus @endif>

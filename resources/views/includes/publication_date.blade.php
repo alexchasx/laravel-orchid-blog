@@ -11,7 +11,6 @@
     <time>{{ $article->published_at->diffForHumans() }}</time>
     @foreach ($article->tags as $tag)
     &nbsp;&nbsp;<em class="tag_title">
-        <!-- <a href="{{ route('showByTag', $tag) }}"></a> -->
         {{ $tag->title }}
     </em>
     @endforeach

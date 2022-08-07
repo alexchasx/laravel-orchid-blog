@@ -26,26 +26,6 @@
             <input id="author" name="author" type="text" value="{{ old('author') }}" size="30" maxlength="245" required="">
         </p>
 
-        <!-- <p class="comment-form-email">
-            <label for="email">{{ __('Ваш email') }} <span class="required" aria-hidden="true">{{ __('(обязательно)') }}</span></label>
-            @error('email')
-            <br>
-            <span class="invalid-feedback">{{ $message }}</span>
-            @enderror
-            <br>
-            <input id="email" name="email" type="email" value="{{ old('email') }}" size="30" maxlength="100" aria-describedby="email-notes" required="">
-        </p>
-
-        <p class="comment-form-url">
-            <label for="website">{{ __('Веб-сайт (если есть)') }}</label>
-            @error('website')
-            <br>
-            <span class="invalid-feedback">{{ $message }}</span>
-            @enderror
-            <br>
-            <input id="website" name="website" type="url" value="{{ old('website') }}" size="30" maxlength="200">
-        </p> -->
-
         <p class="comment-form-cookies-consent">
             <label for="checkbot">
                 {{ __('1 + 2 =') }} {{ __('(обязательно)') }}

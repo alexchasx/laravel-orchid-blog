@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Orchid\Platform\Http\Middleware\Access;
+use phpDocumentor\Reflection\Types\This;
 
 class ArticleController extends MainController
 {
@@ -19,66 +20,64 @@ class ArticleController extends MainController
         // $query = Article::published();
         // dd($query->toSql(), $query->getBindings());
 
-        return view('index', [
-            'articles' => Article::published(
-                Article::search($request->input('search')))
-                // ->with('author', 'likes')
-                // ->withCount('comments', 'thumbnail', 'likes')
+        $result = $this->getSideBar()
+            + [
+                'articles' => Article::published(
+                    Article::search($request->input('search'))
+                )
+                    // ->with('author', 'likes')
+                    // ->withCount('comments', 'thumbnail', 'likes')
                     ->paginate(self::PAGINATE),
-            'rubrics' => Rubric::articlePublished()->get(),
-            'tags' => Tag::articlePublished()->get(),
-            'meta_title' => env('APP_NAME') . ' - блокнот веб-разработчика',
-            'meta_desc' => 'Блог по веб-разработке.'
-        ]);
+                'meta_title' => env('APP_NAME') . ' - ' . env('SUB_LOGO'),
+                'meta_desc' => 'Блог по веб-разработке.'
+            ];
+
+        return view('index', $result);
     }
 
     public function showNotPublic(): View
     {
-        $articles = Article::orderBy('id', 'desc')
-            ->where('is_published', false)
-            ->paginate(self::PAGINATE);
+        $result = $this->getSideBar()
+            + [
+                'articles' => Article::orderBy('id', 'desc')
+                    ->where('is_published', false)
+                    ->paginate(self::PAGINATE),
+                'pageTitle' => 'Неопубликованные статьи',
+                'meta_title' => 'Неопубликованные статьи',
+                'meta_desc' => ''
+            ];
 
-        return view('index', [
-            'articles' => $articles,
-            'rubrics' => Rubric::articlePublished()->get(),
-            'tags' => Tag::articlePublished()->get(),
-            'pageTitle' => 'Неопубликованные статьи',
-            'meta_title' => 'Неопубликованные статьи',
-            'meta_desc' => ''
-        ]);
+        return view('index', $result);
     }
 
     public function show(Article $article): View
     {
-        // $article =  Article::findOrFail($id);
-        // $article->comments_count = $article->comments()->count();
-        // dd($article->comments_count);
-
         if (!$article->is_published) {
             $this->accessToNotPublic();
         }
 
-        return view('article', [
+        $result = $this->getSideBar()
+            + [
             'article' => $article,
-            'rubrics' => Rubric::articlePublished()->get(),
-            'tags' => Tag::articlePublished()->get(),
-            'comments' => $article->comments,
-        ]);
+        ];
+
+        return view('article', $result);
     }
 
     public function showByRubric($id): View
     {
-        $rubrics = Rubric::articlePublished()->get();
-        $pageTitle = $rubrics->find($id)->title;
+        $sideBar = $this->getSideBar();
+        $pageTitle = $sideBar['rubrics']->find($id)->title;
 
-        return view('index', [
-            'articles' => Article::byRubric($id)->paginate(self::PAGINATE),
-            'pageTitle' => $pageTitle,
-            'rubrics' => $rubrics,
-            'tags' => Tag::articlePublished()->get(),
-            'meta_title' => $pageTitle,
-            'meta_desc' => '',
-        ]);
+        $result = $sideBar
+            + [
+                'articles' => Article::byRubric($id)->paginate(self::PAGINATE),
+                'pageTitle' => $pageTitle,
+                'meta_title' => $pageTitle,
+                'meta_desc' => '',
+            ];
+
+        return view('index', $result);
     }
 
     public function showByTag(Tag $tag): View
@@ -89,14 +88,15 @@ class ArticleController extends MainController
             });
         $pageTitle = $tag->title;
 
-        return view('index', [
+        $result = $this->getSideBar()
+            + [
             'articles' => $articlesByTag->paginate(self::PAGINATE),
             'pageTitle' => $pageTitle,
-            'rubrics' => Rubric::articlePublished()->get(),
-            'tags' => Tag::articlePublished()->get(),
             'meta_title' => $pageTitle,
             'meta_desc' => ''
-        ]);
+        ];
+
+        return view('index', $result);
     }
 
     protected function accessToNotPublic()
@@ -106,5 +106,13 @@ class ArticleController extends MainController
             ) {
             abort(403);
         }
+    }
+
+    protected function getSideBar(): array
+    {
+        return [
+            'tags' => Tag::articlePublished()->get(),
+            'rubrics' => Rubric::articlePublished()->get(),
+        ];
     }
 }
