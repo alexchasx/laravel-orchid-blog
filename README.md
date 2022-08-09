@@ -1,20 +1,34 @@
-### Project installation (Установка проекта)
+Blog on Laravel with the Orchid admin panel (https://orchid.software/)
+
+# Project installation
 
 ```bash
-composer install    # установка composer-зависимости (см. composer.json)
-npm install         # уст-ка npm-завис-ти (см. package.jsoon)
-npm audit fix --force  # если попросит
-npm run dev         # запуск команды из package.json: scripts: dev
-php artisan storage:link    # создать симлинк папки storage в папке public
+mkdir new_project
+cd new_project
+git clone git@github.com:chasovnikov/laravel-orchid-blog.git
+cd laravel-orchid-blog
 
-# создать файл .env по примеру .env.example
-# сгенерировать APP_KEY в файле .env
-php artisan key:generate
-
-# создать базу данных
-# запуск миграций + создание тестовых данных
-php artisan migrate --seed
-
-# настроить и запустить веб-сервер
-# проверить результат в браузере
+composer install    # installing composer dependencies (see composer.json)
+npm install         # install npm dependencies (see package.json)
+npm audit fix --force  # if he asks
+npm run dev         # running a command from package.json: scripts: dev
+php artisan storage:link    # create a storage folder symlink in the public folder
 ```
+
+- Create a file .env using example .en.example and edit it.
+
+- Create a database (for MySQL in utf8_unicode_ci encoding).
+- Starting migrations + creating test data:
+
+```bash
+php artisan migrate --seed
+```
+- Ignore errors when filling in data, if there are.
+- Create a user with the maximum (at the time of creation) rights:
+
+```bash
+php artisan orchid:admin nickname email@email.com secretpassword
+```
+
+- Configure and launch the web server.
+- Check the result in the browser.
