@@ -23,7 +23,6 @@ php artisan storage:link    # create a storage folder symlink in the public fold
 ```bash
 php artisan migrate --seed
 ```
-- Ignore errors when filling in data, if there are.
 - Create a user with the maximum (at the time of creation) rights:
 
 ```bash
