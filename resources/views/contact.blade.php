@@ -10,7 +10,7 @@
                     <!-- <p class="text-center">
                     <div class="wrap_img">
                         {{ __('Если у вас есть предложения или вопросы, то отправьте мне письмо на') }}
-                        <strong>{{ env('CONTACT_EMAIL') }}</strong>
+                        <strong>{{ config('CONTACT_EMAIL') }}</strong>
                         {{-- или используйте форму: --}}
                         <br />
                         <br />

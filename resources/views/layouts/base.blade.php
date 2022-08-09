@@ -39,7 +39,7 @@
                         <ul class="menu clearfix">
                             <li id="logo" class="left">
                                 <a href="{{ route('home') }}" class="link">{{ config('app.name') }}
-                                    <div class="sub_logo">{{ env('SUB_LOGO') }}</div>
+                                    <div class="sub_logo">{{ config('my_config.sub_logo') }}</div>
                                 </a>
                             </li>
                             <li class="left"><a href="https://github.com/chasovnikov" class="link">{{ __('GitHub') }}</a></li>
@@ -95,7 +95,7 @@
             </nav>
         </header>
 
-        <div class="wrap">
+        <div class="{{ isset($rubrics) ? 'wrap' : '' }}">
 
             <main class="left_block">
 
@@ -117,6 +117,7 @@
 
         </div>
 
+        @if (isset($rubrics))
         <footer>
             <hr />
             <div class="footer">
@@ -130,6 +131,7 @@
                 </div>
             </div>
         </footer>
+        @endif
 
     </div>
 </body>

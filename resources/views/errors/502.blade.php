@@ -1,8 +1,8 @@
 @extends('layouts.base')
 
 @php
-$metaTitle = '403 Forbidden';
-$metaDesc = __('Нет доступа.')
+$metaTitle = '502 Bad Gateway';
+$metaDesc = __('Плохой шлюз.')
 @endphp
 
 

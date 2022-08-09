@@ -1,8 +1,8 @@
 @extends('layouts.base')
 
 @php
-$metaTitle = '403 Forbidden';
-$metaDesc = __('Нет доступа.')
+$metaTitle = '503 Service Unavailable';
+$metaDesc = __('Сервис недоступен.')
 @endphp
 
 

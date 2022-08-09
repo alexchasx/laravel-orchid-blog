@@ -1,8 +1,8 @@
 @extends('layouts.base')
 
 @php
-$metaTitle = '403 Forbidden';
-$metaDesc = __('Нет доступа.')
+$metaTitle = '400 Bad Request';
+$metaDesc = __('Плохой запрос.')
 @endphp
 
 

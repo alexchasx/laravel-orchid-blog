@@ -85,9 +85,8 @@ class User extends Authenticatable
         );
     }
 
-    // public function isAdmin(): bool
-    // {
-    //     // return $this->roles()->where('slug', self::ROLE_ADMIN)->first();
-    //     // return $this->hasAccess('platform.custom.articles');
-    // }
+    public function isAdmin(): bool
+    {
+        return $this->hasAccess('platform.custom.articles');
+    }
 }

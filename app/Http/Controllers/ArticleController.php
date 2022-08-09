@@ -28,8 +28,8 @@ class ArticleController extends MainController
                     // ->with('author', 'likes')
                     // ->withCount('comments', 'thumbnail', 'likes')
                     ->paginate(self::PAGINATE),
-                'meta_title' => env('APP_NAME') . ' - ' . env('SUB_LOGO'),
-                'meta_desc' => 'Блог по веб-разработке.'
+                'metaTitle' => env('APP_NAME') . ' - ' . env('SUB_LOGO'),
+                'metaDesc' => 'Блог по веб-разработке.'
             ];
 
         return view('index', $result);
@@ -43,8 +43,8 @@ class ArticleController extends MainController
                     ->where('is_published', false)
                     ->paginate(self::PAGINATE),
                 'pageTitle' => 'Неопубликованные статьи',
-                'meta_title' => 'Неопубликованные статьи',
-                'meta_desc' => ''
+                'metaTitle' => 'Неопубликованные статьи',
+                'metaDesc' => ''
             ];
 
         return view('index', $result);
@@ -73,8 +73,8 @@ class ArticleController extends MainController
             + [
                 'articles' => Article::byRubric($id)->paginate(self::PAGINATE),
                 'pageTitle' => $pageTitle,
-                'meta_title' => $pageTitle,
-                'meta_desc' => '',
+                'metaTitle' => $pageTitle,
+                'metaDesc' => '',
             ];
 
         return view('index', $result);
@@ -92,8 +92,8 @@ class ArticleController extends MainController
             + [
             'articles' => $articlesByTag->paginate(self::PAGINATE),
             'pageTitle' => $pageTitle,
-            'meta_title' => $pageTitle,
-            'meta_desc' => ''
+            'metaTitle' => $pageTitle,
+            'metaDesc' => ''
         ];
 
         return view('index', $result);
@@ -101,9 +101,9 @@ class ArticleController extends MainController
 
     protected function accessToNotPublic()
     {
-        if ( (Auth::user() && !Auth::user()->hasAccess('platform.custom.articles')
-                || false == Auth::user())
-            ) {
+        /** @var User $user */
+        $user = Auth::user();
+        if ( ($user && !$user->isAdmin()) || !$user) {
             abort(403);
         }
     }
