@@ -16,7 +16,6 @@ class ContactController extends MainController
             'tags' => Tag::articlePublished()->get(),
             'metaTitle' => 'Обратная связь',
             'metaDesc' => 'Обратная связь',
-            'withoutPageTitle' => true,
         ]);
     }
 

@@ -99,7 +99,7 @@
 
             <main class="left_block">
 
-                @if (!isset($withoutPageTitle))
+                @if ($metaTitle)
                 <h1 class="pageTitle">{{ $metaTitle }}</h1>
                 <br>
                 @endif

@@ -10,44 +10,28 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use Orchid\Platform\Http\Middleware\Access;
-use phpDocumentor\Reflection\Types\This;
 
 class ArticleController extends MainController
 {
     public function index(Request $request): View
     {
-        // $query = Article::published();
-        // dd($query->toSql(), $query->getBindings());
+        $searchString = $request->input('search');
+        $builder = Article::published( Article::search($searchString));
 
-        $result = $this->getSideBar()
-            + [
-                'articles' => Article::published(
-                    Article::search($request->input('search'))
-                )
-                    // ->with('author', 'likes')
-                    // ->withCount('comments', 'thumbnail', 'likes')
-                    ->paginate(self::PAGINATE),
-                'metaTitle' => env('APP_NAME') . ' - ' . env('SUB_LOGO'),
-                'metaDesc' => 'Блог по веб-разработке.',
-                'withoutPageTitle' => true,
-            ];
+        $metaTitle = '';
+        if ($searchString) {
+            $metaTitle = 'Результаты поиска для: ' . $searchString;
+        }
 
-        return view('index', $result);
+        return view('index', $this->getResponseArray($builder, $metaTitle));
     }
 
     public function showNotPublic(): View
     {
-        $result = $this->getSideBar()
-            + [
-                'articles' => Article::orderBy('id', 'desc')
-                    ->where('is_published', false)
-                    ->paginate(self::PAGINATE),
-                'metaTitle' => 'Неопубликованные статьи',
-                'metaDesc' => ''
-            ];
-
-        return view('index', $result);
+        return view('index', $this->getResponseArray(
+            Article::orderBy('id', 'desc')->where('is_published', false),
+            'Неопубликованные статьи'
+        ));
     }
 
     public function show(Article $article): View
@@ -58,7 +42,7 @@ class ArticleController extends MainController
         $result = $this->getSideBar()
             + [
                 'article' => $article,
-                'withoutPageTitle' => true,
+                'metaTitle' => '',
             ];
 
         return view('article', $result);
@@ -66,32 +50,23 @@ class ArticleController extends MainController
 
     public function showByRubric(Rubric $rubric): View
     {
-        $result = $this->getSideBar()
-            + [
-                'articles' => Article::byRubric($rubric->id)->paginate(self::PAGINATE),
-                'metaTitle' => $rubric->title,
-                'metaDesc' => '',
-            ];
-
-        return view('index', $result);
+        return view('index', $this->getResponseArray(
+            Article::byRubric($rubric->id),
+            $rubric->title
+        ));
     }
 
     public function showByTag(Tag $tag): View
     {
-        $articlesByTag = Article::published()
+        $builder = Article::published()
             ->whereHas('tags', function (Builder $builder) use ($tag) {
                 $builder->where('tag_id', $tag->id);
             });
-        $pageTitle = $tag->title;
 
-        $result = $this->getSideBar()
-            + [
-            'articles' => $articlesByTag->paginate(self::PAGINATE),
-            'metaTitle' => $pageTitle,
-            'metaDesc' => ''
-        ];
-
-        return view('index', $result);
+        return view('index', $this->getResponseArray(
+            $builder,
+            $tag->title
+        ));
     }
 
     protected function accessToNotPublic()
@@ -108,6 +83,15 @@ class ArticleController extends MainController
         return [
             'tags' => Tag::articlePublished()->get(),
             'rubrics' => Rubric::articlePublished()->get(),
+        ];
+    }
+
+    protected function getResponseArray($builder, $metaTitle): array
+    {
+        return $this->getSideBar() + [
+            'articles' => $builder->paginate(self::PAGINATE),
+            'metaTitle' => $metaTitle,
+            'metaDesc' => '',
         ];
     }
 }

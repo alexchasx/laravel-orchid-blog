@@ -2,7 +2,6 @@
 <section id="search" class="category_block">
     <form role="search" method="GET" class="search-form" action="{{ route('home') }}">
         <label>
-            {{-- <span class="screen-reader-text">{{ __('Поиск для:') }}</span> --}}
             <input type="search" class="search-field" placeholder=" {{ __('Поиск по сайту') }} …" value="" name="search">
         </label>
         <button type="submit" class="submit">
