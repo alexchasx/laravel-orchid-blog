@@ -54,8 +54,9 @@ class DatabaseSeeder extends Seeder
 
         Article::factory(32)->create();
 
-        ArticleTag::factory(16)->create();
-
-        Comment::factory(32)->create();
+        rescue(function () {
+            ArticleTag::factory(16)->create();
+            Comment::factory(32)->create();
+        });
     }
 }
