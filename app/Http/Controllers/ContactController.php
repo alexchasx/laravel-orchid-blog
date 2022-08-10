@@ -15,7 +15,8 @@ class ContactController extends MainController
             'rubrics' => Rubric::articlePublished()->get(),
             'tags' => Tag::articlePublished()->get(),
             'metaTitle' => 'Обратная связь',
-            'meatDesc' => 'Обратная связь',
+            'metaDesc' => 'Обратная связь',
+            'withoutPageTitle' => true,
         ]);
     }
 

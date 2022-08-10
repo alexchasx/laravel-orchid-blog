@@ -117,8 +117,6 @@ class Article extends Model
     {
         if ($query) {
             return $builder->where('title', 'LIKE', "%{$query}%");
-                // ->orWhere('excert', 'LIKE', "%{$query}%")
-                // ->orWhere('content_raw', 'LIKE', "%{$query}%");
         }
     }
 
@@ -179,33 +177,5 @@ class Article extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class)->orderBy('created_at');
-        // return $this->morphMany(Comment::class, 'target');
     }
-
-    // /**
-    //  * Возращает все файлы к статье.
-    //  *
-    //  * @return MorphMany
-    //  */
-    // public function files()
-    // {
-    //     return $this->morphMany(File::class, 'target');
-    // }
-
-    // public static function populars(Builder $builder)
-    // {
-    //     return $builder->orderBy('viewed', 'desc')
-    //         ->limit(3)
-    //         ->get();
-    // }
-
-    // /**
-    //  * Возращает все комментарии пользователя.
-    //  *
-    //  * @return HasMany
-    //  */
-    // public function articleTags()
-    // {
-    //     return $this->hasMany(ArticleTag::class, 'article_id');
-    // }
 }

@@ -29,7 +29,8 @@ class ArticleController extends MainController
                     // ->withCount('comments', 'thumbnail', 'likes')
                     ->paginate(self::PAGINATE),
                 'metaTitle' => env('APP_NAME') . ' - ' . env('SUB_LOGO'),
-                'metaDesc' => 'Блог по веб-разработке.'
+                'metaDesc' => 'Блог по веб-разработке.',
+                'withoutPageTitle' => true,
             ];
 
         return view('index', $result);
@@ -42,7 +43,6 @@ class ArticleController extends MainController
                 'articles' => Article::orderBy('id', 'desc')
                     ->where('is_published', false)
                     ->paginate(self::PAGINATE),
-                'pageTitle' => 'Неопубликованные статьи',
                 'metaTitle' => 'Неопубликованные статьи',
                 'metaDesc' => ''
             ];
@@ -55,25 +55,21 @@ class ArticleController extends MainController
         if (!$article->is_published) {
             $this->accessToNotPublic();
         }
-
         $result = $this->getSideBar()
             + [
-            'article' => $article,
-        ];
+                'article' => $article,
+                'withoutPageTitle' => true,
+            ];
 
         return view('article', $result);
     }
 
-    public function showByRubric($id): View
+    public function showByRubric(Rubric $rubric): View
     {
-        $sideBar = $this->getSideBar();
-        $pageTitle = $sideBar['rubrics']->find($id)->title;
-
-        $result = $sideBar
+        $result = $this->getSideBar()
             + [
-                'articles' => Article::byRubric($id)->paginate(self::PAGINATE),
-                'pageTitle' => $pageTitle,
-                'metaTitle' => $pageTitle,
+                'articles' => Article::byRubric($rubric->id)->paginate(self::PAGINATE),
+                'metaTitle' => $rubric->title,
                 'metaDesc' => '',
             ];
 
@@ -91,7 +87,6 @@ class ArticleController extends MainController
         $result = $this->getSideBar()
             + [
             'articles' => $articlesByTag->paginate(self::PAGINATE),
-            'pageTitle' => $pageTitle,
             'metaTitle' => $pageTitle,
             'metaDesc' => ''
         ];

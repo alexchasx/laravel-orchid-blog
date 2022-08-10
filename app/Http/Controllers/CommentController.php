@@ -56,9 +56,6 @@ class CommentController extends MainController
                 'active' => true,
             ]));
 
-        // return back()
-        //     // ->withErrors(['msg' => 'Запись не найдена.'])
-        //     ->withInput();
         return redirect()->to(url()->previous() . '#comment' . $comment->id );
     }
 
