@@ -101,7 +101,6 @@
 
                 @if (!isset($withoutPageTitle))
                 <h1 class="pageTitle">{{ $metaTitle }}</h1>
-                <hr>
                 <br>
                 @endif
 
