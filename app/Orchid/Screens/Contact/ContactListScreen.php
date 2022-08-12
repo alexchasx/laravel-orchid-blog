@@ -28,7 +28,8 @@ class ContactListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'contacts' => Contact::all(),
+            'contacts' => Contact::filters()->defaultSort('created_at', 'desc')
+                ->paginate(24),
         ];
     }
 
@@ -39,7 +40,7 @@ class ContactListScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Сообщения через "Контакты"';
+        return 'Сообщения через "Обратная связь"';
     }
 
     /**
@@ -61,7 +62,7 @@ class ContactListScreen extends Screen
     {
         return [
             Layout::table('contacts', [
-                TD::make('id', 'ID')->sort(),
+                TD::make('id', 'ID'),
 
                 TD::make('Смотреть')->render(function (Contact $contact) {
                     return Link::make('')
@@ -75,19 +76,19 @@ class ContactListScreen extends Screen
                 //         ->value($contact->read);
                 // })->sort(),
 
+                TD::make('name', 'Имя')
+                    ->render(function (Contact $contact) {
+                        return Str::limit(e($contact->name), 30);
+                    }),
+
                 TD::make('title', 'Заголовок')
                         ->render(function (Contact $contact) {
-                            return Str::limit($contact->title, 40);
+                            return Str::limit(e($contact->title), 40);
                         }),
 
                 TD::make('message', 'Сообщение')
                     ->render(function (Contact $contact) {
-                        return Str::limit($contact->message, 50);
-                    }),
-
-                TD::make('name', 'Имя')
-                    ->render(function (Contact $contact) {
-                        return Str::limit($contact->message, 30);
+                        return Str::limit(e($contact->message), 50);
                     }),
 
                 TD::make('email', 'Email')->defaultHidden(),
@@ -95,7 +96,7 @@ class ContactListScreen extends Screen
                 TD::make('created_at', 'Дата создания')->render(function (Contact $contact) {
                     $carbon = Carbon::create($contact->created_at);
 
-                    return $carbon->format('d.m.Y');
+                    return $carbon->format('d.m.Y H:i');
                 }),
 
             // TD::make('delete', 'Удалить'),

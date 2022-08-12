@@ -21,6 +21,7 @@ class ArticleController extends MainController
         $metaTitle = '';
         if ($searchString) {
             $metaTitle = 'Результаты поиска для: ' . $searchString;
+            // $metaRobot = 'noindex, nofollow';
         }
 
         return view('index', $this->getResponseArray($builder, $metaTitle));
@@ -30,7 +31,8 @@ class ArticleController extends MainController
     {
         return view('index', $this->getResponseArray(
             Article::orderBy('id', 'desc')->where('is_published', false),
-            'Неопубликованные статьи'
+            'Неопубликованные статьи',
+            // 'noindex, nofollow',
         ));
     }
 
@@ -65,33 +67,7 @@ class ArticleController extends MainController
 
         return view('index', $this->getResponseArray(
             $builder,
-            $tag->title
+            'Записи с меткой «' . $tag->title . '»'
         ));
-    }
-
-    protected function accessToNotPublic()
-    {
-        /** @var User $user */
-        $user = Auth::user();
-        if ( ($user && !$user->isAdmin()) || !$user) {
-            abort(403);
-        }
-    }
-
-    protected function getSideBar(): array
-    {
-        return [
-            'tags' => Tag::articlePublished()->get(),
-            'rubrics' => Rubric::articlePublished()->get(),
-        ];
-    }
-
-    protected function getResponseArray($builder, $metaTitle): array
-    {
-        return $this->getSideBar() + [
-            'articles' => $builder->paginate(self::PAGINATE),
-            'metaTitle' => $metaTitle,
-            'metaDesc' => '',
-        ];
     }
 }

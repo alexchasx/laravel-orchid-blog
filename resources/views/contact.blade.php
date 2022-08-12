@@ -2,24 +2,21 @@
 
 @section('content')
 
+@if (session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@elseif(session('error'))
+<div class="alert alert-error">
+    {{ session('error') }}
+</div>
+@endif
+
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <!-- <p class="text-center">
-                    <div class="wrap_img">
-                        {{ __('Если у вас есть предложения или вопросы, то отправьте мне письмо на') }}
-                        <strong>{{ config('CONTACT_EMAIL') }}</strong>
-                        {{-- или используйте форму: --}}
-                        <br />
-                        <br />
-                        <img {{-- style="max-width: 700px" --}} class="img_contact" src="{{ asset('images/banner.jpg') }}" alt="image">
-                    </div>
-                    </p>
-                    <br /> -->
-
-                    @if (empty($success))
 
                     <form action="{{ route('contact.store') }}" id="contact-form" method="POST" class="form-horizontal" role="form">
                         @csrf
@@ -63,8 +60,7 @@
                         <div class="form-group{{ $errors->has('message') ? ' has-error' : '' }}">
                             <label for="message" class="col-md-4 control-label">Сообщение (обязательно)</label>
                             <div class="col-md-6">
-                                <textarea name="message" id="message" rows="20"
-                                    required @if ($errors->has('name')) autofocus @endif>
+                                <textarea name="message" id="message" rows="20" required @if ($errors->has('name')) autofocus @endif>
                                             {{ old('message') }}
                                         </textarea>
                                 @if ($errors->has('message'))
@@ -84,9 +80,6 @@
                         </div>
 
                     </form>
-                    @else
-                    {{ $success }} &nbsp;&nbsp; <button><a href="/">На главную</a></button>
-                    @endif
 
                 </div>
             </div>

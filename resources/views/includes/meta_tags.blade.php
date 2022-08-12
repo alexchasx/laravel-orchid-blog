@@ -1,5 +1,5 @@
-@if(isset($article))
-<title>{{ $article->title }} | {{ config('name') }}</title>
+@if(!empty($article))
+<title>{{ $article->title }}</title>
 <meta name='description' content='{{ $article->meta_desc }}' />
 <meta property='article:published_time' content='{{$article->published_at}}' />
 <meta property='article:modified_time' content='{{$article->updated_at}}' />
@@ -19,4 +19,8 @@
 @else
 <title>{{ $metaTitle }}</title>
 <meta name='description' content='{{ $metaDesc }}' />
+@endif
+
+@if (!empty($metaRobot))
+<meta name='robots' content='{{ $metaRobot }}' />
 @endif

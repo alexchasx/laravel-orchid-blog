@@ -40,8 +40,8 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('home')
                 ->route('home'),
 
-            Menu::make(__('Контакты'))
-                ->icon('contacts')
+            Menu::make(__('Обратная связь'))
+                ->icon('envelope-letter')
                 // ->permission('platform.custom.articles')
                 // ->canSee(Auth::user()->hasAccess('platform.custom.articles'))
                 ->route('platform.contact.list')

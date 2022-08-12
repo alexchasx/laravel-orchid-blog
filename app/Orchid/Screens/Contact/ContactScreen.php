@@ -51,13 +51,14 @@ class ContactScreen extends Screen
         return [
             Layout::legend('contact', [
                 Sight::make('id'),
-                Sight::make('name'),
+                Sight::make('name', 'Имя'),
                 Sight::make('email'),
-                Sight::make('title'),
-                Sight::make('message')->render(function (Contact $contact) {
-                    return $contact->message;
+                Sight::make('title', 'Тема'),
+                Sight::make('message', 'Сообщение'),
+                Sight::make('created_at', 'Создано')->render(function (Contact $contact) {
+                    return $contact->created_at->diffForHumans()
+                        . ' (' . $contact->created_at->format('d.m.Y H:i') . ')';
                 }),
-                Sight::make('created_at'),
             ])
         ];
     }

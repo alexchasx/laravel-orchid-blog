@@ -11,17 +11,12 @@ class ContactController extends MainController
 {
     public function index()
     {
-        return view('contact', [
-            'rubrics' => Rubric::articlePublished()->get(),
-            'tags' => Tag::articlePublished()->get(),
-            'metaTitle' => 'Обратная связь',
-            'metaDesc' => 'Обратная связь',
-        ]);
+        return view('contact', $this->getResponseArray(null, __('Обратная связь')));
     }
 
     public function store(Request $request)
     {
-        Contact::create(
+        $success = Contact::create(
             $this->validate($request, [
                 'name' => ['required', 'string', 'max:250'],
                 'email' => ['required', 'string', 'max:250', 'email'],
@@ -39,11 +34,10 @@ class ContactController extends MainController
             'message.max' => 'Слишком длинное сообщение',
         ]));
 
-        // return back()->with(['success' => 'Сообщение оправлено.']);
-        return view('contact', [
-            'rubrics' => Rubric::articlePublished()->get(),
-            'tags' => Tag::articlePublished()->get(),
-            'success' => 'Сообщение оправлено.',
-        ]);
+        if ($success) {
+            return redirect()->route('contact')->with('success', 'Сообщение отправлено!');
+        }
+
+        return redirect()->route('contact')->with('error', 'Сообщение не получилось отправить. Что-то сломалось.');
     }
 }

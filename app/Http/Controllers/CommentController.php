@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Validator;
 
 class CommentController extends MainController
 {
-
     /**
      * Сохранить комментарий
      *

@@ -24,7 +24,7 @@ class ArticleListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'articles' => Article::filters()->defaultSort('published_at', 'desc')
+            'articles' => Article::filters()->defaultSort('created_at', 'desc')
                 ->paginate(24),
         ];
     }
