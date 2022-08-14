@@ -7,8 +7,9 @@ use App\Models\Rubric;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
-class MainController extends Controller
+abstract class MainController extends Controller
 {
     const PAGINATE = 12;
 
@@ -30,10 +31,19 @@ class MainController extends Controller
 
     protected function getSideBar(): array
     {
-        return [
-            'tags' => Tag::articlePublished()->get(),
-            'rubrics' => Rubric::articlePublished()->get(),
-        ];
+        $tags = Cache::remember(
+            'sidebar-tags',
+            now()->addDays(1),
+            fn () => Tag::articlePublished()->get()
+        );
+
+        $rubrics = Cache::remember(
+            'sidebar-rubrics',
+            now()->addDays(1),
+            fn () => Rubric::articlePublished()->get()
+        );
+
+        return compact('tags', 'rubrics');
     }
 
     protected function getResponseArray(

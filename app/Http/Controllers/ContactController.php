@@ -11,7 +11,8 @@ class ContactController extends MainController
 {
     public function index()
     {
-        return view('contact', $this->getResponseArray(null, __('Обратная связь')));
+        return view('contact',
+            $this->getResponseArray(builder: null, metaTitle: __('Обратная связь')));
     }
 
     public function store(Request $request)

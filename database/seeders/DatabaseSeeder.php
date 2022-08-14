@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             'Backend-разработка',
             'Frontend-разработка',
             'Вёрстка',
-            'Computer Science',
+            'Веб-архитектура',
             'Инструменты веб-разработки',
         ] as $title) {
             Rubric::factory(1)->create([
