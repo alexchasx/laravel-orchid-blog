@@ -8,6 +8,7 @@ use App\Models\Comment;
 use App\Models\Rubric;
 use App\Models\Tag;
 use Illuminate\Database\Seeder;
+use Orchid\Platform\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,12 +19,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory(16)->create();
-        // \App\Models\User::factory(1)->create([
-        //     'name' => 'admin',
-        //     'email' => 'laravel@laravel.com',
-        //     'password' => bcrypt('1234'),
-        // ]);
+        // Production:
 
         foreach([
             'Администрирование',
@@ -33,7 +29,21 @@ class DatabaseSeeder extends Seeder
             'Веб-архитектура',
             'Инструменты веб-разработки',
         ] as $title) {
-            Rubric::factory(1)->create([
+            Rubric::factory(1)->createOne([
+                'title' => $title,
+                'parent_id' => 0,
+            ]);
+        }
+
+        foreach([
+            'Администрирование',
+            'Backend-разработка',
+            'Frontend-разработка',
+            'Вёрстка',
+            'Веб-архитектура',
+            'Инструменты веб-разработки',
+        ] as $title) {
+            Rubric::factory(1)->createOne([
                 'title' => $title,
                 'parent_id' => 0,
             ]);
@@ -45,18 +55,29 @@ class DatabaseSeeder extends Seeder
             'JavaScript',
             'NodeJS',
             'Git',
+            'Databases',
+            'SQL',
+            'API',
+            'SOLID',
+            'GRASP',
+            'Carbon',
+            'MySQL',
         ] as $title) {
-            Tag::factory(1)->create([
+            Tag::factory(1)->createOne([
                 'title' => $title,
                 'active' => true,
             ]);
         }
 
-        Article::factory(32)->create();
+        // Develop:
 
-        rescue(function () {
-            ArticleTag::factory(16)->create();
-            Comment::factory(32)->create();
-        });
+        // \App\Models\User::factory(16)->create();
+
+        // Article::factory(32)->create();
+
+        // rescue(function () {
+        //     ArticleTag::factory(16)->create();
+        //     Comment::factory(32)->create();
+        // });
     }
 }

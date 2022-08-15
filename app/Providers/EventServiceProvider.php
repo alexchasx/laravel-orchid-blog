@@ -2,6 +2,13 @@
 
 namespace App\Providers;
 
+use App\Events\ArticleCreated;
+use App\Listeners\ClearSidebarCache;
+use App\Models\Article;
+use App\Models\Rubric;
+use App\Models\Tag;
+use App\Observers\RubricObserver;
+use App\Observers\TagObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,7 +34,8 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Rubric::observe(RubricObserver::class);
+        Tag::observe(TagObserver::class);
     }
 
     /**

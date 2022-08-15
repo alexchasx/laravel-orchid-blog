@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Orchid\Screen\AsSource;
 
 class Rubric extends Model
@@ -14,6 +15,8 @@ class Rubric extends Model
     use HasFactory;
     use AsSource;
     use SoftDeletes;
+
+    public const SIDEBAR_CACHE_KEY = 'sidebar-rubrics';
 
     /**
      * Определяет необходимость отметок времени для модели.
@@ -50,8 +53,8 @@ class Rubric extends Model
     public function scopeArticlePublished($query)
     {
         return $query->addSelect('id', 'title')
-        ->whereHas('articles', function (Builder $builder) {
-            $builder = Article::published($builder);
+            ->whereHas('articles', function (Builder $builder) {
+                $builder = Article::published($builder);
         });
     }
 }

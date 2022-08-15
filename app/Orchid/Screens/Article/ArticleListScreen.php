@@ -2,11 +2,13 @@
 
 namespace App\Orchid\Screens\Article;
 
+use App\Events\ArticleCreated;
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use App\Orchid\Layouts\Article\ArticleListTable;
 use App\Orchid\Layouts\CreateOrUpdateArticle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Layouts\Modal;
 use Orchid\Support\Facades\Layout;
@@ -101,6 +103,8 @@ class ArticleListScreen extends Screen
         ]);
 
         $article->tags()->sync($request->input('article.tags'));
+
+        Event::dispatch(new ArticleCreated($article));
 
         is_null($articleId) ? Toast::info('Статья создана') : Toast::info('Статья обновлена');
     }

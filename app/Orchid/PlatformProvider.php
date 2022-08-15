@@ -182,14 +182,16 @@ class PlatformProvider extends OrchidServiceProvider
     {
         return [
             /**
-             * Все права:
-             * "platform.index",
-             * "platform.systems.roles",
-             * "platform.systems.users",
-             * "platform.custom.rubrics",
-             * "platform.custom.articles",
-             * "platform.custom.comments",
+             * Все права (permissions):
+             * "platform.index"
+             * "platform.systems.roles"
+             * "platform.systems.users"
+             * "platform.custom.rubrics"
+             * "platform.custom.articles"
+             * "platform.custom.comments"
              * "platform.systems.attachment"
+             * "platform.systems.settings"
+             * "platform.systems.media"
              */
             ItemPermission::group(__('System'))
                 ->addPermission('platform.systems.roles', __('Roles'))

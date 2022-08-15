@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Orchid\Screen\AsSource;
 
 class Tag extends Model
@@ -13,6 +14,8 @@ class Tag extends Model
     use HasFactory;
     use AsSource;
     use SoftDeletes;
+
+    public const SIDEBAR_CACHE_KEY = 'sidebar-tags';
 
     /**
      * Определяет необходимость отметок времени для модели.

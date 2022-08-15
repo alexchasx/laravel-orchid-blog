@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\ModelCache;
 use App\Http\Controllers\Controller;
 use App\Models\Rubric;
 use App\Models\Tag;
@@ -31,17 +32,8 @@ abstract class MainController extends Controller
 
     protected function getSideBar(): array
     {
-        $tags = Cache::remember(
-            'sidebar-tags',
-            now()->addDays(1),
-            fn () => Tag::articlePublished()->get()
-        );
-
-        $rubrics = Cache::remember(
-            'sidebar-rubrics',
-            now()->addDays(1),
-            fn () => Rubric::articlePublished()->get()
-        );
+        $tags = ModelCache::rememberChache(Tag::class);
+        $rubrics = ModelCache::rememberChache(Rubric::class);
 
         return compact('tags', 'rubrics');
     }
