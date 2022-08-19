@@ -15,7 +15,7 @@ class TagObserver
      */
     public function created(Tag $tag)
     {
-        ModelCache::updateCache(Tag::class);
+        // ModelCache::updateCache(Tag::class);
     }
 
     /**
@@ -26,7 +26,7 @@ class TagObserver
      */
     public function updated(Tag $tag)
     {
-        ModelCache::updateCache(Tag::class);
+        // ModelCache::updateCache(Tag::class);
     }
 
     /**

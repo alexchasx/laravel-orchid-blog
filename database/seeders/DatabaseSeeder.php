@@ -36,20 +36,6 @@ class DatabaseSeeder extends Seeder
         }
 
         foreach([
-            'Администрирование',
-            'Backend-разработка',
-            'Frontend-разработка',
-            'Вёрстка',
-            'Веб-архитектура',
-            'Инструменты веб-разработки',
-        ] as $title) {
-            Rubric::factory(1)->createOne([
-                'title' => $title,
-                'parent_id' => 0,
-            ]);
-        }
-
-        foreach([
             'PHP',
             'Laravel',
             'JavaScript',

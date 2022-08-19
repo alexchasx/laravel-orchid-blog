@@ -2,7 +2,9 @@
 
 namespace App\Observers;
 
+use App\Classes\ModelCache;
 use App\Models\Article;
+use App\Models\Rubric;
 use App\Models\Tag;
 
 class ArticleObserver
@@ -16,6 +18,8 @@ class ArticleObserver
     public function created(Article $article)
     {
         Tag::updateCountArticles();
+        ModelCache::updateCache(Rubric::class);
+        ModelCache::updateCache(Tag::class);
     }
 
     /**
@@ -27,6 +31,8 @@ class ArticleObserver
     public function updated(Article $article)
     {
         Tag::updateCountArticles();
+        ModelCache::updateCache(Rubric::class);
+        ModelCache::updateCache(Tag::class);
     }
 
     /**
@@ -38,6 +44,8 @@ class ArticleObserver
     public function deleted(Article $article)
     {
         Tag::updateCountArticles();
+        ModelCache::updateCache(Rubric::class);
+        ModelCache::updateCache(Tag::class);
     }
 
     /**
@@ -49,6 +57,8 @@ class ArticleObserver
     public function restored(Article $article)
     {
         Tag::updateCountArticles();
+        ModelCache::updateCache(Rubric::class);
+        ModelCache::updateCache(Tag::class);
     }
 
     /**
@@ -60,5 +70,7 @@ class ArticleObserver
     public function forceDeleted(Article $article)
     {
         Tag::updateCountArticles();
+        ModelCache::updateCache(Rubric::class);
+        ModelCache::updateCache(Tag::class);
     }
 }

@@ -15,7 +15,7 @@ class RubricObserver
      */
     public function created(Rubric $rubric)
     {
-        ModelCache::updateCache(Rubric::class);
+        // ModelCache::updateCache(Rubric::class);
     }
 
     /**
@@ -26,7 +26,7 @@ class RubricObserver
      */
     public function updated(Rubric $rubric)
     {
-        ModelCache::updateCache(Rubric::class);
+        // ModelCache::updateCache(Rubric::class);
     }
 
     /**
