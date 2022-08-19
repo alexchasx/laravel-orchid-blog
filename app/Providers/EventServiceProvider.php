@@ -7,6 +7,7 @@ use App\Listeners\ClearSidebarCache;
 use App\Models\Article;
 use App\Models\Rubric;
 use App\Models\Tag;
+use App\Observers\ArticleObserver;
 use App\Observers\RubricObserver;
 use App\Observers\TagObserver;
 use Illuminate\Auth\Events\Registered;
@@ -36,6 +37,7 @@ class EventServiceProvider extends ServiceProvider
     {
         Rubric::observe(RubricObserver::class);
         Tag::observe(TagObserver::class);
+        Article::observe(ArticleObserver::class);
     }
 
     /**

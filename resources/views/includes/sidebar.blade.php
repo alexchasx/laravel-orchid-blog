@@ -54,7 +54,7 @@
 
         @if ($tag->exists)
         <a class="link tags_link" href="{{ route('showByTag', $tag) }}" style="font-size: {{ $tag->popular ?: 10 }}pt">
-            {{ $tag->title }}
+            {{ $tag->title }}({{ $tag->count_articles }})
         </a>
         @endif
 

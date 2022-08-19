@@ -5,9 +5,10 @@
 @unless (empty($article))
 
 <article class="article_card">
-    <h3>{{ $article->title }}</h3>
+    <h2 class="article_title">{{ $article->title }}</h2>
 
     @include('includes/publication_date')
+    <br>
 
     <p>{!! $article->content_raw !!}</p>
 

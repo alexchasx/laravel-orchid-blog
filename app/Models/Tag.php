@@ -33,6 +33,7 @@ class Tag extends Model
         'title',
         'popular',
         'active',
+        'count_articles',
     ];
 
     /**
@@ -60,9 +61,23 @@ class Tag extends Model
      */
     public function scopeArticlePublished($query)
     {
-        return $query->addSelect('id', 'title', 'active', 'popular')
+        return $query->addSelect('id', 'title', 'active', 'popular', 'count_articles')
             ->whereHas('articles', function (Builder $builder) {
                 $builder = Article::published($builder);
             })->where('active', true);
+    }
+
+    public static function updateCountArticles(): void
+    {
+        foreach (self::all('id', 'count_articles') as $tag) {
+            $countPublicArticles = $tag->articles()
+                ->where('is_published', true)
+                ->count();
+
+            if ($countPublicArticles !== $tag->count_articles) {
+                $tag->count_articles = $countPublicArticles;
+                $tag->save();
+            }
+        }
     }
 }

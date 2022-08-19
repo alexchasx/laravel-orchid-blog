@@ -727,3 +727,7 @@ input.contact {
 .search_submit {
   color: #5d92b7;
 }
+
+.article_title {
+  text-align: center;
+}
