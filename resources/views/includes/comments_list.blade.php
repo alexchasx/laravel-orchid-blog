@@ -2,7 +2,7 @@
     <a name="comments"></a>
 
     @if($article->comments->isNotEmpty())
-    <h3>{{ __('Комментарии') }}</h3>
+    <h3>{{ __('Комментарии') }} ({{ $article->comments->count() }})</h3>
 
     @foreach($article->comments as $comment)
     <div>
@@ -22,13 +22,13 @@
             </p>
 
             @auth
-            @hasAccess('platform.index')
+            @if (Auth::user()->hasAccess('platform.index') || Auth::user()->id == $comment->user_id)
             <form action="{{ route('commentDelete', $comment) }}" method="post">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger">{{ __('Удалить') }}</button>
             </form>
-            @endhasAccess
+            @endif
             @endauth
 
             <br>
