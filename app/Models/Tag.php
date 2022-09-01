@@ -9,6 +9,37 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Orchid\Screen\AsSource;
 
+/**
+ * App\Models\Tag
+ *
+ * @property int $id
+ * @property string $title
+ * @property string|null $slug
+ * @property int|null $popular
+ * @property int $active
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int|null $count_articles
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ArticleTag[] $article_tags
+ * @property-read int|null $article_tags_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Article[] $articles
+ * @property-read int|null $articles_count
+ * @method static Builder|Tag articlePublished()
+ * @method static \Database\Factories\TagFactory factory(...$parameters)
+ * @method static Builder|Tag newModelQuery()
+ * @method static Builder|Tag newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Tag onlyTrashed()
+ * @method static Builder|Tag query()
+ * @method static Builder|Tag whereActive($value)
+ * @method static Builder|Tag whereCountArticles($value)
+ * @method static Builder|Tag whereDeletedAt($value)
+ * @method static Builder|Tag whereId($value)
+ * @method static Builder|Tag wherePopular($value)
+ * @method static Builder|Tag whereSlug($value)
+ * @method static Builder|Tag whereTitle($value)
+ * @method static \Illuminate\Database\Query\Builder|Tag withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Tag withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Tag extends Model
 {
     use HasFactory;

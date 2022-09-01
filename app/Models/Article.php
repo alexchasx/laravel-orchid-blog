@@ -13,6 +13,63 @@ use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\Article
+ *
+ * @property int $id
+ * @property int $rubric_id
+ * @property int $user_id
+ * @property string|null $slug
+ * @property string $title
+ * @property string|null $excert
+ * @property string $content_raw
+ * @property string|null $content_html
+ * @property bool $is_published
+ * @property \Illuminate\Support\Carbon|null $published_at
+ * @property string|null $image
+ * @property int|null $viewed Кол-во просмотров
+ * @property string|null $keywords
+ * @property string|null $meta_desc
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
+ * @property-read int|null $comments_count
+ * @property-read Rubric $rubric
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
+ * @property-read int|null $tags_count
+ * @property-read User $user
+ * @method static Builder|Article defaultSort(string $column, string $direction = 'asc')
+ * @method static \Database\Factories\ArticleFactory factory(...$parameters)
+ * @method static Builder|Article filters(?\Orchid\Filters\HttpFilter $httpFilter = null)
+ * @method static Builder|Article filtersApply(iterable $filters = [])
+ * @method static Builder|Article filtersApplySelection($selection)
+ * @method static Builder|Article newModelQuery()
+ * @method static Builder|Article newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Article onlyTrashed()
+ * @method static Builder|Article query()
+ * @method static Builder|Article search(?string $query)
+ * @method static Builder|Article whereContentHtml($value)
+ * @method static Builder|Article whereContentRaw($value)
+ * @method static Builder|Article whereCreatedAt($value)
+ * @method static Builder|Article whereDeletedAt($value)
+ * @method static Builder|Article whereExcert($value)
+ * @method static Builder|Article whereId($value)
+ * @method static Builder|Article whereImage($value)
+ * @method static Builder|Article whereIsPublished($value)
+ * @method static Builder|Article whereKeywords($value)
+ * @method static Builder|Article whereMetaDesc($value)
+ * @method static Builder|Article wherePublishedAt($value)
+ * @method static Builder|Article whereRubricId($value)
+ * @method static Builder|Article whereSlug($value)
+ * @method static Builder|Article whereTitle($value)
+ * @method static Builder|Article whereUpdatedAt($value)
+ * @method static Builder|Article whereUserId($value)
+ * @method static Builder|Article whereViewed($value)
+ * @method static \Illuminate\Database\Query\Builder|Article withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Article withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Article extends Model
 {
     use HasFactory;
