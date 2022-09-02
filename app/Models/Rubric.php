@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 use Orchid\Screen\AsSource;
 
 /**
@@ -43,18 +43,8 @@ class Rubric extends Model
 
     public const SIDEBAR_CACHE_KEY = 'sidebar-rubrics';
 
-    /**
-     * Определяет необходимость отметок времени для модели.
-     *
-     * @var bool
-     */
     public $timestamps = false;
 
-    /**
-     * Атрибуты, для которых запрещено массовое назначение.
-     *
-     * @var array
-     */
     protected $fillable = [
         'parent_id',
         'slug',
@@ -62,22 +52,14 @@ class Rubric extends Model
         'description',
     ];
 
-    /**
-     * Возращает все статьи к данной категории.
-     */
-    public function articles()
+    public function articles(): HasMany
     {
         return $this->hasMany(Article::class, 'rubric_id');
     }
 
-    /**
-     * Возращает список всех рубрик
-     *
-     * @return Rubric[] | Collection
-     */
-    public function scopeArticlePublished($query)
+    public function scopeArticlePublished(Builder $query): Builder
     {
-        return $query->addSelect('id', 'title')
+        return $query->addSelect(['id', 'title'])
             ->whereHas('articles', function (Builder $builder) {
                 $builder = Article::published($builder);
         });

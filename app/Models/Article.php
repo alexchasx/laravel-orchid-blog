@@ -6,12 +6,15 @@ use App\Models\User;
 use App\Models\Rubric;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
-use Illuminate\Support\Str;
 
 /**
  * App\Models\Article
@@ -98,7 +101,6 @@ class Article extends Model
 
     protected $casts = [
         'is_published' => 'boolean',
-        // 'published_at' => 'datetime:d-m-Y',  // не работает?
     ];
 
     protected $dates = [
@@ -108,77 +110,42 @@ class Article extends Model
         'delete_at',
     ];
 
-    protected $allowedSorts = [
+    protected array $allowedSorts = [
         'published_at', 'id', 'rubric_id'
     ];
 
-    protected $allowedFilters = [
+    protected array $allowedFilters = [
         'rubric_id',
     ];
 
-    // public function getTitleAttribute($value)
-    // {
-    //     return Str::title($value); // первые буквы слов - заглавные
-    // }
-
-    // public function getPublishedAtAttribute($value)
-    // {
-    //     return (new Carbon($value))->format('d-m-Y');
-    //     // ->diffForHumans(); // Вызывает ошибку в админке Orchid (не понимает русский формат "diffForHumans")
-    // }
-
-    // public function setPublishedAtAttribute($value)
-    // {
-    //     $this->attributes['published_at'] = Carbon::createFromFormat('m/d/Y', $value)->format('Y-m-d');
-    // }
-
-    /**
-     * Возращает категорию данной статьи.
-     *
-     * @return BelongsTo
-     */
-    public function rubric()
+    public function rubric(): BelongsTo
     {
         return $this->belongsTo(Rubric::class);
     }
 
-    /**
-     * Возращает владельца данной статьи
-     *
-     * @return BelongsTo
-     */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Возращает тэги статьи.
-     *
-     * @return BelongsToMany
-     */
-    public function tags()
+    public function tags(): BelongsToMany
     {
         return $this->belongsToMany(
             Tag::class,
-            'article_tags'/*,
-            'article_id',
-            'tag_id'*/
+            'article_tags'
         );
     }
 
-    /**
-     * Scope a query to search posts
-     */
-    public function scopeSearch(Builder $builder, ?string $query)
+    public function scopeSearch(Builder $builder, ?string $query): ?Builder
     {
         if ($query) {
             return $builder->where('title', 'LIKE', "%{$query}%");
         }
+        return null;
     }
 
     // С этим методом не работает фильтрация по тегам
-    // public function scopePublished($query)
+    // public function scopePublished($query): Builder
     // {
     //     return $query->addSelect(
     //         'id',
@@ -192,7 +159,7 @@ class Article extends Model
     //         ->orderBy('published_at', 'desc');
     // }
 
-    public static function published(?Builder $builder = null)
+    public static function published(?Builder $builder = null): Builder
     {
         if (!$builder) {
             $builder = self::select(
@@ -209,29 +176,24 @@ class Article extends Model
             ->orderBy('published_at', 'desc');
     }
 
-    public static function byRubric($rubricId)
+    public static function byRubric(int $rubricId): Builder
     {
         return self::published()->where('rubric_id', $rubricId);
     }
 
-    public static function byTag(Builder $articles, $tagId)
+    public static function byTag(Builder $articles, int $tagId): Builder
     {
         return $articles->whereHas('tags', function (Builder $builder) use ($tagId) {
             $builder->where('tag_id', $tagId);
         });
     }
 
-    public static function recents(Builder $builder)
+    public static function recents(Builder $builder): Collection | array
     {
         return $builder->orderBy('published_at', 'desc')->limit(4)->get();
     }
 
-    /**
-     * Возращает все комментарии статьи.
-     *
-     * @return hasMany
-     */
-    public function comments()
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class)->orderBy('created_at');
     }

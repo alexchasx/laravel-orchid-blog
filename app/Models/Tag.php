@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Orchid\Screen\AsSource;
@@ -48,18 +50,8 @@ class Tag extends Model
 
     public const SIDEBAR_CACHE_KEY = 'sidebar-tags';
 
-    /**
-     * Определяет необходимость отметок времени для модели.
-     *
-     * @var bool
-     */
     public $timestamps = false;
 
-    /**
-     * Атрибуты, для которых запрещено массовое назначение.
-     *
-     * @var array
-     */
     protected $fillable = [
         'title',
         'popular',
@@ -67,32 +59,19 @@ class Tag extends Model
         'count_articles',
     ];
 
-    /**
-     * Статьи, принадлежащие тегу.
-     */
-    public function articles()
+    public function articles(): BelongsToMany
     {
-        return $this->belongsToMany(
-            Article::class,
-            'article_tags',
-            // 'tag_id',
-            // 'article_id'
-        );
+        return $this->belongsToMany(Article::class, 'article_tags');
     }
 
-    public function article_tags()
+    public function article_tags(): HasMany
     {
         return $this->hasMany(ArticleTag::class, 'tag_id');
     }
 
-    /**
-     * Возращает список всех тегов
-     *
-     * @return Tag[] | Collection
-     */
-    public function scopeArticlePublished($query)
+    public function scopeArticlePublished(Builder $query): Builder
     {
-        return $query->addSelect('id', 'title', 'active', 'popular', 'count_articles')
+        return $query->addSelect(['id', 'title', 'active', 'popular', 'count_articles'])
             ->whereHas('articles', function (Builder $builder) {
                 $builder = Article::published($builder);
             })->where('active', true);
@@ -100,7 +79,7 @@ class Tag extends Model
 
     public static function updateCountArticles(): void
     {
-        foreach (self::all('id', 'count_articles') as $tag) {
+        foreach (self::all(['id', 'count_articles']) as $tag) {
             $countPublicArticles = $tag->articles()
                 ->where('is_published', true)
                 ->count();

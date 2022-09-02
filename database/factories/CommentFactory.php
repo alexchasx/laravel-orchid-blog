@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use PharIo\Manifest\Email;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Blog\Comment>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Comment>
  */
 class CommentFactory extends Factory
 {

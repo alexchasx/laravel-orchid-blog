@@ -22,7 +22,7 @@ abstract class MainController extends Controller
 
     protected function accessToNotPublic()
     {
-        /** @var User $user */
+        /** @var  \App\Models\User $user */
         $user = Auth::user();
         if (($user && !$user->isAdmin()) || !$user) {
             abort(403);

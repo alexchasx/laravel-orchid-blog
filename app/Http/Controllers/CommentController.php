@@ -40,7 +40,7 @@ class CommentController extends MainController
      *
      * @param $commentId
      *
-     * @return RedirectResponse | HttpException
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function delete(Comment $comment)
     {

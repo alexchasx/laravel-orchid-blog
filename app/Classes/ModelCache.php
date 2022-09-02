@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 
 class ModelCache
 {
-    public static function rememberChache(string $modelName)
+    public static function rememberChache(string $modelName): mixed
     {
         return Cache::remember(
             $modelName::SIDEBAR_CACHE_KEY,
@@ -16,7 +16,7 @@ class ModelCache
         );
     }
 
-    public static function updateCache(string $modelName)
+    public static function updateCache(string $modelName): void
     {
         Cache::forget($modelName::SIDEBAR_CACHE_KEY);
         self::rememberChache($modelName);
