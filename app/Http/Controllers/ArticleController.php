@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Rubric;
 use App\Models\Tag;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class ArticleController extends MainController
@@ -17,7 +15,6 @@ class ArticleController extends MainController
     {
         $searchString = $request->input('search');
         $builder = Article::published( Article::search($searchString));
-
         $metaTitle = '';
         if ($searchString) {
             $metaTitle = 'Результаты поиска для: ' . $searchString;
@@ -41,11 +38,7 @@ class ArticleController extends MainController
         if (!$article->is_published) {
             $this->accessToNotPublic();
         }
-        $result = $this->getSideBar()
-            + [
-                'article' => $article,
-                'metaTitle' => '',
-            ];
+        $result = $this->getSideBar() + ['article' => $article, 'metaTitle' => ''];
 
         return view('article', $result);
     }

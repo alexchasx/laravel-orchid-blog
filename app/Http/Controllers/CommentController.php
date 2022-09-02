@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CommentRequest;
 use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Http\Request;
@@ -17,28 +18,8 @@ class CommentController extends MainController
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(CommentRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'comment' => ['required', 'max:5000'],
-            // 'author' => ['required', 'max:250'],
-            // 'checkbot' => ['required', 'in:3'],
-        ], [
-            'comment.required' => 'Это поле необходимо для заполнения',
-            // 'author.required' => 'Это поле необходимо для заполнения',
-            // 'checkbot.required' => 'Это поле необходимо для заполнения',
-            // 'comment.max' => 'Количество символов в поле не может превышать 5000',
-            // 'author.max' => 'Количество символов в поле не может превышать 250',
-            // 'checkbot.in' => 'Ответ неверный',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                ->to(url()->previous() . '#comments_form')
-                ->withErrors($validator)
-                ->withInput();
-        }
-
         $comment = Article::find($request->input('article_id'))
             ->comments()
             ->save(new Comment([

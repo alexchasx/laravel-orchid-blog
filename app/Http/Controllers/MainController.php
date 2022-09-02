@@ -8,7 +8,6 @@ use App\Models\Rubric;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 
 abstract class MainController extends Controller
 {
@@ -30,7 +29,7 @@ abstract class MainController extends Controller
         }
     }
 
-    protected function getSideBar(): array
+    protected function getSidebarCache(): array
     {
         $tags = ModelCache::rememberChache(Tag::class);
         $rubrics = ModelCache::rememberChache(Rubric::class);
@@ -39,18 +38,14 @@ abstract class MainController extends Controller
     }
 
     protected function getResponseArray(
-        ?Builder $builder,
-        string $metaTitle = '',
-        string $metaRobots = '',
-        string $metaDesc = '',
-    ): array
+        ?Builder $builder, string $metaTitle = '', string $metaRobots = '', string $metaDesc = ''): array
     {
         $articles = null;
         if ($builder) {
             $articles = $builder->paginate(self::PAGINATE);
         }
 
-        return $this->getSideBar() + [
+        return $this->getSidebarCache() + [
             'articles' => $articles,
             'metaTitle' => $metaTitle,
             'metaRobots' => $metaRobots,
