@@ -7,22 +7,23 @@ use App\Http\Controllers\Controller;
 use App\Models\Rubric;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
-abstract class MainController extends Controller
+class MainController extends Controller
 {
     const PAGINATE = 12;
 
-    public function setLocale($locale)
+    public function setLocale(string $locale): RedirectResponse
     {
         session(['user_locale' => $locale]);
 
         return redirect()->back();
     }
 
-    protected function accessToNotPublic()
+    protected function accessToNotPublic(): void
     {
-        /** @var  \App\Models\User $user */
+        /** @var \App\Models\User $user */
         $user = Auth::user();
         if (($user && !$user->isAdmin()) || !$user) {
             abort(403);

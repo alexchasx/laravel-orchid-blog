@@ -4,16 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactRequest;
 use App\Models\Contact;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ContactController extends MainController
 {
-    public function index()
+    public function index(): View | Factory
     {
         return view('contact',
-            $this->getResponseArray(builder: null, metaTitle: __('Обратная связь')));
+            $this->getResponseArray(builder: null, metaTitle: 'Обратная связь')
+        );
     }
 
-    public function store(ContactRequest $request)
+    public function store(ContactRequest $request): RedirectResponse
     {
         $success = Contact::create($request->only([
             'name',
