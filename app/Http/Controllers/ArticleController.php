@@ -38,7 +38,7 @@ class ArticleController extends MainController
         if (!$article->is_published) {
             $this->accessToNotPublic();
         }
-        $result = $this->getSideBar() + ['article' => $article, 'metaTitle' => ''];
+        $result = $this->getSidebarCache() + ['article' => $article, 'metaTitle' => ''];
 
         return view('article', $result);
     }

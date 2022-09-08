@@ -29,7 +29,7 @@
                             <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                                <input id="email" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -57,8 +57,30 @@
                             <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                <input id="password-confirm" type="password" class="form-control @error('password-confirm') is-invalid @enderror" name="password_confirmation" required">
                             </div>
+
+                            @error('password-confirm')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="captcha" class="col-md-4 col-form-label text-md-end">{{ __('Введите текст с картинки') }}</label>
+
+                            <div class="col-md-6">
+                                <span>{!! Captcha::img('mini', ['class' => 'form-captcha']) !!}</span>
+                                <span><a href="{{ url()->current(); }}">{{ __('Обновить') }}</a></span>
+                                <div><input id="captcha" name="captcha" class="form-control @error('captcha') is-invalid @enderror" required></div> 
+                            </div>
+
+                            @error('captcha')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
 
                         <div class="row mb-0">

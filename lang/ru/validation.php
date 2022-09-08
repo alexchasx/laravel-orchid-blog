@@ -31,7 +31,7 @@ return [
     ],
     'boolean'              => 'Значение поля :attribute должно быть логического типа.',
     'confirmed'            => 'Значение поля :attribute не совпадает с подтверждаемым.',
-    'current_password'     => 'Неверный пароль.',
+    'current_password'     => 'Неверный пароль.', 
     'date'                 => 'Значение поля :attribute не является датой.',
     'date_equals'          => 'Значение поля :attribute должно быть датой равной :date.',
     'date_format'          => 'Значение поля :attribute не соответствует формату даты :format.',
@@ -131,6 +131,10 @@ return [
     'custom'               => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
+        ],
+        'captcha' => [     
+            'required' => 'Введите текст с картинки',       
+            'captcha' => 'Введите правильный текст с картинки',   
         ],
     ],
 ];

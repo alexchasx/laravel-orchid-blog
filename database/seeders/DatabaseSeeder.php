@@ -35,25 +35,25 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        foreach([
-            'PHP',
-            'Laravel',
-            'JavaScript',
-            'NodeJS',
-            'Git',
-            'Databases',
-            'SQL',
-            'API',
-            'SOLID',
-            'GRASP',
-            'Carbon',
-            'MySQL',
-        ] as $title) {
-            Tag::factory(1)->createOne([
-                'title' => $title,
-                'active' => true,
-            ]);
-        }
+        // foreach([
+        //     'PHP',
+        //     'Laravel',
+        //     'JavaScript',
+        //     'NodeJS',
+        //     'Git',
+        //     'Databases',
+        //     'SQL',
+        //     'API',
+        //     'SOLID',
+        //     'GRASP',
+        //     'Carbon',
+        //     'MySQL',
+        // ] as $title) {
+        //     Tag::factory(1)->createOne([
+        //         'title' => $title,
+        //         'active' => true,
+        //     ]);
+        // }
 
         // Develop:
 

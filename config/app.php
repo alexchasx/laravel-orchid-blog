@@ -185,6 +185,8 @@ return [
         /*
          * Package Service Providers...
          */
+        \Barryvdh\Debugbar\ServiceProvider::class,
+        Mews\Captcha\CaptchaServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -195,7 +197,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        \Barryvdh\Debugbar\ServiceProvider::class,
 
     ],
 
@@ -213,6 +214,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
+        'Captcha' => Mews\Captcha\Facades\Captcha::class,
     ])->toArray(),
 
 ];
