@@ -17,7 +17,7 @@ class ArticleObserver
      */
     public function created(Article $article)
     {
-        Tag::updateCountArticles();
+        Tag::updateCountArticles($article);
         ModelCache::updateCache(Rubric::class);
         ModelCache::updateCache(Tag::class);
     }
@@ -30,7 +30,7 @@ class ArticleObserver
      */
     public function updated(Article $article)
     {
-        Tag::updateCountArticles();
+        Tag::updateCountArticles($article);
         ModelCache::updateCache(Rubric::class);
         ModelCache::updateCache(Tag::class);
     }
@@ -43,7 +43,7 @@ class ArticleObserver
      */
     public function deleted(Article $article)
     {
-        Tag::updateCountArticles();
+        Tag::updateCountArticles($article);
         ModelCache::updateCache(Rubric::class);
         ModelCache::updateCache(Tag::class);
     }
@@ -56,7 +56,7 @@ class ArticleObserver
      */
     public function restored(Article $article)
     {
-        Tag::updateCountArticles();
+        Tag::updateCountArticles($article);
         ModelCache::updateCache(Rubric::class);
         ModelCache::updateCache(Tag::class);
     }
@@ -69,7 +69,7 @@ class ArticleObserver
      */
     public function forceDeleted(Article $article)
     {
-        Tag::updateCountArticles();
+        Tag::updateCountArticles($article);
         ModelCache::updateCache(Rubric::class);
         ModelCache::updateCache(Tag::class);
     }

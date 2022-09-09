@@ -54,7 +54,7 @@
 
         @if ($tag->exists)
         <a class="link tags_link" href="{{ route('showByTag', $tag) }}" style="font-size: {{ $tag->popular ?: 10 }}pt">
-            {{ $tag->title }}({{ $tag->count_articles }})
+            {{ $tag->title }}
         </a>
         @endif
 
@@ -63,7 +63,7 @@
 </section>
 @endif
 
-<!-- <section id="donate">
+{{-- <section id="donate">
     <hr />
     <a href="#" class="link">{{ __('Поддержать проект') }}</a>
-</section> -->
+</section> --}}
