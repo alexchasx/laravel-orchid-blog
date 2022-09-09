@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Orchid\Platform\Models\Role;
 use Orchid\Platform\Models\User as Authenticatable;
 
@@ -120,23 +121,38 @@ class User extends Authenticatable
         'created_at',
     ];
 
-    public function articles()
+    public function articles(): HasMany
     {
         return $this->hasMany(Article::class, 'user_id');
     }
 
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class, 'user_id');
+    }
+
+    public function contacts(): HasMany
+    {
+        return $this->hasMany(Contact::class, 'user_id');
+    }
+
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(
-            Role::class,
-            'role_users'/*,
-            'user_id',
-            'role_id'*/
-        );
+        return $this->belongsToMany(Role::class, 'role_users');
     }
 
     public function isAdmin(): bool
     {
         return $this->hasAccess('platform.custom.articles');
+    }
+
+    public function saveContact(array $data): Contact
+    {
+        return $this->contacts()
+            ->save(new Contact($data +
+                [
+                    'user_id' => $this->id,
+                ]
+            ));
     }
 }

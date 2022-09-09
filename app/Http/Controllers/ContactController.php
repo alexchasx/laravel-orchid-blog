@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactRequest;
 use App\Models\Contact;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class ContactController extends MainController
 {
@@ -15,13 +17,9 @@ class ContactController extends MainController
 
     public function store(ContactRequest $request)
     {
-        $success = Contact::create($request->only([
-            'name',
-            'email',
-            'title',
-            'message',
-        ]));
-
+        /** @var User $user */
+        $user = Auth::user();        
+        $success = $user->saveContact($request->only('title', 'message'));
         if ($success) {
             return redirect()
                 ->route('contact')

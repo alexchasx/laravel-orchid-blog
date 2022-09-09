@@ -12,6 +12,17 @@
 </div>
 @endif
 
+@guest
+
+<h3>
+    <a href="{{ route('login') }}" class="link login">
+        <span>{{ 'Авторизуйтесь' }}</span>
+    </a>
+    , чтобы отправить сообщение или пишите на <a class="link" href="https://mail.yandex.ru">a.s.chasovnikov@yandex.ru</a>.
+</h3>
+
+@else
+
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -20,30 +31,6 @@
 
                     <form action="{{ route('contact.store') }}" id="contact-form" method="POST" class="form-horizontal" role="form">
                         @csrf
-
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Ваше имя (обязательно)</label>
-                            <div class="col-md-6">
-                                <input id="name" type="name" class="form-control contact" name="name" value="{{ old('name') }}" required @if ($errors->has('name') || !$errors) autofocus @endif>
-                                @if ($errors->has('email'))
-                                <div class="help-block">
-                                    <strong>{{ $errors->first('name') }}</strong>
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">Ваш e-mail (обязательно)</label>
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control contact" name="email" value="{{ old('email') }}" required @if ($errors->has('name') || !$errors) autofocus @endif>
-                                @if ($errors->has('email'))
-                                <div class="help-block">
-                                    <strong>{{ $errors->first('email') }}</strong>
-                                </div>
-                                @endif
-                            </div>
-                        </div>
 
                         <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
                             <label for="title" class="col-md-4 control-label">Тема</label>
@@ -86,6 +73,8 @@
         </div>
     </div>
 </div>
+
+@endguest
 {{-- <br />
 <br />
 <br />

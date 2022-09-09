@@ -4,7 +4,7 @@
     @guest
     <h3>
         <a href="{{ route('login') }}" class="link login">
-            <span>{{ 'Авторизуйся' }}</span>
+            <span>{{ 'Авторизуйтесь' }}</span>
         </a>
         , чтобы прокомментировать.
     </h3>

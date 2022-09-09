@@ -12,8 +12,7 @@ use Illuminate\Support\Str;
  * App\Models\Contact
  *
  * @property int $id
- * @property string $name
- * @property string $email
+ * @property int $user_id
  * @property string|null $title
  * @property string|null $message
  * @property int|null $read
@@ -43,8 +42,7 @@ class Contact extends Model
     use Filterable;
 
     public $fillable = [
-        'name',
-        'email',
+        'user_id',
         'title',
         'message',
         'read',

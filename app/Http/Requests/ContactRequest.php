@@ -24,8 +24,6 @@ class ContactRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:250'],
-            'email' => ['required', 'string', 'max:250', 'email'],
             'title' => ['string', 'max:5000'],
             'message' => ['required', 'max:500000'],
     ];
@@ -34,15 +32,9 @@ class ContactRequest extends FormRequest
     public function messages(): array
     {
         return  [
-            'name.required' => ($requiredMessage = 'Это поле необходимо для заполнения!'),
-            'name.max' => ($max250 = 'Количество символов в поле не может превышать 250!'),
-            'email.required' => $requiredMessage,
-            'email.max' => $max250,
-            'email.string' => ($requredString = 'В поле должна быть строка!'),
-            'email.email' => 'Почта должна соответствовать формату mail@some.domain',
-            'title.string' => $requredString,
+            'title.string' => 'В поле должна быть строка!',
             'title.max' => ($maxString = 'Слишком длинный текст'),
-            'message.required' => $requiredMessage,
+            'message.required' => 'Это поле необходимо для заполнения!',
             'message.max' => $maxString,
         ];
     }
