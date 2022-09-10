@@ -18,7 +18,7 @@
     <a href="{{ route('login') }}" class="link login">
         <span>{{ 'Авторизуйтесь' }}</span>
     </a>
-    , чтобы отправить сообщение или пишите на <a class="link" href="https://mail.yandex.ru">a.s.chasovnikov@yandex.ru</a>.
+    , чтобы отправить сообщение или пишите на <a rel="nofollow" href="mailto:a.s.chasovnikov@yandex.ru" class="link">a.s.chasovnikov@yandex.ru</a>.
 </h3>
 
 @else
