@@ -7,27 +7,6 @@ use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-// Route::get('/', function () {
-//     return redirect('adminIndex');
-// })->middleware(['auth'])->name('dashboard');
-
-
-
-Route::get('/issues', function () {
-    return view('issues');
-})->name('issues');
-
 require __DIR__ . '/auth.php';
 
 Route::get('/setlocale/{locale}', [MainController::class, 'setLocale'])->name('setlocale');
@@ -48,14 +27,7 @@ Route::controller(CommentController::class)->group(function () {
     Route::post('comment.create', 'store')->name('commentStore');
     Route::post('comment.update', 'update')->name('commentUpdate');
     Route::delete('delete.{comment}', 'delete')->name('commentDelete');
-    // Route::get('comment.status.{comment}', 'statusChange')->name('commentStatusChange');
-    // Route::get('ajax/ validation', 'ajaxValidation')->name('ajax_validation');
-    // Route::post('ajax/validation/store', 'ajaxValidationStore')->name('ajax_validation_store');
 });
-
-//Route::fallback(function () {
-//    return view('errors.404');
-//});
 
 Auth::routes();
 
