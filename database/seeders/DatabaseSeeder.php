@@ -21,39 +21,39 @@ class DatabaseSeeder extends Seeder
     {
         // Production:
 
-        foreach([
-            'Администрирование',
-            'Backend-разработка',
-            'Frontend-разработка',
-            'Вёрстка',
-            'Веб-архитектура',
-            'Инструменты веб-разработки',
-        ] as $title) {
-            Rubric::factory(1)->createOne([
-                'title' => $title,
-                'parent_id' => 0,
-            ]);
-        }
-
         // foreach([
-        //     'PHP',
-        //     'Laravel',
-        //     'JavaScript',
-        //     'NodeJS',
-        //     'Git',
-        //     'Databases',
-        //     'SQL',
-        //     'API',
-        //     'SOLID',
-        //     'GRASP',
-        //     'Carbon',
-        //     'MySQL',
+        //     'Администрирование',
+        //     'Backend-разработка',
+        //     'Frontend-разработка',
+        //     'Вёрстка',
+        //     'Веб-архитектура',
+        //     'Инструменты веб-разработки',
         // ] as $title) {
-        //     Tag::factory(1)->createOne([
+        //     Rubric::factory(1)->createOne([
         //         'title' => $title,
-        //         'active' => true,
+        //         'parent_id' => 0,
         //     ]);
         // }
+
+        foreach([
+            'PHP',
+            'Laravel',
+            'JavaScript',
+            'NodeJS',
+            'Git',
+            'Databases',
+            'SQL',
+            'API',
+            'SOLID',
+            'GRASP',
+            'Carbon',
+            'MySQL',
+        ] as $title) {
+            Tag::factory(1)->createOne([
+                'title' => $title,
+                'active' => true,
+            ]);
+        }
 
         // Develop:
 
