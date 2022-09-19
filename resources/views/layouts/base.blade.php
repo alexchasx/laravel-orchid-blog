@@ -42,7 +42,7 @@
                                     <div class="sub_logo">{{ config('my_config.sub_logo') }}</div>
                                 </a>
                             </li>
-                            <li class="left"><a href="https://github.com/alekschas/it-notes" class="link">{{ __('GitHub') }}</a></li>
+                            <li class="left"><a href="https://github.com/alexchasx" class="link">{{ __('GitHub') }}</a></li>
 
                             <li class="left"><a href="{{ route('contact') }}" class="link">{{ __('Обратная связь') }}</a></li>
 
