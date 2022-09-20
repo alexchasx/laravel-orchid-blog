@@ -32,7 +32,7 @@ a.user_name {
 }
 
 h1 {
-    font-size: 23px;
+    // font-size: 23px;
 }
 
 h3 {
@@ -44,6 +44,25 @@ h1, h2, h3, h4, h5 {
     font-weight: 400;
     margin-bottom: 15px;
     text-align: left;
+}
+
+code {
+    word-wrap: break-word;
+    color: #e83e8c;
+    font-size: .875em;
+}
+
+pre {
+    background: #eee;
+    padding: 10px;
+    margin-top: -8px;
+    border-radius: 5px;
+
+    code {
+        word-wrap: break-word;
+        color: inherit;
+        font-size: .875em;
+    }
 }
 
 .hr-lines {
@@ -239,13 +258,20 @@ hr {
     margin: 0.05em;
     margin-left: 0.8em;
     padding: 0.05em;
-    list-style-type: circle;
+    list-style-type:disc;
 }
-.article_card h3 {
-    text-align: center;
+.article_card ul {
+    padding-left: 20px;
+    margin-bottom: 15px;
+}
+.left_block h2, .left_block h3, .left_block h4 {
+    margin-top: 40px;    
+    // text-align: center;
 }
 .article_card_index {
-    margin-bottom: 40px;;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding-top: 20px;
 }
 
 .submit {
@@ -306,9 +332,10 @@ input.contact {
     text-align: center;
 }
 
-.pageTitle {
+.pageTitle, .article_title {    
+    font-size: 1.5em;
+    margin-top: 0px !important;
     text-align: center;
-    margin-top: 0px;;
 }
 
 .caret {
@@ -363,6 +390,3 @@ input.contact {
     color: $link-color;
 }
 
-.article_title {
-    text-align: center;
-}

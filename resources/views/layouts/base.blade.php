@@ -101,7 +101,6 @@
 
                 @if ($metaTitle)
                 <h1 class="pageTitle">{{ $metaTitle }}</h1>
-                <br>
                 @endif
 
                 @yield('content')
