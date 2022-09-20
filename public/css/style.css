@@ -491,7 +491,7 @@ nav .nav_wrap {
   grid-template-columns: 70% 30%;
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 900px) {
   html,
 body {
     font-size: 12px;
