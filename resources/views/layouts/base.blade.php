@@ -38,6 +38,7 @@
                         <input id="menuCheck" type="checkbox" />
                         <ul class="menu clearfix">
                             <li id="logo" class="left">
+                                    <img src="/storage/avatar.png" alt="logo">
                                 <a href="{{ route('home') }}" class="link">{{ config('app.name') }}
                                     <div class="sub_logo">{{ config('my_config.sub_logo') }}</div>
                                 </a>

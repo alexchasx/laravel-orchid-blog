@@ -53,7 +53,7 @@
         @foreach($tags as $tag)
 
         @if ($tag->exists)
-        <a class="link tags_link" href="{{ route('showByTag', $tag) }}" style="font-size: {{ $tag->popular ?: 10 }}pt">
+        <a class="link tags_link" href="{{ route('showByTag', $tag) }}" style="font-size: {{ $tag->popular ?: 16 }}px">
             {{ $tag->title }}
         </a>
         @endif

@@ -19,7 +19,7 @@
         <span>{{ 'Авторизуйтесь' }}</span>
     </a>
     , чтобы отправить сообщение или пишите на 
-    <a rel="nofollow" href="mailto:a.s.chasovnikov@yandex.ru" class="link">a.s.chasovnikov@yandex.ru</a>.
+    <a rel="nofollow" href="mailto:alexchasx@yandex.ru" class="link">alexchasx@yandex.ru</a>.
 </h3>
 
 @else
