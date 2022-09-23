@@ -78,7 +78,7 @@ class ContactListScreen extends Screen
 
                 TD::make('name', 'Имя')
                     ->render(function (Contact $contact) {
-                        return Str::limit(e($contact->name), 30);
+                        return Str::limit(e($contact->user->name), 30);
                     }),
 
                 TD::make('title', 'Заголовок')
