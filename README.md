@@ -1,7 +1,8 @@
 Blog on Laravel with the Orchid admin panel (https://orchid.software/).
 Working site: https://alexchasx.ru/
 
-# Project installation
+---
+# Installing the project on the development environment
 
 ```bash
 mkdir new_project
