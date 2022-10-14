@@ -19,21 +19,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // Production:
-
-        // foreach([
-        //     'Администрирование',
-        //     'Backend-разработка',
-        //     'Frontend-разработка',
-        //     'Вёрстка',
-        //     'Веб-архитектура',
-        //     'Инструменты веб-разработки',
-        // ] as $title) {
-        //     Rubric::factory(1)->createOne([
-        //         'title' => $title,
-        //         'parent_id' => 0,
-        //     ]);
-        // }
+        foreach([
+            'Администрирование',
+            'Backend-разработка',
+            'Frontend-разработка',
+            'Вёрстка',
+            'Архитектура',
+            'Инструменты веб-разработки',
+        ] as $title) {
+            Rubric::factory(1)->createOne([
+                'title' => $title,
+                'parent_id' => 0,
+            ]);
+        }
 
         foreach([
             'PHP',
@@ -48,14 +46,15 @@ class DatabaseSeeder extends Seeder
             'GRASP',
             'Carbon',
             'MySQL',
+            'Паттерны',
+            'Nginx',
+            'Apache',
         ] as $title) {
             Tag::factory(1)->createOne([
                 'title' => $title,
                 'active' => true,
             ]);
         }
-
-        // Develop:
 
         // \App\Models\User::factory(16)->create();
 
