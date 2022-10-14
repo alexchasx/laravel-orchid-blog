@@ -6,13 +6,13 @@ Working site: https://alexchasx.ru/
 
 ```bash
 mkdir projects && cd projects
-git clone git@github.com:chasovnikov/laravel-orchid-blog.git
+git clone git@github.com:alexchasx/laravel-orchid-blog.git
 cd laravel-orchid-blog
 
-composer install    # installing composer dependencies (see composer.json)
-npm install         # install npm dependencies (see package.json)
-npm run dev         # running a command from package.json: scripts: dev
-php artisan storage:link    # create a storage folder symlink in the public folder
+composer install
+npm install
+npm run dev
+php artisan storage:link
 
 cp .env.example .env
 composer require laravel/sail --dev
@@ -26,4 +26,6 @@ sail artisan migrate --seed
 
 # Create a user with the maximum (at the time of creation) rights:
 sail artisan orchid:admin admin email@email.com 123456
+
+# check in the browser: http://localhost 
 ```
