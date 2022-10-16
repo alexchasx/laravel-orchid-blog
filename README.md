@@ -15,9 +15,9 @@ npm run dev
 php artisan storage:link
 
 cp .env.example .env
-composer require laravel/sail --dev
-php artisan sail:install
-# select `mysql`
+
+
+# ======== For Docker (Sail)
 
 alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
 sail up -d
@@ -26,6 +26,15 @@ sail artisan migrate --seed
 
 # Create a user with the maximum (at the time of creation) rights:
 sail artisan orchid:admin admin email@email.com 123456
+
+
+#  ======== Without Docker
+
+php artisan migrate --seed
+
+# Create a user with the maximum (at the time of creation) rights:
+php artisan orchid:admin admin email@email.com 123456
+
 
 # check in the browser: http://localhost 
 ```
