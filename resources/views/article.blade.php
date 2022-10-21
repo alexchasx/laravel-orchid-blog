@@ -2,10 +2,10 @@
 
 @section('content')
 
-@unless (empty($article))
+@unless (empty($articles))
+@php($article = $articles)
 
 <article class="article_card">
-    <h2 class="article_title">{{ $article->title }}</h2>
 
     @include('includes/publication_date')
     <br>

@@ -3,31 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Services\ResponseFormat;
-use App\Services\Sidebar;
+use App\Services\ServiceInterface;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class MainController extends Controller
 {
-    const PAGINATE = 12;
-
     public function __construct(
-        protected ResponseFormat $responseFormat,
-        protected Sidebar $sidebar
-        ) {}
+        protected ServiceInterface $service,
+    ) {}
 
-    public function setLocale($locale)
+    public function setLocale($locale): RedirectResponse
     {
         session(['user_locale' => $locale]);
 
         return redirect()->back();
     }
 
-    protected function accessToNotPublic()
+    protected function checkAccess(Model $model): void
     {
         /** @var User $user */
-        $user = Auth::user();
-        if (($user && !$user->isAdmin()) || !$user) {
+        if (!$model->is_published 
+            && ( $user = Auth::user() ) 
+            && !$user->isAdmin()
+        ) {
             abort(403);
         }
     }

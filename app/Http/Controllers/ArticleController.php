@@ -13,54 +13,53 @@ class ArticleController extends MainController
 {
     public function index(Request $request): View
     {
-        $searchString = $request->input('search');
-        $builder = Article::published( Article::search($searchString));
-        $metaTitle = '';
-        if ($searchString) {
-            $metaTitle = 'Результаты поиска для: ' . $searchString;
-            // $metaRobot = 'noindex, nofollow';
-        }
-
-        return view('index', $this->responseFormat->getArray(builder: $builder, metaTitle: $metaTitle));
-    }
-
-    public function showNotPublic(): View
-    {
-        return view('index', $this->responseFormat->getArray(
-            builder: Article::orderBy('id', 'desc')->where('is_published', false),
-            metaTitle: 'Неопубликованные статьи',
-            // metaDesc: 'noindex, nofollow',
-        ));
+        return $this->service->getResponse(
+            builder: Article::published( 
+                Article::search($searchString = $request->input('search'))), 
+            metaTitle: $searchString ? __('Результаты поиска для: ') . $searchString : '',
+            metaRobots: 'noindex, nofollow',
+        );
     }
 
     public function show(Article $article): View
     {
-        if (!$article->is_published) {
-            $this->accessToNotPublic();
-        }
-        $result = $this->sidebar->getData() + ['article' => $article, 'metaTitle' => ''];
+        $this->checkAccess($article);
 
-        return view('article', $result);
+        return $this->service->getResponse(
+            articles: $article,
+            metaTitle: $article->title,
+            metaDesc: $article->meta_desc,
+            view: 'article',
+        );
+    }
+
+    public function showNotPublic(): View
+    {
+        return $this->service->getResponse(
+            builder: Article::orderBy('id', 'desc')
+                ->where('is_published', false),
+            metaTitle: __('Неопубликованные статьи'),
+            metaRobots: 'noindex, nofollow',
+        );
     }
 
     public function showByRubric(Rubric $rubric): View
     {
-        return view('index', $this->responseFormat->getArray(
+        return $this->service->getResponse(
             builder: Article::byRubric($rubric->id),
-            metaTitle: $rubric->title
-        ));
+            metaTitle: $rubric->title,
+            metaDesc: $rubric->description,
+        );
     }
 
     public function showByTag(Tag $tag): View
     {
-        $builder = Article::published()
-            ->whereHas('tags', function (Builder $builder) use ($tag) {
-                $builder->where('tag_id', $tag->id);
-            });
-
-        return view('index', $this->responseFormat->getArray(
-            builder: $builder,
-            metaTitle: 'Записи с меткой «' . $tag->title . '»'
-        ));
+        return $this->service->getResponse(
+            builder: Article::published()
+                ->whereHas('tags', function (Builder $builder) use ($tag) {
+                    $builder->where('tag_id', $tag->id);
+                }),
+            metaTitle: __('Записи с меткой «') . $tag->title . '»',
+        );
     }
 }

@@ -5,20 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CommentRequest;
 use App\Models\Article;
 use App\Models\Comment;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class CommentController extends MainController
 {
-    /**
-     * Сохранить комментарий
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(CommentRequest $request)
+    public function store(CommentRequest $request): RedirectResponse
     {
         $comment = Article::find($request->input('article_id'))
             ->comments()
@@ -33,16 +27,7 @@ class CommentController extends MainController
         return redirect()->to(url()->previous() . '#comment' . $comment->id );
     }
 
-    /**
-     * Удалить комментарий
-     *
-     * DELETE /admin/comment/delete/{id}
-     *
-     * @param $commentId
-     *
-     * @return RedirectResponse | HttpException
-     */
-    public function delete(Comment $comment)
+    public function delete(Comment $comment): RedirectResponse
     {
         $comment->delete();
 
