@@ -7,8 +7,6 @@ use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-require __DIR__ . '/auth.php';
-
 Route::get('/setlocale/{locale}', [MainController::class, 'setLocale'])->name('setlocale');
 
 Route::get('contact', [ContactController::class, 'index'])->name('contact');

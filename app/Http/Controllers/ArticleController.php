@@ -21,12 +21,12 @@ class ArticleController extends MainController
             // $metaRobot = 'noindex, nofollow';
         }
 
-        return view('index', $this->getResponseArray(builder: $builder, metaTitle: $metaTitle));
+        return view('index', $this->responseFormat->getArray(builder: $builder, metaTitle: $metaTitle));
     }
 
     public function showNotPublic(): View
     {
-        return view('index', $this->getResponseArray(
+        return view('index', $this->responseFormat->getArray(
             builder: Article::orderBy('id', 'desc')->where('is_published', false),
             metaTitle: 'Неопубликованные статьи',
             // metaDesc: 'noindex, nofollow',
@@ -38,14 +38,14 @@ class ArticleController extends MainController
         if (!$article->is_published) {
             $this->accessToNotPublic();
         }
-        $result = $this->getSidebarCache() + ['article' => $article, 'metaTitle' => ''];
+        $result = $this->sidebar->getData() + ['article' => $article, 'metaTitle' => ''];
 
         return view('article', $result);
     }
 
     public function showByRubric(Rubric $rubric): View
     {
-        return view('index', $this->getResponseArray(
+        return view('index', $this->responseFormat->getArray(
             builder: Article::byRubric($rubric->id),
             metaTitle: $rubric->title
         ));
@@ -58,7 +58,7 @@ class ArticleController extends MainController
                 $builder->where('tag_id', $tag->id);
             });
 
-        return view('index', $this->getResponseArray(
+        return view('index', $this->responseFormat->getArray(
             builder: $builder,
             metaTitle: 'Записи с меткой «' . $tag->title . '»'
         ));

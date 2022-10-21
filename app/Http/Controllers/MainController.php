@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\ModelCache;
 use App\Http\Controllers\Controller;
-use App\Models\Rubric;
-use App\Models\Tag;
-use Illuminate\Database\Eloquent\Builder;
+use App\Services\ResponseFormat;
+use App\Services\Sidebar;
 use Illuminate\Support\Facades\Auth;
 
-abstract class MainController extends Controller
+class MainController extends Controller
 {
     const PAGINATE = 12;
+
+    public function __construct(
+        protected ResponseFormat $responseFormat,
+        protected Sidebar $sidebar
+        ) {}
 
     public function setLocale($locale)
     {
@@ -27,29 +30,5 @@ abstract class MainController extends Controller
         if (($user && !$user->isAdmin()) || !$user) {
             abort(403);
         }
-    }
-
-    protected function getSidebarCache(): array
-    {
-        $tags = ModelCache::rememberChache(Tag::class);
-        $rubrics = ModelCache::rememberChache(Rubric::class);
-
-        return compact('tags', 'rubrics');
-    }
-
-    protected function getResponseArray(
-        ?Builder $builder, string $metaTitle = '', string $metaRobots = '', string $metaDesc = ''): array
-    {
-        $articles = null;
-        if ($builder) {
-            $articles = $builder->paginate(self::PAGINATE);
-        }
-
-        return $this->getSidebarCache() + [
-            'articles' => $articles,
-            'metaTitle' => $metaTitle,
-            'metaRobots' => $metaRobots,
-            'metaDesc' => $metaDesc,
-        ];
     }
 }
