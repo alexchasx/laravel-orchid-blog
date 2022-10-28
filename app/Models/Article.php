@@ -206,6 +206,7 @@ class Article extends Model
         }
         return $builder->whereDate('published_at', '<=', Carbon::now())
             ->where('is_published', true)
+            ->with('tags')
             ->orderBy('published_at', 'desc');
     }
 
