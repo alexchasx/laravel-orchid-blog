@@ -209,18 +209,6 @@ class Article extends Model
             ->orderBy('published_at', 'desc');
     }
 
-    public static function byRubric($rubricId)
-    {
-        return self::published()->where('rubric_id', $rubricId);
-    }
-
-    public static function byTag(Builder $articles, $tagId)
-    {
-        return $articles->whereHas('tags', function (Builder $builder) use ($tagId) {
-            $builder->where('tag_id', $tagId);
-        });
-    }
-
     public static function recents(Builder $builder)
     {
         return $builder->orderBy('published_at', 'desc')->limit(4)->get();

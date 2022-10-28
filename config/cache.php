@@ -3,11 +3,6 @@
 use Illuminate\Support\Str;
 
 return [
-
-    'caching' => [
-        'sidebar' => true,
-    ],
-
     /*
     |--------------------------------------------------------------------------
     | Default Cache Store

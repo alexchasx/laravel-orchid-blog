@@ -2,39 +2,54 @@
 
 namespace App\Services;
 
-use App\Services\Sidebar;
+use App\Models\Article;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 
-class ArticleService implements ServiceInterface
+class ArticleService
 {
     private const PAGINATE = 12;
+    private static array $selectColumn = ['id', 'title', 'published_at'];
 
-    public function __construct(
-        private Sidebar $sidebar,
-    ) {}
-
-    public function getResponse(
-        Builder $builder = null, 
-        Model $articles = null,
-        ?string $metaTitle = '', 
-        ?string $metaRobots = '', 
-        ?string $metaDesc = '',
-        ?string $view = 'index',
-    ): View
+    public function getPublic(?string $search): LengthAwarePaginator
     {
-        if ($builder) {
-            $articles = $builder->paginate(self::PAGINATE);
-        }
-        $response = $this->sidebar->getData() 
-            + [
-                'articles' => $articles,
-                'metaTitle' => $metaTitle,
-                'metaRobots' => $metaRobots,
-                'metaDesc' => $metaDesc,
-            ];
+        return Article::published(
+                Article::search($search)
+            )->paginate(self::PAGINATE, self::$selectColumn);
+    }
 
-        return view($view, $response);
+    public function getNotPublic(): LengthAwarePaginator 
+    {
+        return Article::query()->orderBy('id', 'desc')
+            ->where('is_published', false)
+            ->paginate(self::PAGINATE, self::$selectColumn);
+    }
+
+    public function getByRubric(int $rubricId): LengthAwarePaginator 
+    {
+        return Article::published()
+            ->where('rubric_id', $rubricId)
+            ->paginate(self::PAGINATE, self::$selectColumn);
+    }
+
+    public function getByTag(int $tagId): LengthAwarePaginator 
+    {
+        return Article::published()
+            ->whereHas('tags', function (Builder $builder) use ($tagId) {
+                $builder->where('tag_id', $tagId);
+            })
+            ->paginate(self::PAGINATE, self::$selectColumn);
+    }
+
+    public function checkAccess(Article $article): void
+    {
+        /** @var User $user */
+        if (!$article->is_published 
+            && ( $user = Auth::user() ) 
+            && !$user->isAdmin()
+        ) {
+            abort(403);
+        }
     }
 }

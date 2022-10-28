@@ -2,8 +2,7 @@
 
 @section('content')
 
-@unless (empty($articles))
-@php($article = $articles)
+@unless (empty($article))
 
 <article class="article_card">
 
