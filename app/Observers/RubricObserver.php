@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Classes\ModelCache;
+// use App\Classes\ModelCache;
 use App\Models\Rubric;
 
 class RubricObserver
@@ -37,7 +37,7 @@ class RubricObserver
      */
     public function deleted(Rubric $rubric)
     {
-        ModelCache::updateCache(Rubric::class);
+        // ModelCache::updateCache(Rubric::class);
     }
 
     /**
@@ -48,7 +48,7 @@ class RubricObserver
      */
     public function restored(Rubric $rubric)
     {
-        ModelCache::updateCache(Rubric::class);
+        // ModelCache::updateCache(Rubric::class);
     }
 
     /**
@@ -59,6 +59,6 @@ class RubricObserver
      */
     public function forceDeleted(Rubric $rubric)
     {
-        ModelCache::updateCache(Rubric::class);
+        // ModelCache::updateCache(Rubric::class);
     }
 }

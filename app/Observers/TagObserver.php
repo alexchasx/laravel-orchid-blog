@@ -37,7 +37,7 @@ class TagObserver
      */
     public function deleted(Tag $tag)
     {
-        ModelCache::updateCache(Tag::class);
+        // ModelCache::updateCache(Tag::class);
     }
 
     /**
@@ -48,7 +48,7 @@ class TagObserver
      */
     public function restored(Tag $tag)
     {
-        ModelCache::updateCache(Tag::class);
+        // ModelCache::updateCache(Tag::class);
     }
 
     /**
@@ -59,6 +59,6 @@ class TagObserver
      */
     public function forceDeleted(Tag $tag)
     {
-        ModelCache::updateCache(Tag::class);
+        // ModelCache::updateCache(Tag::class);
     }
 }
