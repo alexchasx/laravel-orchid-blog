@@ -1,5 +1,5 @@
 Blog on Laravel with the Orchid admin panel (https://orchid.software/).
-Working site: https://alexchasx.ru/
+Working site: [https://alexchas-dev.ru/](https://alexchas-dev.ru/)
 
 ---
 # Installing the project on the development environment
