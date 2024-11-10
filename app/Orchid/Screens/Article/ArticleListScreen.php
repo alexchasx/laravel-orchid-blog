@@ -95,6 +95,7 @@ class ArticleListScreen extends Screen
             'title' => $request->input('article.title'),
             // 'excert' => $request->input('article.excert'),
             'content_raw' => $request->input('article.content_raw'),
+            'content_html' => $request->input('article.content_html'),
             'user_id' => auth()->user()->id,
             'rubric_id' => $request->input('article.rubric_id'),
             'keywords' => $request->input('article.keywords'),

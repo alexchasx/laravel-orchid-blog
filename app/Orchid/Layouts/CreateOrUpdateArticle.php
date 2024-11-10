@@ -75,6 +75,8 @@ class CreateOrUpdateArticle extends Rows
 
             SimpleMDE::make('article.content_raw')->title('Контент'),
 
+            SimpleMDE::make('article.content_html')->title('Контент HTML'),
+
             // Code::make('article.content_raw')->title('Контент'),
 
             // FieldsCode::make('article.content')->language(FieldsCode::MARKUP)->title('Контент'),

@@ -9,7 +9,7 @@
     @include('includes/publication_date')
     <br>
 
-    <p>{!! $article->content_raw !!}</p>
+    <p>{!! $article->content_html !!}</p>
 
     <br>
 </article>
