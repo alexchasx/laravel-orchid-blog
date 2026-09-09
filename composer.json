@@ -12,13 +12,11 @@
         "guzzlehttp/guzzle": "^7.9",
         "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.10",
-        "laravel/ui": "^5.0",
+        "laravel/tinker": "^3.0",
         "mews/captcha": "^3.3",
         "orchid/platform": "^14.53"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.13",
         "barryvdh/laravel-ide-helper": "^3.0",
         "fakerphp/faker": "^1.23",
         "laravel-lang/lang": "^13.0",
