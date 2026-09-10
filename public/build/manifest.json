@@ -9,5 +9,10 @@
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
+  },
+  "resources/sass/style.scss": {
+    "file": "assets/style-CCLWHsKI.css",
+    "src": "resources/sass/style.scss",
+    "isEntry": true
   }
 }

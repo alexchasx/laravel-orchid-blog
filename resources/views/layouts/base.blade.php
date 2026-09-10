@@ -10,7 +10,7 @@
     @include('includes.meta_tags')
 
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    @vite(['resources/sass/style.scss', 'resources/js/app.js'])
 </head>
 
 <body>
@@ -136,7 +136,5 @@
 </body>
 
 @stack('js')
-
-<script src="{{ asset('js/app.js') }}"></script>
 
 </html>
