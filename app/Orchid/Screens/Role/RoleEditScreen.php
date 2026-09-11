@@ -33,7 +33,7 @@ class RoleEditScreen extends Screen
     {
         return [
             'role'       => $role,
-            'permission' => $role->getStatusPermission(),
+            'permission' => $role->statusOfPermissions(),
         ];
     }
 
@@ -123,9 +123,9 @@ class RoleEditScreen extends Screen
             ],
         ]);
 
-        $role->fill($request->get('role'));
+        $role->fill($request->input('role'));
 
-        $role->permissions = collect($request->get('permissions'))
+        $role->permissions = collect($request->input('permissions'))
             ->map(function ($value, $key) {
                 return [base64_decode($key) => $value];
             })

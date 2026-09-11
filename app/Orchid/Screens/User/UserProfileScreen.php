@@ -105,7 +105,7 @@ class UserProfileScreen extends Screen
         ]);
 
         $request->user()
-            ->fill($request->get('user'))
+            ->fill($request->input('user'))
             ->save();
 
         Toast::info(__('Profile updated.'));
@@ -123,7 +123,7 @@ class UserProfileScreen extends Screen
         ]);
 
         tap($request->user(), function ($user) use ($request) {
-            $user->password = Hash::make($request->get('password'));
+            $user->password = Hash::make($request->input('password'));
         })->save();
 
         Toast::info(__('Password changed.'));

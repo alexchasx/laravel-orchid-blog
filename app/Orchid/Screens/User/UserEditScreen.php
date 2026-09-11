@@ -11,7 +11,7 @@ use App\Orchid\Layouts\User\UserRoleLayout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
-use Orchid\Access\UserSwitch;
+use Orchid\Access\Impersonation;
 use Orchid\Platform\Models\User;
 use Orchid\Screen\Action;
 use Orchid\Screen\Actions\Button;
@@ -40,7 +40,7 @@ class UserEditScreen extends Screen
 
         return [
             'user'       => $user,
-            'permission' => $user->getStatusPermission(),
+            'permission' => $user->statusOfPermissions(),
         ];
     }
 
@@ -169,14 +169,14 @@ class UserEditScreen extends Screen
             ],
         ]);
 
-        $permissions = collect($request->get('permissions'))
+        $permissions = collect($request->input('permissions'))
             ->map(function ($value, $key) {
                 return [base64_decode($key) => $value];
             })
             ->collapse()
             ->toArray();
 
-        $userData = $request->get('user');
+        $userData = $request->input('user');
         if ($user->exists && (string) $userData['password'] === '') {
             // When updating existing user null password means "do not change current password"
             unset($userData['password']);
@@ -222,7 +222,7 @@ class UserEditScreen extends Screen
      */
     public function loginAs(User $user)
     {
-        UserSwitch::loginAs($user);
+        Impersonation::loginAs($user);
 
         Toast::info(__('You are now impersonating this user'));
 
