@@ -89,8 +89,12 @@ class RubricListScreen extends Screen
         ];
     }
 
-    public function asyncGetRubric(Rubric $rubric): array
+    public function asyncGetRubric(/* Rubric $rubric */): array
     {
+        // id из query-строки: при восстановлении состояния он не попадает в request()->query()/route
+        parse_str((string) parse_url((string) request()->getRequestUri(), PHP_URL_QUERY), $query);
+        $rubric = Rubric::findOrFail((int) ($query['rubric'] ?? 0));
+
         return ['rubric' => $rubric];
     }
 

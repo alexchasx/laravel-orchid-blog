@@ -53,7 +53,7 @@ class CreateOrUpdateArticle extends Rows
                     ->fromModel(Rubric::class, 'title')
                     ->empty('Не выбрано'),
 
-                Select::make('article.tags.')
+                Select::make('article.tags')
                     ->title('Метка (тэг)')
                     ->required()
                     ->multiple()

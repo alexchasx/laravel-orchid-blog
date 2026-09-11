@@ -94,9 +94,13 @@ class TagListScreen extends Screen
         ];
     }
 
-    public function asyncGetTag(Tag $tag): array
+    public function asyncGetTag(/* Tag $tag */): array
     {
-        return compact('tag');
+        // id из query-строки: при восстановлении состояния он не попадает в request()->query()/route
+        parse_str((string) parse_url((string) request()->getRequestUri(), PHP_URL_QUERY), $query);
+        $tag = Tag::findOrFail((int) ($query['tag'] ?? 0));
+
+        return ['tag' => $tag];
     }
 
     public function createOrUpdateTag(Request $request): void

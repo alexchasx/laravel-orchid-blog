@@ -87,9 +87,33 @@ class ArticleListScreen extends Screen
         ];
     }
 
-    public function asyncGetArticle(Article $article): array
+    public function asyncGetArticle(/* Article $article */): array
     {
-        return ['article' => $article];
+        /*
+         * В async-запросе Orchid параметр кнопки (article=<id>) передаётся в query-строке.
+         * Из-за восстановления состояния экрана он не попадает ни в request()->query(),
+         * ни в route-параметры, поэтому обычная инъекция Article $article даёт пустую модель.
+         * Достаём id напрямую из сырой query-строки запроса.
+         */
+        parse_str((string) parse_url((string) request()->getRequestUri(), PHP_URL_QUERY), $query);
+        $article = Article::with(['rubric', 'tags'])->findOrFail((int) ($query['article'] ?? 0));
+
+        return [
+            'article' => [
+                'id'           => $article->id,
+                'title'        => $article->title,
+                'is_published' => $article->is_published,
+                'rubric_id'    => $article->rubric_id,
+                'tags'         => $article->tags->pluck('id')->all(),
+                'published_at' => $article->published_at
+                    ? \Illuminate\Support\Carbon::parse($article->published_at)->format('Y-m-d')
+                    : null,
+                'content_raw'  => $article->content_raw,
+                'content_html' => $article->content_html,
+                'keywords'     => $article->keywords,
+                'meta_desc'    => $article->meta_desc,
+            ],
+        ];
     }
 
     public function createOrUpdateArticle(Request $request): void
@@ -102,7 +126,7 @@ class ArticleListScreen extends Screen
             // 'excert' => $request->input('article.excert'),
             'content_raw' => $request->input('article.content_raw'),
             'content_html' => $request->input('article.content_html'),
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->id,
             'rubric_id' => $request->input('article.rubric_id'),
             'keywords' => $request->input('article.keywords'),
             'meta_desc' => $request->input('article.meta_desc'),
