@@ -9,6 +9,7 @@ use App\Models\Tag;
 use App\Orchid\Layouts\Article\ArticleListTable;
 use App\Orchid\Layouts\CreateOrUpdateArticle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Layouts\Modal;
@@ -26,12 +27,6 @@ class ArticleListScreen extends Screen
      */
     public function query(): iterable
     {
-        // dd('ZXZX');
-
-        // $articles = Article::filters()->defaultSort('created_at', 'desc')
-        //         ->paginate(24);
-        // dd($articles);
-
         return [
             'articles' => Article::filters()->defaultSort('created_at', 'desc')
                 ->paginate(24),
@@ -126,7 +121,7 @@ class ArticleListScreen extends Screen
             // 'excert' => $request->input('article.excert'),
             'content_raw' => $request->input('article.content_raw'),
             'content_html' => $request->input('article.content_html'),
-            'user_id' => auth()->id,
+            'user_id' => Auth::id(),
             'rubric_id' => $request->input('article.rubric_id'),
             'keywords' => $request->input('article.keywords'),
             'meta_desc' => $request->input('article.meta_desc'),
