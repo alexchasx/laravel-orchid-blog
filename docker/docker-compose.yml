@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   nginx:
     image: nginx
@@ -11,7 +9,7 @@ services:
     depends_on:
       - app
     container_name: blog_nginx
-      
+
   app:
     build:
       context: .

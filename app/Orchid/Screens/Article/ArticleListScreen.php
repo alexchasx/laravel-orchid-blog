@@ -26,6 +26,12 @@ class ArticleListScreen extends Screen
      */
     public function query(): iterable
     {
+        // dd('ZXZX');
+
+        // $articles = Article::filters()->defaultSort('created_at', 'desc')
+        //         ->paginate(24);
+        // dd($articles);
+
         return [
             'articles' => Article::filters()->defaultSort('created_at', 'desc')
                 ->paginate(24),

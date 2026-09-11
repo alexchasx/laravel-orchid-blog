@@ -8,7 +8,7 @@
         @endhasAccess
     @endauth
 
-    <time>{{ $article->published_at->diffForHumans() }}</time>
+    <time>{{ \Carbon\Carbon::parse($article->published_at)->format('d.m.Y H:i') }}</time>
     @foreach ($article->tags as $tag)
     &nbsp;&nbsp;<em class="tag_title">
         {{ $tag->title }}

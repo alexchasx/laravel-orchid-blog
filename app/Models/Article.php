@@ -112,9 +112,9 @@ class Article extends Model
         'published_at', 'id', 'rubric_id'
     ];
 
-    protected $allowedFilters = [
-        'rubric_id',
-    ];
+    // protected $allowedFilters = [
+    //     'rubric_id',
+    // ];
 
     // public function getTitleAttribute($value)
     // {

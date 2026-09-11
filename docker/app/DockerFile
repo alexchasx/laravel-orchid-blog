@@ -1,4 +1,6 @@
-FROM php:8.5-fpm
+FROM php:8.5.2-fpm-bookworm
+
+LABEL maintainer="alexchasx"
 
 RUN apt-get update && apt-get install -y \
       apt-utils \

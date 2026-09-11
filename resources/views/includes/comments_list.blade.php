@@ -12,7 +12,7 @@
             <div class="comment_user">{{$comment->name}}:</div class="comment_user">
             <br>
             <div class="publication_date">
-                <time>{{ $comment->created_at->diffForHumans() }}</time>
+                <time>{{ \Carbon\Carbon::parse($comment->created_at)->format('d.m.Y H:i') }}</time>
             </div>
         </div>
 
