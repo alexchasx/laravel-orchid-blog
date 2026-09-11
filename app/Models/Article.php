@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
-use Illuminate\Support\Str;
+use League\CommonMark\CommonMarkConverter;
 
 /**
  * App\Models\Article
@@ -76,6 +76,22 @@ class Article extends Model
     use AsSource;
     use Filterable;
     use SoftDeletes;
+
+    /**
+     * Автоматическое преобразование markdown-разметки поля "Контекст"
+     * (content_raw) в HTML-код поля "Контент HTML" (content_html)
+     * при создании и обновлении статьи.
+     */
+    protected static function booted(): void
+    {
+        static::saving(function (Article $article): void {
+            if (!empty($article->content_raw)) {
+                $article->content_html = (new CommonMarkConverter())
+                    ->convert((string) $article->content_raw)
+                    ->getContent();
+            }
+        });
+    }
 
     public const LENGTH_DATE = 10;
 
