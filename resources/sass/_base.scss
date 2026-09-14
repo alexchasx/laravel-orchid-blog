@@ -1,0 +1,83 @@
+// ============================================================================
+// Базовые стили публичного фронтенда (Фаза 1, change 2026-09-14-frontend-design-foundation)
+// Нормализация + базовые стили элементов (html/body, ссылки, списки, код/pre).
+// Перенесено из монолита style.scss без изменения поведения.
+// ============================================================================
+
+// Наследуемые SCSS-переменные (обязательно при переходе с @import на @use)
+@use 'variables' as *;
+
+// Нормализация (бывший импорт в style.scss; сохраняется поведение инлайна)
+@import '../css/normalize.css';
+
+/* basic CSS */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a.user_name {
+    pointer-events: none;
+    color: $hover-link-color;
+}
+
+h1 {
+    // font-size: 23px;
+}
+
+h3 {
+    margin-top: 0px;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: arial,sans-serif;
+    font-weight: 400;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+code {
+    word-wrap: break-word;
+    color: #e83e8c;
+    font-size: .875em;
+}
+
+pre {
+    background: #eee;
+    padding: 10px;
+    margin-top: -8px;
+    border-radius: 5px;
+
+    code {
+        word-wrap: break-word;
+        color: inherit;
+        font-size: .875em;
+    }
+}
+
+.hr-lines {
+    margin: 20px 0;
+        padding: 0;
+        height: 10px;
+        border: none;
+        color: $hover-link-color;
+        background-image: linear-gradient(90deg, $hover-link-color, $hover-link-color 33.33%, transparent 33.33%, transparent 100%);
+        background-size: 3px 100%;
+}
+
+/* END basic CSS*/

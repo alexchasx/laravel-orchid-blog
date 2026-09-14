@@ -1,0 +1,203 @@
+// ============================================================================
+// Стили компонентов публичного фронтенда (Фаза 1, change 2026-09-14-frontend-design-foundation)
+// Ссылки, карточки статей, алерты, пагинация, формы, комментарии, теги.
+// Перенесено из монолита style.scss без изменения поведения.
+// ============================================================================
+
+// Наследуемые SCSS-переменные (обязательно при переходе с @import на @use)
+@use 'variables' as *;
+
+// Ссылки
+.link,
+.category_link,
+.continue_read {
+    color: $link-color;
+}
+.link:hover,
+.category_link:hover,
+.continue_read:hover {
+    color: $hover-link-color;
+}
+
+.article_id {
+    color: $hover-link-color;
+}
+.publication_date {
+    text-align: center;
+    margin-bottom: 0.8em;
+    margin-top: -10px;
+    font-size: 0.8em;
+}
+.category_link {
+    margin-bottom: 0.8em;
+}
+
+// Теги
+.tag {
+    margin-bottom: 5px;
+}
+.tag_title {
+    color: $hover-link-color;
+}
+
+// Изображения статей
+.wrap_img {
+    overflow: hidden;
+}
+
+.wrap_img img {
+    max-width: 100%;
+    object-fit: contain;
+}
+.align-left {
+    float: left !important;
+}
+.align-rigt {
+    float: rigt !important;
+}
+
+// Карточки статей
+.article_card li {
+    margin: 0.05em;
+    margin-left: 0.8em;
+    padding: 0.05em;
+    list-style-type:disc;
+}
+.article_card ul {
+    padding-left: 20px;
+    margin-bottom: 15px;
+}
+.left_block h2, .left_block h3, .left_block h4 {
+    margin-top: 40px;
+    // text-align: center;
+}
+.article_card_index {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+// Формы
+.submit {
+    margin-top: 5px;
+}
+.form-group {
+    margin-top: 10px;
+}
+textarea {
+    width: 100%;
+}
+.textwrapper {
+    margin: 5px 0;
+    padding: 3px;
+}
+.invalid-feedback {
+    color: $invalid-feedback-color;
+}
+
+.star {
+    color: $invalid-feedback-color;
+}
+input.contact {
+    width: 100%;
+}
+
+// Комментарии
+.comment_user {
+    text-align: center;
+}
+
+.comments > h3 {
+    text-align: center;
+}
+
+// Заголовки страниц/статей
+.pageTitle, .article_title {
+    font-size: 1.5em;
+    margin-top: 0px !important;
+    text-align: center;
+}
+
+// Пагинация
+ul.pagination {
+    clear: both;
+    font-size: 0;
+    line-height: 1.4;
+    margin: 20px 0;
+    padding: 0;
+    text-align: center;
+}
+ul.pagination li a {
+    text-decoration: underline;
+}
+ul.pagination li a,
+ul.pagination li span {
+    background: $background-color;
+    color: $text-color;
+    display: inline-block;
+    margin: 0;
+    padding: 6px 12px;
+}
+ul.pagination li {
+    display: inline-block;
+    font-size: 13px;
+    margin: 0;
+    padding: 0 2px;
+}
+
+// Меню-каретка (шапка)
+.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-top: 4px solid\9;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}
+
+// Сайдбар: рубрики и теги
+.category_block > h3, #tags {
+    text-align: center;
+}
+
+.tags_link {
+    margin-left: 10px;
+}
+
+// Страницы ошибок
+.error-page {
+    text-align: center;
+}
+
+.error-title {
+    text-align: center;
+}
+
+// Алерты
+.alert {
+    position: relative;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+
+.alert-success {
+    color: $alert-success-color;
+    background-color: $alert-success-background-color;
+    border-color: $alert-success-background-color;
+}
+
+.alert-error {
+    color: $alert-error-color;
+    background-color: $alert-error-background-color;
+    border-color: $alert-error-background-color;
+}
+
+// Поиск
+.search_submit {
+    color: $link-color;
+}

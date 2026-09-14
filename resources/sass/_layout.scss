@@ -1,0 +1,129 @@
+// ============================================================================
+// Стили макета публичного фронтенда (Фаза 1, change 2026-09-14-frontend-design-foundation)
+// .main_block, .wrap, .nav_wrap, шапка/меню, футер.
+// Перенесено из монолита style.scss.
+//
+// Changelog (баги, исправленные в рамках Фазы 1 — без изменения внешнего вида):
+//  - .main_block { max-width: 1170 } -> max-width: 1170px (невалидное значение без единиц);
+//  - удалены 4 нерабочих медиазапроса с опечаткой @media (max-widht: ...) для .wrap
+//    (1200/992/767/350px): они никогда не применялись в браузере; перевод их в рабочую
+//    нотацию изменил бы текущий вид на других ширинах, а адаптивность — отдельная
+//    фаза плана (Фаза 4). Правила удалены, а не починены, чтобы внешний вид остался
+//    идентичным скриншотам «до».
+// ============================================================================
+
+// Наследуемые SCSS-переменные (обязательно при переходе с @import на @use)
+@use 'variables' as *;
+
+.main_block {
+    max-width: 1170px;
+    margin: 0px auto;
+    padding: 0px 15px;
+}
+
+.clearfix::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.nav_wrap {
+    max-width: 1170px;
+    padding: 0 30px;
+    margin: 0 auto;
+}
+
+nav .nav_wrap {
+    position: relative;
+    margin-top: 2em;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.menu li a {
+    display: inline-block;
+    padding: 10px 15px;
+}
+
+.menuToggle {
+    padding: 10px 15px;
+    display: none;
+    cursor: pointer;
+    color: $link-color;
+}
+
+#menuCheck {
+    display: none;
+}
+
+.wrap {
+    max-width: 1170px;
+    padding: 0 30px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 70% 30%;
+}
+
+@media screen and (max-width: 900px) {
+    html,
+    body {
+        font-size: 12px;
+    }
+    .wrap {
+        padding: 0;
+        grid-template-columns: none;
+    }
+    .menu {
+        display: none;
+        position: absolute;
+        background: $background-color;
+    }
+
+    .menu li {
+        float: none;
+    }
+
+    .menuToggle {
+        display: inline-block;
+    }
+
+    #menuCheck:checked + .menu {
+        display: block;
+    }
+
+    #menuCheck:checked {
+        transition: 1s;
+    }
+}
+.left_block {
+    padding: 1em;
+    padding-right: 2em;
+}
+.right_block {
+    padding: 1em;
+    padding-right: 0;
+}
+hr {
+    max-width: 1170px;
+}
+.logo {
+    text-align: center;
+}
+.sub_logo {
+    font-size: 12px;
+}
+.footer {
+    margin: 24px auto;
+    padding-bottom: 15px;
+    max-width: 1170px;
+    text-align: center;
+}
+.made_in {
+    padding-top: 8px;
+}
