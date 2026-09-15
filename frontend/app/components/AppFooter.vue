@@ -4,7 +4,7 @@ const year = new Date().getFullYear()
 
 <template>
   <footer class="border-t">
-    <VContainer class="d-flex flex-column flex-sm-row align-center justify-space-between ga-2 py-4">
+    <VContainer class="footer d-flex flex-column flex-sm-row align-center justify-space-between ga-2 py-4">
       <div class="text-body-2 text-medium-emphasis text-center text-sm-start">
         © {{ year }} BlogDev · Сделано на
         <a href="https://nuxt.com/" target="_blank" rel="noopener" class="text-primary">Nuxt</a>
@@ -25,3 +25,9 @@ const year = new Date().getFullYear()
     </VContainer>
   </footer>
 </template>
+
+<style scoped>
+.footer {
+    max-width: 820px;
+}
+</style>
