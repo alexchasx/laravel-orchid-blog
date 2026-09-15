@@ -1,0 +1,14 @@
+# Nuxt
+node_modules/
+.nuxt/
+.output/
+.data/
+dist/
+
+# Local env
+.env
+.env.*
+!.env.example
+
+*.log
+.DS_Store

@@ -15,8 +15,13 @@
 - **mews/captcha** ^3.3 — капча (в связке с Google reCAPTCHA через middleware `GoogleRecaptcha`)
 - **Guzzle HTTP** ^7.9 — HTTP-клиент
 
-### Frontend
-- **Vite** ^6.0 + **laravel-vite-plugin** — сборка фронтенда
+### Frontend (публичный сайт — Nuxt 4, `frontend/`)
+- **Nuxt 4** (SSR) + **Vue 3** (`<script setup>`, Composition API)
+- **Vuetify 3** (+ `vuetify-nuxt-module`, tree-shaking) — компоненты и темы light/dark
+- **@mdi/font** — иконки
+
+### Frontend (Blade-шаблоны Breeze/auth)
+- **Vite** ^6.0 + **laravel-vite-plugin** — сборка ассетов Breeze
 - **Tailwind CSS** ^3.4 + **@tailwindcss/forms**
 - **Alpine.js** ^3.14
 - **Sass** + **PostCSS** + **Autoprefixer**
@@ -142,12 +147,52 @@ docker compose exec app php artisan storage:link
 
 ---
 
+## ⚡ Публичный фронтенд на Nuxt 4 (`frontend/`)
+
+Новый публичный сайт блога написан на **Nuxt 4 (SSR) + Vue 3 + Vuetify 3** и живёт в папке [`frontend/`](frontend/). Данные он получает из Laravel JSON API (`routes/api.php`): статьи, рубрики, теги, отправка обратной связи.
+
+Blade-вьюхи публичной части пока остаются рабочими (fallback); auth (Breeze) и комментарии — на Blade.
+
+### Запуск (dev)
+
+```bash
+# 1. Backend (Laravel) — Docker или php artisan serve (см. выше)
+docker compose -f docker/docker-compose.yml up -d app nginx   # сайт на :8080
+
+# 2. Frontend (Nuxt)
+cd frontend
+cp .env.example .env        # NUXT_PUBLIC_API_BASE=http://localhost:8080
+npm install
+npm run dev                 # http://localhost:3000 (или :3001, если порт занят)
+```
+
+### Переменные окружения
+
+| Переменная | Назначение | По умолчанию |
+|---|---|---|
+| `NUXT_PUBLIC_API_BASE` | Базовый URL Laravel (API + медиа) | `http://localhost:8080` |
+
+### Полезные команды
+
+```bash
+cd frontend
+npm run dev          # dev-сервер (SSR)
+npm run build        # production-сборка (SSR)
+npm run generate     # статический экспорт (SSG)
+npm run typecheck    # проверка типов TypeScript/Vue
+```
+
+---
+
 ## 📂 Структура проекта
 
 - `app/Orchid/` — экраны, layout'ы и фильтры административной панели Orchid
 - `app/Http/Controllers/` — контроллеры публичной части и авторизации
+- `app/Http/Controllers/Api/` — публичный JSON API для Nuxt-фронтенда
+- `app/Http/Resources/` — API-ресурсы (Article, Rubric, Tag)
 - `database/migrations/` и `database/seeders/` — миграции и сиды
 - `resources/views/` — Blade-шаблоны (публичная часть, auth, компоненты)
-- `routes/` — маршруты приложения
+- `routes/` — маршруты приложения (`web.php`, `api.php`, `platform.php`, `auth.php`)
+- `frontend/` — публичный сайт на Nuxt 4 (SSR) + Vue 3 + Vuetify 3
 - `docker/` — конфигурация Docker (nginx, PHP-FPM, MySQL, phpMyAdmin)
 - `lang/` — языковые файлы (ru, en)
