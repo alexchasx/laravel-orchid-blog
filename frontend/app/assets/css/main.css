@@ -2,6 +2,21 @@
    Базовые стили публичного блога (поверх Vuetify 3)
    ============================================================ */
 
+/* Фолбэки переменных темы Vuetify на случай, когда классы
+   .v-theme--light/.v-theme--dark ещё не применены (SSR до гидрации,
+   контент вне VApp). Значения соответствуют светлой теме
+   из nuxt.config.ts; при активной теме Vuetify переопределит их. */
+:root {
+  --v-theme-primary: 11 87 208; /* #0B57D0 — primary из nuxt.config.ts */
+  --v-theme-on-surface: 29 29 31; /* #1D1D1F — дефолт Vuetify light */
+  --v-theme-on-surface-variant: 73 69 79; /* #49454F — дефолт Vuetify light */
+}
+
+.v-theme--light, .v-theme--dark {
+  --v-theme-primary: 11 87 208; /* #0B57D0 — primary из nuxt.config.ts */
+  --v-theme-on-surface-variant: 73 69 79; /* #49454F — дефолт Vuetify light */
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -158,3 +173,4 @@ body {
 .footer-github-link:hover {
   background: rgb(127 127 127 / 0.15);
 }
+
