@@ -1,10 +1,4 @@
-# frontend-design
-
-## Purpose
-
-Определяет единую дизайн-систему публичного фронтенда блога: дизайн-токены (CSS custom properties), модульную организацию SCSS, базовую типографику и доступный viewport. Эти требования создают фундамент для последующих фаз обновления дизайна.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Единый источник дизайн-токенов
 Дизайн-система публичного фронтенда SHALL строиться на темах Vuetify 3 (light/dark) как единственном источнике цветов, состояний и типографики. Кастомные оверрайды SHALL задаваться минимальным набором CSS-переменных в `frontend/app/assets/css/main.css` вместо CSS custom properties в `:root` и партиалов SCSS. Пользователь SHALL иметь возможность переключать тему в интерфейсе.
@@ -38,3 +32,17 @@ Viewport-метатег, отдаваемый Nuxt, SHALL NOT содержать
 #### Scenario: Аудит доступности без предупреждений о зуме
 - **WHEN** Lighthouse-audit выполняется на публичной странице
 - **THEN** отсутствуют предупреждения о запрете масштабирования (viewport allows zoom)
+
+## REMOVED Requirements
+
+### Requirement: Единый источник дизайн-токенов в :root
+**Reason**: Дизайн-система публичного фронтенда переходит на темы Vuetify 3; CSS custom properties в `:root` и партиалы SCSS больше не являются источником токенов публичной части.
+**Migration**: Токены цветов, типографики и spacing определяются темами Vuetify (`light`/`dark`) в `frontend/app/plugins/vuetify.ts`; точечные оверрайды — CSS-переменные в `frontend/app/assets/css/main.css`.
+
+### Requirement: Модульная организация стилей с сохранением сборки Vite
+**Reason**: Стили публичного фронтенда больше не собираются через `resources/sass/style.scss` и `@vite`; сборка стилей переходит в Nuxt-приложение (Vuetify styles + `main.css`).
+**Migration**: Стили публичной части размещаются в `frontend/app/assets/css/main.css` и подключаются через `nuxt.config.ts` (css), а не через `@vite(['resources/sass/style.scss', ...])`.
+
+### Requirement: Совместимость наследуемых SCSS-переменных
+**Reason**: `resources/sass/_variables.scss` больше не является частью дизайн-системы публичного фронтенда; значения переносятся в темы Vuetify.
+**Migration**: Цветовые значения `_variables.scss` отображаются на переменные тем Vuetify (`light`/`dark`) в `frontend/app/plugins/vuetify.ts`; сам файл сохраняется только для legacy Blade-fallback до его удаления.
