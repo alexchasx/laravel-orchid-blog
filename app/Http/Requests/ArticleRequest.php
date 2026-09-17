@@ -29,12 +29,14 @@ class ArticleRequest extends FormRequest
             'article.content_raw' => ['required'],
             'article.rubric_id' => ['required'],
             'article.published_at' => ['required', 'date_format:Y-m-d'],
+            'article.slug' => ['nullable', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'],
         ];
     }
 
     public function messages(): array
     {
         return  [
+            'article.slug.regex' => 'Slug может содержать только строчные латинские буквы, цифры и дефисы.',
             // 'article.title.title' => 'Количество символов должно быть менее 255',
             // 'article.content.content' => 'Количество символов должно быть менее 255'
         ];

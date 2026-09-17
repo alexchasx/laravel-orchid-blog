@@ -8,7 +8,6 @@ use App\Models\Article;
 use App\Models\Tag;
 use App\Orchid\Layouts\Article\ArticleListTable;
 use App\Orchid\Layouts\CreateOrUpdateArticle;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Orchid\Screen\Actions\ModalToggle;
@@ -97,6 +96,7 @@ class ArticleListScreen extends Screen
             'article' => [
                 'id'           => $article->id,
                 'title'        => $article->title,
+                'slug'         => $article->slug,
                 'is_published' => $article->is_published,
                 'rubric_id'    => $article->rubric_id,
                 'tags'         => $article->tags->pluck('id')->all(),
@@ -111,13 +111,14 @@ class ArticleListScreen extends Screen
         ];
     }
 
-    public function createOrUpdateArticle(Request $request): void
+    public function createOrUpdateArticle(ArticleRequest $request): void
     {
         $articleId = $request->input('article.id');
         $article = Article::updateOrCreate([
             'id' => $articleId,
         ], [
             'title' => $request->input('article.title'),
+            'slug' => $request->input('article.slug'),
             // 'excert' => $request->input('article.excert'),
             'content_raw' => $request->input('article.content_raw'),
             'content_html' => $request->input('article.content_html'),
