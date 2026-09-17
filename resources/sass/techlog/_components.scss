@@ -371,8 +371,14 @@
 
 .article-layout {
     display: grid;
-    grid-template-columns: 190px 1fr;
+    grid-template-columns: 1fr;
     gap: 60px;
+
+    // Двухколоночная сетка только при наличии оглавления:
+    // без TOC контент занимает всю ширину колонки, а не ячейку 190px.
+    &.with-toc {
+        grid-template-columns: 190px 1fr;
+    }
 }
 
 .toc {

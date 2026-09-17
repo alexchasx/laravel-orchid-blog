@@ -23,7 +23,7 @@
     </div>
 
     {{-- Article Layout: TOC + Prose --}}
-    <div class="article-layout">
+    <div @class(['article-layout', 'with-toc' => !empty($tocItems)])>
         {{-- TOC (Table of Contents): якоря на подзаголовки --}}
         @if(!empty($tocItems))
         <aside class="toc">
