@@ -50,10 +50,15 @@ final class ArticleController extends Controller
         $this->service->checkAccess($article);
         $article->load(['user', 'rubric', 'tags']);
 
+        // Оглавление (якоря на подзаголовки) и контент с проставленными id.
+        ['contentHtml' => $contentHtml, 'tocItems' => $tocItems] = $this->service->withToc($article);
+
         return view('article', [
-            'article' => $article,
-            'metaTitle' => $article->title,
-            'metaDesc' => $article->meta_desc,
+            'article'     => $article,
+            'contentHtml' => $contentHtml,
+            'tocItems'    => $tocItems,
+            'metaTitle'   => $article->title,
+            'metaDesc'    => $article->meta_desc,
         ]);
     }
 

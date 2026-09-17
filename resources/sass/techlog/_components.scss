@@ -406,10 +406,21 @@
     margin-bottom: 55px;
 }
 
+.prose h2,
+.prose h3 {
+    scroll-margin-top: 100px; /* учёт фиксированного header при переходе по якорям */
+}
+
 .prose h2 {
     font-size: 1.9rem;
     line-height: 1.2;
     margin: 55px 0 18px;
+}
+
+.prose h3 {
+    font-size: 1.4rem;
+    line-height: 1.25;
+    margin: 40px 0 16px;
 }
 
 .prose p,

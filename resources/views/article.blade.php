@@ -24,11 +24,13 @@
 
     {{-- Article Layout: TOC + Prose --}}
     <div class="article-layout">
-        {{-- TOC (Table of Contents) --}}
-        @if(!empty($article->toc))
+        {{-- TOC (Table of Contents): якоря на подзаголовки --}}
+        @if(!empty($tocItems))
         <aside class="toc">
             <strong>В статье</strong>
-            {!! $article->toc !!}
+            @foreach($tocItems as $item)
+                <a href="#{{ $item['id'] }}">{{ $item['text'] }}</a>
+            @endforeach
         </aside>
         @endif
 
@@ -39,8 +41,8 @@
                 <div class="article-hero" style="background: linear-gradient(135deg, #003322, #08120e 45%, #00ff88 180%); background-size: cover; background-position: center;"></div>
             @endif
 
-            {{-- Article Content (HTML from markdown) --}}
-            {!! $article->content_html !!}
+            {{-- Article Content (HTML from markdown, с id у подзаголовков) --}}
+            {!! $contentHtml !!}
 
             {{-- Tags --}}
             @if($article->tags->isNotEmpty())
