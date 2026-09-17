@@ -1,0 +1,50 @@
+// ============================================================================
+// Утилиты
+// ============================================================================
+
+// Контейнер
+.container {
+    width: min(calc(100% - 40px), var(--max));
+    margin: auto;
+}
+
+// Skip-link (доступность)
+.skip-link {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    z-index: 100;
+    background: var(--green);
+    color: #000;
+    padding: 8px 12px;
+    transform: translateY(-150%);
+
+    &:focus {
+        transform: none;
+    }
+}
+
+// Screen reader only
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+// Scroll reveal анимация
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .7s ease, transform .7s ease;
+
+    &.visible {
+        opacity: 1;
+        transform: none;
+    }
+}

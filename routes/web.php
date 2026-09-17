@@ -16,9 +16,9 @@ Route::controller(ArticleController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('notpublic', 'showNotPublic')->name('notpublic')
         ->middleware(['auth', 'access:platform.custom.articles']);
-    Route::get('rubric.{rubric}', 'showByRubric')->name('showByRubric');
-    Route::get('tag.{tag}', 'showByTag')->name('showByTag');
-    Route::get('article.{article}', 'show')->name('articleShow');
+    Route::get('rubric/{rubric}', 'showByRubric')->name('showByRubric');
+    Route::get('tag/{tag}', 'showByTag')->name('showByTag');
+    Route::get('article/{article:slug}', 'show')->name('articleShow');
 });
 
 Route::controller(CommentController::class)->group(function () {

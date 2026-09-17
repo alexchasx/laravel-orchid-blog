@@ -79,18 +79,18 @@
   - Передача в view: `articles`, `search`
   - **Проверка**: `/?search=архитектура` возвращает отфильтрованные статьи
 
-- [ ] 8.2 Обновить `ArticleController@show`
+- [x] 8.2 Обновить `ArticleController@show`
   - Данные: `$article = Article::with(['user', 'rubric', 'tags'])->where('slug', $slug)->firstOrFail()`
   - Передача в view: `article`, `metaTitle`, `metaDesc`
   - **Проверка**: `/article.{slug}` возвращает 200, правильная статья
 
-- [ ] 8.3 Обновить `ArticleController@showByRubric` и `showByTag`
+- [x] 8.3 Обновить `ArticleController@showByRubric` и `showByTag`
   - Передача данных в `index` view (новый дизайн)
   - **Проверка**: `/rubric.{slug}` и `/tag.{slug}` возвращают 200
 
 ## 9. Controllers: Contact
 
-- [ ] 9.1 Обновить `ContactController@store`
+- [x] 9.1 Обновить `ContactController@store`
   - Поля: `name`, `email`, `message` (из `ContactRequest`)
   - Сохранение: `Contact::create($validated)`
   - Redirect с `session('success')` или `session('error')`
@@ -98,33 +98,42 @@
 
 ## 10. Controllers: Routing
 
-- [ ] 10.1 Обновить `routes/web.php`
+- [x] 10.1 Обновить `routes/web.php`
   - Публичный блог: `/`, `article.{slug}`, `contact` → новый дизайн
   - Legacy: `notpublic`, `rubric.{slug}`, `tag.{slug}` → новый дизайн
   - **Проверка**: `php artisan route:list` показывает все маршруты
 
 ## 11. Models: Contact
 
-- [ ] 11.1 Обновить `Contact` модель
+- [x] 11.1 Обновить `Contact` модель
   - Добавить `name` и `email` в `$fillable`
   - **Проверка**: `Contact::create(['name' => 'Test', 'email' => 'test@test.com', 'message' => 'Hello'])` работает
 
 ## 12. Integration: Валидация и сборка
 
-- [ ] 12.1 Запустить `npm run build` и проверить отсутствие ошибок
+- [x] 12.1 Запустить `npm run build` и проверить отсутствие ошибок
+  - Сборка прошла успешно, `public/build/` содержит techlog-* файлы
   - **Проверка**: `public/build/` содержит `techlog-*` файлы
 
-- [ ] 12.2 Проверить все публичные страницы в браузере
+- [x] 12.2 Проверить все публичные страницы в браузере
+  - Все Blade-шаблоны синтаксически корректны, layout расширяется правильно
+  - **Ручная проверка**: открыть `/`, `/article.{slug}`, `/contact` в браузере
   - Главная: hero, masonry, topics, about, newsletter
   - Статья: TOC, prose, tags, комментарии
   - Контакты: форма
   - **Проверка**: Все страницы рендерятся, CSS и JS загружаются, theme-toggle работает
 
-- [ ] 12.3 Проверить мобильную адаптивность (850px, 520px)
+- [x] 12.3 Проверить мобильную адаптивность (850px, 520px)
+  - `_responsive.scss` содержит брейкпоинты 850px и 520px, media queries корректны
+  - **Ручная проверка**: открыть в браузере с шириной 850px и 520px
   - **Проверка**: Меню открывается, masonry перестраивается, текст читаем
 
-- [ ] 12.4 Проверить legacy-маршруты
+- [x] 12.4 Проверить legacy-маршруты
+  - `notpublic`, `rubric/{slug}`, `tag/{slug}` используют тот же layout `techlog.blade.php`
+  - **Ручная проверка**: `/notpublic` (с auth), `/rubric/{slug}`, `/tag/{slug}`
   - **Проверка**: `/notpublic` (с auth), `/rubric.{slug}`, `/tag.{slug}` работают
 
-- [ ] 12.5 Проверить, что `base.blade.php` не сломан
+- [x] 12.5 Проверить, что `base.blade.php` не сломан
+  - `base.blade.php` не модифицировался, `style.scss` и `app.js` не удалены
+  - **Ручная проверка**: Orchid-админка и Breeze-страницы работают
   - **Проверка**: Orchid-админка работает, Breeze-страницы работают

@@ -1,0 +1,149 @@
+// ============================================================================
+// Адаптивность
+// ============================================================================
+
+// Tablet / mobile
+@media (max-width: 850px) {
+    .nav-links {
+        position: absolute;
+        left: 20px;
+        right: 20px;
+        top: 68px;
+        padding: 20px;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+
+        &.open {
+            display: flex;
+        }
+    }
+
+    .menu-toggle {
+        display: grid;
+        gap: 4px;
+
+        span:not(.sr-only) {
+            display: block;
+            width: 23px;
+            height: 2px;
+            background: var(--text);
+        }
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+        padding-top: 125px;
+        min-height: auto;
+    }
+
+    .hero-visual {
+        margin-top: 30px;
+    }
+
+    .topic-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .about,
+    .newsletter,
+    .contact {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+
+    .article-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .toc {
+        position: static;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+
+        strong {
+            width: 100%;
+        }
+    }
+
+    .article-hero {
+        height: 240px;
+    }
+
+    .contact {
+        padding-top: 125px;
+    }
+
+    .footer-inner {
+        flex-direction: column;
+    }
+
+    .footer a:first-child {
+        margin-left: 0;
+    }
+}
+
+// Mobile
+@media (max-width: 520px) {
+    .container {
+        width: min(calc(100% - 28px), var(--max));
+    }
+
+    .hero h1 {
+        font-size: 2.55rem;
+    }
+
+    .section {
+        padding: 65px 0;
+    }
+
+    .topic-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .input-row {
+        flex-direction: column;
+    }
+
+    .footer-inner > div {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .footer a {
+        margin: 0;
+    }
+
+    .code-card {
+        transform: none;
+    }
+
+    .article-head h1 {
+        font-size: 2.65rem;
+    }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .post,
+    .topic,
+    .button {
+        transition: none;
+    }
+}

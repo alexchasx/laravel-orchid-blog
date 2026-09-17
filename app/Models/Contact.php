@@ -44,6 +44,8 @@ class Contact extends Model
 
     public $fillable = [
         'user_id',
+        'name',
+        'email',
         'title',
         'message',
         'read',

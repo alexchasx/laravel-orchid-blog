@@ -14,6 +14,7 @@ final class ArticleController extends Controller
 {
     private const META_NO_ROBOTS = 'noindex, nofollow';
     private const MAIN_VIEW = 'index';
+    private const PAGINATE = 6;
 
     public function __construct(
         private ArticleService $service,
@@ -22,12 +23,24 @@ final class ArticleController extends Controller
 
     public function index(Request $request): View
     {
+        $query = Article::published()
+            ->with(['user', 'rubric', 'tags'])
+            ->select('id', 'title', 'slug', 'excert', 'image', 'published_at', 'rubric_id', 'is_published');
+
+        if ($request->filled('search')) {
+            $q = $request->input('search');
+            $query->where(function ($q2) use ($q) {
+                $q2->where('title', 'LIKE', "%{$q}%")
+                   ->orWhereRaw('content_html LIKE ?', ["%{$q}%"]);
+            });
+        }
+
+        $articles = $query->orderBy('published_at', 'desc')->paginate(self::PAGINATE);
+
         return view(self::MAIN_VIEW, [
-            'tags' => $this->cache->remember(Tag::class),
-            'rubrics' => $this->cache->remember(Rubric::class),
-            'articles' => $this->service->getPublic($search = $request->input('search')),
-            'metaTitle' => $search ? __('Результаты поиска для: ') . $search : '',
-            'metaRobots' => self::META_NO_ROBOTS,
+            'articles' => $articles,
+            'search' => $request->input('search'),
+            'metaTitle' => $request->filled('search') ? __('Результаты поиска для: ') . $request->input('search') : '',
             'metaDesc' => '',
         ]);
     }
@@ -35,9 +48,9 @@ final class ArticleController extends Controller
     public function show(Article $article): View
     {
         $this->service->checkAccess($article);
+        $article->load(['user', 'rubric', 'tags']);
+
         return view('article', [
-            'tags' => $this->cache->remember(Tag::class),
-            'rubrics' => $this->cache->remember(Rubric::class),
             'article' => $article,
             'metaTitle' => $article->title,
             'metaDesc' => $article->meta_desc,
@@ -47,9 +60,9 @@ final class ArticleController extends Controller
     public function showNotPublic(): View
     {
         return view(self::MAIN_VIEW, [
-            'tags' => $this->cache->remember(Tag::class),
-            'rubrics' => $this->cache->remember(Rubric::class),
-            'articles' => $this->service->getNotPublic(),
+            'articles' => Article::query()->orderBy('id', 'desc')
+                ->where('is_published', false)
+                ->paginate(self::PAGINATE),
             'metaTitle' => __('Неопубликованные статьи'),
             'metaRobots' => self::META_NO_ROBOTS,
             'metaDesc' => '',
@@ -59,9 +72,12 @@ final class ArticleController extends Controller
     public function showByRubric(Rubric $rubric): View
     {
         return view(self::MAIN_VIEW, [
-            'tags' => $this->cache->remember(Tag::class),
-            'rubrics' => $this->cache->remember(Rubric::class),
-            'articles' => $this->service->getByRubric($rubric->id),
+            'articles' => Article::published()
+                ->with(['user', 'rubric', 'tags'])
+                ->select('id', 'title', 'slug', 'excert', 'image', 'published_at', 'rubric_id', 'is_published')
+                ->where('rubric_id', $rubric->id)
+                ->orderBy('published_at', 'desc')
+                ->paginate(self::PAGINATE),
             'metaTitle' => $rubric->title,
             'metaDesc' => $rubric->description,
         ]);
@@ -70,9 +86,14 @@ final class ArticleController extends Controller
     public function showByTag(Tag $tag): View
     {
         return view(self::MAIN_VIEW, [
-            'tags' => $this->cache->remember(Tag::class),
-            'rubrics' => $this->cache->remember(Rubric::class),
-            'articles' => $this->service->getByTag($tag->id),
+            'articles' => Article::published()
+                ->with(['user', 'rubric', 'tags'])
+                ->select('id', 'title', 'slug', 'excert', 'image', 'published_at', 'rubric_id', 'is_published')
+                ->whereHas('tags', function ($q) use ($tag) {
+                    $q->where('tag_id', $tag->id);
+                })
+                ->orderBy('published_at', 'desc')
+                ->paginate(self::PAGINATE),
             'metaTitle' => __('Записи с меткой «') . $tag->title . '»',
             'metaDesc' => '',
         ]);

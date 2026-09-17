@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactRequest;
+use App\Models\Contact;
 use App\Models\Rubric;
 use App\Models\Tag;
-use App\Models\User;
 use App\Services\CacheService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -18,8 +18,6 @@ final class ContactController extends Controller
     public function index(): View
     {
         return view('contact', [
-            'tags' => $this->cache->remember(Tag::class),
-            'rubrics' => $this->cache->remember(Rubric::class),
             'metaTitle' => __('Обратная связь'),
             'metaDesc' => '',
         ]);
@@ -27,17 +25,22 @@ final class ContactController extends Controller
 
     public function store(ContactRequest $request): RedirectResponse
     {
-        $messageType = 'error' ;
-        $message = __('Сообщение не получилось отправить. Что-то сломалось.');
-        /** @var User $user */
-        $user = Auth::user();
-        if ($user->saveContact($request->only('title', 'message'))) {
-            $messageType = 'success' ;
-            $message = __('Сообщение отправлено!');
+        try {
+            Contact::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'message' => $request->message,
+                'user_id' => Auth::id(),
+                'title' => $request->name . ' — ' . $request->email,
+            ]);
+
+            return redirect()
+                ->route('contact')
+                ->with('success', __('Сообщение отправлено!'));
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('contact')
+                ->with('error', __('Сообщение не получилось отправить. Что-то сломалось.'));
         }
-        
-        return redirect()
-            ->route('contact')
-            ->with($messageType, $message);
     }
 }
