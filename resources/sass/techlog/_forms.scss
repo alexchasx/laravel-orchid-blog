@@ -1,0 +1,60 @@
+// ============================================================================
+// Формы
+// ============================================================================
+
+.subscribe-form,
+.contact-form,
+.comment-form {
+    label {
+        display: block;
+        font-size: .8rem;
+        color: var(--muted);
+        margin-bottom: 8px;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--surface);
+        color: var(--text);
+        padding: 13px 15px;
+        outline: 0;
+        box-shadow: inset 3px 3px 10px rgba(0, 0, 0, .2);
+        transition: .2s;
+    }
+
+    input:focus,
+    textarea:focus {
+        border-color: var(--green);
+        box-shadow: 0 0 0 3px rgba(0, 255, 136, .1);
+    }
+
+    textarea {
+        resize: vertical;
+    }
+}
+
+.input-row {
+    display: flex;
+    gap: 10px;
+
+    input {
+        flex: 1;
+    }
+}
+
+.form-message {
+    font-size: .8rem;
+    color: var(--green);
+    min-height: 1.4em;
+}
+
+.form-message.success {
+    color: var(--green);
+}
+
+.form-message.error {
+    color: var(--red, #e5484d);
+}

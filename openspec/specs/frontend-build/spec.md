@@ -11,68 +11,69 @@ Vite является единственным инструментом сбор
 
 - **SHALL** использовать Nuxt 4 в папке `frontend/` для сборки и запуска публичного фронтенда.
 - **SHALL NOT** использовать `laravel-mix`/`webpack.mix.js`.
-- Vite **SHALL** оставаться инструментом сборки только для Breeze-шаблонов (`app`, `guest`).
+- `package.json` **SHALL** содержать скрипты `dev` и `build`, вызывающие `vite`.
 
-#### Scenario: Сборка Nuxt проходит
-- **WHEN** выполняется `npm run build` в `frontend/`
-- **THEN** Nuxt успешно собирает приложение (SSR + клиентский бандл) без ошибок
+#### Scenario: Сборка выполняется через Vite
 
-#### Scenario: Vite обслуживает Breeze
-- **WHEN** выполняется `npm run dev`/`npm run build` в корне проекта
-- **THEN** Vite собирает ассеты Breeze-шаблонов аутентификации без ошибок
+- **WHEN** выполняется `npm run build`
+- **THEN** Vite собирает ассеты без ошибок, а `laravel-mix` не используется
 
-### Requirement: R2: Входные точки сборки
-`vite.config.js` SHALL объявлять входные точки только для Breeze-шаблонов: `resources/css/app.css` (Tailwind) и `resources/js/app.js` (Alpine). `resources/sass/style.scss` SHALL NOT быть входной точкой публичного фронтенда; стили публичного фронтенда живут в Nuxt-приложении (Vuetify 3 и `frontend/app/assets/css/main.css`).
+### R2: Входные точки сборки
 
-#### Scenario: Сборка Vite без style.scss
-- **WHEN** выполняется `npm run build` в корне проекта
-- **THEN** Vite собирает только входные точки Breeze, без ошибок undefined variable
+`vite.config.js` **SHALL** объявлять следующие входные точки:
+- `resources/css/app.css` — Tailwind, для Breeze-шаблонов (`app`, `guest`);
+- `resources/sass/style.scss` — кастомные стили публичного блога;
+- `resources/js/app.js` — общий JavaScript (Alpine);
+- `resources/sass/techlog/index.scss` — стили techlog (новый дизайн);
+- `resources/js/techlog.js` — скрипты techlog (новый дизайн).
 
-#### Scenario: Стили публичного фронтенда в Nuxt
-- **WHEN** открывается публичная страница, обслуживаемая Nuxt
-- **THEN** её стили загружаются из Nuxt-приложения, а не из `@vite(['resources/sass/style.scss', ...])`
+#### Scenario: Сборка включает techlog
 
-### Requirement: R3: Подключение ассетов в шаблонах
+- **WHEN** выполняется `npm run build`
+- **THEN** Vite собирает `techlog/index.scss` и `techlog.js` без ошибок
+
+#### Scenario: Techlog-ассеты доступны
+
+- **WHEN** `techlog.blade.php` использует `@vite(['resources/sass/techlog/index.scss', 'resources/js/techlog.js'])`
+- **THEN** браузер получает собранные CSS и JS файлы
+
+### R3: Подключение ассетов в шаблонах
 
 - Все layouts **SHALL** подключать собранные ассеты через `@vite(...)`, а не через `asset()`/`mix()`.
 - `resources/views/layouts/base.blade.php` **SHALL** использовать `@vite(['resources/sass/style.scss', 'resources/js/app.js'])` (покрывает index/article/contact/errors).
 - `resources/views/layouts/app.blade.php` и `guest.blade.php` **SHALL** использовать `@vite(['resources/css/app.css', 'resources/js/app.js'])`.
 
-#### Scenario: Публичные шаблоны подключают собранные ассеты
-- **WHEN** рендерится публичный layout (`base.blade.php`)
-- **THEN** ассеты подключены через `@vite(['resources/sass/style.scss', 'resources/js/app.js'])`, а не через `asset()`/`mix()`
+#### Scenario: Ассеты подключаются через @vite
 
-#### Scenario: Breeze-шаблоны используют Tailwind-ассеты
-- **WHEN** рендерятся `app.blade.php` или `guest.blade.php`
-- **THEN** они подключают `@vite(['resources/css/app.css', 'resources/js/app.js'])`
+- **WHEN** открывается любая страница блога или Breeze
+- **THEN** стили и скрипты подключены директивой `@vite(...)`, а не `asset()`/`mix()`
 
-### Requirement: R4: Отсутствие артефактов Mix
+### R4: Отсутствие артефактов Mix
 
 - **SHALL NOT** существовать `webpack.mix.js` и `public/mix-manifest.json`.
 - Старый Mix-выход `public/js/*`, `public/css/*` **SHALL** быть удалён; актуальный вывод — в `public/build/`.
 
-#### Scenario: Артефакты Mix отсутствуют
-- **WHEN** проверяется структура репозитория
-- **THEN** `webpack.mix.js` и `public/mix-manifest.json` не существуют, а старые `public/js/*` и `public/css/*` удалены
+#### Scenario: Mix-артефакты отсутствуют
 
-### Requirement: R5: Удаление легаси-кода
+- **WHEN** проверяется репозиторий фронтенда
+- **THEN** `webpack.mix.js` и `public/mix-manifest.json` не существуют, а собранные ассеты находятся в `public/build/`
+
+### R5: Удаление легаси-кода
 
 - **SHALL NOT** существовать `resources/js/vue.js`, `resources/js/components/**`, `resources/js/bootstrap.js`, `resources/js/App_OLD.vue_OLD`.
 - **SHALL NOT** существовать осиротевший `resources/sass/app.scss` (Bootstrap) и неиспользуемые `resources/views/auth_OLD/**`.
 - `resources/sass/_variables.scss` и `resources/css/normalize.css` **SHALL** сохраняться (используются `style.scss`).
 
-#### Scenario: Легаси-артефакты отсутствуют
-- **WHEN** проверяется структура `resources/js` и `resources/views`
-- **THEN** `vue.js`, `components/**`, `bootstrap.js`, `App_OLD.vue_OLD`, `resources/sass/app.scss` и `auth_OLD/**` не существуют
+#### Scenario: Легаси-файлы удалены
 
-#### Scenario: Наследуемые SCSS-файлы сохраняются
-- **WHEN** выполняется сборка Vite
-- **THEN** `resources/sass/_variables.scss` и `resources/css/normalize.css` остаются в репозитории и используются `style.scss`
+- **WHEN** проверяется структура `resources/`
+- **THEN** `vue.js`, `bootstrap.js`, `app.scss` и `auth_OLD/**` отсутствуют, а `_variables.scss` и `normalize.css` сохранены
 
-### Requirement: R6: Комментарии на серверном рендере
+### R6: Комментарии на серверном рендере
 
 - Комментарии публичной части **SHALL** оставаться на серверном рендере Blade (без Vue/Alpine), формы и списки — в `includes/comments_form.blade.php` и `includes/comments_list.blade.php`.
 
 #### Scenario: Комментарии рендерятся на сервере
-- **WHEN** открывается страница статьи с комментариями
-- **THEN** HTML комментариев и формы отдаётся с сервера Blade из `includes/comments_form.blade.php` и `includes/comments_list.blade.php`
+
+- **WHEN** открывается статья с комментариями
+- **THEN** список и форма комментариев отображаются из Blade-включений без клиентского фреймворка

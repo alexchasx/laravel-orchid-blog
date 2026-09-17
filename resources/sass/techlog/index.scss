@@ -1,0 +1,12 @@
+// ============================================================================
+// Techlog SCSS — entry point (orchestrator)
+// Порядок: variables → reset → base → forms → utilities → components → responsive
+// ============================================================================
+
+@use 'variables';
+@use 'reset';
+@use 'base';
+@use 'forms';
+@use 'utilities';
+@use 'components';
+@use 'responsive';

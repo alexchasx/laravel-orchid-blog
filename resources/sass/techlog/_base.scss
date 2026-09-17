@@ -1,0 +1,93 @@
+// ============================================================================
+// Базовые стили: типографика, ссылки, кнопки
+// ============================================================================
+
+// Заголовки
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.1;
+    letter-spacing: -.04em;
+    margin: 0;
+}
+
+// Эмфаза в заголовках
+h1 em,
+h2 em,
+h3 em {
+    font-style: normal;
+    color: var(--green);
+}
+
+// Lead-текст
+.lead {
+    color: var(--muted);
+    font-size: 1.08rem;
+    max-width: 650px;
+}
+
+// Eyebrow (маленький заголовок-метка)
+.eyebrow {
+    font: 600 .72rem "JetBrains Mono", monospace;
+    letter-spacing: .14em;
+    color: var(--green);
+    margin: 0 0 16px;
+}
+
+// Кнопки
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 19px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s, background .2s;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+.button.primary {
+    background: var(--green);
+    color: #03120b;
+    font-weight: 700;
+    box-shadow: 0 0 25px rgba(0, 255, 136, .16);
+}
+
+.button.ghost {
+    background: var(--surface);
+    box-shadow: var(--shadow);
+}
+
+// Текст-ссылки
+.text-link,
+.read {
+    color: var(--green);
+}
+
+.read {
+    font: 600 .76rem "JetBrains Mono", monospace;
+}
+
+// Terminal note
+.terminal-note {
+    font: 500 .75rem / 1.9 "JetBrains Mono", monospace;
+    color: var(--muted);
+
+    span, strong {
+        color: var(--green);
+    }
+}
+
+// Pulse-точка
+.pulse {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 12px var(--green);
+    margin-right: 8px;
+}

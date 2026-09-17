@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ИТ-блог о технологиях, архитектуре, инструментах и практических решениях для современного разработчика.">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta property="og:title" content="TECH//LOG — ИТ-блог">
+  <meta property="og:description" content="Инструменты, архитектура, решения: всё для современного разработчика.">
+  <title>TECH//LOG — ИТ-блог</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">К содержимому</a>
+<header class="site-header" id="top">
+  <nav class="nav container" aria-label="Основная навигация">
+    <a class="brand" href="index.html" aria-label="TECH//LOG — главная"><span>TECH</span><b>//</b>LOG</a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-menu"><span></span><span></span><span></span><span class="sr-only">Открыть меню</span></button>
+    <div class="nav-links" id="primary-menu">
+      <a href="#articles">Статьи</a><a href="#topics">Темы</a><a href="#about">О блоге</a><a href="contact.html">Контакты</a>
+      <button class="theme-toggle" type="button" aria-label="Переключить тему" title="Переключить тему">☼</button>
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+<section class="hero container reveal">
+  <div class="hero-copy">
+    <p class="eyebrow"><span class="pulse"></span> SYSTEM ONLINE / 2026</p>
+    <h1>Инструменты, архитектура, решения: <em>всё для современного разработчика.</em></h1>
+    <p class="lead">Практический ИТ-блог без информационного шума: разбираем архитектуру, инженерные подходы, инструменты и реальные trade-off'ы.</p>
+    <div class="hero-actions"><a class="button primary" href="#articles">Читать статьи <span>→</span></a><a class="button ghost" href="#newsletter">Подписаться</a></div>
+    <div class="terminal-note"><span>$</span> cat /etc/techlog/mission.txt<br><strong>ship better software.</strong></div>
+  </div>
+  <div class="hero-visual">
+    <div class="glow"></div>
+    <div class="code-card">
+      <div class="window-bar"><i></i><i></i><i></i><span>architecture.ts</span></div>
+      <pre><code><span class="c-purple">type</span> <span class="c-green">System</span> = {
+  <span class="c-blue">scale</span>: <span class="c-orange">"elastic"</span>;
+  <span class="c-blue">latency</span>: <span class="c-orange">"&lt;100ms"</span>;
+  <span class="c-blue">reliability</span>: <span class="c-orange">"99.99%"</span>;
+};
+
+<span class="c-purple">const</span> <span class="c-green">ship</span> = (<span class="c-blue">idea</span>) =&gt;
+  <span class="c-green">software</span>.<span class="c-blue">deliver</span>(idea);</code></pre>
+    </div>
+  </div>
+</section>
+
+<section class="section container" id="articles">
+  <div class="section-head reveal"><div><p class="eyebrow">LATEST / 01—06</p><h2>Свежие материалы</h2></div><a class="text-link" href="article.html">Все статьи →</a></div>
+  <div class="masonry">
+    <article class="post featured reveal"><div class="post-image image-one"><span>ARCH / 01</span></div><div class="post-body"><div class="meta">12 СЕН 2026 · 8 МИН</div><h3><a href="article.html">Как проектировать сервисы, которые не боятся роста</a></h3><p>От границ модулей до наблюдаемости: практический разбор решений, которые помогают архитектуре пережить первые миллионы запросов.</p><a class="read" href="article.html">Читать разбор <span>↗</span></a></div></article>
+    <article class="post reveal"><div class="post-image image-two"><span>DEV / 02</span></div><div class="post-body"><div class="meta">08 СЕН 2026 · 6 МИН</div><h3><a href="article.html">Локальная разработка без боли: reproducible environments</a></h3><p>Почему одинаковое окружение важнее ещё одного README и как собрать понятный workflow.</p><a class="read" href="article.html">Читать <span>↗</span></a></div></article>
+    <article class="post reveal"><div class="post-body"><div class="meta">03 СЕН 2026 · 5 МИН</div><h3><a href="article.html">PostgreSQL: пять индексов, которые легко понять неправильно</a></h3><p>Разбираем планы запросов, селективность и случаи, когда индекс превращается из ускорителя в лишний расход.</p><a class="read" href="article.html">Читать <span>↗</span></a></div></article>
+    <article class="post reveal"><div class="post-image image-three"><span>AI / 04</span></div><div class="post-body"><div class="meta">29 АВГ 2026 · 9 МИН</div><h3><a href="article.html">AI-инструменты в инженерном цикле: где они действительно полезны</a></h3><p>Не хайп, а workflow: код-ревью, документация, тесты и исследование неизвестного кода.</p><a class="read" href="article.html">Читать <span>↗</span></a></div></article>
+    <article class="post reveal"><div class="post-body"><div class="meta">21 АВГ 2026 · 7 МИН</div><h3><a href="article.html">Наблюдаемость как продукт: от логов к сигналам</a></h3><p>Что собирать, как не утонуть в telemetry и почему alert — это часть интерфейса системы.</p><a class="read" href="article.html">Читать <span>↗</span></a></div></article>
+    <article class="post reveal"><div class="post-image image-four"><span>TOOLS / 06</span></div><div class="post-body"><div class="meta">16 АВГ 2026 · 4 МИН</div><h3><a href="article.html">CLI-инструменты, которые экономят часы каждую неделю</a></h3><p>Небольшая коллекция практик для терминала: поиск, git, контейнеры и автоматизация рутины.</p><a class="read" href="article.html">Читать <span>↗</span></a></div></article>
+  </div>
+</section>
+
+<section class="section container topics" id="topics">
+  <div class="section-head reveal"><div><p class="eyebrow">EXPLORE / 02</p><h2>Исследуйте по темам</h2></div></div>
+  <div class="topic-grid">
+    <a class="topic reveal" href="article.html"><span>01</span><strong>Архитектура</strong><small>DDD · Microservices · Systems</small></a>
+    <a class="topic reveal" href="article.html"><span>02</span><strong>Backend</strong><small>APIs · Databases · Performance</small></a>
+    <a class="topic reveal" href="article.html"><span>03</span><strong>DevOps</strong><small>Cloud · CI/CD · Observability</small></a>
+    <a class="topic reveal" href="article.html"><span>04</span><strong>AI & Data</strong><small>LLM · ML · Data Engineering</small></a>
+  </div>
+</section>
+
+<section class="about section container reveal" id="about">
+  <div><p class="eyebrow">ABOUT / 03</p><h2>Инженерный взгляд<br><em>вместо шума.</em></h2></div>
+  <div><p>TECH//LOG — независимый блог о том, как создавать и поддерживать программные системы. Здесь важны контекст, проверяемость и цена каждого технического решения.</p><p>Материалы написаны для разработчиков, тимлидов и инженеров, которым нужно не просто узнать «как», а понять «почему».</p></div>
+</section>
+
+<section class="newsletter section container reveal" id="newsletter">
+  <div><p class="eyebrow">SIGNAL / 04</p><h2>Один полезный email.<br><em>Никакого спама.</em></h2></div>
+  <form class="subscribe-form" data-validate><label for="email">Ваш email</label><div class="input-row"><input id="email" name="email" type="email" autocomplete="email" placeholder="developer@example.com" required><button class="button primary" type="submit">Подписаться</button></div><p class="form-message" aria-live="polite"></p></form>
+</section>
+</main>
+
+<footer class="footer"><div class="container footer-inner"><span>© 2026 TECH//LOG. Built for engineers.</span><div><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a><a href="https://t.me/" target="_blank" rel="noopener">Telegram</a><a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a><a href="contact.html">Контакты</a></div></div></footer>
+<button class="to-top" type="button" aria-label="Наверх">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

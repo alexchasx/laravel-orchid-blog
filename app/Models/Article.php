@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Rubric;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -89,6 +90,19 @@ class Article extends Model
                 $article->content_html = (new CommonMarkConverter())
                     ->convert((string) $article->content_raw)
                     ->getContent();
+            }
+
+            // Автогенерация slug из заголовка, если slug не заполнен.
+            if (empty($article->slug)) {
+                $base = Str::slug($article->title);
+                $slug = $base;
+                $counter = 1;
+
+                while (Article::where('slug', $slug)->where('id', '!=', $article->id)->exists()) {
+                    $slug = $base . '-' . $counter++;
+                }
+
+                $article->slug = $slug;
             }
         });
     }

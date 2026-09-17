@@ -86,6 +86,9 @@ class CreateOrUpdateArticle extends Rows
             //     ->title('Предпросмотр')->required(),
 
             Group::make([
+                Input::make('article.slug')
+                    ->title('Slug (URL)')
+                    ->placeholder('Оставьте пустым — сгенерируется автоматически'),
                 Input::make('article.keywords')->title('Ключевые слова'),
                 Input::make('article.meta_desc')->title('Мета деск'),
             ]),

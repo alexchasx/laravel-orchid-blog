@@ -52,10 +52,10 @@ class ContactScreen extends Screen
             Layout::legend('contact', [
                 Sight::make('id'),
                 Sight::make('name', 'Имя')->render(function (Contact $contact) {
-                    return $contact->user?->name;
+                    return $contact->name ?? $contact->user?->name;
                 }),
                 Sight::make('email', 'Email')->render(function (Contact $contact) {
-                    return $contact->user?->email;
+                    return $contact->email ?? $contact->user?->email;
                 }),
                 Sight::make('title', 'Тема'),
                 Sight::make('message', 'Сообщение'),
