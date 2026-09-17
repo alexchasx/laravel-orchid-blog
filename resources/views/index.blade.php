@@ -55,9 +55,9 @@
                     <div class="meta">
                         {{ \Carbon\Carbon::parse($article->published_at)->locale('ru')->isoFormat('D MMM YYYY') }} · {{ rand(4, 12) }} МИН
                     </div>
-                    <h3><a href="{{ route('articleShow', $article->slug) }}">{{ $article->title }}</a></h3>
+                    <h3><a href="{{ route('articleShow', ['article' => $article->slug]) }}">{{ $article->title }}</a></h3>
                     <p>{{ Str::limit($article->excert ?? '', 150) }}</p>
-                    <a class="read" href="{{ route('articleShow', $article->slug) }}">
+                    <a class="read" href="{{ route('articleShow', ['article' => $article->slug]) }}">
                         Читать <span>↗</span>
                     </a>
                 </div>
