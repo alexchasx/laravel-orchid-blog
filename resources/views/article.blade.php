@@ -57,7 +57,9 @@
 </article>
 
 {{-- Comments --}}
-@include('includes.comments_list')
-@include('includes.comments_form')
+<section class="section comments container" id="comments">
+    @include('includes.comments_list')
+    @include('includes.comments_form')
+</section>
 
 @endsection

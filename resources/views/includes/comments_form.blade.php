@@ -1,43 +1,32 @@
-<div id="app" class="article_card">
-    <a name="comments_form"></a>
+<div class="comment-form-wrap reveal">
+    <div class="section-head">
+        <div>
+            <p class="eyebrow">JOIN THE DISCUSSION</p>
+            <h2>Оставить комментарий</h2>
+        </div>
+    </div>
 
     @guest
-    <h3>
-        <a href="{{ route('login') }}" class="link login">
-            <span>{{ 'Авторизуйтесь' }}</span>
-        </a>
-        , чтобы прокомментировать.
-    </h3>
-
+        <p class="comment-login-note">
+            <a href="{{ route('login') }}" class="text-link">Авторизуйтесь</a>, чтобы прокомментировать.
+        </p>
     @else
+        <form action="{{ route('commentStore') }}" method="post" class="comment-form" id="commentform">
+            @csrf
 
-    <form action="{{ route('commentStore') }}" method="post" id="commentform" class="comment-form">
-        @csrf
-
-        <p class="comment-form-comment textwrapper">
             <label for="comment">
                 {{ __('Комментарий') }}
 
                 @error('comment')
-                <br>
-                <span class="invalid-feedback">{{ $message }}</span>
+                    <span class="comment-error">{{ $message }}</span>
                 @enderror
-
             </label>
-            <br>
-            <textarea id="comment" name="comment" cols="35" rows="8" maxlength="65525" required="required">
-                {{ old('comment') }}
-            </textarea>
-        </p>
 
-        <p class="comment-form-cookies-consent">
-        </p>
+            <textarea id="comment" name="comment" rows="6" maxlength="65525" required placeholder="Поделитесь мыслями…">{{ old('comment') }}</textarea>
 
-        <p class="form-submit">
-            <input name="submit" type="submit" id="submit" class="submit" value="{{ __('Отправить') }}">
-            <input type="hidden" name="article_id" value="{{ $article->id }}" id="article_id">
-        </p>
-    </form>
+            <input type="hidden" name="article_id" value="{{ $article->id }}">
 
+            <button class="button primary" type="submit">Отправить →</button>
+        </form>
     @endguest
 </div>
