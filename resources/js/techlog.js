@@ -61,17 +61,67 @@
     emailForm.reset();
   });
 
-  // Contact form validation
+  // Contact form: отправка на backend
   const contactForm = document.querySelector('[data-contact-form]');
-  contactForm?.addEventListener('submit', e => {
+  contactForm?.addEventListener('submit', async e => {
     e.preventDefault();
-    const message = contactForm.querySelector('.form-message');
+
+    const messageEl = contactForm.querySelector('.form-message');
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const originalText = submitBtn?.textContent;
+
+    messageEl.classList.remove('success', 'error');
+    messageEl.textContent = '';
+
     if (!contactForm.checkValidity()) {
-      message.textContent = 'Проверьте заполнение полей формы.';
+      messageEl.textContent = 'Проверьте заполнение полей формы.';
+      messageEl.classList.add('error');
       contactForm.reportValidity();
       return;
     }
-    message.textContent = 'Сообщение принято. В рабочей интеграции здесь будет отправка на backend.';
-    contactForm.reset();
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Отправляем…';
+    }
+
+    try {
+      const response = await fetch(contactForm.action, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+        },
+        body: new FormData(contactForm),
+      });
+
+      let data = {};
+      try {
+        data = await response.json();
+      } catch (_) {
+        // если сервер вернул не JSON — обработаем по статусу
+      }
+
+      if (response.ok && data.success) {
+        messageEl.textContent = data.message || 'Сообщение отправлено!';
+        messageEl.classList.add('success');
+        contactForm.reset();
+      } else {
+        const firstError = data.errors
+          ? Object.values(data.errors)[0][0]
+          : (data.message || 'Не удалось отправить сообщение. Попробуйте ещё раз.');
+        messageEl.textContent = firstError;
+        messageEl.classList.add('error');
+      }
+    } catch (_) {
+      messageEl.textContent = 'Не удалось отправить сообщение. Проверьте соединение и попробуйте ещё раз.';
+      messageEl.classList.add('error');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    }
   });
 })();

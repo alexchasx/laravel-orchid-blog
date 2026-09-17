@@ -50,3 +50,11 @@
     color: var(--green);
     min-height: 1.4em;
 }
+
+.form-message.success {
+    color: var(--green);
+}
+
+.form-message.error {
+    color: var(--red, #e5484d);
+}

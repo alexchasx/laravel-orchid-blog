@@ -50,6 +50,15 @@
             <a href="{{ route('home') }}#about">О блоге</a>
             <a href="{{ route('contact') }}">Контакты</a>
             <button class="theme-toggle" type="button" aria-label="Переключить тему" title="Переключить тему">☼</button>
+
+            @auth
+            <button class="nav-logout" type="button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                {{ __('Выйти') }}
+            </button>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+            @endauth
         </div>
     </nav>
 </header>

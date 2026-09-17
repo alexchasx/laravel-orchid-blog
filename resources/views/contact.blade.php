@@ -9,7 +9,7 @@
         <h1>Давайте обсудим<br><em>технологии.</em></h1>
         <p>Есть тема для статьи, идея сотрудничества или нашли неточность? Напишите — читаем каждое сообщение.</p>
         <div class="contact-links">
-            <a href="mailto:alexchasx@yandex.ru">alexchasx@yandex.ru</a>
+            <a href="mailto:mail@yandex.ru">mail@yandex.ru</a>
             <a href="https://github.com/alexchasx" target="_blank" rel="noopener">github.com/alexchasx</a>
         </div>
     </div>
@@ -18,15 +18,20 @@
     <form class="contact-form reveal" data-contact-form action="{{ route('contact.store') }}" method="POST">
         @csrf
 
-        <label for="name">
-            Имя
-            <input id="name" name="name" type="text" autocomplete="name" placeholder="Алексей" required minlength="2">
-        </label>
+        @auth
+            <input type="hidden" name="name" value="{{ auth()->user()->name }}">
+            <input type="hidden" name="email" value="{{ auth()->user()->email }}">
+        @else
+            <label for="name">
+                Имя
+                <input id="name" name="name" type="text" autocomplete="name" placeholder="Алексей" required minlength="2">
+            </label>
 
-        <label for="contact-email">
-            Email
-            <input id="contact-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
-        </label>
+            <label for="contact-email">
+                Email
+                <input id="contact-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+            </label>
+        @endauth
 
         <label for="message">
             Сообщение

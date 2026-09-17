@@ -67,6 +67,23 @@
     font-size: 1.2rem;
 }
 
+.nav-logout {
+    border: 1px solid var(--line);
+    background: none;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: .9rem;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .2s;
+
+    &:hover {
+        color: var(--green);
+        border-color: var(--green);
+    }
+}
+
 .menu-toggle {
     display: none;
 }

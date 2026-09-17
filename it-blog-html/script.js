@@ -59,7 +59,7 @@
       contactForm.reportValidity();
       return;
     }
-    message.textContent = 'Сообщение принято. В рабочей интеграции здесь будет отправка на backend.';
+    message.textContent = 'Сообщение принято.';
     contactForm.reset();
   });
 })();
