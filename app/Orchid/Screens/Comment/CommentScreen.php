@@ -51,6 +51,11 @@ class CommentScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Button::make('Одобрить')
+                ->icon('check')
+                ->method('approve')
+                ->canSee($this->comment->exists && !$this->comment->active),
+
             Button::make('Удалить')
                 ->icon('trash')
                 ->method('remove')
@@ -80,6 +85,15 @@ class CommentScreen extends Screen
 
                 Sight::make('name'),
 
+                Sight::make('active', 'Статус')
+                    ->render(function (Comment $comment) {
+                        return $comment->active
+                            ? 'Опубликован'
+                            : '<span style="color:#e5484d;">На модерации</span>';
+                    }),
+
+                Sight::make('ip', 'IP'),
+
                 Sight::make('content')->render(function (Comment $comment) {
                     return $comment->content;
                 }),
@@ -91,6 +105,15 @@ class CommentScreen extends Screen
                 }),
             ])
         ];
+    }
+
+    public function approve(Comment $comment)
+    {
+        $comment->update(['active' => true]);
+
+        Alert::info('Комментарий с ID=' . $comment->id . ' одобрен.');
+
+        return redirect()->route('platform.comment.list');
     }
 
     /**

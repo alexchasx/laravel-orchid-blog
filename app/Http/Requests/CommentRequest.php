@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\MathCaptchaRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CommentRequest extends FormRequest
@@ -23,15 +24,34 @@ class CommentRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
+            'article_id' => ['required', 'exists:articles,id'],
             'comment' => ['required', 'max:5000'],
         ];
+
+        if (! $this->user()) {
+            $rules['name'] = ['required', 'string', 'min:2', 'max:255'];
+            $rules['email'] = ['required', 'email', 'max:255'];
+            $rules['captcha'] = ['required', new MathCaptchaRule()];
+        }
+
+        return $rules;
     }
 
     public function messages(): array
     {
-        return  [
+        return [
             'comment.required' => 'Это поле необходимо для заполнения',
+            'comment.max' => 'Комментарий не должен превышать 5000 символов.',
+            'article_id.required' => 'Не указана статья, к которой относится комментарий.',
+            'article_id.exists' => 'Указанная статья не найдена.',
+            'name.required' => 'Поле "Имя" обязательно.',
+            'name.min' => 'Имя должно содержать не менее 2 символов.',
+            'name.max' => 'Имя не должно превышать 255 символов.',
+            'email.required' => 'Поле "Email" обязательно.',
+            'email.email' => 'Введите корректный email.',
+            'email.max' => 'Email не должен превышать 255 символов.',
+            'captcha.required' => 'Ответьте на контрольный вопрос.',
         ];
     }
 }

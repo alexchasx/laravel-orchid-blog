@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Rubric;
 use App\Models\User;
+use App\Support\MathCaptcha;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -26,6 +27,13 @@ class CommentTest extends TestCase
         ]);
     }
 
+    private function solveCaptcha(): int
+    {
+        MathCaptcha::question();
+
+        return session('captcha_answer');
+    }
+
     public function test_auth_user_can_store_comment(): void
     {
         $user = User::factory()->create(['active' => true]);
@@ -43,19 +51,93 @@ class CommentTest extends TestCase
             'name' => $user->name,
             'content' => 'Отличная статья, спасибо!',
             'active' => true,
+            'ip' => '127.0.0.1',
         ]);
     }
 
-    public function test_guest_cannot_store_comment(): void
+    public function test_guest_can_store_comment_with_captcha_and_goes_to_moderation(): void
     {
         $article = $this->createAuthoredArticle();
 
         $response = $this->post('/comment.create', [
             'comment' => 'Комментарий от гостя',
             'article_id' => $article->id,
+            'name' => 'Гость',
+            'email' => 'guest@example.com',
+            'captcha' => $this->solveCaptcha(),
         ]);
 
-        $response->assertRedirect(route('login'));
+        $response->assertRedirect();
+        $this->assertDatabaseHas('comments', [
+            'article_id' => $article->id,
+            'user_id' => null,
+            'name' => 'Гость',
+            'email' => 'guest@example.com',
+            'content' => 'Комментарий от гостя',
+            'active' => false,
+            'ip' => '127.0.0.1',
+        ]);
+        $response->assertSessionHas('success');
+    }
+
+    public function test_guest_needs_name_and_email(): void
+    {
+        $article = $this->createAuthoredArticle();
+
+        $response = $this->post('/comment.create', [
+            'comment' => 'Комментарий без имени и email',
+            'article_id' => $article->id,
+            'captcha' => $this->solveCaptcha(),
+        ]);
+
+        $response->assertSessionHasErrors(['name', 'email']);
+        $this->assertDatabaseCount('comments', 0);
+    }
+
+    public function test_guest_comment_without_captcha_fails_validation(): void
+    {
+        $article = $this->createAuthoredArticle();
+
+        $response = $this->post('/comment.create', [
+            'comment' => 'Комментарий без капчи',
+            'article_id' => $article->id,
+            'name' => 'Гость',
+            'email' => 'guest@example.com',
+        ]);
+
+        $response->assertSessionHasErrors('captcha');
+        $this->assertDatabaseCount('comments', 0);
+    }
+
+    public function test_guest_comment_with_wrong_captcha_fails_validation(): void
+    {
+        $article = $this->createAuthoredArticle();
+
+        $correct = $this->solveCaptcha();
+
+        $response = $this->post('/comment.create', [
+            'comment' => 'Комментарий с неверной капчей',
+            'article_id' => $article->id,
+            'name' => 'Гость',
+            'email' => 'guest@example.com',
+            'captcha' => $correct + 1,
+        ]);
+
+        $response->assertSessionHasErrors('captcha');
+        $this->assertDatabaseCount('comments', 0);
+    }
+
+    public function test_comment_for_missing_article_fails_validation(): void
+    {
+        $response = $this->post('/comment.create', [
+            'comment' => 'Комментарий к несуществующей статье',
+            'article_id' => 999999,
+            'name' => 'Гость',
+            'email' => 'guest@example.com',
+            'captcha' => $this->solveCaptcha(),
+        ]);
+
+        $response->assertSessionHasErrors('article_id');
         $this->assertDatabaseCount('comments', 0);
     }
 

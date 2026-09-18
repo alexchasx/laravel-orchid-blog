@@ -21,10 +21,12 @@ Route::controller(ArticleController::class)->group(function () {
     Route::get('article/{article:slug}', 'show')->name('articleShow');
 });
 
-Route::middleware('auth')->controller(CommentController::class)->group(function () {
-    Route::post('comment.create', 'store')->name('commentStore');
-    Route::delete('delete.{comment}', 'delete')->name('commentDelete');
-});
+Route::post('comment.create', [CommentController::class, 'store'])
+    ->middleware('throttle:10,1')
+    ->name('commentStore');
+
+Route::middleware('auth')->delete('delete.{comment}', [CommentController::class, 'delete'])
+    ->name('commentDelete');
 
 // Breeze dashboard (используется для редиректов после входа).
 Route::get('/dashboard', function () {

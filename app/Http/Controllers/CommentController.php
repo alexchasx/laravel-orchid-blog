@@ -8,23 +8,41 @@ use App\Models\Comment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class CommentController extends MainController
 {
     public function store(CommentRequest $request): RedirectResponse
     {
-        $comment = Article::find($request->input('article_id'))
-            ->comments()
-            ->save(new Comment([
-                'content' => $request->input('comment'),
-                'user_id' => Auth::user()->id,
-                'name' => Auth::user()->name,
-                'article_id' => $request->input('article_id'),
-                'active' => true,
-            ]));
+        $article = Article::findOrFail($request->input('article_id'));
 
-        return redirect()->to(url()->previous() . '#comment' . $comment->id );
+        $data = [
+            'content' => $request->input('comment'),
+            'article_id' => $article->id,
+            'ip' => $request->ip(),
+        ];
+
+        if (Auth::check()) {
+            $data['user_id'] = Auth::id();
+            $data['name'] = Auth::user()->name;
+            $data['email'] = Auth::user()->email;
+            $data['active'] = true;
+        } else {
+            $data['user_id'] = null;
+            $data['name'] = $request->input('name');
+            $data['email'] = $request->input('email');
+            $data['active'] = false;
+        }
+
+        $comment = $article->comments()->create($data);
+
+        if ($data['active']) {
+            $route = url()->previous() . '#comment' . $comment->id;
+        } else {
+            $route = url()->previous() . '#comments';
+            session()->flash('success', __('Комментарий отправлен и появится после модерации.'));
+        }
+
+        return redirect()->to($route);
     }
 
     public function delete(Comment $comment): RedirectResponse

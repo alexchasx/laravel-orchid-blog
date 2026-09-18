@@ -73,6 +73,15 @@ class CommentListScreen extends Screen
                         return Str::limit($comment->name, 40);
                 }),
 
+                TD::make('active', 'Статус')
+                    ->render(function (Comment $comment) {
+                        return $comment->active
+                            ? '<span style="color:#00d68f;">Опубликован</span>'
+                            : '<span style="color:#e5484d;">На модерации</span>';
+                    }),
+
+                TD::make('ip', 'IP')->defaultHidden(),
+
                 TD::make('content', 'Контент')
                     ->render(function (Comment $comment) {
                         return Str::limit($comment->content, 50);

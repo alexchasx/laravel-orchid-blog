@@ -1,13 +1,15 @@
-@if($article->comments->isNotEmpty())
+@php $activeComments = $article->comments->where('active', true); @endphp
+
+@if($activeComments->isNotEmpty())
     <div class="section-head reveal">
         <div>
-            <p class="eyebrow">DISCUSSION / {{ $article->comments->count() }}</p>
+            <p class="eyebrow">DISCUSSION / {{ $activeComments->count() }}</p>
             <h2>Комментарии</h2>
         </div>
     </div>
 
     <div class="comments-list">
-        @foreach($article->comments as $comment)
+        @foreach($activeComments as $comment)
             <article class="comment reveal" id="comment{{ $comment->id }}">
                 <div class="comment-head">
                     <strong class="comment-author">{{ $comment->name }}</strong>
