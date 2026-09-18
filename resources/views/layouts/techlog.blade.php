@@ -69,7 +69,7 @@
 
 <footer class="footer">
     <div class="container footer-inner">
-        <span>&copy; 2026 TECH//LOG. Built for engineers.</span>
+        <span>&copy; 2026 {{ config('app.name') }}. {{ config('my_config.slogan') }}.</span>
         <div>
             @if(config('my_config.my_github'))
                 <a href="{{ config('my_config.my_github') }}" target="_blank" rel="noopener">GitHub</a>
