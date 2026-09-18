@@ -124,4 +124,45 @@
       }
     }
   });
+
+  // Модальное окно: результат отправки комментария
+  const modals = document.querySelectorAll('.modal');
+
+  const closeModal = (modal) => {
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
+  };
+
+  const openModal = (modal) => {
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
+    modal.querySelector('[data-modal-close], button')?.focus();
+  };
+
+  modals.forEach(modal => {
+    // Элементы закрытия: крестик, оверлей, кнопка «Понятно»
+    modal.querySelectorAll('[data-modal-close]').forEach(el => {
+      el.addEventListener('click', () => closeModal(modal));
+    });
+
+    // Клик за пределами карточки (по оверлею)
+    modal.addEventListener('click', e => {
+      if (e.target === modal) closeModal(modal);
+    });
+  });
+
+  // Escape закрывает открытую модалку
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    modals.forEach(modal => {
+      if (modal.classList.contains('is-open')) closeModal(modal);
+    });
+  });
+
+  // Модалка, открытая сервером (redirect с flash/ошибкой), блокирует скролл
+  modals.forEach(modal => {
+    if (modal.classList.contains('is-open')) openModal(modal);
+  });
 })();

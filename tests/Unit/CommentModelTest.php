@@ -54,6 +54,7 @@ class CommentModelTest extends TestCase
             'name',
             'email',
             'website',
+            'ip',
             'user_id',
             'article_id',
             'content',

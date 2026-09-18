@@ -15,6 +15,7 @@ use Orchid\Screen\AsSource;
  * @property string|null $name
  * @property string|null $email
  * @property string|null $website
+ * @property string|null $ip
  * @property int|null $user_id
  * @property int $article_id
  * @property string $content
@@ -40,6 +41,7 @@ use Orchid\Screen\AsSource;
  * @method static \Illuminate\Database\Eloquent\Builder|Comment whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comment whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereIp($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comment whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comment whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comment whereUserId($value)
@@ -59,6 +61,7 @@ class Comment extends Model
         'name',
         'email',
         'website',
+        'ip',
         'user_id',
         'article_id',
         'content',

@@ -51,6 +51,11 @@ class CommentScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Button::make('Одобрить')
+                ->icon('check')
+                ->method('approve')
+                ->canSee($this->comment->exists && !$this->comment->active),
+
             Button::make('Удалить')
                 ->icon('trash')
                 ->method('remove')
@@ -67,30 +72,54 @@ class CommentScreen extends Screen
     {
         return [
             Layout::legend('comment', [
-                Sight::make('id'),
+                Sight::make('id', 'ID'),
 
                 Sight::make('article_id', 'Статья')
                     ->render(function (Comment $comment) {
+                        if (! $comment->article) {
+                            return 'Статья удалена (ID=' . $comment->article_id . ')';
+                        }
+
                         $strTitle = '[ID=' . $comment->article->id . '] '
                             . $comment->article->title;
 
                         return Link::make($strTitle)
-                            ->route('articleShow', $comment->article->id);
+                            ->route('articleShow', $comment->article->slug);
                     }),
 
-                Sight::make('name'),
+                Sight::make('name', 'Имя'),
 
-                Sight::make('content')->render(function (Comment $comment) {
+                Sight::make('email', 'Email'),
+
+                Sight::make('active', 'Статус')
+                    ->render(function (Comment $comment) {
+                        return $comment->active
+                            ? 'Опубликован'
+                            : '<span style="color:#e5484d;">На модерации</span>';
+                    }),
+
+                Sight::make('ip', 'IP'),
+
+                Sight::make('content', 'Содержимое')->render(function (Comment $comment) {
                     return $comment->content;
                 }),
 
-                Sight::make('created_at')->render(function (Comment $comment) {
+                Sight::make('created_at', 'Дата')->render(function (Comment $comment) {
                     $carbon = Carbon::create($comment->created_at);
 
                     return $carbon->format('d.m.Y');
                 }),
             ])
         ];
+    }
+
+    public function approve(Comment $comment)
+    {
+        $comment->update(['active' => true]);
+
+        Alert::info('Комментарий с ID=' . $comment->id . ' одобрен.');
+
+        return redirect()->route('platform.comment.list');
     }
 
     /**

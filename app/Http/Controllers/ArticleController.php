@@ -7,7 +7,9 @@ use App\Models\Rubric;
 use App\Models\Tag;
 use App\Services\ArticleService;
 use App\Services\CacheService;
+use App\Support\MathCaptcha;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 final class ArticleController extends Controller
@@ -57,6 +59,7 @@ final class ArticleController extends Controller
             'article'     => $article,
             'contentHtml' => $contentHtml,
             'tocItems'    => $tocItems,
+            'captcha'     => Auth::guest() ? MathCaptcha::question() : null,
             'metaTitle'   => $article->title,
             'metaDesc'    => $article->meta_desc,
         ]);

@@ -21,6 +21,7 @@ class CommentListScreen extends Screen
     {
         return [
             'comments' => Comment::filters()->defaultSort('id', 'desc')
+                ->with('article')
                 ->paginate(50),
         ];
     }
@@ -73,6 +74,15 @@ class CommentListScreen extends Screen
                         return Str::limit($comment->name, 40);
                 }),
 
+                TD::make('active', 'Статус')
+                    ->render(function (Comment $comment) {
+                        return $comment->active
+                            ? '<span style="color:#00d68f;">Опубликован</span>'
+                            : '<span style="color:#e5484d;">На модерации</span>';
+                    }),
+
+                TD::make('ip', 'IP')->defaultHidden(),
+
                 TD::make('content', 'Контент')
                     ->render(function (Comment $comment) {
                         return Str::limit($comment->content, 50);
@@ -80,10 +90,14 @@ class CommentListScreen extends Screen
 
                 TD::make('article_id', 'Статья')
                     ->render(function (Comment $comment) {
+                        if (! $comment->article) {
+                            return 'Статья удалена (ID=' . $comment->article_id . ')';
+                        }
+
                         $strTitle = '[ID=' . $comment->article->id . '] ' . $comment->article->title;
 
                         return Link::make( Str::limit($strTitle, 30) )
-                            ->route('articleShow', $comment->article->id);
+                            ->route('articleShow', $comment->article->slug);
                     }),
 
                 // TD::make('email', 'Email')->defaultHidden(),

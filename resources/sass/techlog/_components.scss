@@ -692,3 +692,122 @@
         pointer-events: auto;
     }
 }
+
+// ---------------------------------------------------------------------------
+// Modal (результат отправки комментария)
+// ---------------------------------------------------------------------------
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .25s ease, visibility .25s ease;
+
+    &.is-open {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+.modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(4, 6, 5, .68);
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+}
+
+.modal-card {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    padding: 44px 32px 30px;
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transform: translateY(14px) scale(.98);
+    transition: transform .25s ease;
+
+    .modal.is-open & {
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    font-size: 1.3rem;
+    line-height: 1;
+    color: var(--muted);
+    background: none;
+    border: 0;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: .2s;
+
+    &:hover {
+        color: var(--text);
+        background: var(--surface-2);
+    }
+}
+
+.modal-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 20px;
+    display: grid;
+    place-items: center;
+    font: 700 1.4rem "JetBrains Mono", monospace;
+    border-radius: 50%;
+
+    &--ok {
+        color: var(--green);
+        background: var(--green-dark);
+        border: 1px solid rgba(0, 255, 136, .35);
+        box-shadow: 0 0 22px rgba(0, 255, 136, .18);
+    }
+
+    &--error {
+        color: #ff6b6b;
+        background: rgba(255, 107, 107, .1);
+        border: 1px solid rgba(255, 107, 107, .35);
+        box-shadow: 0 0 22px rgba(255, 107, 107, .15);
+    }
+}
+
+.modal-title {
+    margin: 0 0 10px;
+    font-size: 1.45rem;
+    line-height: 1.2;
+    letter-spacing: -.02em;
+}
+
+.modal-text {
+    margin: 0 0 26px;
+    color: var(--muted);
+    font-size: .95rem;
+    line-height: 1.6;
+}
+
+.modal-action {
+    min-width: 140px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .modal,
+    .modal-card {
+        transition: none;
+    }
+}

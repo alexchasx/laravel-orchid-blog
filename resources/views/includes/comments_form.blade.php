@@ -6,27 +6,55 @@
         </div>
     </div>
 
-    @guest
-        <p class="comment-login-note">
-            <a href="{{ route('login') }}" class="text-link">Авторизуйтесь</a>, чтобы прокомментировать.
-        </p>
-    @else
-        <form action="{{ route('commentStore') }}" method="post" class="comment-form" id="commentform">
-            @csrf
+    <form action="{{ route('commentStore') }}" method="post" class="comment-form" id="commentform">
+        @csrf
 
-            <label for="comment">
-                {{ __('Комментарий') }}
+        @guest
+            <div class="input-row">
+                <label for="c-name">
+                    {{ __('Имя') }}
 
-                @error('comment')
+                    @error('name')
+                        <span class="comment-error">{{ $message }}</span>
+                    @enderror
+
+                    <input id="c-name" name="name" type="text" autocomplete="name" placeholder="Алексей" value="{{ old('name') }}" required minlength="2">
+                </label>
+
+                <label for="c-email">
+                    {{ __('Email') }}
+
+                    @error('email')
+                        <span class="comment-error">{{ $message }}</span>
+                    @enderror
+
+                    <input id="c-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" value="{{ old('email') }}" required>
+                </label>
+            </div>
+
+            <label for="captcha">
+                {{ __('Контрольный вопрос:') }} <strong>{{ $captcha }}</strong>
+
+                @error('captcha')
                     <span class="comment-error">{{ $message }}</span>
                 @enderror
+
+                <input id="captcha" name="captcha" type="text" inputmode="numeric" autocomplete="off" placeholder="Ваш ответ" required>
             </label>
+        @endguest
 
-            <textarea id="comment" name="comment" rows="6" maxlength="65525" required placeholder="Поделитесь мыслями…">{{ old('comment') }}</textarea>
+        <label for="comment">
+            {{ __('Комментарий') }}
 
-            <input type="hidden" name="article_id" value="{{ $article->id }}">
+            @error('comment')
+                <span class="comment-error">{{ $message }}</span>
+            @enderror
+        </label>
 
-            <button class="button primary" type="submit">Отправить →</button>
-        </form>
-    @endguest
+        <textarea id="comment" name="comment" rows="6" maxlength="65525" required placeholder="Поделитесь мыслями…">{{ old('comment') }}</textarea>
+
+        <input type="hidden" name="article_id" value="{{ $article->id }}">
+
+        <button class="button primary" type="submit">Отправить →</button>
+    </form>
 </div>
