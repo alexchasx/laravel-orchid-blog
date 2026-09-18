@@ -7,9 +7,9 @@ Vite является единственным инструментом сбор
 ## Requirements
 
 ### Requirement: R1: Единый инструмент сборки — Vite
-Публичный фронтенд блога SHALL собираться и запускаться через Nuxt 4 (`frontend/`) с серверным рендерингом. Vite SHALL использоваться только для Breeze-шаблонов аутентификации. `laravel-mix`/`webpack.mix.js` SHALL NOT использоваться.
+Публичный фронтенд (Blade) и Breeze-шаблоны аутентификации SHALL собираться единым инструментом Vite. `laravel-mix`/`webpack.mix.js` SHALL NOT использоваться.
 
-- **SHALL** использовать Nuxt 4 в папке `frontend/` для сборки и запуска публичного фронтенда.
+- **SHALL** использовать Vite для сборки ассетов публичного фронтенда (Blade) и Breeze-шаблонов.
 - **SHALL NOT** использовать `laravel-mix`/`webpack.mix.js`.
 - `package.json` **SHALL** содержать скрипты `dev` и `build`, вызывающие `vite`.
 

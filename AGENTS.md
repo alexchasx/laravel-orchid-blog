@@ -1,11 +1,8 @@
 # AGENTS.md
 
-Russian-language IT blog. **Laravel 13 (PHP ^8.5)** backend with **Orchid Platform 14** admin panel at `/admin` (`app/Orchid/`), plus **two public frontends** with deliberately different branding:
+Russian-language IT blog. **Laravel 13 (PHP ^8.5)** backend with **Orchid Platform 14** admin panel at `/admin` (`app/Orchid/`), plus a single public frontend — **Blade/Vite — "TECH//LOG"** (`resources/views/`, `layouts.techlog`).
 
-- **Blade/Vite — "TECH//LOG"** (`resources/views/`, `layouts.techlog`) — primary storefront
-- **Nuxt 4 SSR — "BlogDev"** (`frontend/`) — consumes the public JSON API in `routes/api.php`
-
-The branding split is intentional (`docs/design-update-plan.md`). Auth (Breeze) and comments are Blade-only; the Nuxt frontend is not wired for them. When adding a public feature, decide which surface it belongs to: Blade view, Nuxt (`frontend/`), the API, or all.
+The branding/design direction is documented in `docs/design-update-plan.md`. Auth (Breeze) and comments are Blade-only. When adding a public feature, decide which surface it belongs to: Blade view, admin panel, or both.
 
 ## Language
 
@@ -21,13 +18,12 @@ UI copy, code comments, and all docs are in **Russian** — write new ones in Ru
 - `make orchid-admin` — creates admin user (`admin@localhost.ru` / `123456`; non-interactive)
 - `make test` — `php artisan test`; `make lint` — `php -l` only (no phpstan, no Pint config)
 - `make docker-*` — Docker Compose from **`docker/docker-compose.yml`** (not repo root): site `:8080`, admin `:8080/admin`, phpMyAdmin `:8899`; default DB `larblog`/`wwwuser`/`Password+12`
-- Nuxt frontend: `cd frontend && npm run dev|build|generate|typecheck`
 
 No CI. Tests are currently only boilerplate `ExampleTest`; add real tests when touching domain logic (PHPUnit runs against the `testing` DB per `phpunit.xml`).
 
 ## Gotchas
 
-- **DB column is `excert` (typo, kept).** `Article` model, `ArticleService`, and `ArticleResource` all reference `excert`; the API contract exposes it as `excerpt` (`ArticleResource` line ~33). Fixing it means touching migration + model + resource + service + Nuxt consumers at once.
+- **DB column is `excert` (typo, kept).** `Article` model, `ArticleService`, and `ArticleResource` all reference `excert`.
 - **Cache invalidation happens via model observers** (`ArticleObserver`, `RubricObserver`, `TagObserver`) and `Tag::updateCountArticles()`; cache keys like `Tag::SIDEBAR_CACHE_KEY` live on models. There are **no Events/Listeners** — keep the observer pattern.
 - `Article::published()` scope = `is_published` && `published_at <= now`; `ArticleService::checkAccess()` returns 403 for non-admins viewing unpublished articles.
 - `Article` auto-generates `slug` and converts markdown `content_raw` → `content_html` on save (model `booted()`).
