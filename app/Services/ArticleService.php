@@ -47,8 +47,7 @@ class ArticleService
     {
         /** @var User $user */
         if (!$article->is_published
-            && ( $user = Auth::user() )
-            && !$user->isAdmin()
+            && (!($user = Auth::user()) || !$user->isAdmin())
         ) {
             abort(403);
         }

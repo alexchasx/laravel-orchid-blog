@@ -80,9 +80,7 @@ class Tag extends Model
 
     public static function updateCountArticles(Article $article): void
     {
-        $tags = self::query()
-            ->findOrFail($article->id)
-            ->get();
+        $tags = $article->tags()->get();
         foreach ($tags as $tag) {
             $tag->count_articles = $tag->articles()
                 ->where('is_published', true)

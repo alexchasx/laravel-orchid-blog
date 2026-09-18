@@ -21,9 +21,8 @@ Route::controller(ArticleController::class)->group(function () {
     Route::get('article/{article:slug}', 'show')->name('articleShow');
 });
 
-Route::controller(CommentController::class)->group(function () {
+Route::middleware('auth')->controller(CommentController::class)->group(function () {
     Route::post('comment.create', 'store')->name('commentStore');
-    Route::post('comment.update', 'update')->name('commentUpdate');
     Route::delete('delete.{comment}', 'delete')->name('commentDelete');
 });
 
