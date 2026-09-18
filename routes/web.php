@@ -5,12 +5,20 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubscriberController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/setlocale/{locale}', [MainController::class, 'setLocale'])->name('setlocale');
 
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
 Route::post('contact.store', [ContactController::class, 'store'])->name('contact.store');
+
+// Подписка на новые статьи.
+Route::post('subscribe', [SubscriberController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('subscribe.store');
+Route::get('unsubscribe/{token}', [SubscriberController::class, 'unsubscribe'])
+    ->name('subscribe.unsubscribe');
 
 Route::controller(ArticleController::class)->group(function () {
     Route::get('/', 'index')->name('home');

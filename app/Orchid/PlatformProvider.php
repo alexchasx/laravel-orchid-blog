@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Models\Comment;
 use App\Models\Contact;
 use App\Models\Rubric;
+use App\Models\Subscriber;
 use App\Models\Tag;
 use App\Models\User;
 use Orchid\Platform\Dashboard;
@@ -50,6 +51,13 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.contact.list')
                 ->badge(function () {
                     return Contact::all('id')->count();
+                }),
+
+            Menu::make(__('Подписчики'))
+                ->icon('bs.envelope-paper')
+                ->route('platform.subscriber.list')
+                ->badge(function () {
+                    return Subscriber::active()->count();
                 }),
 
             Menu::make(__('Статьи'))
