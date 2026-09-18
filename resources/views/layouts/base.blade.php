@@ -43,7 +43,9 @@
                                     <div class="sub_logo">{{ config('my_config.sub_logo') }}</div>
                                 </a>
                             </li>
-                            <li class="left"><a href="https://github.com/alexchasx" class="link">{{ __('GitHub') }}</a></li>
+                            @if(config('my_config.my_github'))
+                                <li class="left"><a href="{{ config('my_config.my_github') }}" class="link">{{ __('GitHub') }}</a></li>
+                            @endif
 
                             <li class="left"><a href="{{ route('contact') }}" class="link">{{ __('Обратная связь') }}</a></li>
 

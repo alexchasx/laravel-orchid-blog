@@ -71,9 +71,12 @@
     <div class="container footer-inner">
         <span>&copy; 2026 TECH//LOG. Built for engineers.</span>
         <div>
-            <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
-            <a href="https://t.me/" target="_blank" rel="noopener">Telegram</a>
-            <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
+            @if(config('my_config.my_github'))
+                <a href="{{ config('my_config.my_github') }}" target="_blank" rel="noopener">GitHub</a>
+            @endif
+            @if(config('my_config.my_telegram'))
+                <a href="https://t.me/" target="_blank" rel="noopener">Telegram</a>
+            @endif
             <a href="{{ route('contact') }}">Контакты</a>
         </div>
     </div>
