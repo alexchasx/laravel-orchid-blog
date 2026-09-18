@@ -4,6 +4,20 @@
   const nav = document.querySelector('.nav-links');
   const themeButtons = document.querySelectorAll('.theme-toggle');
   const topButton = document.querySelector('.to-top');
+  const modals = document.querySelectorAll('.modal');
+
+  const closeModal = (modal) => {
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
+  };
+
+  const openModal = (modal) => {
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
+    modal.querySelector('[data-modal-close], button')?.focus();
+  };
 
   // Тема: восстановить сохранённую
   const savedTheme = localStorage.getItem('techlog-theme');
@@ -47,6 +61,22 @@
   });
 
   // Newsletter form: подписка на новые статьи (отправка на backend)
+  const newsletterModal = document.querySelector('#newsletter-modal');
+  const newsletterModalIcon = newsletterModal?.querySelector('.modal-icon');
+  const newsletterModalTitle = newsletterModal?.querySelector('.modal-title');
+  const newsletterModalText = newsletterModal?.querySelector('.modal-text');
+
+  const showNewsletterModal = (success, message) => {
+    if (!newsletterModal) return;
+    if (newsletterModalIcon) {
+      newsletterModalIcon.className = `modal-icon ${success ? 'modal-icon--ok' : 'modal-icon--error'}`;
+      newsletterModalIcon.innerHTML = success ? '&#10003;' : '!';
+    }
+    if (newsletterModalTitle) newsletterModalTitle.textContent = success ? 'Подписка оформлена' : 'Не получилось';
+    if (newsletterModalText) newsletterModalText.textContent = message;
+    openModal(newsletterModal);
+  };
+
   const emailForm = document.querySelector('[data-newsletter-form]');
   emailForm?.addEventListener('submit', async e => {
     e.preventDefault();
@@ -89,19 +119,16 @@
       }
 
       if (response.ok && data.success) {
-        messageEl.textContent = data.message || 'Подписка оформлена!';
-        messageEl.classList.add('success');
         emailForm.reset();
+        showNewsletterModal(true, data.message || 'Подписка оформлена!');
       } else {
         const firstError = data.errors
           ? Object.values(data.errors)[0][0]
           : (data.message || 'Не удалось оформить подписку. Попробуйте ещё раз.');
-        messageEl.textContent = firstError;
-        messageEl.classList.add('error');
+        showNewsletterModal(false, firstError);
       }
     } catch (_) {
-      messageEl.textContent = 'Не удалось оформить подписку. Проверьте соединение и попробуйте ещё раз.';
-      messageEl.classList.add('error');
+      showNewsletterModal(false, 'Не удалось оформить подписку. Проверьте соединение и попробуйте ещё раз.');
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
@@ -174,22 +201,7 @@
     }
   });
 
-  // Модальное окно: результат отправки комментария
-  const modals = document.querySelectorAll('.modal');
-
-  const closeModal = (modal) => {
-    modal.classList.remove('is-open');
-    document.body.style.overflow = '';
-    document.body.classList.remove('modal-open');
-  };
-
-  const openModal = (modal) => {
-    modal.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-    document.body.classList.add('modal-open');
-    modal.querySelector('[data-modal-close], button')?.focus();
-  };
-
+// Модальные окна: привязка обработчиков закрытия
   modals.forEach(modal => {
     // Элементы закрытия: крестик, оверлей, кнопка «Понятно»
     modal.querySelectorAll('[data-modal-close]').forEach(el => {

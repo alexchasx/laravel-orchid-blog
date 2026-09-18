@@ -34,7 +34,7 @@ services:
   mailhog:
     image: mailhog/mailhog
     ports:
-      - "8025:8025"
+      - "8026:8025"
     container_name: blog_mailhog
 
   db:
