@@ -6,10 +6,6 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <p class="form-message success">{{ session('success') }}</p>
-    @endif
-
     <form action="{{ route('commentStore') }}" method="post" class="comment-form" id="commentform">
         @csrf
 

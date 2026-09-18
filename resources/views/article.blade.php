@@ -62,4 +62,7 @@
     @include('includes.comments_form')
 </section>
 
+{{-- Модальное окно результата отправки комментария --}}
+@include('includes.comment_modal')
+
 @endsection
