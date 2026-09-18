@@ -190,18 +190,6 @@ docker-composer-install:
 	@echo "$(GREEN)→ Installing Composer dependencies in Docker...$(RESET)"
 	docker compose -f docker/docker-compose.yml exec app composer install
 
-.PHONY: frontend-nuxt-dev
-frontend-nuxt-dev: ## Запустить Nuxt frontend (cd frontend && npm run dev)
-	@echo "$(GREEN)→ Starting Nuxt frontend dev server...$(RESET)"
-	@cd frontend && [ ! -f .env ] && cp .env.example .env || true
-	@cd frontend && $(NPM) install
-	@cd frontend && $(NPM) run dev
-
-.PHONY: frontend-nuxt-build
-frontend-nuxt-build: ## Собрать Nuxt frontend для продакшена
-	@echo "$(GREEN)→ Building Nuxt frontend for production...$(RESET)"
-	@cd frontend && $(NPM) run build
-
 .PHONY: lint
 lint: ## Запустить PHP lint (php -l на всех .php файлах)
 	@echo "$(GREEN)→ Running PHP lint...$(RESET)"

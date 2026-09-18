@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Публичная форма обратной связи (Nuxt /api/contact) не требует
-     * авторизации, поэтому user_id должен допускать NULL.
+     * Публичная форма обратной связи не требует авторизации,
+     * поэтому user_id должен допускать NULL.
      */
     public function up(): void
     {

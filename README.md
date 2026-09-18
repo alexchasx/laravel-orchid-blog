@@ -15,11 +15,6 @@
 - **mews/captcha** ^3.3 — капча (в связке с Google reCAPTCHA через middleware `GoogleRecaptcha`)
 - **Guzzle HTTP** ^7.9 — HTTP-клиент
 
-### Frontend (публичный сайт — Nuxt 4, `frontend/`)
-- **Nuxt 4** (SSR) + **Vue 3** (`<script setup>`, Composition API)
-- **Vuetify 3** (+ `vuetify-nuxt-module`, tree-shaking) — компоненты и темы light/dark
-- **@mdi/font** — иконки
-
 ### Frontend (Blade-шаблоны Breeze/auth)
 - **Vite** ^6.0 + **laravel-vite-plugin** — сборка ассетов Breeze
 - **Tailwind CSS** ^3.4 + **@tailwindcss/forms**
