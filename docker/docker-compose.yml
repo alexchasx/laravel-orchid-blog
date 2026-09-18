@@ -11,6 +11,7 @@ services:
     container_name: blog_nginx
 
   app:
+    image: blog_app
     build:
       context: .
       dockerfile: ./app/DockerFile
@@ -18,7 +19,23 @@ services:
       - ./../:/var/www
     depends_on:
       - db
+      - mailhog
     container_name: blog_app
+
+  schedule:
+    image: blog_app
+    depends_on:
+      - db
+    volumes:
+      - ./../:/var/www
+    command: php artisan schedule:work
+    container_name: blog_schedule
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+    container_name: blog_mailhog
 
   db:
     image: mysql:8.0

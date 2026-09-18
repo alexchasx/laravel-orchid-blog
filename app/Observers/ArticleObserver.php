@@ -28,8 +28,10 @@ class ArticleObserver
         }
 
         try {
-            Subscriber::active()->each(function (Subscriber $subscriber) use ($article) {
-                Mail::to($subscriber->email)->send(new NewArticleMail($article, $subscriber));
+            Subscriber::active()->chunkById(100, function ($subscribers) use ($article) {
+                foreach ($subscribers as $subscriber) {
+                    Mail::to($subscriber->email)->send(new NewArticleMail($article, $subscriber));
+                }
             });
         } catch (\Throwable $e) {
             Log::error('Ошибка отправки рассылки о новой статье: ' . $e->getMessage(), [
