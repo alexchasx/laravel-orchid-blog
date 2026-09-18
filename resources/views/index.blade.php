@@ -129,7 +129,8 @@
         <p class="eyebrow">SIGNAL / 04</p>
         <h2>Один полезный email.<br><em>Никакого спама.</em></h2>
     </div>
-    <form class="subscribe-form" data-validate>
+    <form class="subscribe-form" data-newsletter-form action="{{ route('subscribe.store') }}" method="POST">
+        @csrf
         <label for="email">Ваш email</label>
         <div class="input-row">
             <input id="email" name="email" type="email" autocomplete="email" placeholder="developer@example.com" required>

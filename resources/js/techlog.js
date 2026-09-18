@@ -46,19 +46,68 @@
     scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // Newsletter form validation
-  const emailForm = document.querySelector('[data-validate]');
-  emailForm?.addEventListener('submit', e => {
+  // Newsletter form: подписка на новые статьи (отправка на backend)
+  const emailForm = document.querySelector('[data-newsletter-form]');
+  emailForm?.addEventListener('submit', async e => {
     e.preventDefault();
-    const email = emailForm.email.value.trim();
-    const message = emailForm.querySelector('.form-message');
-    if (!emailForm.email.checkValidity()) {
-      message.textContent = 'Введите корректный email.';
+
+    const messageEl = emailForm.querySelector('.form-message');
+    const submitBtn = emailForm.querySelector('button[type="submit"]');
+    const originalText = submitBtn?.textContent;
+
+    messageEl.classList.remove('success', 'error');
+    messageEl.textContent = '';
+
+    if (!emailForm.checkValidity()) {
+      messageEl.textContent = 'Введите корректный email.';
+      messageEl.classList.add('error');
       emailForm.email.focus();
       return;
     }
-    message.textContent = 'Готово — подписка оформлена. Проверьте почту для подтверждения.';
-    emailForm.reset();
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Подписываем…';
+    }
+
+    try {
+      const response = await fetch(emailForm.action, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+        },
+        body: new FormData(emailForm),
+      });
+
+      let data = {};
+      try {
+        data = await response.json();
+      } catch (_) {
+        // если сервер вернул не JSON — обработаем по статусу
+      }
+
+      if (response.ok && data.success) {
+        messageEl.textContent = data.message || 'Подписка оформлена!';
+        messageEl.classList.add('success');
+        emailForm.reset();
+      } else {
+        const firstError = data.errors
+          ? Object.values(data.errors)[0][0]
+          : (data.message || 'Не удалось оформить подписку. Попробуйте ещё раз.');
+        messageEl.textContent = firstError;
+        messageEl.classList.add('error');
+      }
+    } catch (_) {
+      messageEl.textContent = 'Не удалось оформить подписку. Проверьте соединение и попробуйте ещё раз.';
+      messageEl.classList.add('error');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    }
   });
 
   // Contact form: отправка на backend

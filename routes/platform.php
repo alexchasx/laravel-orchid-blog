@@ -18,6 +18,7 @@ use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
+use App\Orchid\Screens\Subscriber\SubscriberListScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\Rubric\RubricListScreen;
 use App\Orchid\Screens\Tag\TagListScreen;
@@ -49,6 +50,9 @@ Route::screen('contact/{id}', ContactScreen::class)
     ->name('platform.contact');
 Route::screen('contacts', ContactListScreen::class)
 ->name('platform.contact.list');
+
+Route::screen('subscribers', SubscriberListScreen::class)
+    ->name('platform.subscriber.list');
 
 Route::screen('comment/{comment}', CommentScreen::class)
 ->name('platform.comment');
