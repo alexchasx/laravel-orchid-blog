@@ -2,6 +2,8 @@
 
 Блог на базе **Laravel** с административной панелью **[Orchid](https://orchid.software/)**.
 
+![Скрин главной](screenshots/home.png)
+
 ---
 
 ## 📋 Используемые технологии
