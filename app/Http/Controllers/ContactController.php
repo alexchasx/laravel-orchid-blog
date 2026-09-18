@@ -26,7 +26,7 @@ final class ContactController extends Controller
         $data['user_id'] = Auth::id();
         $data['title'] = $data['title'] ?? ($data['name'] . ' — ' . $data['email']);
 
-        Log::info('Сохранение сообщения обратной связи', $data);
+        // Log::info('Сохранение сообщения обратной связи', $data);
 
         try {
             Contact::create($data);
