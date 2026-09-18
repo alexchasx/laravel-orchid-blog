@@ -50,7 +50,7 @@ Route::screen('contact/{id}', ContactScreen::class)
 Route::screen('contacts', ContactListScreen::class)
 ->name('platform.contact.list');
 
-Route::screen('comment/{id}', CommentScreen::class)
+Route::screen('comment/{comment}', CommentScreen::class)
 ->name('platform.comment');
 Route::screen('comments', CommentListScreen::class)
     ->name('platform.comment.list');
