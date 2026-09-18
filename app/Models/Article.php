@@ -128,14 +128,7 @@ class Article extends Model
 
     protected $casts = [
         'is_published' => 'boolean',
-        // 'published_at' => 'datetime:d-m-Y',  // не работает?
-    ];
-
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'published_at',
-        'delete_at',
+        'published_at' => 'datetime',
     ];
 
     protected $allowedSorts = [

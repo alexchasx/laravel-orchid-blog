@@ -6,7 +6,7 @@
     <div class="section-head">
         <div>
             <p class="eyebrow">SIGNAL / OFF</p>
-            <h2>{{ $success ? 'Вы отписались' : 'Ссылка не сработала' }}</h2>
+            <h2>{{ $title }}</h2>
         </div>
     </div>
 

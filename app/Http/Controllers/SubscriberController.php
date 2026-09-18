@@ -7,6 +7,7 @@ use App\Models\Subscriber;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -19,9 +20,9 @@ final class SubscriberController extends Controller
     public function store(SubscribeRequest $request): RedirectResponse|JsonResponse
     {
         $email = Str::lower($request->validated('email'));
-        $subscriber = Subscriber::where('email', $email)->first();
 
-        // Уже подписан — отвечаем без ошибки, чтобы не пугать пользователя.
+        // Быстрая проверка: уже активный подписчик.
+        $subscriber = Subscriber::where('email', $email)->first();
         if ($subscriber !== null && $subscriber->isActive()) {
             return $this->respond(
                 $request,
@@ -30,22 +31,35 @@ final class SubscriberController extends Controller
         }
 
         try {
-            if ($subscriber !== null) {
-                // Повторная подписка после отписки: активируем и обновляем токен.
-                $subscriber->status = Subscriber::STATUS_ACTIVE;
-                $subscriber->token = Str::random(64);
-                $subscriber->user_id = Auth::id();
-                $subscriber->save();
-            } else {
-                Subscriber::create([
-                    'user_id' => Auth::id(),
-                    'email' => $email,
-                ]);
-            }
+            $alreadySubscribed = DB::transaction(function () use ($email): bool {
+                // lockForUpdate защищает от гонки на уникальном email.
+                $subscriber = Subscriber::where('email', $email)->lockForUpdate()->first();
+
+                if ($subscriber !== null && $subscriber->isActive()) {
+                    return true;
+                }
+
+                if ($subscriber === null) {
+                    Subscriber::create([
+                        'user_id' => Auth::id(),
+                        'email' => $email,
+                    ]);
+                } else {
+                    // Повторная подписка после отписки: активируем и обновляем токен.
+                    $subscriber->status = Subscriber::STATUS_ACTIVE;
+                    $subscriber->token = Str::random(64);
+                    $subscriber->user_id = Auth::id();
+                    $subscriber->save();
+                }
+
+                return false;
+            });
 
             return $this->respond(
                 $request,
-                __('Подписка оформлена! Один полезный email — без спама.')
+                $alreadySubscribed
+                    ? __('Вы уже подписаны на новые статьи. Спасибо!')
+                    : __('Подписка оформлена! Один полезный email — без спама.')
             );
         } catch (\Throwable $e) {
             Log::error('Ошибка сохранения подписчика: ' . $e->getMessage(), [
@@ -59,7 +73,10 @@ final class SubscriberController extends Controller
                 ], 500);
             }
 
-            return redirect()->back()->with('error', __('Не удалось оформить подписку. Попробуйте ещё раз.'));
+            return redirect()
+                ->route('home')
+                ->withFragment('newsletter')
+                ->with('newsletter-error', __('Не удалось оформить подписку. Попробуйте ещё раз.'));
         }
     }
 
@@ -72,6 +89,7 @@ final class SubscriberController extends Controller
 
         if ($subscriber === null) {
             return view('unsubscribe', [
+                'title' => __('Ссылка не сработала'),
                 'success' => false,
                 'message' => __('Ссылка недействительна или уже была использована.'),
             ]);
@@ -83,12 +101,14 @@ final class SubscriberController extends Controller
             $subscriber->save();
 
             return view('unsubscribe', [
+                'title' => __('Вы отписались'),
                 'success' => true,
                 'message' => __('Вы отписались от рассылки. Новые статьи больше не будут приходить на этот email.'),
             ]);
         }
 
         return view('unsubscribe', [
+            'title' => __('Уже отписаны'),
             'success' => false,
             'message' => __('Этот email уже отписан от рассылки.'),
         ]);
@@ -106,6 +126,6 @@ final class SubscriberController extends Controller
         return redirect()
             ->route('home')
             ->withFragment('newsletter')
-            ->with('success', $message);
+            ->with('newsletter-success', $message);
     }
 }
