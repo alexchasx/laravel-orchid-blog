@@ -138,13 +138,8 @@
         </div>
         <p class="form-message" aria-live="polite"></p>
     </form>
-
-    @if (session('newsletter-success'))
-        <p class="form-message success">{{ session('newsletter-success') }}</p>
-    @endif
-    @if (session('newsletter-error'))
-        <p class="form-message error">{{ session('newsletter-error') }}</p>
-    @endif
 </section>
+
+@include('includes.newsletter_modal')
 
 @endsection
