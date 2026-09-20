@@ -11,9 +11,10 @@
   docker exec blog_db mysql -uroot -proot -e \
     "CREATE DATABASE IF NOT EXISTS testing CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
   ```
-- Запуск тестов — только внутри `blog_app` (хостовая PHP 8.4 < `^8.5`, а `.env` указывает `DB_HOST=db`, который резолвится только в docker-сети; внутри контейнера `phpunit.xml` переопределяет `DB_DATABASE=testing`, остальные параметры `.env`: root/root):
+- Запуск тестов — только внутри `blog_app` (проект docker-only; внутри контейнера `phpunit.xml` переопределяет `DB_DATABASE=testing`, остальные параметры `.env`: `DB_HOST=db`, root/root):
   ```bash
-  docker exec -w /var/www blog_app php artisan test
+  make up   # поднять контейнеры, если они не запущены
+  make test # = docker compose exec app php artisan test
   ```
 - `public/build/manifest.json` существует — `@vite` в тестах рендерится нормально.
 
@@ -112,7 +113,7 @@
 
 ## Шаг 5. Проверка
 
-- `docker exec -w /var/www blog_app php artisan test` — все тесты зелёные (существующие Breeze-тесты + новые)
+- `make test` — все тесты зелёные (существующие Breeze-тесты + новые)
 - `make lint` для изменённых файлов (php -l)
 
 ## Замечания

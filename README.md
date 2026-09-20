@@ -24,8 +24,8 @@
 - **Sass** + **PostCSS** + **Autoprefixer**
 
 ### База данных и инфраструктура
-- **MySQL** 8.0 (докеризированная)
-- **Docker / Docker Compose** (nginx, PHP-FPM 8.5, MySQL, phpMyAdmin)
+- **MySQL** 8.0
+- **Docker / Docker Compose** (nginx, PHP-FPM 8.5, Node.js, MySQL, phpMyAdmin, MailHog)
 
 ### Инструменты разработки
 - **Laravel Breeze** — каркас аутентификации
@@ -33,13 +33,15 @@
 
 ---
 
-## 🚀 Установка и запуск локально
+## 🚀 Установка и запуск (только Docker)
+
+> **Важно:** приложение запускается **только через Docker Compose**. Локальные
+> PHP/Composer/npm/MySQL на хосте не используются — все команды выполняются
+> внутри контейнеров через `Makefile`.
 
 ### Требования
-- **PHP** 8.5+
-- **Composer** 2+
-- **Node.js** 18+ и **npm**
-- **MySQL** 8.0 (или **Docker**)
+- **Docker Engine** 24+ и **Docker Compose** (плагин `docker compose`)
+- **Make** (для быстрой установки; без него — см. «Ручной запуск» ниже)
 
 ### 1. Клонирование репозитория
 
@@ -48,99 +50,64 @@ git clone git@github.com:alexchasx/laravel-orchid-blog.git
 cd laravel-orchid-blog
 ```
 
-### 2. Установка зависимостей
+### 2. Установка
 
 ```bash
-composer install
-npm install
+make install
 ```
 
-### 3. Настройка окружения
+Команда выполняет полную настройку: собирает образы, копирует `.env.example` → `.env`,
+устанавливает PHP- и JS-зависимости, генерирует `APP_KEY`, запускает
+`migrate:fresh --seed`, создаёт администратора Orchid, делает `storage:link`
+и собирает фронтенд.
 
-```bash
-cp .env.example .env
-php artisan key:generate
-```
-
-При необходимости отредактируйте `.env`: настройки базы данных (`DB_*`), почты (`MAIL_*`), URL приложения (`APP_URL`) и т.д.
-
-Для подключения к БД без Docker используется `DB_HOST=127.0.0.1`. Если вы используете БД из Docker-контейнера — закомментируйте эту строку и раскомментируйте `DB_HOST=db`.
-
-### 4. Миграции и сиды
-
-```bash
-php artisan migrate --seed
-```
-
-### 5. Создание администратора (для панели Orchid)
-
-```bash
-php artisan orchid:admin admin email@example.com 123456
-```
-
-> Пользователь создаётся с максимальными правами на момент создания.
-
-### 6. Хранилище и сборка фронтенда
-
-```bash
-php artisan storage:link
-npm run dev   # или npm run build для production
-```
-
-### 7. Запуск сервера
-
-```bash
-php artisan serve
-```
-
-Приложение будет доступно по адресу: [http://localhost:8000](http://localhost:8000)
-
-Админ-панель Orchid: [http://localhost:8000/admin](http://localhost:8000/admin)
-
----
-
-## 🐳 Запуск через Docker Compose
-
-В проекте есть собственный `docker-compose.yml`, который поднимает четыре сервиса:
-
-| Сервис      | Контейнер       | Порт хост → контейнер |
-|-------------|-----------------|------------------------|
-| nginx       | `blog_nginx`    | 8080 → 80              |
-| PHP-FPM     | `blog_app`      | —                      |
-| MySQL 8.0   | `blog_db`       | 8101 → 3306            |
-| phpMyAdmin  | `blog_phpmyadmin` | 8899 → 80            |
-
-### Шаги запуска
-
-```bash
-# 1. Скопировать и настроить .env (DB_HOST должен быть "db")
-cp .env.example .env
-
-# 2. Собрать и запустить контейнеры
-docker compose up -d --build
-
-# 3. Установить зависимости PHP внутри контейнера
-docker compose exec app composer install
-
-# 4. Сгенерировать ключ приложения
-docker compose exec app php artisan key:generate
-
-# 5. Миграции и сиды
-docker compose exec app php artisan migrate --seed
-
-# 6. Создать администратора
-docker compose exec app php artisan orchid:admin admin email@example.com 123456
-
-# 7. Хранилище
-docker compose exec app php artisan storage:link
-```
-
-Доступ:
+Доступ после установки:
 - Сайт: [http://localhost:8080](http://localhost:8080)
-- Админ-панель: [http://localhost:8080/admin](http://localhost:8080/admin)
+- Админ-панель Orchid: [http://localhost:8080/admin](http://localhost:8080/admin) — пользователь `admin@localhost.ru` / `123456`
 - phpMyAdmin: [http://localhost:8899](http://localhost:8899)
+- MailHog: [http://localhost:8026](http://localhost:8026)
 
-> ⚠️ При работе через Docker не забудьте в `.env` раскомментировать `DB_HOST=db` и выставить параметры подключения к БД (`DB_DATABASE=laraorchid`, `DB_USERNAME=root`, `DB_PASSWORD=root`), либо привести их в соответствие с [docker/docker-compose.yml](docker/docker-compose.yml).
+> ⚠️ `make migrate` из `make install` выполняет **`migrate:fresh --seed`** — команда
+> **разрушает** базу данных при повторном запуске.
+
+### 3. Повседневные команды
+
+```bash
+make up     # собрать образы и поднять контейнеры
+make down   # остановить контейнеры
+make logs   # следить за логами
+make shell  # войти в контейнер app (bash)
+```
+
+Приложение и его сервисы описаны в `docker/docker-compose.yml`:
+
+| Сервис      | Контейнер        | Порт хост → контейнер |
+|-------------|------------------|------------------------|
+| nginx       | `blog_nginx`     | 8080 → 80              |
+| PHP-FPM     | `blog_app`       | —                      |
+| Node.js     | `blog_node`      | 5173 → 5173 (Vite dev) |
+| MySQL 8.0   | `blog_db`        | 8101 → 3306            |
+| phpMyAdmin  | `blog_phpmyadmin`| 8899 → 80              |
+| MailHog     | `blog_mailhog`   | 8026 → 8025            |
+
+Полный список команд Makefile — `make help`.
+
+### Ручной запуск (без `make`)
+
+```bash
+cp .env.example .env
+
+docker compose -f docker/docker-compose.yml up -d --build
+
+docker compose -f docker/docker-compose.yml exec app composer install
+docker compose -f docker/docker-compose.yml exec app php artisan key:generate
+docker compose -f docker/docker-compose.yml exec app php artisan migrate:fresh --seed
+docker compose -f docker/docker-compose.yml exec app php artisan orchid:admin admin admin@localhost.ru 123456
+docker compose -f docker/docker-compose.yml exec app php artisan storage:link
+
+docker compose -f docker/docker-compose.yml exec node npm install
+docker compose -f docker/docker-compose.yml exec node npm run build
+```
 
 ---
 
@@ -151,5 +118,5 @@ docker compose exec app php artisan storage:link
 - `database/migrations/` и `database/seeders/` — миграции и сиды
 - `resources/views/` — Blade-шаблоны (публичная часть, auth, компоненты)
 - `routes/` — маршруты приложения (`web.php`, `platform.php`, `auth.php`)
-- `docker/` — конфигурация Docker (nginx, PHP-FPM, MySQL, phpMyAdmin)
+- `docker/` — конфигурация Docker (nginx, PHP-FPM, Node, MySQL, phpMyAdmin, MailHog)
 - `lang/` — языковые файлы (ru, en)
