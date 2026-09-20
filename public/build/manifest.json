@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-23wwsgIV.css",
+    "file": "assets/app-BKt6lkmA.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -10,8 +10,14 @@
     "src": "resources/js/app.js",
     "isEntry": true
   },
+  "resources/js/cookie-banner.js": {
+    "file": "assets/cookie-banner-DHK6a08j.js",
+    "name": "cookie-banner",
+    "src": "resources/js/cookie-banner.js",
+    "isEntry": true
+  },
   "resources/js/techlog.js": {
-    "file": "assets/techlog-BrdE2W3H.js",
+    "file": "assets/techlog-CuOEqI-7.js",
     "name": "techlog",
     "src": "resources/js/techlog.js",
     "isEntry": true
@@ -22,7 +28,7 @@
     "isEntry": true
   },
   "resources/sass/techlog/index.scss": {
-    "file": "assets/index-DwFcKY3w.css",
+    "file": "assets/index-BlioW9hZ.css",
     "src": "resources/sass/techlog/index.scss",
     "isEntry": true
   }

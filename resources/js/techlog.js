@@ -1,4 +1,34 @@
 (() => {
+  // =========================================================================
+  // Cookie-баннер: ВЫЗЫВАЕТСЯ В САМОМ НАЧАЛЕ загрузки страницы — раньше любых
+  // трекинговых скриптов (функция объявлена в resources/js/cookie-banner.js,
+  // который подключён в @vite первым). Решение читается из localStorage
+  // синхронно, поэтому аналитику можно гейтить прямо здесь.
+  // =========================================================================
+  const cookieConsent = window.initCookieBanner
+    ? window.initCookieBanner()
+    : { status: 'undecided', decided: false };
+
+  // ---------------------------------------------------------------------------
+  // ТОЧКА ПОДКЛЮЧЕНИЯ АНАЛИТИКИ.
+  // ВСЕ трекинговые скрипты (Google Analytics / gtag, Яндекс.Метрика, пиксели)
+  // должны загружаться ТОЛЬКО при разрешённой категории 'analytics'.
+  //
+  // 1) Для уже принятого решения (повторный визит) — проверка синхронно:
+  if (cookieConsent.categories.analytics) {
+    // Ваши скрипты аналитики можно записать здесь, например:
+    //   (function() { var s = document.createElement('script');
+    //     s.async = true; s.src = '<URL скрипта>'; document.head.appendChild(s); })();
+  }
+
+  // 2) Для нового решения (первый визит — пользователь нажал кнопку в баннере):
+  document.addEventListener('cookies-consent', (e) => {
+    if (e.detail.categories.analytics) {
+      // Здесь — то же самое подключение аналитики, что и в пункте 1.
+    }
+  });
+  // ---------------------------------------------------------------------------
+
   const root = document.documentElement;
   const menu = document.querySelector('.menu-toggle');
   const nav = document.querySelector('.nav-links');

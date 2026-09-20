@@ -706,6 +706,162 @@
 }
 
 // ---------------------------------------------------------------------------
+// Cookie banner (согласие на cookies / аналитику)
+// ---------------------------------------------------------------------------
+
+.cookie-banner {
+    position: fixed;
+    z-index: 90; // ниже модалок (z-100), выше шапки (z-50)
+    left: 20px;
+    bottom: 20px;
+    width: min(430px, calc(100% - 40px));
+
+    // Баннер не блокирует контент: без полноэкранного оверлея.
+    &[hidden] {
+        display: none;
+    }
+}
+
+.cookie-banner__card {
+    position: relative;
+    padding: 30px 28px 26px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    animation: cookie-rise .35s ease;
+
+    .cookie-banner:not([hidden]) & {
+        animation: cookie-rise .35s ease;
+    }
+}
+
+.cookie-banner__close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    font-size: 1.3rem;
+    line-height: 1;
+    color: var(--muted);
+    background: none;
+    border: 0;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: .2s;
+
+    &:hover {
+        color: var(--text);
+        background: var(--surface-2);
+    }
+}
+
+.cookie-banner__title {
+    font-size: 1.2rem;
+    line-height: 1.25;
+    letter-spacing: -.02em;
+    margin: 0 20px 10px 0;
+}
+
+.cookie-banner__text {
+    margin: 0 0 22px;
+    color: var(--muted);
+    font-size: .88rem;
+    line-height: 1.6;
+
+    a {
+        color: var(--green);
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.cookie-banner__actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    .button {
+        flex: 1 1 130px;
+    }
+
+    // Кнопка «Отклонить» не менее заметна, чем «Принять» — сплошная заливка,
+    // акцентная рамка и жирный текст (а не «приглушённый» вариант).
+    .cookie-banner__decline {
+        background: var(--surface-2);
+        border-color: rgba(255, 107, 107, .45);
+        color: #ff8f8f;
+        font-weight: 600;
+
+        &:hover {
+            box-shadow: 0 0 16px rgba(255, 107, 107, .16);
+        }
+    }
+}
+
+.cookie-banner__settings {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-size: .85rem;
+    color: var(--muted);
+
+    &[hidden] {
+        display: none;
+    }
+}
+
+.cookie-banner__settings-text {
+    margin: 0 0 10px;
+    font-size: .8rem;
+}
+
+.cookie-banner__option {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 14px;
+
+    input {
+        accent-color: var(--green);
+        width: 16px;
+        height: 16px;
+        flex: none;
+    }
+}
+
+@keyframes cookie-rise {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+// Видимый фокус для клавиатуры (баннер не перекрывает страницу фиксированным оверлеем)
+.cookie-banner button:focus-visible,
+.cookie-banner a:focus-visible,
+.cookie-banner input:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cookie-banner__card,
+    .cookie-banner:not([hidden]) .cookie-banner__card {
+        animation: none;
+    }
+}
+
+// ---------------------------------------------------------------------------
 // Modal (результат отправки комментария)
 // ---------------------------------------------------------------------------
 

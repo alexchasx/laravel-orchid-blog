@@ -28,7 +28,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    @vite(['resources/sass/techlog/index.scss', 'resources/js/techlog.js'])
+    @vite(['resources/sass/techlog/index.scss', 'resources/js/cookie-banner.js', 'resources/js/techlog.js'])
 
     @stack('styles')
 </head>
@@ -84,6 +84,9 @@
 </footer>
 
 <button class="to-top" type="button" aria-label="Наверх">↑</button>
+
+{{-- Cookie-баннер: подключается последним в <body> (см. resources/js/cookie-banner.js) --}}
+@include('includes.cookie_banner')
 
 @stack('scripts')
 </body>

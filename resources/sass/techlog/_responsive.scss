@@ -127,6 +127,18 @@
     .article-head h1 {
         font-size: 2.65rem;
     }
+
+    // Cookie-баннер на мобильных: баннер на всю ширину экрана
+    .cookie-banner {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        width: auto;
+
+        .cookie-banner__card {
+            padding: 26px 20px 22px;
+        }
+    }
 }
 
 // Reduced motion

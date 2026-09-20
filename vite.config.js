@@ -9,6 +9,7 @@ export default defineConfig({
                 'resources/sass/style.scss',
                 'resources/js/app.js',
                 'resources/sass/techlog/index.scss',
+                'resources/js/cookie-banner.js',
                 'resources/js/techlog.js',
             ],
             refresh: true,
