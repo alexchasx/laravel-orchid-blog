@@ -22,6 +22,17 @@ services:
       - mailhog
     container_name: blog_app
 
+  node:
+    image: node:22-alpine
+    user: "${UID:-1000}:${GID:-1000}"
+    working_dir: /var/www
+    volumes:
+      - ./../:/var/www
+    ports:
+      - "5173:5173"
+    command: tail -f /dev/null
+    container_name: blog_node
+
   schedule:
     image: blog_app
     depends_on:

@@ -17,36 +17,25 @@
 
 ## 2. Требования к окружению
 
-- PHP ^8.5
-- Composer 2+
-- Node.js 18+ и npm
-- MySQL 8.0 (или Docker)
+- **Docker Engine** 24+ и **Docker Compose** (плагин `docker compose`)
+- **Make** (для каноничных команд; без него — голый `docker compose`, см. README)
+
+Проект запускается **только через Docker**: локальные PHP/Composer/npm/MySQL на хосте не используются.
 
 ## 3. Быстрый старт
 
-Каноничный рабочий процесс — через `Makefile` (`make help` — список всех команд), **не** голые artisan/composer.
-
-### Локально (без Docker)
+Каноничный рабочий процесс — через `Makefile` (`make help` — список всех команд), **не** голые artisan/composer. Все команды выполняются внутри контейнеров по конфигурации `docker/docker-compose.yml`.
 
 ```bash
-make install        # composer + npm + .env + key:generate + storage:link
-make migrate        # ВНИМАНИЕ: migrate:fresh --seed (разрушает данные)
-make orchid-admin   # администратор admin@localhost.ru / 123456
-make serve          # сайт :8000, админка :8000/admin
-make frontend-dev   # Vite dev server (npm run dev)
+make install        # полная настройка: сборка + .env + composer/npm + key + migrate:fresh --seed + admin + storage:link + frontend
+make up             # поднять контейнеры
+make down           # остановить
+make shell          # войти в контейнер app
 ```
 
-### Через Docker
+Сайт: `http://localhost:8080`, админка: `http://localhost:8080/admin` (`admin@localhost.ru` / `123456`), phpMyAdmin: `http://localhost:8899`, MailHog: `http://localhost:8026`. Конфигурация — `docker/docker-compose.yml` (не в корне репозитория).
 
-```bash
-make docker-install # сборка + composer + key + migrate + admin + storage:link
-make docker-up      # поднять контейнеры
-make docker-down    # остановить
-```
-
-Сайт: `http://localhost:8080`, админка: `http://localhost:8080/admin`, phpMyAdmin: `http://localhost:8899`. Конфигурация — `docker/docker-compose.yml` (не в корне репозитория).
-
-> ⚠️ `make migrate` выполняет `migrate:fresh --seed` — команда **разрушает** базу данных. Не запускайте её на данных, которые нужно сохранить.
+> ⚠️ `make migrate` (входит в `make install`) выполняет **`migrate:fresh --seed`** — команда **разрушает** базу данных. Не запускайте её на данных, которые нужно сохранить.
 
 ## 4. Рабочий процесс
 
@@ -89,20 +78,20 @@ make docker-down    # остановить
 Перед отправкой PR обязательно выполните:
 
 ```bash
-make test   # php artisan test (PHPUnit, БД testing)
-make lint   # php -l для всех .php в app, database, routes
+make test   # docker compose exec app php artisan test (PHPUnit, БД testing)
+make lint   # php -l для всех .php в app, database, routes (внутри контейнера)
 ```
 
-- Учетные данные/окружение для тестов — в `phpunit.xml` (запуск против БД `testing`).
+- Учетные данные/окружение для тестов — в `phpunit.xml` (запуск против БД `testing`); перед тестами БД `testing` должна существовать в MySQL-контейнере (см. `docs/testing-plan.md`).
 - Если меняли схему БД — добавьте миграцию (без редактирования старых, если иного не требуют изменения).
-- Меняли фронтенд — проверьте `make frontend-build` (сборка Vite без ошибок).
+- Меняли фронтенд — проверьте `make frontend-build` (сборка Vite внутри `blog_node`).
 - CI в проекте нет — проверки локальные, на порядочности.
 
 > Сейчас тесты — только boilerplate `ExampleTest`. План наполнения реальными тестами описан в [`docs/testing-plan.md`](docs/testing-plan.md): **новые тесты для доменной логики приветствуются** и опираются на этот план.
 
 ## 7. Отчёты об ошибках и предложения
 
-- Для багов укажите: что ожидалось, что произошло, как воспроизвести, окружение (PHP/MySQL/Docker).
+- Для багов укажите: что ожидалось, что произошло, как воспроизвести, окружение (Docker, `docker/docker-compose.yml`, конфигурация `.env`).
 - Для предложений опишите задачу и, если возможно, предлагаемое решение.
 - Если правка затрагивает публичный дизайн — приложите скриншоты «до/после».
 

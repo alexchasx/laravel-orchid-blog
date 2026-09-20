@@ -10,14 +10,16 @@ UI copy, code comments, and all docs are in **Russian** — write new ones in Ru
 
 ## Commands
 
-`make` is the canonical dev workflow (see `Makefile`), **not** bare artisan/composer:
+The project runs **Docker-only** — no local php/composer/npm/artisan. `make` drives all commands through Docker Compose from **`docker/docker-compose.yml`** (not repo root); `make help` lists everything:
 
-- `make install` — composer + npm + `.env` (from `.env.example`) + `key:generate` + `storage:link`
+- `make install` — one-command Docker setup: `.env` (from `.env.example`), build + up containers, composer/npm installs, `key:generate`, **`migrate:fresh --seed`**, Orchid admin (`admin@localhost.ru`/`123456`), `storage:link`, frontend build
+- `make up` / `make down` / `make logs` / `make shell` — container lifecycle
 - `make migrate` — runs **`migrate:fresh --seed`** (destructive)
-- `make serve` — `php artisan serve` at `:8000`; admin at `:8000/admin`
 - `make orchid-admin` — creates admin user (`admin@localhost.ru` / `123456`; non-interactive)
-- `make test` — `php artisan test`; `make lint` — `php -l` only (no phpstan, no Pint config)
-- `make docker-*` — Docker Compose from **`docker/docker-compose.yml`** (not repo root): site `:8080`, admin `:8080/admin`, phpMyAdmin `:8899`; default DB `larblog`/`wwwuser`/`Password+12`
+- `make test` — `php artisan test` **inside `blog_app`**; `make lint` — `php -l` only (no phpstan, no Pint config)
+- `make frontend-build` / `make frontend-dev` — `npm run build` / Vite dev server **inside `blog_node`**
+
+Defaults: site `:8080`, admin `:8080/admin`, phpMyAdmin `:8899`, MailHog `:8026`, Vite dev `:5173`; DB `laraorchid`/`root`/`root` (matches `docker/docker-compose.yml` and `.env.example`).
 
 No CI. Tests are currently only boilerplate `ExampleTest`; add real tests when touching domain logic (PHPUnit runs against the `testing` DB per `phpunit.xml`).
 
