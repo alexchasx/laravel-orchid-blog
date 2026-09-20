@@ -823,3 +823,20 @@
         transition: none;
     }
 }
+
+// ---------------------------------------------------------------------------
+// Error page (404 и др.)
+// ---------------------------------------------------------------------------
+
+.error-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 35px;
+}
+
+.error-debug {
+    font: 500 .75rem "JetBrains Mono", monospace;
+    color: var(--muted);
+    margin: 35px 0 0;
+}
