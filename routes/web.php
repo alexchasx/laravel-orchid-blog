@@ -13,6 +13,8 @@ Route::get('/setlocale/{locale}', [MainController::class, 'setLocale'])->name('s
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
 Route::post('contact.store', [ContactController::class, 'store'])->name('contact.store');
 
+Route::get('privacy', [MainController::class, 'privacy'])->name('privacy');
+
 // Подписка на новые статьи.
 Route::post('subscribe', [SubscriberController::class, 'store'])
     ->middleware('throttle:5,1')

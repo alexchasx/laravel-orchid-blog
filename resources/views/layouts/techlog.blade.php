@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @if(!empty($article))
-        <title>{{ $article->title }} — TECH//LOG</title>
+        <title>{{ $article->title }} — {{ config('app.name') }}</title>
         <meta name="description" content="{{ $article->meta_desc }}">
         <meta property="og:type" content="article">
         <meta property="og:title" content="{{ $article->title }}">
@@ -15,10 +15,10 @@
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:locale" content="ru-RU">
     @else
-        <title>{{ $metaTitle ?? 'TECH//LOG — ИТ-блог' }}</title>
+        <title>{{ $metaTitle ?? config('app.name').' — ИТ-блог' }}</title>
         <meta name="description" content="{{ $metaDesc ?? 'ИТ-блог о технологиях, архитектуре, инструментах и практических решениях для современного разработчика.' }}">
         <meta property="og:type" content="website">
-        <meta property="og:title" content="{{ $metaTitle ?? 'TECH//LOG — ИТ-блог' }}">
+        <meta property="og:title" content="{{ $metaTitle ?? config('app.name').' — ИТ-блог' }}">
         <meta property="og:description" content="{{ $metaDesc ?? 'ИТ-блог о технологиях, архитектуре, инструментах и практических решениях для современного разработчика.' }}">
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:locale" content="ru-RU">
@@ -37,7 +37,7 @@
 
 <header class="site-header" id="top">
     <nav class="nav container" aria-label="Основная навигация">
-        <a class="brand" href="{{ route('home') }}" aria-label="TECH//LOG — главная">
+        <a class="brand" href="{{ route('home') }}" aria-label="{{ config('app.name') }} — главная">
             <span>TECH</span><b>//</b>LOG
         </a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-menu">
@@ -78,6 +78,7 @@
                 <a href="https://t.me/" target="_blank" rel="noopener">Telegram</a>
             @endif
             <a href="{{ route('contact') }}">Контакты</a>
+            <a href="{{ route('privacy') }}">Конфиденциальность</a>
         </div>
     </div>
 </footer>
