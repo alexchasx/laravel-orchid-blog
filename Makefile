@@ -38,7 +38,7 @@ env-copy: ## Скопировать .env.example → .env (если .env ещё 
 	fi
 
 .PHONY: install
-install: env-copy up composer-install key-generate migrate orchid-admin storage-link frontend-install frontend-build ## Полная первоначальная установка в Docker
+install: env-copy up storage-perm composer-install key-generate migrate orchid-admin storage-link frontend-install frontend-build ## Полная первоначальная установка в Docker
 	@echo ""
 	@echo "$(GREEN)✓ Docker setup complete!$(RESET)"
 	@echo "$(GREEN)  Site:        http://localhost:8080$(RESET)"
@@ -63,6 +63,11 @@ logs: ## Показать логи контейнеров (docker compose logs -
 .PHONY: shell
 shell: ## Войти в контейнер app (bash)
 	$(COMPOSE) exec app bash
+
+.PHONY: storage-perm
+storage-perm: ## Починить права на storage/ и bootstrap/cache для www-data
+	@echo "$(GREEN)→ Fixing storage permissions for www-data...$(RESET)"
+	$(COMPOSE) exec -u root app chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 .PHONY: php
 php: ## Открыть PHP REPL внутри контейнера app

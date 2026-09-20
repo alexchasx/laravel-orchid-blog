@@ -19,6 +19,11 @@ RUN apt-get update && apt-get install -y \
       chmod -R 755 /var/www
 
 COPY ./app/php.ini /usr/local/etc/php/conf.d/php.ini
+COPY ./app/entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["php-fpm"]
 
 # Install composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
