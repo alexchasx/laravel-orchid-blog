@@ -6,14 +6,11 @@ use App\Models\Rubric;
 use App\Models\Tag;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\CheckBox;
-use Orchid\Screen\Fields\Code;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\SimpleMDE;
-use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Layouts\Rows;
 
 class CreateOrUpdateArticle extends Rows
@@ -68,22 +65,7 @@ class CreateOrUpdateArticle extends Rows
                     ->allowInput()
                     ->required(),
 
-            // TextArea::make('article.content_raw')
-            //     ->rows(16)->required()->title('Контент'),
-
-            // SimpleMDE::make('article.excert')->title('Краткое описание'),
-
             SimpleMDE::make('article.content_raw')->title('Контент'),
-
-            // SimpleMDE::make('article.content_html')->title('Контент HTML'),
-
-            // Code::make('article.content_raw')->title('Контент'),
-
-            // FieldsCode::make('article.content')->language(FieldsCode::MARKUP)->title('Контент'),
-
-            // Quill::make('article.excert')
-            //     ->toolbar(["text", "color", "header", "list", "format", "media"])
-            //     ->title('Предпросмотр')->required(),
 
             Group::make([
                 Input::make('article.slug')

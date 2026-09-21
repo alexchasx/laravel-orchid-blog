@@ -107,8 +107,6 @@ class Article extends Model
         });
     }
 
-    public const LENGTH_DATE = 10;
-
     public $fillable = [
         'user_id',
         'rubric_id',
@@ -134,26 +132,6 @@ class Article extends Model
     protected $allowedSorts = [
         'published_at', 'id', 'rubric_id'
     ];
-
-    // protected $allowedFilters = [
-    //     'rubric_id',
-    // ];
-
-    // public function getTitleAttribute($value)
-    // {
-    //     return Str::title($value); // первые буквы слов - заглавные
-    // }
-
-    // public function getPublishedAtAttribute($value)
-    // {
-    //     return (new Carbon($value))->format('d-m-Y');
-    //     // ->diffForHumans(); // Вызывает ошибку в админке Orchid (не понимает русский формат "diffForHumans")
-    // }
-
-    // public function setPublishedAtAttribute($value)
-    // {
-    //     $this->attributes['published_at'] = Carbon::createFromFormat('m/d/Y', $value)->format('Y-m-d');
-    // }
 
     /**
      * Возращает категорию данной статьи.
@@ -182,12 +160,7 @@ class Article extends Model
      */
     public function tags()
     {
-        return $this->belongsToMany(
-            Tag::class,
-            'article_tags'/*,
-            'article_id',
-            'tag_id'*/
-        );
+        return $this->belongsToMany(Tag::class, 'article_tags');
     }
 
     /**
@@ -200,28 +173,12 @@ class Article extends Model
         }
     }
 
-    // С этим методом не работает фильтрация по тегам
-    // public function scopePublished($query)
-    // {
-    //     return $query->addSelect(
-    //         'id',
-    //         'title',
-    //         'excert',
-    //         'content_raw',
-    //         'published_at',
-    //         'is_published',
-    //     )->whereDate('published_at', '<=', Carbon::now())
-    //         ->where('is_published', true)
-    //         ->orderBy('published_at', 'desc');
-    // }
-
     public static function published(?Builder $builder = null)
     {
         if (!$builder) {
             $builder = self::select(
                 'id',
                 'title',
-                // 'excert',
                 'content_raw',
                 'published_at',
                 'is_published',
@@ -231,11 +188,6 @@ class Article extends Model
             ->where('is_published', true)
             ->with('tags')
             ->orderBy('published_at', 'desc');
-    }
-
-    public static function recents(Builder $builder)
-    {
-        return $builder->orderBy('published_at', 'desc')->limit(4)->get();
     }
 
     /**

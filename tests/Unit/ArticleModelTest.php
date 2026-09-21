@@ -140,18 +140,4 @@ class ArticleModelTest extends TestCase
         $this->assertInstanceOf(Collection::class, $article->comments);
         $this->assertTrue($article->comments->contains('id', $comment->id));
     }
-
-    public function test_recents_returns_four_latest_articles(): void
-    {
-        for ($i = 0; $i < 6; $i++) {
-            $this->createArticle([
-                'is_published' => true,
-                'published_at' => now()->subDays($i),
-            ]);
-        }
-
-        $result = Article::recents(Article::query());
-
-        $this->assertCount(4, $result);
-    }
 }

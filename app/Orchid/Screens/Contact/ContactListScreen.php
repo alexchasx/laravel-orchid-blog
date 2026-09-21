@@ -3,20 +3,12 @@
 namespace App\Orchid\Screens\Contact;
 
 use App\Models\Contact;
-use App\Models\User;
-use Orchid\Screen\Screen;
-use App\Orchid\Layouts\ShowContact;
 use Carbon\Carbon;
-use Orchid\Screen\Actions\ModalToggle;
-use Orchid\Screen\Layouts\Modal;
+use Illuminate\Support\Str;
+use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Screen;
 use Orchid\Screen\TD;
 use Orchid\Support\Facades\Layout;
-use Orchid\Screen\Fields\CheckBox;
-use Orchid\Screen\Sight;
-use Illuminate\Support\Str;
-use Orchid\Screen\Actions\Button;
-use Orchid\Screen\Actions\Link;
-use Orchid\Support\Color;
 
 class ContactListScreen extends Screen
 {
@@ -71,20 +63,15 @@ class ContactListScreen extends Screen
 
                 }),
 
-                // TD::make('read', 'Прочитано')->render(function (Contact $contact) {
-                //     return CheckBox::make('contacts[]')
-                //         ->value($contact->read);
-                // })->sort(),
-
                 TD::make('name', 'Имя')
                     ->render(function (Contact $contact) {
                         return Str::limit(e($contact->name ?? $contact->user?->name), 30);
                     }),
 
                 TD::make('title', 'Заголовок')
-                        ->render(function (Contact $contact) {
-                            return Str::limit(e($contact->title), 40);
-                        }),
+                    ->render(function (Contact $contact) {
+                        return Str::limit(e($contact->title), 40);
+                    }),
 
                 TD::make('message', 'Сообщение')
                     ->render(function (Contact $contact) {
@@ -98,14 +85,7 @@ class ContactListScreen extends Screen
 
                     return $carbon->format('d.m.Y H:i');
                 }),
-
-            // TD::make('delete', 'Удалить'),
             ]),
         ];
     }
-
-    // public function asyncGetContact(Contact $contact): array
-    // {
-    //     return ['contact' => $contact];
-    // }
 }

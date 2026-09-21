@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 use Orchid\Screen\AsSource;
 
 /**
@@ -26,8 +23,7 @@ use Orchid\Screen\AsSource;
  * @property-read int|null $article_tags_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Article[] $articles
  * @property-read int|null $articles_count
- * @method static Builder|Tag articlePublished()
- * @method static \Database\Factories\TagFactory factory(...$parameters)
+ * @method static Builder|Tag factory(...$parameters)
  * @method static Builder|Tag newModelQuery()
  * @method static Builder|Tag newQuery()
  * @method static \Illuminate\Database\Query\Builder|Tag onlyTrashed()
@@ -49,8 +45,6 @@ class Tag extends Model
     use AsSource;
     use SoftDeletes;
 
-    public const SIDEBAR_CACHE_KEY = 'sidebar-tags';
-
     public $timestamps = false;
 
     protected $fillable = [
@@ -68,14 +62,6 @@ class Tag extends Model
     public function article_tags(): HasMany
     {
         return $this->hasMany(ArticleTag::class, 'tag_id');
-    }
-
-    public function scopeArticlePublished($query): Builder
-    {
-        return $query->addSelect('id', 'title', 'active', 'popular', 'count_articles')
-            ->whereHas('articles', function (Builder $builder) {
-                $builder = Article::published($builder);
-            })->where('active', true);
     }
 
     public static function updateCountArticles(Article $article): void

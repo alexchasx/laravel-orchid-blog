@@ -57,9 +57,16 @@ make install
 ```
 
 Команда выполняет полную настройку: собирает образы, копирует `.env.example` → `.env`,
-устанавливает PHP- и JS-зависимости, генерирует `APP_KEY`, запускает
-`migrate:fresh --seed`, создаёт администратора Orchid, делает `storage:link`
-и собирает фронтенд.
+запускает контейнеры и вызывает `make setup`. Сама установка (в уже запущенном Docker):
+
+```bash
+make setup
+```
+
+`make setup` устанавливает PHP-зависимости (`composer install`), генерирует `APP_KEY`,
+запускает `migrate:fresh --seed`, создаёт администратора Orchid, делает `storage:link`,
+ставит JS-зависимости (`npm install`) и собирает фронтенд. Команду удобно перезапускать
+повторно, если контейнеры уже подняты и нужно полностью настроить проект заново.
 
 Доступ после установки:
 - Сайт: [http://localhost:8080](http://localhost:8080)
@@ -67,7 +74,7 @@ make install
 - phpMyAdmin: [http://localhost:8899](http://localhost:8899)
 - MailHog: [http://localhost:8026](http://localhost:8026)
 
-> ⚠️ `make migrate` из `make install` выполняет **`migrate:fresh --seed`** — команда
+> ⚠️ `make setup` (и `make install`) включает шаг **`migrate:fresh --seed`** — команда
 > **разрушает** базу данных при повторном запуске.
 
 ### 3. Повседневные команды

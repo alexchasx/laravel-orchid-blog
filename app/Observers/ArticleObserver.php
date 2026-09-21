@@ -2,10 +2,8 @@
 
 namespace App\Observers;
 
-// use App\Classes\ModelCache;
 use App\Mail\NewArticleMail;
 use App\Models\Article;
-use App\Models\Rubric;
 use App\Models\Subscriber;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Log;
@@ -49,8 +47,6 @@ class ArticleObserver
     {
         Tag::updateCountArticles($article);
         $this->notifySubscribers($article);
-        // ModelCache::updateCache(Rubric::class);
-        // ModelCache::updateCache(Tag::class);
     }
 
     /**
@@ -67,9 +63,6 @@ class ArticleObserver
         if ($article->wasChanged('is_published')) {
             $this->notifySubscribers($article);
         }
-
-        // ModelCache::updateCache(Rubric::class);
-        // ModelCache::updateCache(Tag::class);
     }
 
     /**
@@ -81,8 +74,6 @@ class ArticleObserver
     public function deleted(Article $article)
     {
         Tag::updateCountArticles($article);
-        // ModelCache::updateCache(Rubric::class);
-        // ModelCache::updateCache(Tag::class);
     }
 
     /**
@@ -94,8 +85,6 @@ class ArticleObserver
     public function restored(Article $article)
     {
         Tag::updateCountArticles($article);
-        // ModelCache::updateCache(Rubric::class);
-        // ModelCache::updateCache(Tag::class);
     }
 
     /**
@@ -107,7 +96,5 @@ class ArticleObserver
     public function forceDeleted(Article $article)
     {
         Tag::updateCountArticles($article);
-        // ModelCache::updateCache(Rubric::class);
-        // ModelCache::updateCache(Tag::class);
     }
 }

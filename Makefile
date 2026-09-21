@@ -38,13 +38,8 @@ env-copy: ## Скопировать .env.example → .env (если .env ещё 
 	fi
 
 .PHONY: install
-install: env-copy up storage-perm composer-install key-generate migrate orchid-admin storage-link frontend-install frontend-build ## Полная первоначальная установка в Docker
+install: env-copy up storage-perm setup ## Полная первоначальная установка в Docker (env-copy + up + setup)
 	@echo ""
-	@echo "$(GREEN)✓ Docker setup complete!$(RESET)"
-	@echo "$(GREEN)  Site:        http://localhost:8080$(RESET)"
-	@echo "$(GREEN)  Admin:       http://localhost:8080/admin$(RESET)"
-	@echo "$(GREEN)  phpMyAdmin:  http://localhost:8899$(RESET)"
-	@echo "$(GREEN)  MailHog:     http://localhost:8026$(RESET)"
 
 .PHONY: up
 up: ## Собрать образы и запустить контейнеры (docker compose up -d --build)
@@ -55,6 +50,15 @@ up: ## Собрать образы и запустить контейнеры (d
 down: ## Остановить контейнеры (docker compose down)
 	@echo "$(YELLOW)→ Stopping Docker containers...$(RESET)"
 	$(COMPOSE) down
+
+.PHONY: setup
+setup: composer-install key-generate migrate orchid-admin storage-link frontend-install frontend-build ## Полная установка в уже запущенный Docker (composer, ключ, миграции, админ, фронтенд)
+	@echo ""
+	@echo "$(GREEN)✓ Setup complete!$(RESET)"
+	@echo "$(GREEN)  Site:        http://localhost:8080$(RESET)"
+	@echo "$(GREEN)  Admin:       http://localhost:8080/admin$(RESET)"
+	@echo "$(GREEN)  phpMyAdmin:  http://localhost:8899$(RESET)"
+	@echo "$(GREEN)  MailHog:     http://localhost:8026$(RESET)"
 
 .PHONY: logs
 logs: ## Показать логи контейнеров (docker compose logs -f)

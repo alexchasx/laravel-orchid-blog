@@ -2,20 +2,16 @@
 
 namespace App\Orchid\Screens\Article;
 
-use App\Events\ArticleCreated;
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
-use App\Models\Tag;
 use App\Orchid\Layouts\Article\ArticleListTable;
 use App\Orchid\Layouts\CreateOrUpdateArticle;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Event;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Layouts\Modal;
 use Orchid\Support\Facades\Layout;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Toast;
-use Orchid\Screen\Actions\Link;
 
 class ArticleListScreen extends Screen
 {
@@ -52,10 +48,6 @@ class ArticleListScreen extends Screen
         return [
             ModalToggle::make('Создать статью')->modal('createArticle')
                 ->method('createOrUpdateArticle'),
-
-            // Link::make('Выход')
-            //     ->route('platform.logout')
-            //     ->icon('logout'),
         ];
     }
 

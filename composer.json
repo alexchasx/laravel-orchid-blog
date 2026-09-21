@@ -13,7 +13,6 @@
         "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0",
-        "mews/captcha": "^3.3",
         "orchid/platform": "^14.53"
     },
     "require-dev": {
@@ -21,7 +20,6 @@
         "fakerphp/faker": "^1.23",
         "laravel-lang/lang": "^13.0",
         "laravel/breeze": "^2.2",
-        "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.5",
         "phpunit/phpunit": "^11.5",
@@ -37,10 +35,7 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        },
-        "files": [
-            "app/helpers.php"
-        ]
+        }
     },
     "scripts": {
         "post-autoload-dump": [
