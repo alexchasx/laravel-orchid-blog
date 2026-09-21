@@ -10,37 +10,56 @@ use Illuminate\Support\Str;
 
 class ArticleService
 {
-    private const PAGINATE = 12;
-    private static array $selectColumn = ['id', 'title', 'published_at'];
+    private const PAGINATE = 6;
+
+    private const SELECT_COLUMNS = [
+        'id', 'title', 'slug', 'excert', 'image', 'published_at', 'rubric_id', 'is_published',
+    ];
 
     public function getPublic(?string $search): LengthAwarePaginator
     {
-        return Article::published(
-                Article::search($search)
-            )->paginate(self::PAGINATE, self::$selectColumn);
+        $query = Article::published()
+            ->with(['user', 'rubric', 'tags'])
+            ->select(self::SELECT_COLUMNS);
+
+        if ($search) {
+            $query->where(function (Builder $q) use ($search) {
+                $q->where('title', 'LIKE', "%{$search}%")
+                    ->orWhereRaw('content_html LIKE ?', ["%{$search}%"]);
+            });
+        }
+
+        return $query->paginate(self::PAGINATE);
     }
 
     public function getNotPublic(): LengthAwarePaginator
     {
-        return Article::query()->orderBy('id', 'desc')
+        return Article::query()
+            ->with(['user', 'rubric', 'tags'])
+            ->select(self::SELECT_COLUMNS)
+            ->orderBy('id', 'desc')
             ->where('is_published', false)
-            ->paginate(self::PAGINATE, self::$selectColumn);
+            ->paginate(self::PAGINATE);
     }
 
     public function getByRubric(int $rubricId): LengthAwarePaginator
     {
         return Article::published()
+            ->with(['user', 'rubric', 'tags'])
+            ->select(self::SELECT_COLUMNS)
             ->where('rubric_id', $rubricId)
-            ->paginate(self::PAGINATE, self::$selectColumn);
+            ->paginate(self::PAGINATE);
     }
 
     public function getByTag(int $tagId): LengthAwarePaginator
     {
         return Article::published()
+            ->with(['user', 'rubric', 'tags'])
+            ->select(self::SELECT_COLUMNS)
             ->whereHas('tags', function (Builder $builder) use ($tagId) {
                 $builder->where('tag_id', $tagId);
             })
-            ->paginate(self::PAGINATE, self::$selectColumn);
+            ->paginate(self::PAGINATE);
     }
 
     public function checkAccess(Article $article): void

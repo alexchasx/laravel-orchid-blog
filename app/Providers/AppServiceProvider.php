@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Services\ArticleService;
-use App\Services\ServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -39,7 +37,5 @@ class AppServiceProvider extends ServiceProvider
 
             return $user->hasAccess($value);
         });
-
-        $this->app->bind(ServiceInterface::class, ArticleService::class);
     }
 }

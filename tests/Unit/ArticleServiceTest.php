@@ -52,7 +52,7 @@ class ArticleServiceTest extends TestCase
         $result = $this->service->getPublic(null);
 
         $this->assertInstanceOf(LengthAwarePaginator::class, $result);
-        $this->assertSame(12, $result->perPage());
+        $this->assertSame(6, $result->perPage());
         $this->assertTrue($result->contains('id', $published->id));
         $this->assertFalse($result->contains('id', $unpublished->id));
     }

@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 use Orchid\Screen\AsSource;
 
 /**
@@ -48,8 +47,6 @@ class Tag extends Model
     use HasFactory;
     use AsSource;
     use SoftDeletes;
-
-    public const SIDEBAR_CACHE_KEY = 'sidebar-tags';
 
     public $timestamps = false;
 
