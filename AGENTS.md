@@ -12,7 +12,8 @@ UI copy, code comments, and all docs are in **Russian** — write new ones in Ru
 
 The project runs **Docker-only** — no local php/composer/npm/artisan. `make` drives all commands through Docker Compose from **`docker/docker-compose.yml`** (not repo root); `make help` lists everything:
 
-- `make install` — one-command Docker setup: `.env` (from `.env.example`), build + up containers, composer/npm installs, `key:generate`, **`migrate:fresh --seed`**, Orchid admin (`admin@localhost.ru`/`123456`), `storage:link`, frontend build
+- `make install` — one-command Docker setup: `.env` (from `.env.example`), build + up containers, then `make setup`
+- `make setup` — full setup inside an already-running Docker: composer/npm installs, `key:generate`, **`migrate:fresh --seed`**, Orchid admin (`admin@localhost.ru`/`123456`), `storage:link`, frontend build
 - `make up` / `make down` / `make logs` / `make shell` — container lifecycle
 - `make migrate` — runs **`migrate:fresh --seed`** (destructive)
 - `make orchid-admin` — creates admin user (`admin@localhost.ru` / `123456`; non-interactive)
