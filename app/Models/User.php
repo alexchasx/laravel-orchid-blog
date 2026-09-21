@@ -59,10 +59,6 @@ use Orchid\Platform\Models\User as Authenticatable;
  */
 class User extends Authenticatable
 {
-    public const ROLE_USER = 'user';
-    public const ROLE_MODERATOR = 'moderator';
-    public const ROLE_ADMIN = 'admin';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -144,15 +140,5 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->hasAccess('platform.custom.articles');
-    }
-
-    public function saveContact(array $data): Contact
-    {
-        return $this->contacts()
-            ->save(new Contact($data +
-                [
-                    'user_id' => $this->id,
-                ]
-            ));
     }
 }

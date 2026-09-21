@@ -112,12 +112,12 @@ class SubscriberTest extends TestCase
             'published_at' => now(),
         ]);
 
-        Mail::assertSent(NewArticleMail::class, function (NewArticleMail $mail) use ($active) {
+        Mail::assertQueued(NewArticleMail::class, function (NewArticleMail $mail) use ($active) {
             return $mail->hasTo($active->email);
         });
 
         // Отписавшемуся подписчику письмо не уходит.
-        Mail::assertNotSent(NewArticleMail::class, function (NewArticleMail $mail) {
+        Mail::assertNotQueued(NewArticleMail::class, function (NewArticleMail $mail) {
             return $mail->hasTo('unsub@example.com');
         });
     }
