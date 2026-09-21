@@ -8,6 +8,20 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubscriberController;
 use Illuminate\Support\Facades\Route;
 
+// Тестовые маршруты (не удалять)
+Route::get('/test-400', fn () => abort(400));
+Route::get('/test-401', fn () => abort(401));
+Route::get('/test-403', fn () => abort(403));
+Route::get('/test-404', fn () => abort(404));
+Route::get('/test-405', fn () => abort(405));
+Route::get('/test-408', fn () => abort(408));
+Route::get('/test-419', fn () => abort(419));
+Route::get('/test-429', fn () => abort(429));
+Route::get('/test-500', fn () => abort(500));
+Route::get('/test-502', fn () => abort(502));
+Route::get('/test-503', fn () => abort(503));
+Route::get('/test-504', fn () => abort(504));
+
 Route::get('/setlocale/{locale}', [MainController::class, 'setLocale'])->name('setlocale');
 
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
