@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Rubric;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -87,7 +86,15 @@ class Article extends Model
     {
         static::saving(function (Article $article): void {
             if (!empty($article->content_raw)) {
-                $article->content_html = (new CommonMarkConverter())
+                // Санитизация против Stored XSS:
+                //  - 'html_input' => 'strip' вырезает сырой HTML, вставленный в Markdown;
+                //  - 'allow_unsafe_links' => false запрещает опасные схемы URL (javascript: и т.п.).
+                //    (в league/commonmark 2.10 по умолчанию true — ключ пишется во множественном числе).
+                $config = [
+                    'html_input'        => 'strip',
+                    'allow_unsafe_links' => false,
+                ];
+                $article->content_html = (new CommonMarkConverter($config))
                     ->convert((string) $article->content_raw)
                     ->getContent();
             }
@@ -114,7 +121,8 @@ class Article extends Model
         'slug',
         'title',
         'excert',
-        'content_html',
+        // 'content_html' — производное поле, генерируется из content_raw в booted(),
+        // массово не назначается (защита от прямой инъекции HTML из запроса).
         'content_raw',
         'is_published',
         'published_at',
@@ -184,7 +192,9 @@ class Article extends Model
                 'is_published',
             );
         }
-        return $builder->whereDate('published_at', '<=', Carbon::now())
+        // Сравниваем полный timestamp, а не только дату: статья, запланированная
+        // на сегодня 23:00, не должна быть видна утром (обход расписания).
+        return $builder->where('published_at', '<=', now())
             ->where('is_published', true)
             ->with('tags')
             ->orderBy('published_at', 'desc');

@@ -75,7 +75,7 @@
                 <a href="{{ config('my_config.my_github') }}" target="_blank" rel="noopener">GitHub</a>
             @endif
             @if(config('my_config.my_telegram'))
-                <a href="https://t.me/" target="_blank" rel="noopener">Telegram</a>
+                <a href="{{ config('my_config.my_telegram') }}" target="_blank" rel="noopener">Telegram</a>
             @endif
             <a href="{{ route('contact') }}">Контакты</a>
             <a href="{{ route('privacy') }}">Конфиденциальность</a>

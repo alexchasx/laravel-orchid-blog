@@ -62,9 +62,7 @@ class ArticleListTable extends Table
                 ->sort(),
 
             TD::make('rubric_title', 'Категория')->alignLeft()->render(
-                function (Article $article) {
-                    return $article->rubric->title;
-                }
+                fn (Article $article) => $article->rubric?->title ?? '—'
             )->width(300),
 
             TD::make('published_at', 'Дата публикации')->render(function (Article $article) {

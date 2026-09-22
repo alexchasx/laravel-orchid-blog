@@ -17,6 +17,20 @@ YELLOW := \033[33m
 RED    := \033[31m
 RESET  := \033[0m
 
+# ---------- Общий блок: вывод ссылок на сервисы ------------------------------
+
+# Печатает ссылки на сайт, админку и вспомогательные сервисы.
+# Используется в up / setup / install, чтобы вывод оставался синхронным.
+# Первый аргумент ($(1)) — заголовок блока (что именно готово).
+define PRINT_SERVICE_LINKS
+	@echo ""
+	@echo "$(GREEN)✓ $(1)$(RESET)"
+	@echo "$(GREEN)  Site:        http://localhost:8080$(RESET)"
+	@echo "$(GREEN)  Admin:       http://localhost:8080/admin$(RESET)"
+	@echo "$(GREEN)  phpMyAdmin:  http://localhost:8899$(RESET)"
+	@echo "$(GREEN)  MailHog:     http://localhost:8026$(RESET)"
+endef
+
 # ---------- Правила ----------------------------------------------------------
 
 .PHONY: help
@@ -45,6 +59,7 @@ install: env-copy up storage-perm setup ## Полная первоначальн
 up: ## Собрать образы и запустить контейнеры (docker compose up -d --build)
 	@echo "$(GREEN)→ Starting Docker containers...$(RESET)"
 	$(COMPOSE) up -d --build
+	$(call PRINT_SERVICE_LINKS,Containers are up!)
 
 .PHONY: down
 down: ## Остановить контейнеры (docker compose down)
@@ -53,12 +68,7 @@ down: ## Остановить контейнеры (docker compose down)
 
 .PHONY: setup
 setup: composer-install key-generate migrate orchid-admin storage-link frontend-install frontend-build ## Полная установка в уже запущенный Docker (composer, ключ, миграции, админ, фронтенд)
-	@echo ""
-	@echo "$(GREEN)✓ Setup complete!$(RESET)"
-	@echo "$(GREEN)  Site:        http://localhost:8080$(RESET)"
-	@echo "$(GREEN)  Admin:       http://localhost:8080/admin$(RESET)"
-	@echo "$(GREEN)  phpMyAdmin:  http://localhost:8899$(RESET)"
-	@echo "$(GREEN)  MailHog:     http://localhost:8026$(RESET)"
+	$(call PRINT_SERVICE_LINKS,Setup complete!)
 
 .PHONY: logs
 logs: ## Показать логи контейнеров (docker compose logs -f)

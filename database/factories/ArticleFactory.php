@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Blog\Article>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Article>
  */
 class ArticleFactory extends Factory
 {
@@ -23,7 +23,7 @@ class ArticleFactory extends Factory
             'title' => $this->faker->text(80),
             'excert' => $this->faker->text(400),
             'content_raw' => $this->faker->text(3000),
-            'content_html' => $this->faker->text(3000),
+            // 'content_html' — производное поле, генерируется из content_raw в Article::booted().
             // 'image' => $this->faker->image('public/storage/posts', 640, 520, null, false),
             'viewed' => $this->faker->numberBetween(1, 10000),
             'keywords' => $this->faker->text(50),
