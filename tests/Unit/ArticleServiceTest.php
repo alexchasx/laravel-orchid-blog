@@ -194,9 +194,8 @@ class ArticleServiceTest extends TestCase
 
     public function test_with_toc_extracts_h2_h3_items(): void
     {
-        $article = new Article([
-            'content_html' => '<h2>Introduction</h2><h3>Details</h3><p>Text</p>',
-        ]);
+        $article = new Article();
+        $article->content_html = '<h2>Introduction</h2><h3>Details</h3><p>Text</p>';
 
         $result = $this->service->withToc($article);
 
@@ -211,9 +210,8 @@ class ArticleServiceTest extends TestCase
 
     public function test_with_toc_makes_duplicate_headings_ids_unique(): void
     {
-        $article = new Article([
-            'content_html' => '<h2>Topic</h2><h2>Topic</h2>',
-        ]);
+        $article = new Article();
+        $article->content_html = '<h2>Topic</h2><h2>Topic</h2>';
 
         $result = $this->service->withToc($article);
 
@@ -224,9 +222,8 @@ class ArticleServiceTest extends TestCase
 
     public function test_with_toc_honors_existing_id(): void
     {
-        $article = new Article([
-            'content_html' => '<h2 id="custom-heading">Existing</h2>',
-        ]);
+        $article = new Article();
+        $article->content_html = '<h2 id="custom-heading">Existing</h2>';
 
         $result = $this->service->withToc($article);
 
@@ -236,9 +233,8 @@ class ArticleServiceTest extends TestCase
 
     public function test_with_toc_transliterates_cyrillic_headings_to_slug_ids(): void
     {
-        $article = new Article([
-            'content_html' => '<h2>Введение</h2>',
-        ]);
+        $article = new Article();
+        $article->content_html = '<h2>Введение</h2>';
 
         $result = $this->service->withToc($article);
 
@@ -247,7 +243,8 @@ class ArticleServiceTest extends TestCase
 
     public function test_with_toc_returns_empty_items_for_empty_content(): void
     {
-        $article = new Article(['content_html' => '   ']);
+        $article = new Article();
+        $article->content_html = '   ';
 
         $result = $this->service->withToc($article);
 

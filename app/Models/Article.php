@@ -87,7 +87,15 @@ class Article extends Model
     {
         static::saving(function (Article $article): void {
             if (!empty($article->content_raw)) {
-                $article->content_html = (new CommonMarkConverter())
+                // Санитизация против Stored XSS:
+                //  - 'html_input' => 'strip' вырезает сырой HTML, вставленный в Markdown;
+                //  - 'allow_unsafe_links' => false запрещает опасные схемы URL (javascript: и т.п.).
+                //    (в league/commonmark 2.10 по умолчанию true — ключ пишется во множественном числе).
+                $config = [
+                    'html_input'        => 'strip',
+                    'allow_unsafe_links' => false,
+                ];
+                $article->content_html = (new CommonMarkConverter($config))
                     ->convert((string) $article->content_raw)
                     ->getContent();
             }
@@ -114,7 +122,8 @@ class Article extends Model
         'slug',
         'title',
         'excert',
-        'content_html',
+        // 'content_html' — производное поле, генерируется из content_raw в booted(),
+        // массово не назначается (защита от прямой инъекции HTML из запроса).
         'content_raw',
         'is_published',
         'published_at',

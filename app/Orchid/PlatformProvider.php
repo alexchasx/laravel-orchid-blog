@@ -50,7 +50,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->icon('bs.envelope')
                 ->route('platform.contact.list')
                 ->badge(function () {
-                    return Contact::all('id')->count();
+                    return Contact::count();
                 }),
 
             Menu::make(__('Подписчики'))
@@ -65,7 +65,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->permission('platform.custom.articles')
                 ->route('platform.articles')
                 ->badge(function () {
-                    return Article::all('id')->count();
+                    return Article::count();
                 }),
 
             Menu::make(__('Рубрики'))
@@ -73,7 +73,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->permission('platform.custom.rubrics')
                 ->route('platform.rubric.list')
                 ->badge(function () {
-                    return Rubric::all('id')->count();
+                    return Rubric::count();
                 }),
 
             Menu::make(__('Метки'))
@@ -81,7 +81,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->permission('platform.custom.rubrics')
                 ->route('platform.tag.list')
                 ->badge(function () {
-                    return Tag::all('id')->count();
+                    return Tag::count();
                 }),
 
             Menu::make(__('Комментарии'))
@@ -89,7 +89,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.comment.list')
                 ->permission('platform.custom.comments')
                 ->badge(function () {
-                    return Comment::all('id')->count();
+                    return Comment::count();
                 }),
 
             Menu::make(__('Пользователи'))
@@ -98,7 +98,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->permission('platform.systems.users')
                 ->title(__('Access rights'))
                 ->badge(function () {
-                    return User::all('id')->count();
+                    return User::count();
                 }),
 
             Menu::make(__('Роли'))
@@ -106,7 +106,7 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.systems.roles')
                 ->permission('platform.systems.roles')
                 ->badge(function () {
-                    return Role::all('id')->count();
+                    return Role::count();
                 }),
         ];
     }

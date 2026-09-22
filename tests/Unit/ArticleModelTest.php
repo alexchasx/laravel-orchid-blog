@@ -103,6 +103,32 @@ class ArticleModelTest extends TestCase
         $this->assertStringContainsString('<p>Текст абзаца.</p>', $article->content_html);
     }
 
+    public function test_content_raw_strips_raw_html_on_save(): void
+    {
+        $article = $this->createArticle([
+            'title' => 'Markdown с HTML',
+            'content_raw' => "# Заголовок\n\n<script>alert(1)</script>\n\n<img src=x onerror=alert(1)>\n\n[опасная](javascript:alert(1))",
+        ]);
+
+        // Легитимная разметка CommonMark сохраняется...
+        $this->assertStringContainsString('<h1>Заголовок</h1>', $article->content_html);
+        // ...а сырой HTML / опасные схемы URL вырезаются (защита от Stored XSS).
+        $this->assertStringNotContainsString('<script>', $article->content_html);
+        $this->assertStringNotContainsString('onerror=', $article->content_html);
+        $this->assertStringNotContainsString('javascript:', $article->content_html);
+    }
+
+    public function test_content_html_is_derived_and_not_mass_assignable(): void
+    {
+        $article = new Article([
+            'title' => 'Без массового назначения',
+            'content_html' => '<b>Инъекция</b>',
+        ]);
+
+        // content_html — производное поле, его нельзя протащить через массовое назначение.
+        $this->assertNull($article->content_html);
+    }
+
     public function test_search_scope_filters_by_title(): void
     {
         $matching = $this->createArticle(['title' => 'Laravel Performance Guide']);
