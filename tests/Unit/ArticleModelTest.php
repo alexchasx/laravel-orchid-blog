@@ -61,6 +61,20 @@ class ArticleModelTest extends TestCase
         $this->assertFalse($result->contains('id', $future->id));
     }
 
+    public function test_published_scope_excludes_article_scheduled_later_today(): void
+    {
+        // Регрессия: whereDate сравнивал только дату, поэтому статья, запланированная
+        // на сегодня 23:00, была видна уже утром. Сравнение — по полному timestamp.
+        $laterToday = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now()->addMinutes(30),
+        ]);
+
+        $result = Article::published()->get();
+
+        $this->assertFalse($result->contains('id', $laterToday->id));
+    }
+
     public function test_published_scope_orders_by_desc(): void
     {
         $older = $this->createArticle([

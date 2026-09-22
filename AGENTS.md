@@ -28,7 +28,7 @@ UI-тексты, комментарии в коде и вся документа
 - `make lint` — только `php -l` по `app database routes` (нет phpstan и Pint)
 - `make ide-helper` — `ide:model` + `ide:optimize` для автодополнения в IDE
 
-Контейнеры (`blog_*`): `nginx`, `app`, `node`, **`schedule`** (`php artisan schedule:work` — автопубликация статей), `mailhog`, `db` (MySQL 8.0), `phpmyadmin`.
+Контейнеры (`blog_*`): `nginx`, `app`, `node`, **`schedule`** (`php artisan schedule:work` — автопубликация статей), **`queue`** (`php artisan queue:work` — обработка очереди писем рассылки), `mailhog`, `db` (MySQL 8.0), `phpmyadmin`.
 
 Дефолтные адреса: сайт `:8080`, админ `:8080/admin`, phpMyAdmin `:8899`, MailHog `:8026`, Vite dev `:5173`; MySQL — внутри сети `3306`, наружу `:8101`; БД `laraorchid`/`root`/`root` (совпадает с `docker/docker-compose.yml` и `.env.example`).
 
@@ -56,11 +56,12 @@ UI-тексты, комментарии в коде и вся документа
 
 - **Колонка БД называется `excert` (опечатка, сохранена).** На неё ссылаются `Article` model и `ArticleService` (список `SELECT_COLUMNS`). Не «чинить» без миграции данных.
 - **Обсерверов ровно один — `ArticleObserver`** (события created/updated/deleted/restored/forceDeleted). Его задачи: пересчёт `Tag::updateCountArticles()` (поле `count_articles`) и **рассылка подписчикам** (`NewArticleMail`) для опубликованных статей с наступившей датой выхода. Никаких кэш-ключей и инвалидации кэша нет; паттерн Events/Listeners не используется — держись обсерверов.
-- `Article::published()` = `is_published === true` && `published_at <= now` (по `whereDate`). `ArticleService::checkAccess()` отдаёт 403, если статья не опубликована, а текущий пользователь не админ. Отдельная страница «неопубликованные» — роут `notpublic` под `auth` + `access:platform.custom.articles`.
+- `Article::published()` = `is_published === true` && `published_at <= now` (сравнение **по полному timestamp**, а не по дате — запланированная на сегодня «будущая» статья не показывается). `ArticleService::checkAccess()` отдаёт 403, если статья не опубликована, а текущий пользователь не админ. Отдельная страница «неопубликованные» — роут `notpublic` под `auth` + `access:platform.custom.articles`.
 - `Article::booted()`: на `saving` конвертирует markdown `content_raw` → `content_html` через `league/commonmark` (санитизация: `html_input => strip`, `allow_unsafe_links => false`) и авто-генерирует уникальный `slug` из заголовка.
 - **Капча — математическая** (`MathCaptcha`, ключ сессии `captcha_answer`), применяется для гостевых комментариев в `CommentRequest`. Middleware `GoogleRecaptcha` в проекте больше нет.
 - **Комментарии**: гостевые разрешены, при этом сохраняется IP (миграция `add_ip_to_comments`); `comment.create` под `throttle:10,1`, удаление — авторизованным пользователям (`commentDelete`).
 - **Подписка на статьи**: `subscribe.store` под `throttle:5,1`; отписка по токену `unsubscribe/{token}`; активные подписчики — scope `Subscriber::active()`.
 - **Автопубликация**: команда `articles:publish-scheduled` каждую минуту (`routes/console.php`), исполняет контейнер `blog_schedule`; сохранение статьи триггерит `ArticleObserver::updated` → рассылку.
+- **Очередь рассылки**: `QUEUE_CONNECTION=database` (таблица `jobs`), письма `NewArticleMail` (Mailable `implements ShouldQueue`) обрабатывает контейнер `blog_queue`. В тестах (`phpunit.xml`) очередь форсируется в `sync`.
 - Laravel 13-style layout: роутинг/миддлвары регистрируются в `bootstrap/app.php` (нет `Http/Kernel.php`). Кастомные `TrustProxies` и `VerifyCsrfToken` заменяют дефолтные; `Localize` добавлен в группу `web`; алиас `access` → Orchid Access.
 - Env-настройки сайта — `config/my_config.php` (`MY_GITHUB`, `MY_TELEGRAM`, `CONTACT_EMAIL`, `SUB_LOGO`, `SLOGAN`).

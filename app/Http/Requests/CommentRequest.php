@@ -26,7 +26,8 @@ class CommentRequest extends FormRequest
     {
         $rules = [
             'article_id' => ['required', 'exists:articles,id'],
-            'comment' => ['required', 'max:5000'],
+            // 'string' — защита от передачи массива вместо текста комментария.
+            'comment' => ['required', 'string', 'max:5000'],
         ];
 
         if (! $this->user()) {

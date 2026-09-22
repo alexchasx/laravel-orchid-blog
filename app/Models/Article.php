@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Rubric;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -193,7 +192,9 @@ class Article extends Model
                 'is_published',
             );
         }
-        return $builder->whereDate('published_at', '<=', Carbon::now())
+        // Сравниваем полный timestamp, а не только дату: статья, запланированная
+        // на сегодня 23:00, не должна быть видна утром (обход расписания).
+        return $builder->where('published_at', '<=', now())
             ->where('is_published', true)
             ->with('tags')
             ->orderBy('published_at', 'desc');

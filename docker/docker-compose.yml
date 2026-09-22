@@ -42,6 +42,17 @@ services:
     command: php artisan schedule:work
     container_name: blog_schedule
 
+  # Обработчик очереди (QUEUE_CONNECTION=database): отправка писем рассылки
+  # NewArticleMail не блокирует веб-запрос, а выполняется этим воркером.
+  queue:
+    image: blog_app
+    depends_on:
+      - db
+    volumes:
+      - ./../:/var/www
+    command: php artisan queue:work --sleep=1 --tries=3
+    container_name: blog_queue
+
   mailhog:
     image: mailhog/mailhog
     ports:

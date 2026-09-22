@@ -110,7 +110,7 @@ MY_EMAIL=
 ### 🟡 СРЕДНИЙ
 
 ---
-НАЙДЕННЫЙ НЕДОЧЁТ: Запланированная на сегодня «будущая» статья показывается до наступления времени · ✅ ПОДТВЕРЖДЕНО ([`app/Models/Article.php`](app/Models/Article.php:187))
+НАЙДЕННЫЙ НЕДОЧЁТ: Запланированная на сегодня «будущая» статья показывается до наступления времени · ✅ ПОДТВЕРЖДЕНО · ✅ ИСПРАВЛЕНО ([`app/Models/Article.php`](app/Models/Article.php:185))
 ФРАГМЕНТ КОДА:
 ```php
 return $builder->whereDate('published_at', '<=', Carbon::now())
@@ -123,10 +123,11 @@ return $builder->whereDate('published_at', '<=', Carbon::now())
 ->where('published_at', '<=', now())
 ```
 (при этом `is_published` остаётся основным выключателем, а команда `articles:publish-scheduled` — автопубликом).
+ВЫПОЛНЕНО: в `Article::published()` стоит `where('published_at', '<=', now())`; импорт `Carbon\Carbon` удалён. Добавлен регрессионный тест `ArticleModelTest::test_published_scope_excludes_article_scheduled_later_today` (статья, запланированная на сегодня позже, не показывается).
 ---
 
 ---
-НАЙДЕННЫЙ НЕДОЧЁТ: Рассылка «в очереди», но `QUEUE_CONNECTION=sync` → блокировка веб-запроса · ✅ ПОДТВЕРЖДЕНО
+НАЙДЕННЫЙ НЕДОЧЁТ: Рассылка «в очереди», но `QUEUE_CONNECTION=sync` → блокировка веб-запроса · ✅ ПОДТВЕРЖДЕНО · ✅ ИСПРАВЛЕНО
 ФРАГМЕНТ КОДА:
 ```php
 // app/Mail/NewArticleMail.php:14 — implements ShouldQueue
@@ -138,10 +139,11 @@ QUEUE_CONNECTION=sync
 РИСК: С `sync`-драйвером `ShouldQueue` игнорируется: письма всем подписчикам (chunk по 100) отправляются синхронно внутри запроса публикации/команды → таймауты PHP-FPM/nginx и зависание админки при большой базе подписчиков.
 ПРИЧИНА: Ожидание очереди при синхронном драйвере; отправка писем в цикле без `batch`/job'ов.
 РЕШЕНИЕ: Использовать `QUEUE_CONNECTION=database` (или redis) + запустить `queue:worker` (добавить сервис в `docker-compose`); либо явно диспетчить `NewArticleMail::dispatch(...)` в очередь и вынести чанкование в queued-Job.
+ВЫПОЛНЕНО: `QUEUE_CONNECTION=database` в `.env.example`; миграция `2026_09_22_000000_create_jobs_table.php` (таблица `jobs`); контейнер `blog_queue` (`php artisan queue:work --sleep=1 --tries=3`) в `docker/docker-compose.yml`. В тестах очередь по-прежнему форсируется в `sync` (`phpunit.xml`).
 ---
 
 ---
-НАЙДЕННЫЙ НЕДОЧЁТ: Дыры в валидации входных данных · ✅ ПОДТВЕРЖДЕНО
+НАЙДЕННЫЙ НЕДОЧЁТ: Дыры в валидации входных данных · ✅ ПОДТВЕРЖДЕНО · ✅ ИСПРАВЛЕНО
 ФРАГМЕНТ КОДА:
 ```php
 // app/Http/Requests/CommentRequest.php:29
@@ -163,10 +165,11 @@ QUEUE_CONNECTION=sync
 'article.tags'        => ['nullable', 'array'],
 'article.tags.*'      => ['integer', 'exists:tags,id'],
 ```
+ВЫПОЛНЕНО: правила внесены в `CommentRequest` (`string`) и `ArticleRequest` (`string`/`max` для `content_raw`, `integer`+`exists:rubrics,id` для `rubric_id`, `array`+`exists:tags,id` для `tags`); покрыто тестами `ArticleListScreenTest` (валидный и невалидный payload). Нюанс: в `max` использовано `1000000` без подчёркиваний — `max:1_000_000` Laravel парсит как лимит 1 (`(int)'1_000_000' === 1`).
 ---
 
 ---
-НАЙДЕННЫЙ НЕДОЧЁТ: Нет тестов на часть сложной логики (автопубликация, админ-экран статей) · ⚠️ ЧАСТИЧНО УСТАРЕЛО
+НАЙДЕННЫЙ НЕДОЧЁТ: Нет тестов на часть сложной логики (автопубликация, админ-экран статей) · ⚠️ ЧАСТИЧНО УСТАРЕЛО · ✅ ИСПРАВЛЕНО
 ФРАГМЕНТ КОДА:
 ```php
 // Не покрыты тестами (поиск по tests/ — 0 совпадений):
@@ -180,6 +183,7 @@ SubscriberController::unsubscribe()        // tests/Feature/SubscriberTest.php (
 РИСК: Регрессии в автопубликации (`articles:publish-scheduled`) и в `createOrUpdateArticle` (updateOrCreate + sync тегов) останутся незамеченными.
 ПРИЧИНА: Прежняя редакция относила к непокрытым `withToc`, подписку/отписку и рассылку, но на дату проверки они уже покрыты (`tests/Unit/ArticleServiceTest.php`, `tests/Feature/SubscriberTest.php`); непокрытыми остались только команда автопубликации и админ-экран статей.
 РЕШЕНИЕ: Добавить Feature-тесты: `articles:publish-scheduled` (публикует только `published_at<=now`, триггерит рассылку через `ArticleObserver::updated`), `createOrUpdateArticle` (создание/обновление + sync тегов).
+ВЫПОЛНЕНО: добавлены `tests/Feature/PublishScheduledArticlesTest.php` (публикует только наступившие, не трогает опубликованные, рассылка только активным подписчикам) и `tests/Feature/ArticleListScreenTest.php` (создание, обновление + sync тегов, валидация `ArticleRequest`).
 ---
 
 ### 🟢 НИЗКИЙ
