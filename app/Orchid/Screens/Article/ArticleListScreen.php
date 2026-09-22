@@ -23,7 +23,7 @@ class ArticleListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'articles' => Article::filters()->defaultSort('created_at', 'desc')
+            'articles' => Article::filters()->with('rubric')->defaultSort('id', 'desc')
                 ->paginate(24),
         ];
     }

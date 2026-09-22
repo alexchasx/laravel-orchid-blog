@@ -56,7 +56,7 @@ $article->content_html = (new CommonMarkConverter($config))->convert((string) $a
 ### 🟠 ВЫСОКИЙ
 
 ---
-НАЙДЕННЫЙ НЕДОЧЁТ: Ссылка на Telegram захардкожена и игнорирует конфиг · ✅ ПОДТВЕРЖДЕНО ([`resources/views/layouts/techlog.blade.php`](resources/views/layouts/techlog.blade.php:77))
+НАЙДЕННЫЙ НЕДОЧЁТ: Ссылка на Telegram захардкожена и игнорирует конфиг · ✅ ПОДТВЕРЖДЕНО · ✅ ИСПРАВЛЕНО ([`resources/views/layouts/techlog.blade.php`](resources/views/layouts/techlog.blade.php:78))
 ФРАГМЕНТ КОДА:
 ```blade
 @if(config('my_config.my_telegram'))
@@ -75,7 +75,7 @@ $article->content_html = (new CommonMarkConverter($config))->convert((string) $a
 ---
 
 ---
-НАЙДЕННЫЙ НЕДОЧЁТ: N+1 и падение админ-таблицы статей при удалённой рубрике · ✅ ПОДТВЕРЖДЕНО
+НАЙДЕННЫЙ НЕДОЧЁТ: N+1 и падение админ-таблицы статей при удалённой рубрике · ✅ ПОДТВЕРЖДЕНО · ✅ ИСПРАВЛЕНО
 ФРАГМЕНТ КОДА:
 ```php
 // app/Orchid/Screens/Article/ArticleListScreen.php:26 — нет ->with('rubric')
@@ -94,7 +94,7 @@ TD::make('rubric_title', ...)->render(fn (Article $article) => $article->rubric-
 ---
 
 ---
-НАЙДЕННЫЙ НЕДОЧЁТ: `MY_EMAIL` объявлен в `.env`/README, но отсутствует в `config/my_config.php`
+НАЙДЕННЫЙ НЕДОЧЁТ: `MY_EMAIL` объявлен в `.env`/README, но отсутствует в `config/my_config.php` · ✅ ИСПРАВЛЕНО
 ФРАГМЕНТ КОДА:
 ```php
 // config/my_config.php — нет ключа my_email
