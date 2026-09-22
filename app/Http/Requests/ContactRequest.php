@@ -26,7 +26,7 @@ class ContactRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'min:2', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
-            'message' => ['required', 'string', 'min:10', 'max:500000'],
+            'message' => ['required', 'string', 'min:10', 'max:5000'],
         ];
     }
 
@@ -39,6 +39,7 @@ class ContactRequest extends FormRequest
             'email.email' => 'Введите корректный email.',
             'message.required' => 'Поле "Сообщение" обязательно.',
             'message.min' => 'Сообщение должно содержать не менее 10 символов.',
+            'message.max' => 'Сообщение не должно превышать 5000 символов.',
         ];
     }
 }

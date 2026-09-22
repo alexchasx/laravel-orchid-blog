@@ -189,7 +189,7 @@ SubscriberController::unsubscribe()        // tests/Feature/SubscriberTest.php (
 ### 🟢 НИЗКИЙ
 
 ---
-НАЙДЕННЫЙ НЕДОЧЁТ: «Минут чтения» — магические числа и `rand()` прямо в Blade
+НАЙДЕННЫЙ НЕДОЧЁТ: «Минут чтения» — магические числа и `rand()` прямо в Blade · ✅ ПОДТВЕРЖДЕНО · ✅ ИСПРАВЛЕНО ([`app/Models/Article.php`](app/Models/Article.php), [`resources/views/article.blade.php`](resources/views/article.blade.php:21), [`resources/views/index.blade.php`](resources/views/index.blade.php:56))
 ФРАГМЕНТ КОДА:
 ```blade
 {{ rand(5, 15) }} минут чтения ...   {{-- article.blade.php --}}
@@ -205,10 +205,11 @@ public function getReadingMinutesAttribute(): int {
 }
 ```
 И в шаблоне: `{{ $article->reading_minutes }} минут чтения`.
+ВЫПОЛНЕНО: добавлен accessor `Article::getReadingMinutesAttribute()` — детерминированный подсчёт слов с поддержкой кириллицы (`\p{L}`), 200 слов/мин, минимум 1 минута; при отсутствии `content_html` (списки) считает по `content_raw` (в `ArticleService::SELECT_COLUMNS` добавлен `content_raw`). В шаблонах `rand(5, 15)`/`rand(4, 12)` заменены на `$article->reading_minutes`. Добавлены тесты `ArticleModelTest::test_reading_minutes_*`.
 ---
 
 ---
-НАЙДЕННЫЙ НЕДОЧЁТ: Мёртвая колонка `viewed` · ✅ ПОДТВЕРЖДЕНО
+НАЙДЕННЫЙ НЕДОЧЁТ: Мёртвая колонка `viewed` · ✅ ПОДТВЕРЖДЕНО · ✅ ИСПРАВЛЕНО ([`app/Http/Controllers/ArticleController.php`](app/Http/Controllers/ArticleController.php:35))
 ФРАГМЕНТ КОДА:
 ```php
 protected $fillable = [ ..., 'viewed', ... ]; // app/Models/Article.php:122
@@ -218,10 +219,11 @@ protected $fillable = [ ..., 'viewed', ... ]; // app/Models/Article.php:122
 РИСК: Счётчик просмотров объявлен, но не используется → ложное ощущение аналитики; мёртвое поле путает при рефакторинге.
 ПРИЧИНА: Незавершённая фича.
 РЕШЕНИЕ: Либо реализовать (`$article->increment('viewed')` в `ArticleController::show` вне транзакции/с кэшем), либо удалить колонку и из `$fillable`, и из миграции.
+ВЫПОЛНЕНО: реализован счётчик — в `ArticleController::show()` после `checkAccess()` вызывается `$article->increment('viewed')` (простой инкремент без транзакции). Колонка сохранена, как и запись `'viewed'` в `$fillable` (массово не присваивается).
 ---
 
 ---
-НАЙДЕННЫЙ НЕДОЧЁТ: Небезопасный редирект после комментария через `url()->previous()` · ✅ ПОДТВЕРЖДЕНО ([`app/Http/Controllers/CommentController.php`](app/Http/Controllers/CommentController.php:39))
+НАЙДЕННЫЙ НЕДОЧЁТ: Небезопасный редирект после комментария через `url()->previous()` · ✅ ПОДТВЕРЖДЕНО · ✅ ИСПРАВЛЕНО ([`app/Http/Controllers/CommentController.php`](app/Http/Controllers/CommentController.php:14))
 ФРАГМЕНТ КОДА:
 ```php
 $route = url()->previous() . '#comment' . $comment->id;
@@ -230,10 +232,11 @@ return redirect()->to($route);
 РИСК: `url()->previous()` строится по Referer/сессии — редирект может уйти на внешний URL (открытый редирект) и «съесть» якорь при наличии своего `#`.
 ПРИЧИНА: Доверие к предыдущему URL вместо явного маршрута сущности.
 РЕШЕНИЕ: `return redirect()->route('articleShow', $article).'#comment'.$comment->id;`
+ВЫПОЛНЕНО: `store()` и `delete()` редиректят на `route('articleShow', $article)` с якорем `#comment{id}`/`#comments`; в `delete()` при удалённой (soft delete) статье — фолбэк на `route('home')`.
 ---
 
 ---
-НАЙДЕННЫЙ НЕДОЧЁТ: `contact.store` без throttle и с аномальным лимитом сообщения · ✅ ПОДТВЕРЖДЕНО
+НАЙДЕННЫЙ НЕДОЧЁТ: `contact.store` без throttle и с аномальным лимитом сообщения · ✅ ПОДТВЕРЖДЕНО · ✅ ИСПРАВЛЕНО ([`routes/web.php`](routes/web.php:28), [`app/Http/Requests/ContactRequest.php`](app/Http/Requests/ContactRequest.php:29))
 ФРАГМЕНТ КОДА:
 ```php
 'message' => ['required', 'string', 'min:10', 'max:500000'], // app/Http/Requests/ContactRequest.php:29
@@ -242,10 +245,11 @@ return redirect()->to($route);
 РИСК: Флуд формы обратной связи + отправка полумегабайтных сообщений → разрастание БД/спам.
 ПРИЧИНА: Отсутствие rate-limit на публичной POST-ручке.
 РЕШЕНИЕ: `Route::post('contact.store', ...)->middleware('throttle:5,1')` и `max:5000`.
+ВЫПОЛНЕНО: на `contact.store` добавлен `throttle:5,1` (как у `subscribe.store`); лимит `message` снижен с `max:500000` до `max:5000`, добавлено сообщение `message.max`.
 ---
 
 ---
-НАЙДЕННЫЙ НЕДОЧЁТ: Мелкие code-smell / легаси · ✅ ПОДТВЕРЖДЕНО
+НАЙДЕННЫЙ НЕДОЧЁТ: Мелкие code-smell / легаси · ✅ ПОДТВЕРЖДЕНО · ✅ ИСПРАВЛЕНО
 ФРАГМЕНТ КОДА:
 ```php
 // app/Http/Controllers/CommentController.php:12 — должен наследовать Controller
@@ -260,6 +264,7 @@ defaultSort('created_at')
 РИСК: Запутанная иерархия, устаревшие API ( `$dates` удалён/deprecated в новых Laravel), некорректная сортировка в админ-списке.
 ПРИЧИНА: Остатки рефакторинга.
 РЕШЕНИЕ: `CommentController extends Controller`; удалить `$dates` (даты и так кастятся); убрать лишний `Carbon::create(...)` (использовать `$article->published_at?->format('d.m.Y')`); добавить `created_at` в `$allowedSorts` или сортировать по `published_at`/`id`.
+ВЫПОЛНЕНО: `CommentController extends Controller` (вместо `MainController`); из `Comment` удалён устаревший `$dates` (даты кастятся автоматически); в `ArticleListTable` лишние `Carbon::create(...)` заменены на null-safe `$article->published_at?->format('d.m.Y')` (и для `created_at`/`updated_at`), импорт `Carbon\Carbon` удалён. Пункт про `$allowedSorts` закрыт ранее: `defaultSort('id', 'desc')`, а `id` уже есть в `Article::$allowedSorts`.
 ---
 
 ## 2. Что нужно приложить для полной проверки

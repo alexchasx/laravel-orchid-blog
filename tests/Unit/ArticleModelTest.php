@@ -154,6 +154,44 @@ class ArticleModelTest extends TestCase
         $this->assertFalse($result->contains('id', $other->id));
     }
 
+    public function test_reading_minutes_computed_from_content_length(): void
+    {
+        // 400 слов при скорости 200 слов/мин — ровно 2 минуты чтения.
+        $article = $this->createArticle([
+            'title' => 'Время чтения',
+            'content_raw' => implode(' ', array_fill(0, 400, 'слово')),
+        ]);
+
+        $this->assertSame(2, $article->reading_minutes);
+    }
+
+    public function test_reading_minutes_minimum_is_one_minute(): void
+    {
+        $article = $this->createArticle([
+            'title' => 'Короткая заметка',
+            'content_raw' => 'Короткий текст.',
+        ]);
+
+        $this->assertSame(1, $article->reading_minutes);
+    }
+
+    public function test_reading_minutes_falls_back_to_content_raw_in_lists(): void
+    {
+        // В списках (ArticleService::SELECT_COLUMNS) content_html не загружается —
+        // accessor должен считать по content_raw.
+        $article = $this->createArticle([
+            'title' => 'Список',
+            'content_raw' => implode(' ', array_fill(0, 400, 'слово')),
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+
+        $fromList = Article::published()->where('id', $article->id)->first();
+
+        $this->assertNull($fromList->content_html);
+        $this->assertSame(2, $fromList->reading_minutes);
+    }
+
     public function test_user_rubric_tags_comments_relations(): void
     {
         $user = User::factory()->create(['active' => true]);

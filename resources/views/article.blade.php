@@ -18,7 +18,7 @@
         @endif
 
         <div class="article-meta">
-            {{ rand(5, 15) }} минут чтения · Автор: {{ $article->user->name ?? config('app.name') }}
+            {{ $article->reading_minutes }} минут чтения · Автор: {{ $article->user->name ?? config('app.name') }}
         </div>
     </div>
 

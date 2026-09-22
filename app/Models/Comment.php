@@ -69,17 +69,6 @@ class Comment extends Model
     ];
 
     /**
-     * Атрибуты, которые должны быть преобразованы в даты.
-     *
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
-    /**
      * Возращает пользователя - владельца данного комментария
      *
      * @return belongsTo

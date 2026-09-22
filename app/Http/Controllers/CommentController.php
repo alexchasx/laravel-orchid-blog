@@ -9,7 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CommentController extends MainController
+class CommentController extends Controller
 {
     public function store(CommentRequest $request): RedirectResponse
     {
@@ -35,20 +35,25 @@ class CommentController extends MainController
 
         $comment = $article->comments()->create($data);
 
+        // Редирект на страницу статьи вместо url()->previous() —
+        // защита от открытого редиректа и сохранение якоря.
         if ($data['active']) {
-            $route = url()->previous() . '#comment' . $comment->id;
-        } else {
-            $route = url()->previous() . '#comments';
-            session()->flash('success', __('Комментарий отправлен и появится после модерации.'));
+            return redirect()->to(route('articleShow', $article) . '#comment' . $comment->id);
         }
 
-        return redirect()->to($route);
+        session()->flash('success', __('Комментарий отправлен и появится после модерации.'));
+
+        return redirect()->to(route('articleShow', $article) . '#comments');
     }
 
     public function delete(Comment $comment): RedirectResponse
     {
         $comment->delete();
 
-        return redirect()->to(url()->previous() . '#comments');
+        $article = $comment->article;
+
+        return $article
+            ? redirect()->to(route('articleShow', $article) . '#comments')
+            : redirect()->route('home');
     }
 }

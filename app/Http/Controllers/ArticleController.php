@@ -35,6 +35,11 @@ final class ArticleController extends Controller
     public function show(Article $article): View
     {
         $this->service->checkAccess($article);
+
+        // Счётчик просмотров: простое инкрементирование без транзакции
+        // (допустима потеря пары просмотров при параллельных запросах).
+        $article->increment('viewed');
+
         $article->load(['user', 'rubric', 'tags']);
 
         // Оглавление (якоря на подзаголовки) и контент с проставленными id.

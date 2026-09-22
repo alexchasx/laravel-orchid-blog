@@ -4,7 +4,6 @@ namespace App\Orchid\Layouts\Article;
 
 use App\Models\Article;
 use App\Models\Rubric;
-use Carbon\Carbon;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Layouts\Table;
@@ -65,20 +64,17 @@ class ArticleListTable extends Table
                 fn (Article $article) => $article->rubric?->title ?? '—'
             )->width(300),
 
-            TD::make('published_at', 'Дата публикации')->render(function (Article $article) {
-                $carbon = Carbon::create($article->published_at);
-                return $carbon->format('d.m.Y');
-            }),
+            TD::make('published_at', 'Дата публикации')->render(
+                fn (Article $article) => $article->published_at?->format('d.m.Y') ?? ''
+            ),
 
-            TD::make('created_at', 'Дата создания')->render(function (Article $article) {
-                $carbon = Carbon::create($article->created_at);
-                return $carbon->format('d.m.Y');
-            }),
+            TD::make('created_at', 'Дата создания')->render(
+                fn (Article $article) => $article->created_at?->format('d.m.Y') ?? ''
+            ),
 
-            TD::make('updated_at', 'Дата обновления')->render(function (Article $article) {
-                $carbon = Carbon::create($article->updated_at);
-                return $carbon->format('d.m.Y');
-            }),
+            TD::make('updated_at', 'Дата обновления')->render(
+                fn (Article $article) => $article->updated_at?->format('d.m.Y') ?? ''
+            ),
         ];
     }
 }

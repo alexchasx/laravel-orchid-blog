@@ -35,6 +35,7 @@ use League\CommonMark\CommonMarkConverter;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
  * @property-read int|null $comments_count
+ * @property-read int $reading_minutes
  * @property-read Rubric $rubric
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
  * @property-read int|null $tags_count
@@ -208,5 +209,23 @@ class Article extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class)->orderBy('created_at');
+    }
+
+    /**
+     * Примерное время чтения статьи в минутах (200 слов в минуту).
+     *
+     * Вычисляется детерминированно по длине контента (вместо прежнего rand() в Blade).
+     * В списках (ArticleService::SELECT_COLUMNS) content_html не загружается,
+     * поэтому считаем по сырому markdown — на оценку количества слов это влияет незначительно.
+     */
+    public function getReadingMinutesAttribute(): int
+    {
+        $text = strip_tags((string) ($this->content_html ?: $this->content_raw));
+
+        // Поддержка кириллицы: str_word_count() считает только латиницу,
+        // поэтому используем юникодную проверку буквенных последовательностей.
+        $words = preg_match_all('/\p{L}[\p{L}\p{N}]*/u', $text) ?: 0;
+
+        return max(1, (int) ceil($words / 200));
     }
 }

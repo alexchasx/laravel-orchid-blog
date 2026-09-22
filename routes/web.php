@@ -25,7 +25,9 @@ Route::get('/test-504', fn () => abort(504));
 Route::get('/setlocale/{locale}', [MainController::class, 'setLocale'])->name('setlocale');
 
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
-Route::post('contact.store', [ContactController::class, 'store'])->name('contact.store');
+Route::post('contact.store', [ContactController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('contact.store');
 
 Route::get('privacy', [MainController::class, 'privacy'])->name('privacy');
 
