@@ -174,6 +174,42 @@ class PublicPagesTest extends TestCase
         $response->assertDontSee($articleTwo->title);
     }
 
+    public function test_home_page_shows_only_rubrics_with_published_articles(): void
+    {
+        $withArticle = Rubric::factory()->create(['title' => 'Рубрика со статьёй']);
+        $empty = Rubric::factory()->create(['title' => 'Пустая рубрика']);
+        $this->createPublishedArticle(['rubric_id' => $withArticle->id]);
+
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertSee($withArticle->title);
+        $response->assertDontSee($empty->title);
+    }
+
+    public function test_home_page_hides_rubric_without_published_articles(): void
+    {
+        $draftRubric = Rubric::factory()->create(['title' => 'Рубрика-черновик']);
+        $this->createPublishedArticle([
+            'rubric_id' => $draftRubric->id,
+            'is_published' => false,
+            'title' => 'Черновик статьи',
+        ]);
+
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertDontSee($draftRubric->title);
+    }
+
+    public function test_home_page_hides_topics_section_when_no_rubrics_with_articles(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertDontSee('Исследуйте по темам');
+    }
+
     public function test_set_locale_changes_session_locale(): void
     {
         $response = $this->get('/setlocale/ru', ['HTTP_REFERER' => '/']);

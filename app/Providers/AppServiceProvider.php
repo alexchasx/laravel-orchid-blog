@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\View\Composers\RubricsComposer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -37,5 +39,8 @@ class AppServiceProvider extends ServiceProvider
 
             return $user->hasAccess($value);
         });
+
+        // Рубрики с опубликованными статьями для секции «Темы» на главной.
+        View::composer('index', RubricsComposer::class);
     }
 }

@@ -79,7 +79,8 @@
     @endif
 </section>
 
-{{-- Topics Section --}}
+{{-- Topics Section: рубрики с опубликованными статьями --}}
+@if ($rubrics->isNotEmpty())
 <section class="section container topics" id="topics">
     <div class="section-head reveal">
         <div>
@@ -88,28 +89,16 @@
         </div>
     </div>
     <div class="topic-grid">
-        <a class="topic reveal" href="{{ route('showByRubric', 'architecture') }}">
-            <span>01</span>
-            <strong>Архитектура</strong>
-            <small>DDD · Microservices · Systems</small>
+        @foreach($rubrics as $i => $rubric)
+        <a class="topic reveal" href="{{ route('showByRubric', $rubric) }}">
+            <span>{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+            <strong>{{ $rubric->title }}</strong>
+            <small>{{ $rubric->description }}</small>
         </a>
-        <a class="topic reveal" href="{{ route('showByRubric', 'backend') }}">
-            <span>02</span>
-            <strong>Backend</strong>
-            <small>APIs · Databases · Performance</small>
-        </a>
-        <a class="topic reveal" href="{{ route('showByRubric', 'devops') }}">
-            <span>03</span>
-            <strong>DevOps</strong>
-            <small>Cloud · CI/CD · Observability</small>
-        </a>
-        <a class="topic reveal" href="{{ route('showByRubric', 'ai-data') }}">
-            <span>04</span>
-            <strong>AI & Data</strong>
-            <small>LLM · ML · Data Engineering</small>
-        </a>
+        @endforeach
     </div>
 </section>
+@endif
 
 {{-- About Section --}}
 <section class="about section container reveal" id="about">

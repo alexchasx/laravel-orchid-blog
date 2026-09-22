@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Article;
+use App\Models\Rubric;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
@@ -61,6 +62,23 @@ class ArticleService
                 $builder->where('tag_id', $tagId);
             })
             ->paginate(self::PAGINATE);
+    }
+
+    /**
+     * Рубрики, у которых есть хотя бы одна опубликованная статья
+     * (для секции «Темы» на главной странице).
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<int, Rubric>
+     */
+    public function getRubricsWithArticles(): \Illuminate\Database\Eloquent\Collection
+    {
+        return Rubric::query()
+            ->whereHas('articles', static function (Builder $query): void {
+                $query->where('published_at', '<=', now())
+                    ->where('is_published', true);
+            })
+            ->orderBy('title')
+            ->get();
     }
 
     public function checkAccess(Article $article): void
