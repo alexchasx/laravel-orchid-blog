@@ -16,6 +16,15 @@
         <div class="article-meta">
             {{ $article->reading_minutes }} минут чтения · Автор: {{ $article->user->name ?? config('app.name') }}
         </div>
+
+        {{-- Tags --}}
+        @if($article->tags->isNotEmpty())
+        <div class="article-tags">
+            @foreach($article->tags as $tag)
+                <a href="{{ route('showByTag', $tag) }}">#{{ $tag->title }}</a>
+            @endforeach
+        </div>
+        @endif
     </div>
 
     {{-- Article Layout: TOC + Prose --}}
@@ -38,15 +47,6 @@
 
             {{-- Article Content (HTML from markdown, с id у подзаголовков) --}}
             {!! $contentHtml !!}
-
-            {{-- Tags --}}
-            @if($article->tags->isNotEmpty())
-            <div class="article-tags">
-                @foreach($article->tags as $tag)
-                    <span>#{{ $tag->title }}</span>
-                @endforeach
-            </div>
-            @endif
         </div>
     </div>
 </article>

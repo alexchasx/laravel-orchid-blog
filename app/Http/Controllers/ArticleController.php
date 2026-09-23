@@ -84,6 +84,9 @@ final class ArticleController extends Controller
             'articles' => $this->service->getByTag($tag->id),
             'metaTitle' => __('Записи с меткой «') . $tag->title . '»',
             'metaDesc' => '',
+            // На странице метки промо-блок не показываем, а заголовок списка — название метки.
+            'showHero' => false,
+            'sectionTitle' => __('Записи с меткой «') . $tag->title . '»',
         ]);
     }
 }

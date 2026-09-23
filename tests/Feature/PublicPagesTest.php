@@ -227,6 +227,58 @@ class PublicPagesTest extends TestCase
         $response->assertDontSee($articleTwo->title);
     }
 
+    public function test_tag_page_hides_hero_section(): void
+    {
+        $tag = Tag::factory()->create(['active' => true]);
+        $article = $this->createPublishedArticle();
+        $article->tags()->sync([$tag->id]);
+
+        $response = $this->get("/tag/{$tag->id}");
+
+        $response->assertOk();
+        $response->assertDontSee('class="hero container', false);
+    }
+
+    public function test_tag_page_uses_tag_title_as_articles_heading(): void
+    {
+        $tag = Tag::factory()->create(['active' => true, 'title' => 'Laravel']);
+        $article = $this->createPublishedArticle();
+        $article->tags()->sync([$tag->id]);
+
+        $response = $this->get("/tag/{$tag->id}");
+
+        $response->assertOk();
+        $response->assertSee('<h2>Записи с меткой «Laravel»</h2>', false);
+        $response->assertDontSee('<h2>Свежие статьи</h2>', false);
+    }
+
+    public function test_tag_page_shows_back_to_home_link(): void
+    {
+        $tag = Tag::factory()->create(['active' => true]);
+        $article = $this->createPublishedArticle();
+        $article->tags()->sync([$tag->id]);
+
+        $response = $this->get("/tag/{$tag->id}");
+
+        $response->assertOk();
+        $response->assertSee('← На главную</a>', false);
+    }
+
+    public function test_article_page_shows_tags_as_links_under_title(): void
+    {
+        $tag = Tag::factory()->create(['active' => true, 'title' => 'Laravel']);
+        $article = $this->createPublishedArticle();
+        $article->tags()->sync([$tag->id]);
+
+        $response = $this->get("/article/{$article->slug}");
+
+        $response->assertOk();
+        $response->assertSee("/tag/{$tag->id}", false);
+        $response->assertSee('#Laravel', false);
+        // Тег-чипс под заголовком (внутри .article-head), а не в конце контента.
+        $response->assertSee('article-head', false);
+    }
+
     public function test_home_page_shows_only_rubrics_with_published_articles(): void
     {
         $withArticle = Rubric::factory()->create(['title' => 'Рубрика со статьёй']);
