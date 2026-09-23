@@ -66,7 +66,7 @@ class ArticleService
 
     /**
      * Рубрики, у которых есть хотя бы одна опубликованная статья
-     * (для секции «Темы» на главной странице).
+     * (для выпадающего меню «Темы» в хедере).
      *
      * @return \Illuminate\Database\Eloquent\Collection<int, Rubric>
      */

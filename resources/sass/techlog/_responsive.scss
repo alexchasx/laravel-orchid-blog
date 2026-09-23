@@ -35,6 +35,19 @@
         }
     }
 
+    .nav-dropdown {
+        display: block;
+        height: auto;
+    }
+
+    .nav-dropdown-menu {
+        position: static;
+        transform: none;
+        min-width: 0;
+        max-width: none;
+        margin-top: 10px;
+    }
+
     .hero {
         grid-template-columns: 1fr;
         padding-top: 125px;
@@ -43,10 +56,6 @@
 
     .hero-visual {
         margin-top: 30px;
-    }
-
-    .topic-grid {
-        grid-template-columns: 1fr 1fr;
     }
 
     .about,
@@ -101,10 +110,6 @@
         padding: 65px 0;
     }
 
-    .topic-grid {
-        grid-template-columns: 1fr;
-    }
-
     .input-row {
         flex-direction: column;
     }
@@ -153,7 +158,6 @@
     }
 
     .post,
-    .topic,
     .button {
         transition: none;
     }

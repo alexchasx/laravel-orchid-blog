@@ -195,7 +195,7 @@ class PublicPagesTest extends TestCase
         $response = $this->get('/');
 
         $response->assertOk();
-        $response->assertSee('<h2>Свежие материалы</h2>', false);
+        $response->assertSee('<h2>Свежие статьи</h2>', false);
     }
 
     public function test_show_by_tag_returns_only_articles_with_that_tag(): void
@@ -244,12 +244,32 @@ class PublicPagesTest extends TestCase
         $response->assertDontSee($draftRubric->title);
     }
 
-    public function test_home_page_hides_topics_section_when_no_rubrics_with_articles(): void
+    public function test_home_page_has_no_topics_section(): void
     {
         $response = $this->get('/');
 
         $response->assertOk();
-        $response->assertDontSee('Исследуйте по темам');
+        $response->assertDontSee('id="topics"', false);
+    }
+
+    public function test_header_shows_topics_dropdown_with_rubric_link(): void
+    {
+        $rubric = Rubric::factory()->create(['title' => 'Рубрика в меню']);
+        $this->createPublishedArticle(['rubric_id' => $rubric->id]);
+
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertSee('class="nav-dropdown"', false);
+        $response->assertSee(route('showByRubric', $rubric), false);
+    }
+
+    public function test_header_hides_topics_dropdown_when_no_rubrics_with_articles(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertDontSee('nav-dropdown-toggle', false);
     }
 
     public function test_set_locale_changes_session_locale(): void

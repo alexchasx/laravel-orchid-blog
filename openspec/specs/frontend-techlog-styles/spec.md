@@ -40,7 +40,7 @@
 - `_variables.scss` — CSS custom properties
 - `_reset.scss` — `*`, `box-sizing`, `html`, `body`
 - `_base.scss` — типографика, ссылки, кнопки
-- `_components.scss` — header, nav, hero, posts, masonry, topics, article, footer
+- `_components.scss` — header, nav, выпадающее меню «Темы», hero, posts, masonry, article, footer
 - `_forms.scss` — формы, инпуты, кнопки
 - `_utilities.scss` — `.container`, `.reveal`, `.skip-link`, `.sr-only`
 - `_responsive.scss` — `@media` (850px, 520px, `prefers-reduced-motion`)
@@ -53,7 +53,7 @@
 
 ### Requirement: Неоморфные тени
 
-Компоненты (`.post`, `.topic`, `.button`, `.contact-form`) **SHALL** использовать неоморфные тени из `--shadow`:
+Компоненты (`.post`, `.nav-dropdown-menu`, `.button`, `.contact-form`) **SHALL** использовать неоморфные тени из `--shadow`:
 
 - Внешняя тень: `10px 10px 28px rgba(0,0,0,.65)` (dark) / `10px 10px 25px rgba(91,110,99,.18)` (light)
 - Внутреннее свечение: `-8px -8px 24px rgba(255,255,255,.025)` (dark) / `-8px -8px 22px rgba(255,255,255,.85)` (light)

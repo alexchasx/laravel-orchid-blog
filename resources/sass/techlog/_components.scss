@@ -1,5 +1,5 @@
 // ============================================================================
-// Компоненты: header, nav, hero, posts, masonry, topics, article, footer
+// Компоненты: header, nav, hero, posts, masonry, article, footer
 // ============================================================================
 
 // ---------------------------------------------------------------------------
@@ -86,6 +86,74 @@
 
 .menu-toggle {
     display: none;
+}
+
+// Выпадающее меню «Темы» в хедере
+.nav-dropdown {
+    position: relative;
+    height: 76px;
+    display: flex;
+    align-items: center;
+}
+
+.nav-dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: var(--fs-md);
+    cursor: pointer;
+    transition: .2s;
+
+    &:hover,
+    &[aria-expanded="true"] {
+        color: var(--green);
+    }
+}
+
+.nav-dropdown-caret {
+    font-size: .65em;
+    transition: transform .2s;
+}
+
+.nav-dropdown-toggle[aria-expanded="true"] .nav-dropdown-caret {
+    transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 230px;
+    max-width: 300px;
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    z-index: 60;
+
+    &.open {
+        display: flex;
+    }
+
+    a {
+        padding: 9px 12px;
+        border-radius: 8px;
+        line-height: 1.35;
+
+        &:hover {
+            background: var(--surface-2);
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -280,44 +348,8 @@
 }
 
 // ---------------------------------------------------------------------------
-// Topics
+// Topics (секция на главной удалена — темы теперь в .nav-dropdown в хедере)
 // ---------------------------------------------------------------------------
-
-.topics {
-    padding-top: 40px;
-}
-
-.topic-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-}
-
-.topic {
-    padding: 25px;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    transition: .25s;
-
-    &:hover {
-        transform: translateY(-5px);
-        border-color: rgba(0, 255, 136, .38);
-    }
-
-    span, small {
-        display: block;
-        color: var(--muted);
-        font: 600 var(--fs-xs) "JetBrains Mono";
-    }
-
-    strong {
-        display: block;
-        font-size: 1.1rem;
-        margin: 35px 0 7px;
-    }
-}
 
 // ---------------------------------------------------------------------------
 // About & Newsletter

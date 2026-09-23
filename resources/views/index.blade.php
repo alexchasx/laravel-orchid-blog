@@ -77,27 +77,8 @@
     @endif
 </section>
 
-{{-- Topics Section: рубрики с опубликованными статьями --}}
-@if ($rubrics->isNotEmpty())
-<section class="section container topics" id="topics">
-    <div class="section-head reveal">
-        <div>
-            <h2>Темы</h2>
-        </div>
-    </div>
-    <div class="topic-grid">
-        @foreach($rubrics as $i => $rubric)
-        <a class="topic reveal" href="{{ route('showByRubric', $rubric) }}">
-            <span>{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
-            <strong>{{ $rubric->title }}</strong>
-            <small>{{ $rubric->description }}</small>
-        </a>
-        @endforeach
-    </div>
-</section>
-@endif
-
 {{-- Newsletter Section (перенесён в модальное окно: includes/newsletter_modal) --}}
+{{-- Список тем (рубрик) вынесен в выпадающее меню хедера: layouts/techlog.blade.php --}}
 
 @include('includes.newsletter_modal')
 

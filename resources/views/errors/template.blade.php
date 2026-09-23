@@ -4,7 +4,6 @@
     $tocLinks = $tocLinks ?? [
         'На главную' => route('home'),
         'Свежие статьи' => route('home').'#articles',
-        'Темы блога' => route('home').'#topics',
         'Контакты' => route('contact'),
     ];
     $primaryUrl = $primaryUrl ?? route('home');

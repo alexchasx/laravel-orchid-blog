@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
             return $user->hasAccess($value);
         });
 
-        // Рубрики с опубликованными статьями для секции «Темы» на главной.
-        View::composer('index', RubricsComposer::class);
+        // Рубрики с опубликованными статьями для выпадающего меню «Темы» в хедере.
+        View::composer('layouts.techlog', RubricsComposer::class);
     }
 }

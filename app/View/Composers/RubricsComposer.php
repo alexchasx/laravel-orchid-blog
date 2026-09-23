@@ -6,8 +6,8 @@ use App\Services\ArticleService;
 use Illuminate\View\View;
 
 /**
- * Внедряет в представление «index» список рубрик с опубликованными
- * статьями (для секции «Темы» на главной странице).
+ * Внедряет в layout «layouts.techlog» список рубрик с опубликованными
+ * статьями (для выпадающего меню «Темы» в хедере).
  */
 class RubricsComposer
 {

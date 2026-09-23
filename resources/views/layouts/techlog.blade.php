@@ -46,7 +46,18 @@
         </button>
         <div class="nav-links" id="primary-menu">
             <a href="{{ route('home') }}#articles">Статьи</a>
-            <a href="{{ route('home') }}#topics">Темы</a>
+            @if(($rubrics ?? collect())->isNotEmpty())
+            <div class="nav-dropdown">
+                <button class="nav-dropdown-toggle" type="button" aria-expanded="false" aria-controls="nav-topics-menu">
+                    Темы <span class="nav-dropdown-caret" aria-hidden="true">▾</span>
+                </button>
+                <div class="nav-dropdown-menu" id="nav-topics-menu">
+                    @foreach($rubrics as $navRubric)
+                        <a href="{{ route('showByRubric', $navRubric) }}">{{ $navRubric->title }}</a>
+                    @endforeach
+                </div>
+            </div>
+            @endif
             <a href="{{ route('about') }}">О блоге</a>
             <a href="{{ route('contact') }}">Контакты</a>
             <button class="theme-toggle" type="button" aria-label="Переключить тему" title="Переключить тему">☼</button>

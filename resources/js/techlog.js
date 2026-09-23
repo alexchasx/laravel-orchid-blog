@@ -53,10 +53,47 @@
   const savedTheme = localStorage.getItem('techlog-theme');
   if (savedTheme === 'light') root.classList.add('light');
 
+  // Выпадающее меню «Темы» в хедере
+  const dropdowns = document.querySelectorAll('.nav-dropdown');
+
+  const closeDropdowns = () => {
+    dropdowns.forEach(dropdown => {
+      dropdown.querySelector('.nav-dropdown-menu')?.classList.remove('open');
+      dropdown.querySelector('.nav-dropdown-toggle')?.setAttribute('aria-expanded', 'false');
+    });
+  };
+
+  dropdowns.forEach(dropdown => {
+    const toggle = dropdown.querySelector('.nav-dropdown-toggle');
+    const dropdownMenu = dropdown.querySelector('.nav-dropdown-menu');
+
+    toggle?.addEventListener('click', () => {
+      const willOpen = !dropdownMenu.classList.contains('open');
+      closeDropdowns();
+      if (willOpen) {
+        dropdownMenu.classList.add('open');
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    dropdownMenu?.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', closeDropdowns);
+    });
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest?.('.nav-dropdown')) closeDropdowns();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeDropdowns();
+  });
+
   // Мобильное меню
   menu?.addEventListener('click', () => {
     const open = nav.classList.toggle('open');
     menu.setAttribute('aria-expanded', String(open));
+    closeDropdowns();
   });
 
   // Закрыть меню при клике на ссылку
