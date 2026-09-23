@@ -36,6 +36,12 @@
 
 {{-- Articles Section --}}
 <section class="section container" id="articles">
+    @unless ($showHero ?? true)
+        <div class="reveal">
+            <a class="back" href="{{ route('home') }}">← На главную</a>
+        </div>
+    @endunless
+
     <div class="section-head reveal">
         <div>
             <h2>{{ $sectionTitle ?? 'Свежие статьи' }}</h2>

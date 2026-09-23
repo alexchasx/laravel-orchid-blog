@@ -188,6 +188,17 @@ class PublicPagesTest extends TestCase
         $response->assertDontSee('Свежие материалы');
     }
 
+    public function test_rubric_page_shows_back_to_home_link(): void
+    {
+        $rubric = Rubric::factory()->create();
+        $this->createPublishedArticle(['rubric_id' => $rubric->id]);
+
+        $response = $this->get("/rubric/{$rubric->id}");
+
+        $response->assertOk();
+        $response->assertSee('← На главную</a>', false);
+    }
+
     public function test_home_page_keeps_default_articles_heading(): void
     {
         $this->createPublishedArticle();
