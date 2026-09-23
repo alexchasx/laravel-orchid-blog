@@ -43,7 +43,7 @@
     display: flex;
     align-items: center;
     gap: 28px;
-    font-size: .9rem;
+    font-size: var(--fs-md);
 
     a {
         color: var(--muted);
@@ -72,7 +72,7 @@
     background: none;
     color: var(--muted);
     font-family: inherit;
-    font-size: .9rem;
+    font-size: var(--fs-md);
     padding: 7px 14px;
     border-radius: 8px;
     cursor: pointer;
@@ -102,7 +102,7 @@
 }
 
 .hero h1 {
-    font-size: clamp(2.6rem, 5vw, 5.3rem);
+    font-size: clamp(2.2rem, 4.5vw, 4.2rem);
     line-height: 1.02;
     letter-spacing: -.055em;
     margin: 0 0 25px;
@@ -145,7 +145,7 @@
     padding: 0 18px;
     border-bottom: 1px solid var(--line);
     color: var(--muted);
-    font: 600 .7rem "JetBrains Mono", monospace;
+    font: 600 var(--fs-xs) "JetBrains Mono", monospace;
 }
 
 .window-bar i {
@@ -163,7 +163,7 @@
     padding: 35px 32px;
     margin: 0;
     overflow: auto;
-    font: 500 .82rem / 2 "JetBrains Mono", monospace;
+    font: 500 var(--fs-md) / 2 "JetBrains Mono", monospace;
 }
 
 .c-purple { color: #c792ea; }
@@ -187,14 +187,14 @@
 }
 
 .section h2 {
-    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-size: clamp(1.6rem, 3.2vw, 2.4rem);
     line-height: 1.1;
     letter-spacing: -.04em;
     margin: 0;
 }
 
 .text-link {
-    font-size: .85rem;
+    font-size: var(--fs-md);
 }
 
 // ---------------------------------------------------------------------------
@@ -233,7 +233,7 @@
     background-position: center;
 
     span {
-        font: 600 .68rem "JetBrains Mono";
+        font: 600 var(--fs-xs) "JetBrains Mono";
         color: #07140e;
         background: var(--green);
         padding: 5px 8px;
@@ -262,20 +262,20 @@
 }
 
 .meta {
-    font: 600 .65rem "JetBrains Mono";
+    font: 600 var(--fs-xs) "JetBrains Mono";
     color: var(--muted);
     letter-spacing: .08em;
 }
 
 .post h3 {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     line-height: 1.25;
     margin: 11px 0;
 }
 
 .post p {
     color: var(--muted);
-    font-size: .88rem;
+    font-size: var(--fs-md);
     margin-bottom: 20px;
 }
 
@@ -309,12 +309,12 @@
     span, small {
         display: block;
         color: var(--muted);
-        font: 600 .68rem "JetBrains Mono";
+        font: 600 var(--fs-xs) "JetBrains Mono";
     }
 
     strong {
         display: block;
-        font-size: 1.15rem;
+        font-size: 1.1rem;
         margin: 35px 0 7px;
     }
 }
@@ -330,7 +330,7 @@
     border-top: 1px solid var(--line);
 
     h2 {
-        font-size: clamp(2rem, 4vw, 3.4rem);
+        font-size: clamp(1.6rem, 3.2vw, 2.5rem);
         line-height: 1.1;
         margin: 0;
     }
@@ -355,21 +355,21 @@
 }
 
 .article-head h1 {
-    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-size: clamp(2.1rem, 4.2vw, 3.8rem);
     line-height: 1.02;
     letter-spacing: -.05em;
     margin: 15px 0 25px;
 }
 
 .article-meta {
-    font: 600 .72rem "JetBrains Mono";
+    font: 600 var(--fs-sm) "JetBrains Mono";
     color: var(--muted);
 }
 
 .back {
     display: inline-block;
     color: var(--green);
-    font: 600 .75rem "JetBrains Mono";
+    font: 600 var(--fs-sm) "JetBrains Mono";
     margin-bottom: 50px;
 }
 
@@ -391,7 +391,7 @@
     height: max-content;
     display: grid;
     gap: 10px;
-    font-size: .75rem;
+    font-size: var(--fs-sm);
     color: var(--muted);
 
     strong {
@@ -422,13 +422,13 @@
 }
 
 .prose h2 {
-    font-size: 1.9rem;
+    font-size: 1.6rem;
     line-height: 1.2;
     margin: 55px 0 18px;
 }
 
 .prose h3 {
-    font-size: 1.4rem;
+    font-size: 1.25rem;
     line-height: 1.25;
     margin: 40px 0 16px;
 }
@@ -436,7 +436,7 @@
 .prose p,
 .prose li {
     color: var(--muted);
-    font-size: 1rem;
+    font-size: var(--fs-base);
 }
 
 .prose li {
@@ -450,7 +450,7 @@
     padding: 25px;
     overflow: auto;
     color: var(--green);
-    font: 500 .85rem / 1.7 "JetBrains Mono";
+    font: 500 var(--fs-md) / 1.7 "JetBrains Mono";
 }
 
 .callout {
@@ -467,7 +467,7 @@
     margin-top: 50px;
 
     span {
-        font: 600 .7rem "JetBrains Mono";
+        font: 600 var(--fs-xs) "JetBrains Mono";
         padding: 7px 10px;
         border: 1px solid var(--line);
         border-radius: 99px;
@@ -511,18 +511,18 @@
     }
 
     .comment-author {
-        font: 700 .85rem "JetBrains Mono", monospace;
+        font: 700 var(--fs-md) "JetBrains Mono", monospace;
         color: var(--text);
     }
 
     .comment-date {
-        font: 500 .7rem "JetBrains Mono", monospace;
+        font: 500 var(--fs-xs) "JetBrains Mono", monospace;
         color: var(--muted);
     }
 
     .comment-text {
         color: var(--muted);
-        font-size: .95rem;
+        font-size: var(--fs-base);
         line-height: 1.6;
         margin: 0;
         white-space: pre-line;
@@ -535,7 +535,7 @@
 
         .button {
             padding: 7px 12px;
-            font-size: .72rem;
+            font-size: var(--fs-xs);
             border-radius: 9px;
             color: #ff6b6b;
             border-color: rgba(255, 107, 107, .35);
@@ -558,7 +558,7 @@
 
 .comment-login-note {
     color: var(--muted);
-    font-size: .95rem;
+    font-size: var(--fs-base);
 }
 
 .comment-form {
@@ -574,7 +574,7 @@
 
     .comment-error {
         color: #ff6b6b;
-        font-size: .75rem;
+        font-size: var(--fs-sm);
         font-weight: 600;
     }
 }
@@ -592,7 +592,7 @@
     align-items: start;
 
     h1 {
-        font-size: clamp(2.7rem, 5vw, 5rem);
+        font-size: clamp(2.2rem, 4.2vw, 3.8rem);
         line-height: 1;
         letter-spacing: -.05em;
         margin: 0 0 30px;
@@ -607,7 +607,7 @@
         display: grid;
         gap: 10px;
         margin-top: 35px;
-        font: 600 .8rem "JetBrains Mono";
+        font: 600 var(--fs-md) "JetBrains Mono";
 
         a {
             color: var(--green);
@@ -652,7 +652,7 @@
     border-top: 1px solid var(--line);
     padding: 25px 0;
     color: var(--muted);
-    font-size: .75rem;
+    font-size: var(--fs-sm);
 }
 
 .footer-inner {
@@ -747,7 +747,7 @@
 }
 
 .cookie-banner__title {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     line-height: 1.25;
     letter-spacing: -.02em;
     margin: 0 20px 10px 0;
@@ -756,7 +756,7 @@
 .cookie-banner__text {
     margin: 0 0 22px;
     color: var(--muted);
-    font-size: .88rem;
+    font-size: var(--fs-md);
     line-height: 1.6;
 
     a {
@@ -795,7 +795,7 @@
     margin-top: 18px;
     padding-top: 16px;
     border-top: 1px solid var(--line);
-    font-size: .85rem;
+    font-size: var(--fs-md);
     color: var(--muted);
 
     &[hidden] {
@@ -805,7 +805,7 @@
 
 .cookie-banner__settings-text {
     margin: 0 0 10px;
-    font-size: .8rem;
+    font-size: var(--fs-sm);
 }
 
 .cookie-banner__option {
@@ -944,7 +944,7 @@
 
 .modal-title {
     margin: 0 0 10px;
-    font-size: 1.45rem;
+    font-size: 1.25rem;
     line-height: 1.2;
     letter-spacing: -.02em;
 }
@@ -952,7 +952,7 @@
 .modal-text {
     margin: 0 0 26px;
     color: var(--muted);
-    font-size: .95rem;
+    font-size: var(--fs-base);
     line-height: 1.6;
 }
 
@@ -995,7 +995,7 @@
 }
 
 .error-debug {
-    font: 500 .75rem "JetBrains Mono", monospace;
+    font: 500 var(--fs-sm) "JetBrains Mono", monospace;
     color: var(--muted);
     margin: 35px 0 0;
 }
@@ -1013,7 +1013,7 @@
 }
 
 .pagination-info {
-    font: 500 .76rem "JetBrains Mono", monospace;
+    font: 500 var(--fs-sm) "JetBrains Mono", monospace;
     color: var(--muted);
     margin: 0;
 }
@@ -1057,7 +1057,7 @@
     border: 1px solid var(--line);
     border-radius: 12px;
     color: var(--text);
-    font: 500 .9rem "JetBrains Mono", monospace;
+    font: 500 var(--fs-md) "JetBrains Mono", monospace;
     transition: transform .2s, border-color .2s, color .2s, box-shadow .2s;
 
     &:hover {

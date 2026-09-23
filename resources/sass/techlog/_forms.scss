@@ -7,7 +7,7 @@
 .comment-form {
     label {
         display: block;
-        font-size: .8rem;
+        font-size: var(--fs-sm);
         color: var(--muted);
         margin-bottom: 8px;
     }
@@ -46,7 +46,7 @@
 }
 
 .form-message {
-    font-size: .8rem;
+    font-size: var(--fs-sm);
     color: var(--green);
     min-height: 1.4em;
 }
