@@ -6,7 +6,6 @@
 @if ($showHero ?? true)
 <section class="hero container reveal">
     <div class="hero-copy">
-        <p class="eyebrow"><span class="pulse"></span> SYSTEM ONLINE / 2026</p>
         <h1>Инструменты, архитектура, решения: <em>всё для современного разработчика.</em></h1>
         <p class="lead">Практический ИТ-блог без информационного шума: разбираем архитектуру, инженерные подходы, инструменты и реальные trade-off'ы.</p>
         <div class="hero-actions">
@@ -98,23 +97,9 @@
 </section>
 @endif
 
-{{-- About Section --}}
-<section class="about section container reveal" id="about">
-    <div>
-        <p class="eyebrow">ABOUT / 03</p>
-        <h2>Инженерный взгляд<br><em>вместо шума.</em></h2>
-    </div>
-    <div>
-        <p>{{ config('app.name') }} — независимый блог о том, как создавать и поддерживать программные системы. Здесь важны контекст, проверяемость и цена каждого технического решения.</p>
-        <p>Материалы написаны для разработчиков, тимлидов и инженеров, которым нужно не просто узнать «как», а понять «почему».</p>
-    </div>
-</section>
-
 {{-- Newsletter Section (перенесён в модальное окно: includes/newsletter_modal) --}}
 
 @include('includes.newsletter_modal')
 
 @endsection
 
-
-@endsection

@@ -7,10 +7,6 @@
     <div class="article-head reveal">
         <a class="back" href="{{ route('home') }}#articles">← Назад к статьям</a>
 
-        @if($article->rubric)
-            <p class="eyebrow">{{ strtoupper($article->rubric->title) }} · {{ \Carbon\Carbon::parse($article->published_at)->locale('ru')->isoFormat('D MMM YYYY') }}</p>
-        @endif
-
         <h1>{{ $article->title }}</h1>
 
         @if($article->excert)

@@ -47,7 +47,7 @@
         <div class="nav-links" id="primary-menu">
             <a href="{{ route('home') }}#articles">Статьи</a>
             <a href="{{ route('home') }}#topics">Темы</a>
-            <a href="{{ route('home') }}#about">О блоге</a>
+            <a href="{{ route('about') }}">О блоге</a>
             <a href="{{ route('contact') }}">Контакты</a>
             <button class="theme-toggle" type="button" aria-label="Переключить тему" title="Переключить тему">☼</button>
 

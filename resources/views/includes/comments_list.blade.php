@@ -3,7 +3,6 @@
 @if($activeComments->isNotEmpty())
     <div class="section-head reveal">
         <div>
-            <p class="eyebrow">DISCUSSION / {{ $activeComments->count() }}</p>
             <h2>Комментарии</h2>
         </div>
     </div>

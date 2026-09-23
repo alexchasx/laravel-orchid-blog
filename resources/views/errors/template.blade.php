@@ -18,8 +18,6 @@
     <div class="article-head reveal visible">
         <a class="back" href="{{ route('home') }}#articles">← Назад к статьям</a>
 
-        <p class="eyebrow">ERROR / {{ $code }} · {{ $statusText }}</p>
-
         <h1>{!! $title !!}</h1>
 
         <p class="lead">{{ $lead }}</p>

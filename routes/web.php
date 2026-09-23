@@ -29,6 +29,7 @@ Route::post('contact.store', [ContactController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('contact.store');
 
+Route::get('about', [MainController::class, 'about'])->name('about');
 Route::get('privacy', [MainController::class, 'privacy'])->name('privacy');
 
 // Подписка на новые статьи.

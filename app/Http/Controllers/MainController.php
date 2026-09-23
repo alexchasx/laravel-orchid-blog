@@ -15,6 +15,14 @@ class MainController extends Controller
         return redirect()->back();
     }
 
+    public function about(): View
+    {
+        return view('about', [
+            'metaTitle' => __('О блоге'),
+            'metaDesc' => __('Что такое :app — независимый инженерный блог о создании и поддержке программных систем.', ['app' => config('app.name')]),
+        ]);
+    }
+
     public function privacy(): View
     {
         return view('privacy', [

@@ -5,7 +5,6 @@
 <section class="contact container">
     {{-- Contact Intro --}}
     <div class="contact-intro reveal">
-        <p class="eyebrow">CONTACT / 01</p>
         <h1>Давайте обсудим<br><em>технологии.</em></h1>
         <p>Есть тема для статьи, идея сотрудничества или нашли неточность? Напишите — читаем каждое сообщение.</p>
         <div class="contact-links">
@@ -34,7 +33,7 @@
         @endauth
 
         <label for="message">
-            Сообщение
+            <div style="margin-bottom: 8px;">Сообщение</div>
             <textarea id="message" name="message" rows="7" placeholder="Расскажите, чем можем помочь…" required minlength="10"></textarea>
         </label>
 

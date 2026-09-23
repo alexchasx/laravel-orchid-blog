@@ -1,7 +1,6 @@
 <div class="comment-form-wrap reveal">
     <div class="section-head">
         <div>
-            <p class="eyebrow">JOIN THE DISCUSSION</p>
             <h2>Оставить комментарий</h2>
         </div>
     </div>

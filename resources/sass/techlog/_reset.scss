@@ -18,6 +18,13 @@ body {
     font-family: Inter, system-ui, sans-serif;
     line-height: 1.65;
     transition: background .3s, color .3s;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
 }
 
 a {

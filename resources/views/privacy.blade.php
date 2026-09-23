@@ -5,7 +5,6 @@
 <section class="article container legal reveal">
     <div class="article-head">
         <a class="back" href="{{ route('home') }}">← На главную</a>
-        <p class="eyebrow">LEGAL / 01</p>
         <h1>Политика конфиденциальности</h1>
         <p class="lead">Как {{ config('app.name') }} собирает, использует и защищает ваши персональные данные. Дата последнего обновления: 20 сентября 2026 г.</p>
     </div>

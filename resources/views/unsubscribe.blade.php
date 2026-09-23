@@ -5,7 +5,6 @@
 <section class="section container unsubscribe reveal">
     <div class="section-head">
         <div>
-            <p class="eyebrow">SIGNAL / OFF</p>
             <h2>{{ $title }}</h2>
         </div>
     </div>

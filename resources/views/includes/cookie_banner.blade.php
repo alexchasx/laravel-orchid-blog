@@ -7,7 +7,6 @@
     <div class="cookie-banner__card">
         <button class="cookie-banner__close" type="button" data-cookie-close aria-label="Закрыть уведомление">&times;</button>
 
-        <p class="eyebrow">PRIVACY &amp; COOKIES</p>
         <h2 class="cookie-banner__title" id="cookie-banner-title">Мы ценим вашу конфиденциальность</h2>
         <p class="cookie-banner__text" id="cookie-banner-text">
             Мы используем cookie и анонимную метрику, чтобы сайт работал стабильнее и был удобнее.
