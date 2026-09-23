@@ -29,6 +29,7 @@ final class ArticleController extends Controller
             'search' => $request->input('search'),
             'metaTitle' => $request->filled('search') ? __('Результаты поиска для: ') . $request->input('search') : '',
             'metaDesc' => '',
+            'showHero' => true,
         ]);
     }
 
@@ -71,6 +72,9 @@ final class ArticleController extends Controller
             'articles' => $this->service->getByRubric($rubric->id),
             'metaTitle' => $rubric->title,
             'metaDesc' => $rubric->description,
+            // На странице рубрики промо-блок не показываем, а заголовок списка — название рубрики.
+            'showHero' => false,
+            'sectionTitle' => $rubric->title,
         ]);
     }
 

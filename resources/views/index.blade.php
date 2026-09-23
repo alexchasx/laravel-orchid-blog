@@ -2,7 +2,8 @@
 
 @section('content')
 
-{{-- Hero Section --}}
+{{-- Hero Section (не показывается на главной и на странице статей рубрики) --}}
+@if ($showHero ?? true)
 <section class="hero container reveal">
     <div class="hero-copy">
         <p class="eyebrow"><span class="pulse"></span> SYSTEM ONLINE / 2026</p>
@@ -32,13 +33,14 @@
         </div>
     </div>
 </section>
+@endif
 
 {{-- Articles Section --}}
 <section class="section container" id="articles">
     <div class="section-head reveal">
         <div>
             <p class="eyebrow">LATEST / {{ $articles->count() }}</p>
-            <h2>Свежие материалы</h2>
+            <h2>{{ $sectionTitle ?? 'Свежие материалы' }}</h2>
         </div>
         <a class="text-link" href="{{ route('home') }}">Все статьи →</a>
     </div>

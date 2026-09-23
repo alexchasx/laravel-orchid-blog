@@ -156,6 +156,49 @@ class PublicPagesTest extends TestCase
         $response->assertDontSee($articleTwo->title);
     }
 
+    public function test_home_page_hides_hero_section(): void
+    {
+        $this->createPublishedArticle();
+
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertDontSee('class="hero container', false);
+    }
+
+    public function test_rubric_page_hides_hero_section(): void
+    {
+        $rubric = Rubric::factory()->create();
+        $this->createPublishedArticle(['rubric_id' => $rubric->id]);
+
+        $response = $this->get("/rubric/{$rubric->id}");
+
+        $response->assertOk();
+        $response->assertDontSee('class="hero container', false);
+    }
+
+    public function test_rubric_page_uses_rubric_title_as_articles_heading(): void
+    {
+        $rubric = Rubric::factory()->create(['title' => 'Архитектура']);
+        $this->createPublishedArticle(['rubric_id' => $rubric->id]);
+
+        $response = $this->get("/rubric/{$rubric->id}");
+
+        $response->assertOk();
+        $response->assertSee('<h2>Архитектура</h2>', false);
+        $response->assertDontSee('Свежие материалы');
+    }
+
+    public function test_home_page_keeps_default_articles_heading(): void
+    {
+        $this->createPublishedArticle();
+
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertSee('<h2>Свежие материалы</h2>', false);
+    }
+
     public function test_show_by_tag_returns_only_articles_with_that_tag(): void
     {
         $tagOne = Tag::factory()->create(['active' => true]);
