@@ -92,12 +92,21 @@
 
   // Newsletter form: подписка на новые статьи (отправка на backend)
   const newsletterModal = document.querySelector('#newsletter-modal');
-  const newsletterModalIcon = newsletterModal?.querySelector('.modal-icon');
-  const newsletterModalTitle = newsletterModal?.querySelector('.modal-title');
-  const newsletterModalText = newsletterModal?.querySelector('.modal-text');
+  const newsletterFormView = newsletterModal?.querySelector('.newsletter-form-view');
+  const newsletterResultView = newsletterModal?.querySelector('.newsletter-result-view');
+  const newsletterModalIcon = newsletterResultView?.querySelector('.modal-icon');
+  const newsletterModalTitle = newsletterResultView?.querySelector('.modal-title');
+  const newsletterModalText = newsletterResultView?.querySelector('.modal-text');
+
+  const resetNewsletterModal = () => {
+    if (newsletterFormView) newsletterFormView.hidden = false;
+    if (newsletterResultView) newsletterResultView.hidden = true;
+  };
 
   const showNewsletterModal = (success, message) => {
     if (!newsletterModal) return;
+    if (newsletterFormView) newsletterFormView.hidden = true;
+    if (newsletterResultView) newsletterResultView.hidden = false;
     if (newsletterModalIcon) {
       newsletterModalIcon.className = `modal-icon ${success ? 'modal-icon--ok' : 'modal-icon--error'}`;
       newsletterModalIcon.innerHTML = success ? '&#10003;' : '!';
@@ -106,6 +115,15 @@
     if (newsletterModalText) newsletterModalText.textContent = message;
     openModal(newsletterModal);
   };
+
+  // Кнопки «Подписаться» открывают модалку с формой
+  document.querySelectorAll('[data-modal-open="newsletter"]').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      if (!newsletterModal) return;
+      resetNewsletterModal();
+      openModal(newsletterModal);
+    });
+  });
 
   const emailForm = document.querySelector('[data-newsletter-form]');
   emailForm?.addEventListener('submit', async e => {

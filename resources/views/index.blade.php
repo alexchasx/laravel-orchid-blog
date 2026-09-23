@@ -11,7 +11,7 @@
         <p class="lead">Практический ИТ-блог без информационного шума: разбираем архитектуру, инженерные подходы, инструменты и реальные trade-off'ы.</p>
         <div class="hero-actions">
             <a class="button primary" href="#articles">Читать статьи <span>→</span></a>
-            <a class="button ghost" href="#newsletter">Подписаться</a>
+            <button class="button ghost" type="button" data-modal-open="newsletter">Подписаться</button>
         </div>
         <div class="terminal-note">
             <span>$</span> cat /etc/techlog/mission.txt<br>
@@ -39,8 +39,7 @@
 <section class="section container" id="articles">
     <div class="section-head reveal">
         <div>
-            <p class="eyebrow">LATEST / {{ $articles->count() }}</p>
-            <h2>{{ $sectionTitle ?? 'Свежие материалы' }}</h2>
+            <h2>{{ $sectionTitle ?? 'Свежие статьи' }}</h2>
         </div>
         <a class="text-link" href="{{ route('home') }}">Все статьи →</a>
     </div>
@@ -84,8 +83,7 @@
 <section class="section container topics" id="topics">
     <div class="section-head reveal">
         <div>
-            <p class="eyebrow">EXPLORE / 02</p>
-            <h2>Исследуйте по темам</h2>
+            <h2>Темы</h2>
         </div>
     </div>
     <div class="topic-grid">
@@ -112,23 +110,11 @@
     </div>
 </section>
 
-{{-- Newsletter Section --}}
-<section class="newsletter section container reveal" id="newsletter">
-    <div>
-        <p class="eyebrow">SIGNAL / 04</p>
-        <h2>Один полезный email.<br><em>Никакого спама.</em></h2>
-    </div>
-    <form class="subscribe-form" data-newsletter-form action="{{ route('subscribe.store') }}" method="POST">
-        @csrf
-        <label for="email">Ваш email</label>
-        <div class="input-row">
-            <input id="email" name="email" type="email" autocomplete="email" placeholder="developer@example.com" required>
-            <button class="button primary" type="submit">Подписаться</button>
-        </div>
-        <p class="form-message" aria-live="polite"></p>
-    </form>
-</section>
+{{-- Newsletter Section (перенесён в модальное окно: includes/newsletter_modal) --}}
 
 @include('includes.newsletter_modal')
+
+@endsection
+
 
 @endsection

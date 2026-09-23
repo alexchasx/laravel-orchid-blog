@@ -341,19 +341,6 @@
     }
 }
 
-.newsletter {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: end;
-
-    h2 {
-        font-size: clamp(2rem, 4vw, 3.4rem);
-        line-height: 1.1;
-        margin: 0;
-    }
-}
-
 // ---------------------------------------------------------------------------
 // Article
 // ---------------------------------------------------------------------------
@@ -971,6 +958,22 @@
 
 .modal-action {
     min-width: 140px;
+}
+
+// Модалка подписки: форма отображается по левому краю карточки
+.newsletter-modal {
+
+    .newsletter-form-view {
+        text-align: left;
+
+        .eyebrow {
+            color: var(--green);
+        }
+
+        .modal-title {
+            margin-bottom: 22px;
+        }
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

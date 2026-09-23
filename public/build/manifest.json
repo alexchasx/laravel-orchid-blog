@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-Dvo-_wM3.css",
+    "file": "assets/app-CX5PChzu.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -17,7 +17,7 @@
     "isEntry": true
   },
   "resources/js/techlog.js": {
-    "file": "assets/techlog-CuOEqI-7.js",
+    "file": "assets/techlog-1LckZZgL.js",
     "name": "techlog",
     "src": "resources/js/techlog.js",
     "isEntry": true
@@ -28,7 +28,7 @@
     "isEntry": true
   },
   "resources/sass/techlog/index.scss": {
-    "file": "assets/index-gUzi_6Ig.css",
+    "file": "assets/index-BVTJRzDE.css",
     "src": "resources/sass/techlog/index.scss",
     "isEntry": true
   }
