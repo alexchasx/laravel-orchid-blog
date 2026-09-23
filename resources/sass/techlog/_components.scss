@@ -102,7 +102,7 @@
 }
 
 .hero h1 {
-    font-size: clamp(2.2rem, 4.5vw, 4.2rem);
+    font-size: clamp(2rem, 4vw, 3.8rem);
     line-height: 1.02;
     letter-spacing: -.055em;
     margin: 0 0 25px;
@@ -351,11 +351,11 @@
 
 .article-head {
     max-width: 850px;
-    // margin-bottom: 70px;
+    margin-bottom: 32px;
 }
 
 .article-head h1 {
-    font-size: clamp(2.1rem, 4.2vw, 3.8rem);
+    font-size: clamp(1.95rem, 4vw, 3.5rem);
     line-height: 1.02;
     letter-spacing: -.05em;
     margin: 15px 0 25px;
@@ -424,7 +424,7 @@
 .prose h2 {
     font-size: 1.6rem;
     line-height: 1.2;
-    margin: 55px 0 18px;
+    margin: 10px 0 18px;
 }
 
 .prose h3 {
@@ -592,7 +592,7 @@
     align-items: start;
 
     h1 {
-        font-size: clamp(2.2rem, 4.2vw, 3.8rem);
+        font-size: clamp(2rem, 4vw, 3.5rem);
         line-height: 1;
         letter-spacing: -.05em;
         margin: 0 0 30px;

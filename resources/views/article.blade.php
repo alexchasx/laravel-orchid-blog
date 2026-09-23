@@ -23,7 +23,6 @@
         {{-- TOC (Table of Contents): якоря на подзаголовки --}}
         @if(!empty($tocItems))
         <aside class="toc">
-            <strong>В статье</strong>
             @foreach($tocItems as $item)
                 <a href="#{{ $item['id'] }}">{{ $item['text'] }}</a>
             @endforeach

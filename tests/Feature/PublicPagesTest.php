@@ -98,7 +98,6 @@ class PublicPagesTest extends TestCase
         $response->assertOk();
         $response->assertSee($article->title);
         $response->assertSee('Введение');
-        $response->assertSee('В статье');
     }
 
     public function test_guest_cannot_view_unpublished_article(): void
