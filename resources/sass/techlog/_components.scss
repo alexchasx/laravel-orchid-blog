@@ -996,3 +996,70 @@
     color: var(--muted);
     margin: 35px 0 0;
 }
+
+// ---------------------------------------------------------------------------
+// Pagination (пагинация ленты статей)
+// ---------------------------------------------------------------------------
+
+.pagination {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-top: 45px;
+}
+
+.pagination-info {
+    font: 500 .76rem "JetBrains Mono", monospace;
+    color: var(--muted);
+    margin: 0;
+}
+
+.pagination-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.page-item {
+    margin: 0;
+
+    &.disabled .page-link {
+        opacity: .35;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+    &.active .page-link {
+        background: var(--green);
+        border-color: var(--green);
+        color: #03120b;
+        font-weight: 700;
+        box-shadow: 0 0 18px rgba(0, 255, 136, .22);
+    }
+}
+
+.page-link {
+    min-width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    color: var(--text);
+    font: 500 .9rem "JetBrains Mono", monospace;
+    transition: transform .2s, border-color .2s, color .2s, box-shadow .2s;
+
+    &:hover {
+        border-color: var(--green);
+        color: var(--green);
+        transform: translateY(-2px);
+    }
+}

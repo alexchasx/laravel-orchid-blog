@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\View\Composers\RubricsComposer;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
@@ -27,7 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Paginator::useBootstrap();
+        // Кастомная пагинация публичной части в стиле techlog
+        // (админ-панель Orchid рендерит свою пагинацию, на неё это не влияет).
+        Paginator::defaultView('vendor.pagination.techlog');
+        Paginator::defaultSimpleView('vendor.pagination.techlog');
 
         // Создание своей blade-директивы "@hasAccess"
         Blade::if('hasAccess', function (string $value) {

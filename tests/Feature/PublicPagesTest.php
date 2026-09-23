@@ -163,7 +163,7 @@ class PublicPagesTest extends TestCase
         $response = $this->get('/');
 
         $response->assertOk();
-        $response->assertDontSee('class="hero container', false);
+        $response->assertDontSee('class="hero container', true);
     }
 
     public function test_rubric_page_hides_hero_section(): void

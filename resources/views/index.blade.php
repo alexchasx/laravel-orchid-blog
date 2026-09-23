@@ -75,9 +75,7 @@
 
     {{-- Pagination --}}
     @if($articles->hasPages())
-    <nav style="margin-top: 30px; text-align: center;">
         {{ $articles->links() }}
-    </nav>
     @endif
 </section>
 
