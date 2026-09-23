@@ -2,9 +2,11 @@
 
 @section('content')
 
-<section class="article container reveal">
-    <div class="article-head">
+<section class="article container ">
+    <div class="article-head reveal">
         <a class="back" href="{{ route('home') }}">← На главную</a>
+
+        <h1>О блоге</em></h1>
     </div>
 
     <div class="prose">

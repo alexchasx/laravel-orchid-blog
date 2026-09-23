@@ -5,8 +5,8 @@
 <section class="contact container">
     {{-- Contact Intro --}}
     <div class="contact-intro reveal">
-        <h1>Давайте обсудим<br><em>технологии.</em></h1>
-        <p>Есть тема для статьи, идея сотрудничества или нашли неточность? Напишите — читаем каждое сообщение.</p>
+        <h1>Давайте обсудим<br><em>технологии</em></h1>
+        <p>Есть тема для статьи, идея сотрудничества или нашли неточность? Напишите — читаем каждое сообщение</p>
         <div class="contact-links">
             <a href="mailto:mail@yandex.ru">mail@yandex.ru</a>
             <a href="https://github.com/alexchasx" target="_blank" rel="noopener">github.com/alexchasx</a>
