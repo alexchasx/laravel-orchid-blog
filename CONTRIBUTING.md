@@ -82,12 +82,12 @@ make test   # docker compose exec app php artisan test (PHPUnit, БД testing)
 make lint   # php -l для всех .php в app, database, routes (внутри контейнера)
 ```
 
-- Учетные данные/окружение для тестов — в `phpunit.xml` (запуск против БД `testing`); перед тестами БД `testing` должна существовать в MySQL-контейнере (см. `docs/testing-plan.md`).
+- Учетные данные/окружение для тестов — в `phpunit.xml` (запуск против БД `testing`); перед тестами БД `testing` должна существовать в MySQL-контейнере.
 - Если меняли схему БД — добавьте миграцию (без редактирования старых, если иного не требуют изменения).
 - Меняли фронтенд — проверьте `make frontend-build` (сборка Vite внутри `blog_node`).
 - CI в проекте нет — проверки локальные, на порядочности.
 
-> Сейчас тесты — только boilerplate `ExampleTest`. План наполнения реальными тестами описан в [`docs/testing-plan.md`](docs/testing-plan.md): **новые тесты для доменной логики приветствуются** и опираются на этот план.
+> Тесты лежат в `tests/Feature/` и `tests/Unit/`; при изменении доменной логики добавляй или обновляй их и прогоняй `make test`.
 
 ## 7. Отчёты об ошибках и предложения
 
@@ -99,5 +99,4 @@ make lint   # php -l для всех .php в app, database, routes (внутри
 
 - `Makefile` — полный список команд (`make help`)
 - `docs/architecture.md` — детальная архитектура проекта
-- `docs/testing-plan.md` — план юнит- и feature-тестов
 - `README.md` — установка и общая информация

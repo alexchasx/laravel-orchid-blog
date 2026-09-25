@@ -4,7 +4,7 @@
 
 Ключевые функции блога: лента статей по рубрикам/тегам с поиском и оглавлением, гостевые комментарии с математической капчей, форма обратной связи, подписка на новые статьи с рассылкой по email, автопубликация запланированных статей.
 
-Дизайн и рефакторинг задокументированы в `docs/`: [`design-update-plan.md`](docs/design-update-plan.md), [`architecture.md`](docs/architecture.md), [`refactoring-plan.md`](docs/refactoring-plan.md), [`blade-migration-plan.md`](docs/blade-migration-plan.md), [`guest-comments-plan.md`](docs/guest-comments-plan.md), [`testing-plan.md`](docs/testing-plan.md), [`code-audit-report.md`](docs/code-audit-report.md), [`design-audit-inventory.md`](docs/design-audit-inventory.md).
+Архитектура приложения задокументирована в [`docs/architecture.md`](docs/architecture.md); план подготовки публичного шаблона — [`docs/public-template-plan.md`](docs/public-template-plan.md).
 
 ## Язык
 
@@ -30,7 +30,7 @@ UI-тексты, комментарии в коде и вся документа
 
 Контейнеры (`blog_*`): `nginx`, `app`, `node`, **`schedule`** (`php artisan schedule:work` — автопубликация статей), **`queue`** (`php artisan queue:work` — обработка очереди писем рассылки), `mailhog`, `db` (MySQL 8.0), `phpmyadmin`.
 
-Дефолтные адреса: сайт `:8080`, админ `:8080/admin`, phpMyAdmin `:8899`, MailHog `:8026`, Vite dev `:5173`; MySQL — внутри сети `3306`, наружу `:8101`; БД `laraorchid`/`root`/`root` (совпадает с `docker/docker-compose.yml` и `.env.example`).
+Дефолтные адреса: сайт `:8080`, админ `:8080/admin`, phpMyAdmin `:8899`, MailHog `:8026`, Vite dev `:5173`; MySQL — внутри сети `3306`, наружу `:8101`. Контейнер `db` создаёт БД `laraorchid`/`root`/`root` (`docker/docker-compose.yml`); в `.env.example` значения БД пустые — их заполняет разработчик при настройке проекта.
 
 ## Тесты
 

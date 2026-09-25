@@ -18,3 +18,7 @@ yarn-error.log
 /_*
 
 __*
+
+# Lock-файлы исключены: в шаблоне зависимости ставятся свежими (см. docs/public-template-plan.md, п. 2)
+composer.lock
+package-lock.json

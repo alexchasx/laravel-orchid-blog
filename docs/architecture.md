@@ -167,8 +167,6 @@ Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRub
 - **JS**: `resources/js/techlog.js` — мобильное меню, выпадающее меню «Темы», тема, scroll-reveal, to-top, валидация форм, модалки. `resources/js/app.js` — legacy/Alpine.
 - **Legacy** (не трогать без необходимости): `layouts/base.blade.php`, `layouts/app.blade.php`, `layouts/guest.blade.php`, `includes/sidebar.blade.php`, `resources/sass/style.scss`, Tailwind. Используется Breeze/auth-страницами и старыми представлениями.
 
-Дизайн-направление и план вёрстки зафиксированы в `docs/design-update-plan.md` и `docs/blade-migration-plan.md`.
-
 ## 11. Комментарии и модерация
 
 - `CommentController@store`: гости — поля `name`, `email`, математическая капча (`MathCaptcha`, ответ в сессии, правило `MathCaptchaRule`), `active=false` (модерация); авторизованные — берутся из `Auth::user()`, `active=true`, капча не требуется.
@@ -200,7 +198,7 @@ Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRub
 ## 15. Команды и инструменты
 
 - `Makefile` — каноничный dev-workflow (**только Docker**): `make install|up|down|logs|shell|migrate|orchid-admin|storage-link|frontend-build|frontend-dev|test|lint|clear|optimize` и т.д. Локальные php/composer/npm на хосте не используются — все команды выполняются внутри контейнеров `docker/docker-compose.yml`.
-- `make test` = `php artisan test` внутри `blog_app` (сейчас только boilerplate `ExampleTest`); о новых тестах — `docs/testing-plan.md`.
+- `make test` = `php artisan test` внутри `blog_app` (PHPUnit: `tests/Feature/`, `tests/Unit/`).
 - `make lint` = `php -l` (без phpstan/Pint) внутри `blog_app`.
 - `make frontend-build` / `make frontend-dev` = `npm run build` / Vite dev server внутри `blog_node`.
 - Доступ: сайт `:8080`, админка `:8080/admin`, phpMyAdmin `:8899`, MailHog `:8026`, Vite dev `:5173`; БД `laraorchid`/`root`/`root`.
