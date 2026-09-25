@@ -1,4 +1,5 @@
 {
+    "name": "laravel-blog-template",
     "private": true,
     "type": "module",
     "scripts": {

@@ -6,5 +6,12 @@
 *.md diff=markdown
 *.php diff=php
 
+# Не попадают в `git archive` (и, соответственно, в ZIP-архив GitHub).
+# Остальное (README, AGENTS.md, .gitignore, .editorconfig, docs/, Makefile,
+# docker/, tests/, public/) остаётся в архиве — это части шаблона.
+.gitattributes export-ignore
 /.github export-ignore
-CHANGELOG.md export-ignore
+/.styleci.yml export-ignore
+/opencode.json export-ignore
+/prompts export-ignore
+/docs/public-template-plan.md export-ignore

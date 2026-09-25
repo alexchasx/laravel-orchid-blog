@@ -6,8 +6,10 @@
 /public/my
 /storage/*.key
 /vendor
+# Реальные env-файлы в репозиторий не попадают; в шаблоне остаётся только .env.example
 .env
-.env.backup
+.env.*
+!.env.example
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
@@ -15,6 +17,12 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+
+# Служебное окружение ИИ-агентов (локальное, в шаблон не нужно)
+/.codeassistant
+/.gigacode
+/.gigacode_vsc
+
 /_*
 
 __*

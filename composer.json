@@ -1,10 +1,14 @@
 {
-    "name": "laravel/laravel",
+    "name": "alexchasx/laravel-blog-template",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Шаблон IT-блога на Laravel и Orchid Platform: статьи, рубрики, метки, комментарии, рассылка.",
     "keywords": [
-        "framework",
-        "laravel"
+        "blog",
+        "laravel",
+        "orchid",
+        "orchid-platform",
+        "template",
+        "cms"
     ],
     "license": "MIT",
     "require": {
