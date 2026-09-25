@@ -72,7 +72,6 @@
 - **Orchid Platform** ^14.53 — административная панель
 - **Laravel Sanctum** ^4.0 — аутентификация и API токены
 - **Laravel Tinker** ^3.0 — интерактивная работа с приложением
-- **mews/captcha** ^3.3 — капча (в связке с Google reCAPTCHA через middleware `GoogleRecaptcha`)
 - **Guzzle HTTP** ^7.9 — HTTP-клиент
 
 ### Frontend (Blade-шаблоны Breeze/auth)
@@ -267,7 +266,7 @@ docker compose -f docker/docker-compose.yml exec node npm run build
 - `app/Models/` — доменные модели (`Article`, `Rubric`, `Tag`, `Comment`, `Contact`, `Subscriber`, `User`)
 - `app/Http/Controllers/` — контроллеры публичной части и авторизации (Breeze)
 - `app/Http/Requests/` — FormRequest-валидация (статьи, комментарии, подписка, контакты)
-- `app/Http/Middleware/` — кастомные middleware (`Localize`, `GoogleRecaptcha`, `TrustProxies`)
+- `app/Http/Middleware/` — кастомные middleware (`Localize`, `TrustProxies`)
 - `app/Orchid/` — админ-панель Orchid: экраны (`Screens/`), layout'ы (`Layouts/`), фильтры, `PlatformProvider`
 - `app/Services/` — сервисный слой (`ArticleService`, `CacheService`)
 - `app/Observers/` — модель "отслеживания" (`ArticleObserver`, `RubricObserver`, `TagObserver`): обновление счётчиков, рассылка
