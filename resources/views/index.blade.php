@@ -44,7 +44,11 @@
 
     <div class="section-head reveal">
         <div>
-            <h2>{{ $sectionTitle ?? 'Свежие статьи' }}</h2>
+            @unless ($showHero ?? true)
+                <h1>{{ $sectionTitle ?? 'Свежие статьи' }}</h1>
+            @else
+                <h2>{{ $sectionTitle ?? 'Свежие статьи' }}</h2>
+            @endunless
         </div>
         <a class="text-link" href="{{ route('home') }}">Все статьи →</a>
     </div>

@@ -5,7 +5,7 @@
 <section class="section container unsubscribe reveal">
     <div class="section-head">
         <div>
-            <h2>{{ $title }}</h2>
+            <h1>{{ $title }}</h1>
         </div>
     </div>
 

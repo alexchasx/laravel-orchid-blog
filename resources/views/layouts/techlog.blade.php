@@ -136,6 +136,7 @@
 </header>
 
 <main id="main">
+    @include('includes.breadcrumbs')
     @yield('content')
 </main>
 

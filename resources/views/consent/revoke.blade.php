@@ -5,7 +5,7 @@
     <div class="card reveal">
         <div class="section-head">
             <div>
-                <h2>Отзыв согласия на обработку ПДн</h2>
+                <h1>Отзыв согласия на обработку ПДн</h1>
             </div>
         </div>
 

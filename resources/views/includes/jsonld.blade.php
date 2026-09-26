@@ -54,7 +54,28 @@
             },
             @endif
             "sameAs": {!! json_encode($orgSocial) !!}
+        },
+        {{-- BreadcrumbList — только если есть крошки --}}
+        @if(!empty($breadcrumbs))
+        ,
+        {
+            "@@type": "BreadcrumbList",
+            "itemListElement": [
+                @foreach($breadcrumbs as $index => $item)
+                {
+                    "@@type": "ListItem",
+                    "position": {{ $index + 1 }},
+                    "name": "{{ $item['label'] }}",
+                    @if($item['url'] !== null)
+                    "item": "{{ $item['url'] }}"
+                    @else
+                    "item": "{{ url()->current() }}"
+                    @endif
+                }{{ $index < count($breadcrumbs) - 1 ? ',' : '' }}
+                @endforeach
+            ]
         }
+        @endif
         @if($hasArticle)
         ,
         {{-- Article — только на странице статьи --}}

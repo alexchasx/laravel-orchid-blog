@@ -70,6 +70,7 @@ final class ArticleController extends Controller
     {
         return view(self::MAIN_VIEW, [
             'articles' => $this->service->getByRubric($rubric->id),
+            'rubric' => $rubric,
             'metaTitle' => $rubric->title,
             'metaDesc' => $rubric->description,
             // На странице рубрики промо-блок не показываем, а заголовок списка — название рубрики.
@@ -82,6 +83,7 @@ final class ArticleController extends Controller
     {
         return view(self::MAIN_VIEW, [
             'articles' => $this->service->getByTag($tag->id),
+            'tag' => $tag,
             'metaTitle' => __('Записи с меткой «') . $tag->title . '»',
             'metaDesc' => null,
             // На странице метки промо-блок не показываем, а заголовок списка — название метки.

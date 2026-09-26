@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\View\Composers\BreadcrumbComposer;
 use App\View\Composers\RubricsComposer;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -46,5 +47,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Рубрики с опубликованными статьями для выпадающего меню «Темы» в хедере.
         View::composer('layouts.techlog', RubricsComposer::class);
+
+        // Хлебные крошки для публичных страниц.
+        View::composer('layouts.techlog', BreadcrumbComposer::class);
     }
 }
