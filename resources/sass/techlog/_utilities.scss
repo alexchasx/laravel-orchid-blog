@@ -38,13 +38,21 @@
 }
 
 // Scroll reveal анимация
+// По умолчанию элементы видимы (fallback, если JS не загрузился).
+// JS добавляет класс .visible для анимации появления при скролле.
 .reveal {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity .7s ease, transform .7s ease;
+    opacity: 1;
+    transform: none;
 
     &.visible {
         opacity: 1;
-        transform: none;
+        transform: translateY(20px);
+        transition: opacity .7s ease, transform .7s ease;
     }
+
+    // Когда JS работает, .visible добавляется через IntersectionObserver,
+    // но так как мы инвертировали логику — элемент сразу виден.
+    // Для анимации при загрузке страницы можно использовать:
+    // body.js-ready .reveal { opacity: 1; transform: none; }
+    // body.js-ready .reveal.visible { opacity: 1; transform: none; transition: ...; }
 }
