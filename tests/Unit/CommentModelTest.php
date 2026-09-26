@@ -59,6 +59,9 @@ class CommentModelTest extends TestCase
             'article_id',
             'content',
             'active',
+            'consent_processing_log_id',
+            'consent_distribution_log_id',
+            'is_anonymized',
         ], $comment->getFillable());
     }
 

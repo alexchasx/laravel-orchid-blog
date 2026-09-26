@@ -23,7 +23,12 @@ use Orchid\Screen\AsSource;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int|null $consent_processing_log_id
+ * @property int|null $consent_distribution_log_id
+ * @property bool $is_anonymized
  * @property-read \App\Models\Article $article
+ * @property-read \App\Models\ConsentLog|null $consentProcessingLog
+ * @property-read \App\Models\ConsentLog|null $consentDistributionLog
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder|Comment defaultSort(string $column, string $direction = 'asc')
  * @method static \Database\Factories\CommentFactory factory(...$parameters)
@@ -66,6 +71,13 @@ class Comment extends Model
         'article_id',
         'content',
         'active',
+        'consent_processing_log_id',
+        'consent_distribution_log_id',
+        'is_anonymized',
+    ];
+
+    protected $casts = [
+        'is_anonymized' => 'boolean',
     ];
 
     /**
@@ -84,5 +96,21 @@ class Comment extends Model
     public function article()
     {
         return $this->belongsTo(Article::class);
+    }
+
+    /**
+     * Лог согласия на обработку ПДн.
+     */
+    public function consentProcessingLog()
+    {
+        return $this->hasOne(ConsentLog::class, 'id', 'consent_processing_log_id');
+    }
+
+    /**
+     * Лог согласия на распространение ПДн.
+     */
+    public function consentDistributionLog()
+    {
+        return $this->hasOne(ConsentLog::class, 'id', 'consent_distribution_log_id');
     }
 }

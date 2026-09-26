@@ -26,6 +26,9 @@ class CommentFactory extends Factory
             'ip' => $this->faker->ipv4(),
             'content' => $this->faker->text(500),
             'active' => $this->faker->boolean(),
+            'consent_processing_log_id' => null,
+            'consent_distribution_log_id' => null,
+            'is_anonymized' => false,
         ];
     }
 }
