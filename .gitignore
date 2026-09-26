@@ -4,6 +4,7 @@
 /public/hbgl
 /public/Less
 /public/my
+/public/build
 /storage/*.key
 /vendor
 # Реальные env-файлы в репозиторий не попадают; в шаблоне остаётся только .env.example

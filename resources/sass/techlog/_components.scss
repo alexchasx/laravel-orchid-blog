@@ -702,6 +702,12 @@
 
 .footer a {
     margin-left: 20px;
+    color: var(--muted);
+    transition: .2s;
+
+    &:hover {
+        color: var(--green);
+    }
 }
 
 // ---------------------------------------------------------------------------
