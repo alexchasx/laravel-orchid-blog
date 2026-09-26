@@ -6,26 +6,84 @@
     <meta name="theme-color" content="#0a0a0a">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    {{-- Title & Description --}}
     @if(!empty($article))
         <title>{{ $article->title }} — {{ config('app.name') }}</title>
-        <meta name="description" content="{{ $article->meta_desc }}">
-        <meta property="og:type" content="article">
-        <meta property="og:title" content="{{ $article->title }}">
-        <meta property="og:description" content="{{ $article->meta_desc }}">
-        <meta property="og:url" content="{{ url()->current() }}">
-        <meta property="og:locale" content="ru-RU">
+        <meta name="description" content="{{ $article->meta_desc ?: config('seo.default_description') }}">
     @else
-        <title>{{ $metaTitle ?? config('app.name').' — ИТ-блог' }}</title>
-        <meta name="description" content="{{ $metaDesc ?? 'ИТ-блог о технологиях, архитектуре, инструментах и практических решениях для современного разработчика.' }}">
-        <meta property="og:type" content="website">
-        <meta property="og:title" content="{{ $metaTitle ?? config('app.name').' — ИТ-блог' }}">
-        <meta property="og:description" content="{{ $metaDesc ?? 'ИТ-блог о технологиях, архитектуре, инструментах и практических решениях для современного разработчика.' }}">
-        <meta property="og:url" content="{{ url()->current() }}">
-        <meta property="og:locale" content="ru-RU">
+        <title>{{ $metaTitle ?: config('seo.default_title', str_replace('{app_name}', config('app.name'), config('seo.default_title'))) }}</title>
+        <meta name="description" content="{{ $metaDesc ?: config('seo.default_description') }}">
     @endif
 
-    {{-- Замените иконку на свою: положите файл в public/ и укажите его здесь. Сейчас это заглушка Laravel. --}}
-    <link rel="icon" href="/favicon.ico" sizes="any">
+    {{-- Canonical --}}
+    @php
+        $canonicalUrl = $canonical ?? request()->url();
+        // Для 1-й страницы пагинации убираем ?page=N
+        $canonicalUrl = (string) \Illuminate\Support\Uri::of($canonicalUrl)->withoutQuery('page');
+    @endphp
+    <link rel="canonical" href="{{ $canonicalUrl }}">
+
+    {{-- Robots --}}
+    <meta name="robots" content="{{ $metaRobots ?? 'index,follow' }}">
+
+    {{-- Open Graph --}}
+    @if(!empty($article))
+        <meta property="og:type" content="article">
+        <meta property="og:title" content="{{ $article->title }}">
+        <meta property="og:description" content="{{ $article->meta_desc ?: config('seo.default_description') }}">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:locale" content="{{ config('seo.og_locale', 'ru_RU') }}">
+        <meta property="og:site_name" content="{{ str_replace('{app_name}', config('app.name'), config('seo.og_site_name')) }}">
+        @if(!empty($article->image))
+            <meta property="og:image" content="{{ Storage::url($article->image) }}">
+        @else
+            @if(!empty(config('seo.og_image')))
+                <meta property="og:image" content="{{ config('seo.og_image') }}">
+            @endif
+        @endif
+    @else
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="{{ $metaTitle ?: str_replace('{app_name}', config('app.name'), config('seo.default_title')) }}">
+        <meta property="og:description" content="{{ $metaDesc ?: config('seo.default_description') }}">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:locale" content="{{ config('seo.og_locale', 'ru_RU') }}">
+        <meta property="og:site_name" content="{{ str_replace('{app_name}', config('app.name'), config('seo.og_site_name')) }}">
+        @if(!empty(config('seo.og_image')))
+            <meta property="og:image" content="{{ config('seo.og_image') }}">
+        @endif
+    @endif
+
+    {{-- Twitter Card --}}
+    @if(!empty($article))
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{ $article->title }}">
+        <meta name="twitter:description" content="{{ $article->meta_desc ?: config('seo.default_description') }}">
+        @if(!empty($article->image))
+            <meta name="twitter:image" content="{{ Storage::url($article->image) }}">
+        @elseif(!empty(config('seo.og_image')))
+            <meta name="twitter:image" content="{{ config('seo.og_image') }}">
+        @endif
+        @if(!empty(config('seo.twitter_handle')))
+            <meta name="twitter:site" content="@{{ config('seo.twitter_handle') }}">
+        @endif
+    @else
+        <meta name="twitter:card" content="{{ config('seo.twitter_card', 'summary') }}">
+        <meta name="twitter:title" content="{{ $metaTitle ?: str_replace('{app_name}', config('app.name'), config('seo.default_title')) }}">
+        <meta name="twitter:description" content="{{ $metaDesc ?: config('seo.default_description') }}">
+        @if(!empty(config('seo.og_image')))
+            <meta name="twitter:image" content="{{ config('seo.og_image') }}">
+        @endif
+        @if(!empty(config('seo.twitter_handle')))
+            <meta name="twitter:site" content="@{{ config('seo.twitter_handle') }}">
+        @endif
+    @endif
+
+    {{-- JSON-LD структурированные данные --}}
+    @include('includes.jsonld')
+
+    {{-- Favicon --}}
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" href="/favicon.ico">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

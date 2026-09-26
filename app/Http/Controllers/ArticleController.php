@@ -27,8 +27,8 @@ final class ArticleController extends Controller
         return view(self::MAIN_VIEW, [
             'articles' => $articles,
             'search' => $request->input('search'),
-            'metaTitle' => $request->filled('search') ? __('Результаты поиска для: ') . $request->input('search') : '',
-            'metaDesc' => '',
+            'metaTitle' => $request->filled('search') ? __('Результаты поиска для: ') . $request->input('search') : null,
+            'metaDesc' => null,
             'showHero' => true,
         ]);
     }
@@ -62,7 +62,7 @@ final class ArticleController extends Controller
             'articles' => $this->service->getNotPublic(),
             'metaTitle' => __('Неопубликованные статьи'),
             'metaRobots' => self::META_NO_ROBOTS,
-            'metaDesc' => '',
+            'metaDesc' => null,
         ]);
     }
 
@@ -83,7 +83,7 @@ final class ArticleController extends Controller
         return view(self::MAIN_VIEW, [
             'articles' => $this->service->getByTag($tag->id),
             'metaTitle' => __('Записи с меткой «') . $tag->title . '»',
-            'metaDesc' => '',
+            'metaDesc' => null,
             // На странице метки промо-блок не показываем, а заголовок списка — название метки.
             'showHero' => false,
             'sectionTitle' => __('Записи с меткой «') . $tag->title . '»',

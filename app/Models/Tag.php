@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -49,10 +50,28 @@ class Tag extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'popular',
         'active',
         'count_articles',
     ];
+
+    protected static function booted(): void
+    {
+        static::saving(function (Tag $tag): void {
+            if (empty($tag->slug)) {
+                $base = Str::slug($tag->title);
+                $slug = $base;
+                $counter = 1;
+
+                while (Tag::where('slug', $slug)->where('id', '!=', $tag->id)->exists()) {
+                    $slug = $base . '-' . $counter++;
+                }
+
+                $tag->slug = $slug;
+            }
+        });
+    }
 
     public function articles(): BelongsToMany
     {

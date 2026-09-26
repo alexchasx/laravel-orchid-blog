@@ -1,2 +1,13 @@
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /login
+Disallow: /register
+Disallow: /test-
+Disallow: /notpublic
+Disallow: /unsubscribe
+Disallow: /consent/revoke
+Disallow: /*?search=
+Disallow: /*?page=
+Sitemap: https://example.com/sitemap.xml

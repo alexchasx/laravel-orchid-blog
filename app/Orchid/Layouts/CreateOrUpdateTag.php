@@ -26,6 +26,8 @@ class CreateOrUpdateTag extends Rows
         return [
             Input::make('tag.id')->type('hidden'),
 
+            Input::make('tag.slug')->title('Слаг'),
+
             Input::make('tag.title')->required()->title('Заголовок'),
 
             // Input::make('tag.popular')->title('Популярность'),

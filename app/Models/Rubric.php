@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Orchid\Screen\AsSource;
@@ -56,8 +57,25 @@ class Rubric extends Model
         'description',
     ];
 
+    protected static function booted(): void
+    {
+        static::saving(function (Rubric $rubric): void {
+            if (empty($rubric->slug)) {
+                $base = Str::slug($rubric->title);
+                $slug = $base;
+                $counter = 1;
+
+                while (Rubric::where('slug', $slug)->where('id', '!=', $rubric->id)->exists()) {
+                    $slug = $base . '-' . $counter++;
+                }
+
+                $rubric->slug = $slug;
+            }
+        });
+    }
+
     /**
-     * Возращает все статьи к данной категории.
+     * Возвращает все статьи к данной категории.
      */
     public function articles()
     {

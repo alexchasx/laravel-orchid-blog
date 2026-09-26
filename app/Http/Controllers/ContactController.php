@@ -16,7 +16,7 @@ final class ContactController extends Controller
     {
         return view('contact', [
             'metaTitle' => __('Обратная связь'),
-            'metaDesc' => '',
+            'metaDesc' => null,
         ]);
     }
 

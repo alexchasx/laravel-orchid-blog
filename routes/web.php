@@ -6,8 +6,13 @@ use App\Http\Controllers\ConsentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SubscriberController;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
+
+// Sitemap — без кэширования в роутах, кэш внутри контроллера.
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 
 // Тестовые маршруты (не удалять)
 Route::get('/test-400', fn () => abort(400));
@@ -53,12 +58,33 @@ Route::post('subscribe', [SubscriberController::class, 'store'])
 Route::get('unsubscribe/{token}', [SubscriberController::class, 'unsubscribe'])
     ->name('subscribe.unsubscribe');
 
+// Редирект со старых числовых URL на slug-URL (301).
+Route::get('rubric/{legacyId}', function (int $legacyId): RedirectResponse {
+    $rubric = \App\Models\Rubric::withTrashed()->find($legacyId);
+
+    if ($rubric?->slug) {
+        return redirect()->route('showByRubric', ['rubric' => $rubric->slug], 301);
+    }
+
+    abort(404);
+})->whereNumber('legacyId')->name('rubric.legacy.redirect');
+
+Route::get('tag/{legacyId}', function (int $legacyId): RedirectResponse {
+    $tag = \App\Models\Tag::withTrashed()->find($legacyId);
+
+    if ($tag?->slug) {
+        return redirect()->route('showByTag', ['tag' => $tag->slug], 301);
+    }
+
+    abort(404);
+})->whereNumber('legacyId')->name('tag.legacy.redirect');
+
 Route::controller(ArticleController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('notpublic', 'showNotPublic')->name('notpublic')
         ->middleware(['auth', 'access:platform.custom.articles']);
-    Route::get('rubric/{rubric}', 'showByRubric')->name('showByRubric');
-    Route::get('tag/{tag}', 'showByTag')->name('showByTag');
+    Route::get('rubric/{rubric:slug}', 'showByRubric')->name('showByRubric');
+    Route::get('tag/{tag:slug}', 'showByTag')->name('showByTag');
     Route::get('article/{article:slug}', 'show')->name('articleShow');
 });
 
