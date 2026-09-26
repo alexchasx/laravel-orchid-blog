@@ -26,4 +26,26 @@ return [
 
     'hosting_provider' => env('HOSTING_PROVIDER', ''),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Реестр Роскомнадзора
+    |--------------------------------------------------------------------------
+    */
+
+    'rkn_notification_date' => env('RKN_NOTIFICATION_DATE', ''),
+
+    'rkn_registry_number' => env('RKN_REGISTRY_NUMBER', ''),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Сроки хранения данных
+    |--------------------------------------------------------------------------
+    */
+
+    'comment_retention_period' => env('COMMENT_RETENTION_PERIOD', ''),
+
+    'contact_retention_period' => env('CONTACT_RETENTION_PERIOD', ''),
+
+    'backup_retention_days' => env('BACKUP_RETENTION_DAYS', ''),
+
 ];
