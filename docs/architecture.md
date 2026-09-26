@@ -223,3 +223,90 @@ Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRub
 3. Механизм кэша сайдбара (`CacheService`, ключи `Tag::SIDEBAR_CACHE_KEY`, `Rubric::SIDEBAR_CACHE_KEY`) создан, но в новом шаблоне `techlog` не задействован; инвалидация в наблюдателях закомментирована.
 4. `mews/captcha` и `GoogleRecaptcha` — заготовки; реальная капча — самописная математическая.
 5. Планировщик рассылки/публикации требует запущенного `schedule:run` (или Laravel cron) — без него запланированные статьи публиковаться не будут.
+
+## 17. SEO
+
+### 17.1 Мета-теги и canonical
+
+- **Единый источник** — `layouts/techlog.blade.php` + `config/seo.php`.
+- `config/seo.php` содержит: `default_title`, `default_description`, `og_site_name`, `og_locale`, `og_image`, `twitter_card`, `twitter_handle`, `organization_name`, `organization_url`, `organization_logo`, `organization_social`, `canonical_self`.
+- `{app_name}` заменяется на `config('app.name')` через `str_replace` в runtime.
+- Контроллеры передают `metaTitle`/`metaDesc` через `?:` (пустая строка → дефолт из config).
+- **Canonical URL** — `$canonical ?? request()->url()`, убирает `?page=N` через `\Illuminate\Support\Uri::of()`.
+- **Robots** — `$metaRobots ?? 'index,follow'`.
+
+### 17.2 Open Graph и Twitter Card
+
+- Статья: `og:type=article`, `twitter:card=summary_large_image`.
+- Остальные страницы: `og:type=website`, `twitter:card=summary`.
+- `og:image` — из `article->image` (если есть) или `config('seo.og_image')`.
+- `og:locale` — из `config('seo.og_locale', 'ru_RU')`.
+
+### 17.3 JSON-LD (`includes/jsonld.blade.php`)
+
+Выводится только если `noindex` НЕ в `$metaRobots`. Содержит:
+
+| Schema | Условие | Поля |
+|---|---|---|
+| `WebSite` + `SearchAction` | Всегда | name, url, description, inLanguage, publisher, potentialAction (target `/?search={search_term_string}`) |
+| `Organization` | Всегда | name, url, logo (опционально), sameAs (socials) |
+| `BreadcrumbList` | Если `$breadcrumbs` не пуст | itemListElement (position, name, item) |
+| `Article` | Только на `!empty($article)` | headline, description, datePublished, dateModified, mainEntityOfPage, author, publisher, image (ImageObject), inLanguage |
+
+### 17.4 Sitemap (`SitemapController`)
+
+- Маршрут: `GET /sitemap.xml` → `SitemapController::__invoke()`.
+- Кэширование: `Cache::remember('sitemap.xml', 3600)` — 1 час.
+- Включает:
+  - Статические страницы: `/` (daily, 1.0), `/about` (monthly, 0.5), `/contact` (monthly, 0.5), `/privacy` (monthly, 0.3).
+  - Опубликованные статьи (`Article::where('is_published', true)->where('published_at', '<=', now())`) — weekly, 0.8.
+  - Рубрики с опубликованными статьями — monthly, 0.6.
+  - Активные теги с опубликованными статьями — monthly, 0.5.
+- Для статей с изображениями — `<image:image>` (Google Image Sitemap).
+- Content-Type: `application/xml`, namespace `http://www.google.com/schemas/sitemap-image/1.1`.
+
+### 17.5 robots.txt
+
+Файл `public/robots.txt`:
+
+```
+User-agent: *
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /login
+Disallow: /register
+Disallow: /test-*
+Disallow: /notpublic
+Disallow: /unsubscribe
+Disallow: /consent/revoke
+Disallow: /*?search=
+Disallow: /*?page=
+Sitemap: https://example.com/sitemap.xml
+```
+
+### 17.6 Slug-URL рубрик и тегов
+
+- `Rubric` и `Tag` имеют поле `slug` (auto-generated в `booted()` через `Str::slug()` + уникальность).
+- Маршруты: `GET /rubric/{rubric:slug}`, `GET /tag/{tag:slug}`.
+- Редиректы: `GET /rubric/{legacyId}` и `GET /tag/{legacyId}` → 301 на slug-URL (или 404, если запись удалена).
+
+### 17.7 H1-иерархия
+
+- Главная: hero `<h1>`, список статей `<h2>`.
+- Рубрика/тег: `<h1>` с названием рубрики/тега.
+- Статья/about/contact/privacy: ровно один `<h1>`.
+
+### 17.8 Хлебные крошки
+
+- Партиал `includes/breadcrumbs.blade.php` — рендерится при `$breadcrumbs !== []`.
+- В layout: `@include('includes.breadcrumbs')` после `<main>`.
+- JSON-LD BreadcrumbList генерируется в `includes/jsonld.blade.php`.
+
+### 17.9 nginx gzip
+
+`docker/nginx/conf.d/nginx.conf`:
+
+- `gzip on; gzip_comp_level 6; gzip_min_length 256;`
+- `gzip_types`: text/plain, text/css, text/javascript, application/javascript, application/json, application/xml, application/rss+xml, image/svg+xml.
+- HTML сжимается по умолчанию (nginx включает gzip для text/html автоматически).

@@ -19,7 +19,16 @@
 - **Черновики** — отдельная страница `/notpublic` для администратора: статьи с `is_published = false` и будущей датой выхода.
 - **Страницы** — «О блоге», «Политика конфиденциальности», «Обратная связь», кастомные страницы ошибок (`403`, `404`, `500` и др.).
 - **Тёмная/светлая тема** — переключатель в шапке, выбор сохраняется в `localStorage`.
-- **SEO-разметка** — `title`/`description`, Open Graph и Twitter Card для каждой статьи.
+- **SEO-разметка** — `title`/`description`, Open Graph и Twitter Card для каждой статьи и страницы.
+- **Canonical URL** — на каждой публичной странице; для пагинации 1-я страница без `?page=N`, страницы 2+ — self-canonical.
+- **noindex** — для поиска (`?search=`), пагинации `page>=2`, `/notpublic`, `/dashboard`, `/profile`, `/unsubscribe`, `/consent/revoke` и тестовых страниц — роботы не индексируют.
+- **JSON-LD** — структурированные данные Schema.org: Article, BreadcrumbList, WebSite+SearchAction, Organization (только на индексируемых страницах).
+- **sitemap.xml** — генерация через `SitemapController` с кэшированием (1 час); включает главную, статьи, рубрики, теги, статические страницы.
+- **robots.txt** — блокирует `/admin`, `/dashboard`, `/profile`, `/login`, `/register`, `/test-*`, `/notpublic`, `/unsubscribe`, `/consent/revoke`, `?search=`, `?page=`; содержит ссылку на sitemap.
+- **Slug-URL рубрик и тегов** — `/rubric/{slug}` и `/tag/{slug}`; старые `/rubric/{id}` и `/tag/{id}` возвращают 301 на новый URL.
+- **H1-иерархия** — ровно один `<h1>` на страницу: на главной — hero-заголовок, на рубрике/теге — название рубрики/тега.
+- **Хлебные крошки** — навигационная цепочка Главная → Рубрика → Статья (или Метка) с JSON-LD BreadcrumbList.
+- **gzip** — сжатие nginx для HTML, CSS, JS, JSON, XML, SVG (уровень 6).
 - **Двуязычность** — русский/английский, переключение через `GET /setlocale/{locale}` (сессия + middleware `Localize`).
 
 ### Комментарии

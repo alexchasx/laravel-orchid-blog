@@ -117,9 +117,9 @@ class SitemapController extends Controller
     /**
      * Опубликованные статьи.
      *
-     * @return \Illuminate\Database\Collection<int, \App\Models\Article>
+     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\Article>
      */
-    private function publishedArticles(): \Illuminate\Database\Collection
+    private function publishedArticles(): \Illuminate\Database\Eloquent\Collection
     {
         return Article::query()
             ->where('is_published', true)
