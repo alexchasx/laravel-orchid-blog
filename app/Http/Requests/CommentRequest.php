@@ -36,6 +36,15 @@ class CommentRequest extends FormRequest
             $rules['captcha'] = ['required', new MathCaptchaRule()];
         }
 
+        // Согласия на обработку ПДн (152-ФЗ) — обязательны всегда.
+        $rules['consent_processing'] = ['required', 'accepted'];
+        $rules['consent_distribution'] = ['required', 'accepted'];
+        $rules['distribution_conditions'] = [
+            'nullable',
+            'string',
+            'max:' . config('consent.distribution.max_conditions_length', 1000),
+        ];
+
         return $rules;
     }
 
@@ -53,6 +62,11 @@ class CommentRequest extends FormRequest
             'email.email' => 'Введите корректный email.',
             'email.max' => 'Email не должен превышать 255 символов.',
             'captcha.required' => 'Ответьте на контрольный вопрос.',
+            'consent_processing.required' => 'Необходимо дать согласие на обработку персональных данных.',
+            'consent_processing.accepted' => 'Необходимо принять согласие на обработку персональных данных.',
+            'consent_distribution.required' => 'Необходимо дать согласие на распространение персональных данных.',
+            'consent_distribution.accepted' => 'Необходимо принять согласие на распространение персональных данных.',
+            'distribution_conditions.max' => 'Дополнительные условия не должны превышать :max символов.',
         ];
     }
 }

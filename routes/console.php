@@ -10,3 +10,6 @@ Artisan::command('inspire', function () {
 
 // Автопубликация статей, чьё время публикации наступило.
 Schedule::command('articles:publish-scheduled')->everyMinute();
+
+// Обработка просроченных отзывов согласий (раз в сутки).
+Schedule::command('consents:process-revocations')->daily();

@@ -42,7 +42,7 @@
 | `app/Observers/` | `ArticleObserver`, `RubricObserver`, `TagObserver` — обновление счётчиков и рассылка |
 | `app/Orchid/` | Админка: `Screens/`, `Layouts/`, `Filters/RoleFilter`, `Presenters/UserPresenter`, `PlatformProvider` |
 | `app/Mail/` | `NewArticleMail` — письмо подписчикам о новой статье |
-| `app/Console/Commands/` | `PublishScheduledArticles` — автопубликация по расписанию |
+| `app/Console/Commands/` | `PublishScheduledArticles` — автопубликация по расписанию; `ProcessRevocations` — обработка просроченных отзывов согласий |
 | `app/Support/`, `app/Rules/` | `MathCaptcha`, `MathCaptchaRule` |
 | `app/helpers.php` | Глобальные функции `active_link()`, `alert()` (автозагрузка через composer `autoload-dev.files`) |
 
@@ -74,6 +74,10 @@ Laravel 13-стиль: ядро без `Http/Kernel.php`.
 | `GET /unsubscribe/{token}` | `SubscriberController@unsubscribe` | Отписка по одноразовому токену |
 | `POST /comment.create` (throttle:10,1) | `CommentController@store` | Комментарий (гость или авторизованный) |
 | `DELETE /delete.{comment}` | `CommentController@delete` | Удаление комментария (auth) |
+| `GET /consent/processing` | `ConsentController@processing` | Текст согласия на обработку ПДн |
+| `GET /consent/distribution` | `ConsentController@distribution` | Текст согласия на распространение ПДн |
+| `GET /consent/revoke` | — | Форма отзыва согласия (query-параметры) |
+| `POST /consent/revoke` (throttle:10,1) | `ConsentController@revoke` | Отзыв согласия (e-mail + comment_id + consent_type) |
 | `GET /setlocale/{locale}` | `MainController@setLocale` | Переключение языка (сессия) |
 | `/dashboard`, `/profile*` | Breeze | Личная зона |
 
@@ -85,6 +89,7 @@ Laravel 13-стиль: ядро без `Http/Kernel.php`.
 
 - `Schedule::command('articles:publish-scheduled')->everyMinute()` — планировщик.
 - Команда `articles:publish-scheduled` (`app/Console/Commands/PublishScheduledArticles.php`): переключает `is_published=true` у статей с `published_at <= now`; сохранение триггерит `ArticleObserver::updated` → рассылка подписчикам.
+- `Schedule::command('consents:process-revocations')->daily()` — команда `ProcessRevocations` (`app/Console/Commands/ProcessRevocations.php`): находит отозванные согласия (`revoked_at` + необработанные), срок которых наступил, и выполняет обезличивание (распространение, 3 рабочих дня) или удаление комментария (обработка, 7 рабочих дней); отсчёт — от `revoked_at` рабочими днями.
 
 ## 6. Модели и схема БД
 
@@ -96,10 +101,11 @@ Laravel 13-стиль: ядро без `Http/Kernel.php`.
 | `Rubric` | `rubrics` | hasMany `Article` | `softDeletes`; `$timestamps=false`; `parent_id`, `slug`, `title`, `description` |
 | `Tag` | `tags` | belongsToMany `Article`, hasMany `ArticleTag` | `softDeletes`; `$timestamps=false`; `active`, `popular`, `count_articles` (поддерживается вручную) |
 | `ArticleTag` | `article_tags` | belongsToMany-связка | без timestamps |
-| `Comment` | `comments` | belongsTo `Article`, belongsTo `User` | `softDeletes`; `active` — модерация (гости → `false`); `ip` для гостей |
+| `Comment` | `comments` | belongsTo `Article`, belongsTo `User` | `softDeletes`; `active` — модерация (гости → `false`); `ip` для гостей; `consent_processing_log_id`, `consent_distribution_log_id` (FK → `consent_logs`); `is_anonymized` |
 | `Contact` | `contacts` | belongsTo `User` (nullable) | сообщения обратной связи; guest-поля `name`/`email` |
 | `Subscriber` | `subscribers` | belongsTo `User` (nullable) | `email` уникален; `token` (64) — одноразовая отписка; `status` = `active`/`unsubscribed`; в `booted()` — автогенерация токена/статуса |
 | `User` | `users` (Orchid) | hasMany `Article`, `Comment`, `Contact` | extends `Orchid\Platform\Models\User`; роли через `role_users`; `isAdmin()` = `hasAccess('platform.custom.articles')`; константы ролей `user`/`moderator`/`admin` |
+| `ConsentLog` | `consent_logs` | belongsTo `Comment` (nullable, `nullOnDelete`) | `TYPE_PROCESSING` / `TYPE_DISTRIBUTION`; `consent_text` (дословный текст), `consent_version`, `ip_address`, `user_agent`, `page_url`, `consented_at`, `revoked_at`, `processed_at` (nullable); `comment_id` nullable — лог сохраняется после полного удаления комментария; scope `active()`, метод `revoke()` |
 
 ### Ключевые скоупы и методы
 
@@ -121,6 +127,10 @@ Laravel 13-стиль: ядро без `Http/Kernel.php`.
 ### `CacheService`
 
 `remember()` — кэш на 2 дня по `Model::SIDEBAR_CACHE_KEY` (`sidebar-rubrics`/`sidebar-tags`). **Важно:** сейчас функционал активен частично — сайдбар используется только в legacy-шаблоне `layouts/base.blade.php`, а вызовы инвалидации кэша в наблюдателях `RubricObserver`/`TagObserver` закомментированы. Инъекция в `ArticleController` есть (`app/Http/Controllers/ArticleController.php:23`), но фактически не используется. Обновление кэша — через наблюдатели (паттерн «без Events/Listeners», см. `AGENTS.md`).
+
+### `ConsentTextBuilder`
+
+Формирует полные тексты согласий на обработку и распространение ПДн на основе `config('operator')` и `config('consent')`. Методы: `processingText()` — статический текст (цель, перечень данных, действия, третье лицо — хостинг-провайдер, срок, порядок отзыва); `distributionText(array $data)` — динамический текст с именем субъекта и дополнительными условиями/запретами из формы комментария. Обе версии включают дату вступления в силу и версию текста. Тексты для публичных страниц и для сохранения в `consent_logs` — идентичны.
 
 ## 8. Наблюдатели (`app/Observers/`)
 
@@ -185,6 +195,8 @@ Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRub
 
 - **Языки**: `lang/ru`, `lang/en`, `lang/ru.json`. Переключение — `GET /setlocale/{locale}` (`MainController`), локаль хранится в сессии `user_locale`, применяется middleware `Localize`.
 - **Конфиг сайта**: `config/my_config.php` (`MY_GITHUB`, `MY_EMAIL`, `MY_TELEGRAM`, `CONTACT_EMAIL`, `SLOGAN`, `SUB_LOGO`) — выводятся в шаблонах через `config('my_config.*')`.
+- **Конфиг оператора ПДн**: `config/operator.php` (`OPERATOR_NAME`, `OPERATOR_ADDRESS`, `OPERATOR_INN`, `OPERATOR_OGRN`, `OPERATOR_EMAIL`, `OPERATOR_PHONE`, `SITE_URL`) — реквизиты оператора, используемые в текстах согласий.
+- **Конфиг согласий**: `config/consent.php` (`versions.processing`, `versions.distribution`, `distribution.max_conditions_length`, `revocation_days`) — версии текстов, лимиты, сроки отзыва.
 
 ## 14. Безопасность
 

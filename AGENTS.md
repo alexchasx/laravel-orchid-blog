@@ -44,7 +44,7 @@ UI-тексты, комментарии в коде и вся документа
 ## Тесты
 
 Тесты есть и реальные (PHPUnit, база `testing` по `phpunit.xml`):
-- `tests/Feature/` — `PublicPagesTest`, `UnpublishedArticlesPageTest`, `CommentTest`, `CommentScreenTest`, `ContactPageTest`, `SubscriberTest`, `ProfileTest`, а также `Auth/*` от Breeze;
+- `tests/Feature/` — `PublicPagesTest`, `UnpublishedArticlesPageTest`, `CommentTest`, `CommentScreenTest`, `ContactPageTest`, `SubscriberTest`, `ProfileTest`, `ConsentTest`, а также `Auth/*` от Breeze;
 - `tests/Unit/` — `ArticleModelTest`, `ArticleServiceTest`, `CommentModelTest`, `RubricModelTest`, `TagModelTest`.
 
 При изменении доменной логики обновляй или добавляй тесты (`make test`). CI отсутствует.
@@ -75,6 +75,7 @@ UI-тексты, комментарии в коде и вся документа
 - Laravel 13-style layout: роутинг/миддлвары регистрируются в `bootstrap/app.php` (нет `Http/Kernel.php`). Кастомные `TrustProxies` и `VerifyCsrfToken` заменяют дефолтные; `Localize` добавлен в группу `web`; алиас `access` → Orchid Access.
 - Env-настройки сайта — `config/my_config.php` (`MY_GITHUB`, `MY_TELEGRAM`, `CONTACT_EMAIL`, `SUB_LOGO`, `SLOGAN`).
 - **Загрузка изображений к статьям не подключена:** колонка `articles.image` есть и в `fillable`, и в `Article`, но в `CreateOrUpdateArticle` нет поля `Picture`/`Upload`, а в `article.blade.php` стоит заглушка-градиент. README упоминает это как «чего пока нет» — при включении фичи поправь README.
+- **Согласия на ПДн (152-ФЗ):** форма комментария содержит два обязательных чекбокса (`consent_processing`, `consent_distribution`); кнопка отправки заблокирована (`disabled`), пока не отмечены оба. Каждый факт согласия фиксируется в `consent_logs` (IP, UA, URL, дословный текст, версия). Тексты формируются в `ConsentTextBuilder` из `config/operator.php` + `config/consent.php` (без Blade-литералов в heredoc — только переменные PHP). Отзыв на распространение → обезличивание комментария (`is_anonymized = true`, `name = 'Аноним'`); на обработку → forceDelete. Сроки: прекращение распространения — 3 рабочих дня (`config('consent.distribution.stop_days')`, ч. 4 ст. 9 № 152-ФЗ), удаление/обезличивание — 7 рабочих дней (`config('consent.revocation_days')`). При отзыве на обработку комментарий удаляется (`forceDelete`), а лог сохраняется: `consent_logs.comment_id` nullable (`nullOnDelete`) → обнуляется, `revoked_at` фиксирует факт отзыва. Просроченные отзывы догоняет команда `consents:process-revocations` (daily, контейнер `blog_schedule`). Журнал просматривается через phpMyAdmin (экрана Orchid нет). Маршруты `/consent/*` доступны гостям.
 
 ## Выгрузка контекста перед завершением сессии (для код-агента)
 

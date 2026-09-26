@@ -56,11 +56,13 @@ class ConsentLog extends Model
         'page_url',
         'consented_at',
         'revoked_at',
+        'processed_at',
     ];
 
     protected $casts = [
         'consented_at' => 'datetime',
         'revoked_at' => 'datetime',
+        'processed_at' => 'datetime',
     ];
 
     /**

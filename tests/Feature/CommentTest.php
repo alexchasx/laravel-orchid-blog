@@ -42,6 +42,8 @@ class CommentTest extends TestCase
         $response = $this->actingAs($user)->post('/comment.create', [
             'comment' => 'Отличная статья, спасибо!',
             'article_id' => $article->id,
+            'consent_processing' => 1,
+            'consent_distribution' => 1,
         ]);
 
         $response->assertRedirect();
@@ -65,6 +67,8 @@ class CommentTest extends TestCase
             'name' => 'Гость',
             'email' => 'guest@example.com',
             'captcha' => $this->solveCaptcha(),
+            'consent_processing' => 1,
+            'consent_distribution' => 1,
         ]);
 
         $response->assertRedirect();

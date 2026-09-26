@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ConsentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProfileController;
@@ -31,6 +32,19 @@ Route::post('contact.store', [ContactController::class, 'store'])
 
 Route::get('about', [MainController::class, 'about'])->name('about');
 Route::get('privacy', [MainController::class, 'privacy'])->name('privacy');
+
+// Публичные страницы текстов согласий (152-ФЗ).
+Route::get('consent/processing', [ConsentController::class, 'processing'])
+    ->name('consent.processing');
+Route::get('consent/distribution', [ConsentController::class, 'distribution'])
+    ->name('consent.distribution');
+
+// Отзыв согласия на обработку/распространение ПДн.
+Route::get('consent/revoke', fn () => view('consent.revoke'))
+    ->name('consent.revoke.form');
+Route::post('consent/revoke', [ConsentController::class, 'revoke'])
+    ->middleware('throttle:10,1')
+    ->name('consent.revoke');
 
 // Подписка на новые статьи.
 Route::post('subscribe', [SubscriberController::class, 'store'])

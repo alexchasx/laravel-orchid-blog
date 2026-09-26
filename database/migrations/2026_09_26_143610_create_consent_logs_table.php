@@ -45,6 +45,9 @@ return new class extends Migration
             $table->timestamp('revoked_at')->nullable();
             $table->index('revoked_at');
 
+            // Дата/время фоновой обработки отзыва (nullable)
+            $table->timestamp('processed_at')->nullable();
+
             $table->timestamps();
 
             // Уникальная активная запись: один тип согласия на комментарий
