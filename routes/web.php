@@ -8,6 +8,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\FeedController;
 use App\Http\Controllers\SubscriberController;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,9 @@ Route::get('/robots.txt', RobotsController::class)->name('robots');
 
 // Sitemap — без кэширования в роутах, кэш внутри контроллера.
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+
+// RSS 2.0-лента — без кэширования в роутах, кэш внутри контроллера.
+Route::get('/rss', FeedController::class)->name('feed');
 
 // Тестовые маршруты (не удалять)
 Route::get('/test-400', fn () => abort(400));
