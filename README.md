@@ -29,6 +29,8 @@
 - **H1-иерархия** — ровно один `<h1>` на страницу: на главной — hero-заголовок, на рубрике/теге — название рубрики/тега.
 - **Хлебные крошки** — навигационная цепочка Главная → Рубрика → Статья (или Метка) с JSON-LD BreadcrumbList.
 - **gzip** — сжатие nginx для HTML, CSS, JS, JSON, XML, SVG (уровень 6).
+- **Favicon** — `favicon.ico`, `apple-touch-icon.png` (180×180) и `site.webmanifest` для iOS-закладок и PWA-совместимости.
+- **Страницы согласий** `/consent/processing` и `/consent/distribution` — индексируются роботами (полезные юридические страницы), не включаются в sitemap (низкая ценность для навигации), не блокируются в robots.txt.
 - **Двуязычность** — русский/английский, переключение через `GET /setlocale/{locale}` (сессия + middleware `Localize`).
 
 ### Комментарии
@@ -70,7 +72,7 @@
 > но в форме статьи поле не подключено, а в шаблоне статьи стоит заглушка-градиент
 > (`resources/views/article.blade.php`). Чтобы включить: добавьте `Picture::make('article.image')`
 > в `app/Orchid/Layouts/CreateOrUpdateArticle.php` и выведите значение в шаблоне.
-> Свои favicon и логотип также нужно заменить — см. раздел «Что нужно поменять».
+> Свои favicon, apple-touch-icon и логотип также нужно заменить — см. раздел «Что нужно поменять».
 >
 > **Настройка оператора ПДн:** заполните переменные `OPERATOR_NAME`, `OPERATOR_ADDRESS`,
 > `OPERATOR_INN`, `OPERATOR_OGRN`, `OPERATOR_EMAIL`, `OPERATOR_PHONE` в `.env` —
@@ -220,7 +222,9 @@ docker compose -f docker/docker-compose.yml exec node npm run build
 
 | Что | Где | Зачем |
 |---|---|---|
-| `favicon.ico` | `public/favicon.ico` | Заглушка Laravel. Подключается в `techlog` (`layouts/techlog.blade.php`) — замените файл в `public/` на свой |
+| `favicon.ico` | `public/favicon.ico` | Заглушка Laravel. Подключается в `techlog` — замените на свой |
+| `apple-touch-icon.png` | `public/apple-touch-icon.png` | Иконка для iOS-закладок (180×180), заглушка-акцент |
+| `site.webmanifest` | `public/site.webmanifest` | PWA-манифест (name, icons, theme_color), опционально |
 | Логотип / OG-изображение | `public/` | Не поставляются: OG-картинка статей не загружается, в `article.blade.php` стоит заглушка-градиент |
 
 Ассеты Orchid (`public/vendor/orchid/`) — это опубликованная копия ассетов пакета,

@@ -93,13 +93,15 @@
     {{-- Favicon --}}
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
 
     {{-- RSS-лента --}}
     <link rel="alternate" type="application/rss+xml" title="{{ config('app.name') }} — RSS" href="{{ route('feed') }}">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {{-- Preload основных начертаний Inter для ускорения LCP/FCP --}}
+    <link rel="preload" as="font" href="/fonts/Inter-Regular.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="/fonts/Inter-Bold.woff2" type="font/woff2" crossorigin>
 
     @vite(['resources/sass/techlog/index.scss', 'resources/js/cookie-banner.js', 'resources/js/techlog.js'])
 
