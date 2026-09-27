@@ -100,11 +100,17 @@ class RubricListScreen extends Screen
 
     public function createOrUpdateRubric(Request $request): void
     {
+        $request->validate([
+            'rubric.title' => ['required', 'min:3', 'max:254'],
+            'rubric.description' => ['nullable', 'string', 'max:500'],
+        ]);
+
         $rubricId = $request->input('rubric.id');
         Rubric::updateOrCreate([
             'id' => $rubricId,
         ], [
             'title' => $request->input('rubric.title'),
+            'description' => $request->input('rubric.description'),
         ]);
 
         is_null($rubricId) ? Toast::info('Рубрика создана') : Toast::info('Рубрика обновлена');

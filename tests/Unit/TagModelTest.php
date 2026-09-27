@@ -35,6 +35,7 @@ class TagModelTest extends TestCase
 
         $this->assertSame([
             'title',
+            'description',
             'slug',
             'popular',
             'active',

@@ -25,6 +25,10 @@
         $canonicalUrl = $canonical ?? request()->url();
         // Для 1-й страницы пагинации убираем ?page=N
         $canonicalUrl = (string) \Illuminate\Support\Uri::of($canonicalUrl)->withoutQuery('page');
+        // Для результатов поиска canonical указывает на главную (страница noindex).
+        if (request()->routeIs('home') && request()->filled('search')) {
+            $canonicalUrl = route('home');
+        }
     @endphp
     <link rel="canonical" href="{{ $canonicalUrl }}">
 

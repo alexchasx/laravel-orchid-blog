@@ -5,6 +5,7 @@ namespace App\Orchid\Layouts;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Layouts\Rows;
 
 class CreateOrUpdateRubric extends Rows
@@ -29,6 +30,11 @@ class CreateOrUpdateRubric extends Rows
             Input::make('rubric.slug')->title('Слаг'),
 
             Input::make('rubric.title')->required()->title('Заголовок'),
+
+            TextArea::make('rubric.description')
+                ->title('Описание')
+                ->rows(3)
+                ->placeholder('Краткое описание рубрики — используется как meta description страницы рубрики'),
 
             // CheckBox::make('rubric.published')
             //     ->value(1)

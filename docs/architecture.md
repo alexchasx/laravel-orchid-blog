@@ -126,7 +126,7 @@ Laravel 13-стиль: ядро без `Http/Kernel.php`.
 
 ### `CacheService`
 
-`remember()` — кэш на 2 дня по `Model::SIDEBAR_CACHE_KEY` (`sidebar-rubrics`/`sidebar-tags`). **Важно:** сейчас функционал активен частично — сайдбар используется только в legacy-шаблоне `layouts/base.blade.php`, а вызовы инвалидации кэша в наблюдателях `RubricObserver`/`TagObserver` закомментированы. Инъекция в `ArticleController` есть (`app/Http/Controllers/ArticleController.php:23`), но фактически не используется. Обновление кэша — через наблюдатели (паттерн «без Events/Listeners», см. `AGENTS.md`).
+`remember()` — кэш на 2 дня по `Model::SIDEBAR_CACHE_KEY` (`sidebar-rubrics`/`sidebar-tags`). **Важно:** сейчас функционал неактивен — legacy-шаблон `layouts/base.blade.php`, в котором выводился сайдбар, удалён (см. секцию 17), а вызовы инвалидации кэша в наблюдателях `RubricObserver`/`TagObserver` закомментированы. Инъекция в `ArticleController` есть (`app/Http/Controllers/ArticleController.php:23`), но фактически не используется. Обновление кэша — через наблюдатели (паттерн «без Events/Listeners», см. `AGENTS.md`).
 
 ### `ConsentTextBuilder`
 
@@ -172,10 +172,11 @@ Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRub
 
 - **Layout** `resources/views/layouts/techlog.blade.php` — шапка с навигацией (в т.ч. выпадающее меню «Темы» на клик, список рубрик внедряется `RubricsComposer`) и переключателем темы, `<main>`, футер, кнопка «наверх»; OG-разметка и SEO-мета (`metaTitle`/`metaDesc` или meta статьи).
 - **Страницы**: `index.blade.php` (hero, masonry-сетка постов, newsletter-модалка), `about.blade.php`, `privacy.blade.php`, `article.blade.php` (шапка статьи, aside TOC, prose-контент, hero-image, теги, комментарии), `contact.blade.php`, `unsubscribe.blade.php`, `dashboard.blade.php`, `errors/*` (кастомные страницы ошибок), `emails/new-article.blade.php`.
-- **Инклюды**: `includes/comment_modal`, `comments_form`, `comments_list`, `cookie_banner`, `locale_links`, `meta_tags`, `newsletter_modal`, `publication_date` (не подключается), `sidebar` (legacy). Инклюд `includes/donate` удалён в секции 12 плана-шаблона: содержал кошелёк Яндекс.Деньги и нигде не использовался.
+- **Инклюды**: `includes/comment_modal`, `comments_form`, `comments_list`, `cookie_banner`, `jsonld`, `breadcrumbs`, `locale_links`, `newsletter_modal`, `publication_date` (не подключается), `sidebar` (legacy). Инклюды `includes/donate` и `includes/meta_tags` удалены (секция 12 плана-шаблона и секция 17 соответственно).
 - **Стили**: `resources/sass/techlog/index.scss` (SCSS-модули `_variables`, `_reset`, `_base`, `_components`, `_forms`, `_utilities`, `_responsive`), CSS-переменные, тёмная темы через `html.light` + `localStorage`.
 - **JS**: `resources/js/techlog.js` — мобильное меню, выпадающее меню «Темы», тема, scroll-reveal, to-top, валидация форм, модалки. `resources/js/app.js` — legacy/Alpine.
-- **Legacy** (не трогать без необходимости): `layouts/base.blade.php`, `layouts/app.blade.php`, `layouts/guest.blade.php`, `includes/sidebar.blade.php`, `resources/sass/style.scss`, Tailwind. Используется Breeze/auth-страницами и старыми представлениями.
+- **Breeze**: `layouts/app.blade.php`, `layouts/guest.blade.php` — используются auth-страницами и `dashboard`/`profile` (отдают `noindex, nofollow`).
+- **Legacy** (не трогать без необходимости): `includes/sidebar.blade.php`, `resources/sass/style.scss`, Tailwind. Layout `layouts/base.blade.php` удалён в секции 17.
 
 ## 11. Комментарии и модерация
 

@@ -214,13 +214,13 @@ docker compose -f docker/docker-compose.yml exec node npm run build
 | `composer.json` → `description`, `keywords` | корневой файл | Описание пакета (по умолчанию «The Laravel Framework.», ключи Laravel) |
 | `package.json` → `name` | корневой файл | Имя npm-пакета (в шаблоне — `laravel-blog-template`; пакет помечен `private`, менять необязательно) |
 | Название в шапке | `resources/views/layouts/techlog.blade.php:44` | Логотип-текст `TECH//LOG` задан вручную, а не через `APP_NAME` |
-| `robots.txt` | `public/robots.txt` | Сейчас открыт для всех (`Disallow:`) — при необходимости закройте админку |
+| `robots.txt` | `GET /robots.txt` → `RobotsController` | Динамический: блокирует служебные пути и содержит `Sitemap: {APP_URL}/sitemap.xml` |
 
 ### Логотип и favicon
 
 | Что | Где | Зачем |
 |---|---|---|
-| `favicon.ico` | `public/favicon.ico` | Заглушка Laravel. Подключается в `techlog` (`layouts/techlog.blade.php`) и в legacy-шаблоне `layouts/base.blade.php` — замените файл в `public/` на свой |
+| `favicon.ico` | `public/favicon.ico` | Заглушка Laravel. Подключается в `techlog` (`layouts/techlog.blade.php`) — замените файл в `public/` на свой |
 | Логотип / OG-изображение | `public/` | Не поставляются: OG-картинка статей не загружается, в `article.blade.php` стоит заглушка-градиент |
 
 Ассеты Orchid (`public/vendor/orchid/`) — это опубликованная копия ассетов пакета,
@@ -249,7 +249,6 @@ docker compose -f docker/docker-compose.yml exec node npm run build
 | Переменная | Где используется |
 |---|---|
 | `SLOGAN` | футер `layouts/techlog.blade.php` |
-| `SUB_LOGO` | подзаголовок сайта (legacy-шаблон `layouts/base.blade.php`) |
 | `MY_GITHUB`, `MY_TELEGRAM` | ссылки в футере (показываются, только если значение не пустое) |
 | `CONTACT_EMAIL` | страница «Контакты» (`contact.blade.php`); ссылка показывается, только если значение не пустое |
 | `MAIL_FROM_ADDRESS` | отправитель писем рассылки |

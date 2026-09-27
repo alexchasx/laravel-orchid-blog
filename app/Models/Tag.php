@@ -15,6 +15,7 @@ use Orchid\Screen\AsSource;
  *
  * @property int $id
  * @property string $title
+ * @property string|null $description
  * @property string|null $slug
  * @property int|null $popular
  * @property int $active
@@ -50,6 +51,7 @@ class Tag extends Model
 
     protected $fillable = [
         'title',
+        'description',
         'slug',
         'popular',
         'active',
