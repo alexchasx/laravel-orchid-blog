@@ -40,7 +40,7 @@ class SitemapController extends Controller
                         . '<image:url>%s</image:url>'
                         . '<image:title>%s</image:title>'
                         . '</image:image>',
-                        e(Storage::url($article->image)),
+                        e(\App\Support\Seo::absoluteUrl(Storage::url($article->image))),
                         e($article->title)
                     );
                 }

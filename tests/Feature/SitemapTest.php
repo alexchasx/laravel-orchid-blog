@@ -98,4 +98,22 @@ class SitemapTest extends TestCase
         $this->assertStringContainsString('/rubric/', $content);
         $this->assertStringContainsString('/tag/', $content);
     }
+
+    public function test_sitemap_image_url_is_absolute(): void
+    {
+        $this->createPublishedArticle([
+            'image' => 'articles/test.jpg',
+        ]);
+
+        $response = $this->get('/sitemap.xml');
+
+        $response->assertStatus(200);
+        $content = $response->getContent();
+        // <image:url> должен содержать абсолютный URL (APP_URL)
+        $appUrl = config('app.url');
+        $this->assertStringContainsString(
+            '<image:url>' . $appUrl . '/storage/articles/test.jpg</image:url>',
+            $content
+        );
+    }
 }

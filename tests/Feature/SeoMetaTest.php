@@ -325,4 +325,97 @@ class SeoMetaTest extends TestCase
         $this->assertStringContainsString('Sitemap:', $content);
         $this->assertStringContainsString('/sitemap.xml', $content);
     }
+
+    /* ------------------------------------------------------------------
+     * Абсолютные URL в OG/Twitter/JSON-LD
+     * ------------------------------------------------------------------ */
+
+    public function test_article_og_image_is_absolute_url(): void
+    {
+        $article = $this->createPublishedArticle([
+            'image' => 'articles/test.jpg',
+        ]);
+
+        $response = $this->get("/article/{$article->slug}");
+
+        $response->assertOk();
+        $content = $response->getContent();
+        // og:image должен содержать APP_URL (абсолютный URL)
+        $appUrl = config('app.url');
+        $this->assertStringContainsString(
+            'property="og:image" content="' . $appUrl . '/storage/articles/test.jpg"',
+            $content
+        );
+    }
+
+    public function test_article_twitter_image_is_absolute_url(): void
+    {
+        $article = $this->createPublishedArticle([
+            'image' => 'articles/test.jpg',
+        ]);
+
+        $response = $this->get("/article/{$article->slug}");
+
+        $response->assertOk();
+        $content = $response->getContent();
+        $appUrl = config('app.url');
+        $this->assertStringContainsString(
+            'name="twitter:image" content="' . $appUrl . '/storage/articles/test.jpg"',
+            $content
+        );
+    }
+
+    public function test_article_og_url_matches_canonical(): void
+    {
+        $article = $this->createPublishedArticle();
+
+        $response = $this->get("/article/{$article->slug}");
+
+        $response->assertOk();
+        $content = $response->getContent();
+        $expectedUrl = route('articleShow', $article);
+        $this->assertStringContainsString(
+            'property="og:url" content="' . $expectedUrl . '"',
+            $content
+        );
+        $this->assertStringContainsString(
+            'rel="canonical" href="' . $expectedUrl . '"',
+            $content
+        );
+    }
+
+    public function test_search_page_og_url_matches_canonical(): void
+    {
+        $response = $this->get('/?search=Laravel');
+
+        $response->assertOk();
+        $content = $response->getContent();
+        // На странице поиска canonical = главная
+        $expectedUrl = route('home');
+        $this->assertStringContainsString(
+            'property="og:url" content="' . $expectedUrl . '"',
+            $content
+        );
+        $this->assertStringContainsString(
+            'rel="canonical" href="' . $expectedUrl . '"',
+            $content
+        );
+    }
+
+    public function test_seo_helper_returns_null_for_null_input(): void
+    {
+        $this->assertNull(\App\Support\Seo::absoluteUrl(null));
+    }
+
+    public function test_seo_helper_returns_absolute_as_is(): void
+    {
+        $result = \App\Support\Seo::absoluteUrl('https://example.com/image.png');
+        $this->assertSame('https://example.com/image.png', $result);
+    }
+
+    public function test_seo_helper_prepends_app_url_for_relative_paths(): void
+    {
+        $result = \App\Support\Seo::absoluteUrl('/storage/image.jpg');
+        $this->assertSame(config('app.url') . '/storage/image.jpg', $result);
+    }
 }

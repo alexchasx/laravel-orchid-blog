@@ -40,25 +40,25 @@
         <meta property="og:type" content="article">
         <meta property="og:title" content="{{ $article->title }}">
         <meta property="og:description" content="{{ $article->meta_desc ?: config('seo.default_description') }}">
-        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:url" content="{{ $canonicalUrl }}">
         <meta property="og:locale" content="{{ config('seo.og_locale', 'ru_RU') }}">
         <meta property="og:site_name" content="{{ str_replace('{app_name}', config('app.name'), config('seo.og_site_name')) }}">
         @if(!empty($article->image))
-            <meta property="og:image" content="{{ Storage::url($article->image) }}">
+            <meta property="og:image" content="{{ \App\Support\Seo::absoluteUrl(Storage::url($article->image)) }}">
         @else
             @if(!empty(config('seo.og_image')))
-                <meta property="og:image" content="{{ config('seo.og_image') }}">
+                <meta property="og:image" content="{{ \App\Support\Seo::absoluteUrl(config('seo.og_image')) }}">
             @endif
         @endif
     @else
         <meta property="og:type" content="website">
         <meta property="og:title" content="{{ ($metaTitle ?? '') ?: $seoDefaultTitle }}">
         <meta property="og:description" content="{{ ($metaDesc ?? '') ?: config('seo.default_description') }}">
-        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:url" content="{{ $canonicalUrl }}">
         <meta property="og:locale" content="{{ config('seo.og_locale', 'ru_RU') }}">
         <meta property="og:site_name" content="{{ str_replace('{app_name}', config('app.name'), config('seo.og_site_name')) }}">
         @if(!empty(config('seo.og_image')))
-            <meta property="og:image" content="{{ config('seo.og_image') }}">
+            <meta property="og:image" content="{{ \App\Support\Seo::absoluteUrl(config('seo.og_image')) }}">
         @endif
     @endif
 
@@ -68,9 +68,9 @@
         <meta name="twitter:title" content="{{ $article->title }}">
         <meta name="twitter:description" content="{{ $article->meta_desc ?: config('seo.default_description') }}">
         @if(!empty($article->image))
-            <meta name="twitter:image" content="{{ Storage::url($article->image) }}">
+            <meta name="twitter:image" content="{{ \App\Support\Seo::absoluteUrl(Storage::url($article->image)) }}">
         @elseif(!empty(config('seo.og_image')))
-            <meta name="twitter:image" content="{{ config('seo.og_image') }}">
+            <meta name="twitter:image" content="{{ \App\Support\Seo::absoluteUrl(config('seo.og_image')) }}">
         @endif
         @if(!empty(config('seo.twitter_handle')))
             <meta name="twitter:site" content="@{{ config('seo.twitter_handle') }}">
@@ -80,7 +80,7 @@
         <meta name="twitter:title" content="{{ ($metaTitle ?? '') ?: $seoDefaultTitle }}">
         <meta name="twitter:description" content="{{ ($metaDesc ?? '') ?: config('seo.default_description') }}">
         @if(!empty(config('seo.og_image')))
-            <meta name="twitter:image" content="{{ config('seo.og_image') }}">
+            <meta name="twitter:image" content="{{ \App\Support\Seo::absoluteUrl(config('seo.og_image')) }}">
         @endif
         @if(!empty(config('seo.twitter_handle')))
             <meta name="twitter:site" content="@{{ config('seo.twitter_handle') }}">

@@ -107,8 +107,8 @@
             "image": {
                 "{{ $typ }}": "ImageObject",
                 "{{ $oid }}": "{{ url()->current() }}/primary/#image",
-                "url": "{{ Storage::url($article->image) }}",
-                "contentUrl": "{{ Storage::url($article->image) }}",
+                "url": "{{ \App\Support\Seo::absoluteUrl(Storage::url($article->image)) }}",
+                "contentUrl": "{{ \App\Support\Seo::absoluteUrl(Storage::url($article->image)) }}",
                 "caption": "{{ $article->title }}"
             },
             @endif
