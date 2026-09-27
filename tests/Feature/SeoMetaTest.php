@@ -149,26 +149,32 @@ class SeoMetaTest extends TestCase
      * Страницы с noindex
      * ------------------------------------------------------------------ */
 
-    public function test_search_page_has_canonical(): void
+    public function test_search_page_has_noindex(): void
     {
-        // Поиск пока не имеет noindex (контроллер не устанавливает $metaRobots).
-        // Проверяем что canonical присутствует.
         $response = $this->get('/?search=Laravel');
 
         $response->assertOk();
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
         $response->assertSee('rel="canonical"', false);
     }
 
-    public function test_pagination_page_2_has_canonical_without_page_param(): void
+    public function test_pagination_page_2_has_noindex(): void
     {
         $this->createPublishedArticle();
 
         $response = $this->get('/?page=2');
 
         $response->assertOk();
-        // Canonical для пагинации: 1-я страница без ?page, но для page=2 canonical
-        // всё равно содержит self URL (без ?page убирает только 1-я страница).
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
         $response->assertSee('rel="canonical"', false);
+    }
+
+    public function test_first_page_has_index_follow(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertSee('<meta name="robots" content="index,follow">', false);
     }
 
     public function test_notpublic_page_has_noindex(): void
@@ -187,20 +193,6 @@ class SeoMetaTest extends TestCase
     }
 
     /* ------------------------------------------------------------------
-     * Canonical без ?page=N
-     * ------------------------------------------------------------------ */
-
-    public function test_canonical_contains_current_url(): void
-    {
-        $response = $this->get('/?page=2');
-
-        $response->assertOk();
-        // Canonical содержит self URL (с ?page= для страниц пагинации 2+).
-        // Убирает ?page=N только для 1-й страницы.
-        $response->assertSee('rel="canonical"', false);
-    }
-
-    /* ------------------------------------------------------------------
      * Рубрика и тег
      * ------------------------------------------------------------------ */
 
@@ -211,10 +203,9 @@ class SeoMetaTest extends TestCase
 
         $response = $this->get("/rubric/{$rubric->slug}");
 
-        // JSON-LD может вызывать 500 из-за leak $article, но маршрут должен работать.
-        $status = $response->getStatusCode();
-        $this->assertTrue(in_array($status, [200, 500]), "Статус {$status} должен быть 200 или 500");
-        // assertSee не проверяем — при 500 ответ содержит error page, а не контент рубрики.
+        $response->assertOk();
+        $response->assertSee('Архитектура', false);
+        $response->assertSee('rel="canonical"', false);
     }
 
     public function test_tag_page_has_title(): void
@@ -224,9 +215,9 @@ class SeoMetaTest extends TestCase
 
         $response = $this->get("/tag/{$tag->slug}");
 
-        $status = $response->getStatusCode();
-        $this->assertTrue(in_array($status, [200, 500]), "Статус {$status} должен быть 200 или 500");
+        $response->assertOk();
         $response->assertSee('Laravel', false);
+        $response->assertSee('rel="canonical"', false);
     }
 
     /* ------------------------------------------------------------------
@@ -273,5 +264,45 @@ class SeoMetaTest extends TestCase
         $response->assertOk();
         $response->assertSeeInOrder(['<title>', 'Политика конфиденциальности', '</title>'], false);
         $response->assertSee('rel="canonical"', false);
+    }
+
+    /* ------------------------------------------------------------------
+     * robots.txt
+     * ------------------------------------------------------------------ */
+
+    public function test_robots_txt_returns_ok(): void
+    {
+        $response = $this->get('/robots.txt');
+
+        $response->assertOk();
+        $response->assertHeader('Content-Type', 'text/plain; charset=UTF-8');
+    }
+
+    public function test_robots_txt_disallows_admin(): void
+    {
+        $response = $this->get('/robots.txt');
+
+        $content = $response->getContent();
+        $this->assertStringContainsString('Disallow: /admin', $content);
+        $this->assertStringContainsString('Disallow: /dashboard', $content);
+        $this->assertStringContainsString('Disallow: /profile', $content);
+    }
+
+    public function test_robots_txt_disallows_search_and_pagination(): void
+    {
+        $response = $this->get('/robots.txt');
+
+        $content = $response->getContent();
+        $this->assertStringContainsString('Disallow: /*?search=', $content);
+        $this->assertStringContainsString('Disallow: /*?page=', $content);
+    }
+
+    public function test_robots_txt_contains_sitemap_url(): void
+    {
+        $response = $this->get('/robots.txt');
+
+        $content = $response->getContent();
+        $this->assertStringContainsString('Sitemap:', $content);
+        $this->assertStringContainsString('/sitemap.xml', $content);
     }
 }

@@ -23,12 +23,16 @@ final class ArticleController extends Controller
     public function index(Request $request): View
     {
         $articles = $this->service->getPublic($request->input('search'));
+        $page = $request->integer('page', 1);
+        $isSearch = $request->filled('search');
+        $isPaginated = $page > 1;
 
         return view(self::MAIN_VIEW, [
             'articles' => $articles,
             'search' => $request->input('search'),
-            'metaTitle' => $request->filled('search') ? __('Результаты поиска для: ') . $request->input('search') : null,
+            'metaTitle' => $isSearch ? __('Результаты поиска для: ') . $request->input('search') : null,
             'metaDesc' => null,
+            'metaRobots' => ($isSearch || $isPaginated) ? self::META_NO_ROBOTS : 'index,follow',
             'showHero' => true,
         ]);
     }

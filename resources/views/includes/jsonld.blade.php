@@ -12,42 +12,48 @@
         $orgUrl    = config('seo.organization_url') ?: config('app.url');
         $locale    = config('seo.og_locale', 'ru_RU');
         $appUrl    = config('app.url');
-        $hasArticle = !empty($article);
+        $hasArticle = request()->routeIs('articleShow') && !empty($article);
+
+        // JSON-LD специальные ключи (экранирование @ от Blade).
+        $ctx  = '@context';
+        $typ  = '@type';
+        $oid  = '@id';
+        $typg = '@graph';
     @endphp
 
 <script type="application/ld+json">
 {
-    "@@context": "https://schema.org",
-    "@@graph": [
+    "{{ $ctx }}": "https://schema.org",
+    "{{ $typg }}": [
         {{-- WebSite + SearchAction — на всех публичных страницах --}}
         {
-            "@@context": "https://schema.org",
-            "@@type": "WebSite",
-            "@@id": "{{ $appUrl }}/#website",
+            "{{ $ctx }}": "https://schema.org",
+            "{{ $typ }}": "WebSite",
+            "{{ $oid }}": "{{ $appUrl }}/#website",
             "name": "{{ $siteName }}",
             "url": "{{ $appUrl }}",
             "description": "{{ config('seo.default_description') }}",
             "inLanguage": "{{ $locale }}",
             "publisher": {
-                "@@id": "{{ $appUrl }}/#organization"
+                "{{ $oid }}": "{{ $appUrl }}/#organization"
             },
             "potentialAction": {
-                "@@type": "SearchAction",
+                "{{ $typ }}": "SearchAction",
                 "target": "{{ $appUrl }}/?search={search_term_string}",
                 "query-input": "required name=search_term_string"
             }
         },
         {{-- Organization / Publisher --}}
         {
-            "@@context": "https://schema.org",
-            "@@type": "Organization",
-            "@@id": "{{ $appUrl }}/#organization",
+            "{{ $ctx }}": "https://schema.org",
+            "{{ $typ }}": "Organization",
+            "{{ $oid }}": "{{ $appUrl }}/#organization",
             "name": "{{ $orgName }}",
             "url": "{{ $orgUrl }}",
             @if($hasLogo)
             "logo": {
-                "@@type": "ImageObject",
-                "@@id": "{{ $appUrl }}/logo/#image",
+                "{{ $typ }}": "ImageObject",
+                "{{ $oid }}": "{{ $appUrl }}/logo/#image",
                 "url": "{{ config('seo.organization_logo') }}",
                 "contentUrl": "{{ config('seo.organization_logo') }}",
                 "caption": "{{ $orgName }}"
@@ -59,11 +65,11 @@
         @if(!empty($breadcrumbs))
         ,
         {
-            "@@type": "BreadcrumbList",
+            "{{ $typ }}": "BreadcrumbList",
             "itemListElement": [
                 @foreach($breadcrumbs as $index => $item)
                 {
-                    "@@type": "ListItem",
+                    "{{ $typ }}": "ListItem",
                     "position": {{ $index + 1 }},
                     "name": "{{ $item['label'] }}",
                     @if($item['url'] !== null)
@@ -80,27 +86,27 @@
         ,
         {{-- Article — только на странице статьи --}}
         {
-            "@@context": "https://schema.org",
-            "@@type": "Article",
+            "{{ $ctx }}": "https://schema.org",
+            "{{ $typ }}": "Article",
             "headline": "{{ $article->title }}",
             "description": "{{ $article->meta_desc ?: ($article->excert ?: config('seo.default_description')) }}",
             "datePublished": "{{ $article->published_at->toIso8601String() }}",
             "dateModified": "{{ $article->updated_at->toIso8601String() }}",
             "mainEntityOfPage": {
-                "@@type": "WebPage",
-                "@@id": "{{ url()->current() }}"
+                "{{ $typ }}": "WebPage",
+                "{{ $oid }}": "{{ url()->current() }}"
             },
             "author": {
-                "@@type": "Person",
+                "{{ $typ }}": "Person",
                 "name": "{{ $article->user->name ?? config('app.name') }}"
             },
             "publisher": {
-                "@@id": "{{ $appUrl }}/#organization"
+                "{{ $oid }}": "{{ $appUrl }}/#organization"
             },
             @if(!empty($article->image))
             "image": {
-                "@@type": "ImageObject",
-                "@@id": "{{ url()->current() }}/primary/#image",
+                "{{ $typ }}": "ImageObject",
+                "{{ $oid }}": "{{ url()->current() }}/primary/#image",
                 "url": "{{ Storage::url($article->image) }}",
                 "contentUrl": "{{ Storage::url($article->image) }}",
                 "caption": "{{ $article->title }}"

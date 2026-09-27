@@ -132,10 +132,8 @@ class RedirectTest extends TestCase
         // slug-URL маршрутизируется корректно (не 404).
         $response = $this->get("/rubric/my-rubric");
 
-        // Маршрут должен разрешаться (не 404). JSON-LD на страницах рубрик
-        // может вызывать 500 из-за leak $article из предыдущих тестов.
-        $status = $response->getStatusCode();
-        $this->assertTrue(in_array($status, [200, 500]), "Статус {$status} должен быть 200 или 500");
+        $response->assertOk();
+        $response->assertSee('my-rubric', false);
     }
 
     public function test_tag_slug_url_resolves(): void
@@ -146,8 +144,8 @@ class RedirectTest extends TestCase
         // slug-URL маршрутизируется корректно (не 404).
         $response = $this->get("/tag/my-tag");
 
-        $status = $response->getStatusCode();
-        $this->assertTrue(in_array($status, [200, 500]), "Статус {$status} должен быть 200 или 500");
+        $response->assertOk();
+        $response->assertSee('my-tag', false);
     }
 
     /* ------------------------------------------------------------------

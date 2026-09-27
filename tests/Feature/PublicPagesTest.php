@@ -136,8 +136,8 @@ class PublicPagesTest extends TestCase
 
     public function test_show_by_rubric_returns_only_articles_of_that_rubric(): void
     {
-        $rubricOne = Rubric::factory()->create();
-        $rubricTwo = Rubric::factory()->create();
+        $rubricOne = Rubric::factory()->create(['slug' => 'rubric-one']);
+        $rubricTwo = Rubric::factory()->create(['slug' => 'rubric-two']);
 
         $articleOne = $this->createPublishedArticle([
             'title' => 'Статья рубрики один',
@@ -148,7 +148,7 @@ class PublicPagesTest extends TestCase
             'rubric_id' => $rubricTwo->id,
         ]);
 
-        $response = $this->get("/rubric/{$rubricOne->id}");
+        $response = $this->get("/rubric/{$rubricOne->slug}");
 
         $response->assertOk();
         $response->assertSee($articleOne->title);
@@ -167,10 +167,10 @@ class PublicPagesTest extends TestCase
 
     public function test_rubric_page_hides_hero_section(): void
     {
-        $rubric = Rubric::factory()->create();
+        $rubric = Rubric::factory()->create(['slug' => 'my-rubric']);
         $this->createPublishedArticle(['rubric_id' => $rubric->id]);
 
-        $response = $this->get("/rubric/{$rubric->id}");
+        $response = $this->get("/rubric/{$rubric->slug}");
 
         $response->assertOk();
         $response->assertDontSee('class="hero container', false);
@@ -178,22 +178,22 @@ class PublicPagesTest extends TestCase
 
     public function test_rubric_page_uses_rubric_title_as_articles_heading(): void
     {
-        $rubric = Rubric::factory()->create(['title' => 'Архитектура']);
+        $rubric = Rubric::factory()->create(['title' => 'Архитектура', 'slug' => 'architecture']);
         $this->createPublishedArticle(['rubric_id' => $rubric->id]);
 
-        $response = $this->get("/rubric/{$rubric->id}");
+        $response = $this->get("/rubric/{$rubric->slug}");
 
         $response->assertOk();
-        $response->assertSee('<h2>Архитектура</h2>', false);
+        $response->assertSee('<h1>Архитектура</h1>', false);
         $response->assertDontSee('Свежие материалы');
     }
 
     public function test_rubric_page_shows_back_to_home_link(): void
     {
-        $rubric = Rubric::factory()->create();
+        $rubric = Rubric::factory()->create(['slug' => 'my-rubric']);
         $this->createPublishedArticle(['rubric_id' => $rubric->id]);
 
-        $response = $this->get("/rubric/{$rubric->id}");
+        $response = $this->get("/rubric/{$rubric->slug}");
 
         $response->assertOk();
         $response->assertSee('← На главную</a>', false);
@@ -211,8 +211,8 @@ class PublicPagesTest extends TestCase
 
     public function test_show_by_tag_returns_only_articles_with_that_tag(): void
     {
-        $tagOne = Tag::factory()->create(['active' => true]);
-        $tagTwo = Tag::factory()->create(['active' => true]);
+        $tagOne = Tag::factory()->create(['active' => true, 'slug' => 'tag-one']);
+        $tagTwo = Tag::factory()->create(['active' => true, 'slug' => 'tag-two']);
 
         $articleOne = $this->createPublishedArticle(['title' => 'Статья с тегом один']);
         $articleTwo = $this->createPublishedArticle(['title' => 'Статья с тегом два']);
@@ -220,7 +220,7 @@ class PublicPagesTest extends TestCase
         $articleOne->tags()->sync([$tagOne->id]);
         $articleTwo->tags()->sync([$tagTwo->id]);
 
-        $response = $this->get("/tag/{$tagOne->id}");
+        $response = $this->get("/tag/{$tagOne->slug}");
 
         $response->assertOk();
         $response->assertSee($articleOne->title);
@@ -229,11 +229,11 @@ class PublicPagesTest extends TestCase
 
     public function test_tag_page_hides_hero_section(): void
     {
-        $tag = Tag::factory()->create(['active' => true]);
+        $tag = Tag::factory()->create(['active' => true, 'slug' => 'my-tag']);
         $article = $this->createPublishedArticle();
         $article->tags()->sync([$tag->id]);
 
-        $response = $this->get("/tag/{$tag->id}");
+        $response = $this->get("/tag/{$tag->slug}");
 
         $response->assertOk();
         $response->assertDontSee('class="hero container', false);
@@ -241,14 +241,14 @@ class PublicPagesTest extends TestCase
 
     public function test_tag_page_uses_tag_title_as_articles_heading(): void
     {
-        $tag = Tag::factory()->create(['active' => true, 'title' => 'Laravel']);
+        $tag = Tag::factory()->create(['active' => true, 'title' => 'Laravel', 'slug' => 'laravel']);
         $article = $this->createPublishedArticle();
         $article->tags()->sync([$tag->id]);
 
-        $response = $this->get("/tag/{$tag->id}");
+        $response = $this->get("/tag/{$tag->slug}");
 
         $response->assertOk();
-        $response->assertSee('<h2>Записи с меткой «Laravel»</h2>', false);
+        $response->assertSee('<h1>Записи с меткой «Laravel»</h1>', false);
         $response->assertDontSee('<h2>Свежие статьи</h2>', false);
     }
 
@@ -258,7 +258,7 @@ class PublicPagesTest extends TestCase
         $article = $this->createPublishedArticle();
         $article->tags()->sync([$tag->id]);
 
-        $response = $this->get("/tag/{$tag->id}");
+        $response = $this->get("/tag/{$tag->slug}");
 
         $response->assertOk();
         $response->assertSee('← На главную</a>', false);
@@ -266,14 +266,14 @@ class PublicPagesTest extends TestCase
 
     public function test_article_page_shows_tags_as_links_under_title(): void
     {
-        $tag = Tag::factory()->create(['active' => true, 'title' => 'Laravel']);
+        $tag = Tag::factory()->create(['active' => true, 'title' => 'Laravel', 'slug' => 'laravel']);
         $article = $this->createPublishedArticle();
         $article->tags()->sync([$tag->id]);
 
         $response = $this->get("/article/{$article->slug}");
 
         $response->assertOk();
-        $response->assertSee("/tag/{$tag->id}", false);
+        $response->assertSee("/tag/{$tag->slug}", false);
         $response->assertSee('#Laravel', false);
         // Тег-чипс под заголовком (внутри .article-head), а не в конце контента.
         $response->assertSee('article-head', false);

@@ -7,12 +7,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Title & Description --}}
-    @if(!empty($article))
+    @if(request()->routeIs('articleShow') && !empty($article))
         <title>{{ $article->title }} — {{ config('app.name') }}</title>
         <meta name="description" content="{{ $article->meta_desc ?: config('seo.default_description') }}">
     @else
-        <title>{{ $metaTitle ?: config('seo.default_title', str_replace('{app_name}', config('app.name'), config('seo.default_title'))) }}</title>
-        <meta name="description" content="{{ $metaDesc ?: config('seo.default_description') }}">
+        <title>{{ ($metaTitle ?? '') ?: config('seo.default_title', str_replace('{app_name}', config('app.name'), config('seo.default_title'))) }}</title>
+        <meta name="description" content="{{ ($metaDesc ?? '') ?: config('seo.default_description') }}">
     @endif
 
     {{-- Canonical --}}
@@ -27,7 +27,7 @@
     <meta name="robots" content="{{ $metaRobots ?? 'index,follow' }}">
 
     {{-- Open Graph --}}
-    @if(!empty($article))
+    @if(request()->routeIs('articleShow') && !empty($article))
         <meta property="og:type" content="article">
         <meta property="og:title" content="{{ $article->title }}">
         <meta property="og:description" content="{{ $article->meta_desc ?: config('seo.default_description') }}">
@@ -43,8 +43,8 @@
         @endif
     @else
         <meta property="og:type" content="website">
-        <meta property="og:title" content="{{ $metaTitle ?: str_replace('{app_name}', config('app.name'), config('seo.default_title')) }}">
-        <meta property="og:description" content="{{ $metaDesc ?: config('seo.default_description') }}">
+        <meta property="og:title" content="{{ ($metaTitle ?? '') ?: str_replace('{app_name}', config('app.name'), config('seo.default_title')) }}">
+        <meta property="og:description" content="{{ ($metaDesc ?? '') ?: config('seo.default_description') }}">
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:locale" content="{{ config('seo.og_locale', 'ru_RU') }}">
         <meta property="og:site_name" content="{{ str_replace('{app_name}', config('app.name'), config('seo.og_site_name')) }}">
@@ -54,7 +54,7 @@
     @endif
 
     {{-- Twitter Card --}}
-    @if(!empty($article))
+    @if(request()->routeIs('articleShow') && !empty($article))
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="{{ $article->title }}">
         <meta name="twitter:description" content="{{ $article->meta_desc ?: config('seo.default_description') }}">
@@ -68,8 +68,8 @@
         @endif
     @else
         <meta name="twitter:card" content="{{ config('seo.twitter_card', 'summary') }}">
-        <meta name="twitter:title" content="{{ $metaTitle ?: str_replace('{app_name}', config('app.name'), config('seo.default_title')) }}">
-        <meta name="twitter:description" content="{{ $metaDesc ?: config('seo.default_description') }}">
+        <meta name="twitter:title" content="{{ ($metaTitle ?? '') ?: str_replace('{app_name}', config('app.name'), config('seo.default_title')) }}">
+        <meta name="twitter:description" content="{{ ($metaDesc ?? '') ?: config('seo.default_description') }}">
         @if(!empty(config('seo.og_image')))
             <meta name="twitter:image" content="{{ config('seo.og_image') }}">
         @endif

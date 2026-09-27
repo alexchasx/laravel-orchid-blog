@@ -6,10 +6,14 @@ use App\Http\Controllers\ConsentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RobotsController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SubscriberController;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
+
+// robots.txt — динамическая ссылка на sitemap.
+Route::get('/robots.txt', RobotsController::class)->name('robots');
 
 // Sitemap — без кэширования в роутах, кэш внутри контроллера.
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
