@@ -203,7 +203,7 @@ class FeedTest extends TestCase
 
         $content = $response->getContent();
         $this->assertStringContainsString(
-            '<description>Тестовое описание из excерт</description>',
+            '<description>Тестовое описание из excert</description>',
             $content
         );
     }

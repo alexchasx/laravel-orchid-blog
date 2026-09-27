@@ -30,6 +30,8 @@ return [
     */
 
     'organization_name' => '{app_name}',
+    // Внимание: значения должны быть абсолютными URL (http(s)://...) —
+    // в JSON-LD они выводятся как есть, без приведения через \App\Support\Seo::absoluteUrl().
     'organization_url' => '',
     'organization_logo' => '',
     'organization_social' => [
