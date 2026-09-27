@@ -3,6 +3,7 @@
 @php
     $metaTitle = '403 — Доступ запрещён';
     $metaDesc = 'У вас нет прав для просмотра этой страницы.';
+    $metaRobots = 'noindex, nofollow';
 @endphp
 
 @section('content')

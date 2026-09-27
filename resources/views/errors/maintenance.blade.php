@@ -3,6 +3,7 @@
 @php
     $metaTitle = '503 — Технические работы';
     $metaDesc = 'Мы проводим плановое обслуживание и скоро вернёмся.';
+    $metaRobots = 'noindex, nofollow';
 @endphp
 
 @section('content')

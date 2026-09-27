@@ -3,6 +3,7 @@
 @php
     $metaTitle = '503 — Сервис недоступен';
     $metaDesc = 'Сервер временно не может обработать запрос.';
+    $metaRobots = 'noindex, nofollow';
 @endphp
 
 @section('content')

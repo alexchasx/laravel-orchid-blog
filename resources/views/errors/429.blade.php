@@ -3,6 +3,7 @@
 @php
     $metaTitle = '429 — Слишком много запросов';
     $metaDesc = 'Вы отправляете запросы слишком часто.';
+    $metaRobots = 'noindex, nofollow';
 @endphp
 
 @section('content')

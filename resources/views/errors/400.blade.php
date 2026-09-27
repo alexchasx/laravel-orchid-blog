@@ -3,6 +3,7 @@
 @php
     $metaTitle = '400 — Плохой запрос';
     $metaDesc = 'Сервер не смог обработать запрос из-за некорректных данных.';
+    $metaRobots = 'noindex, nofollow';
 @endphp
 
 @section('content')

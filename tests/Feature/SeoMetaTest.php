@@ -418,4 +418,105 @@ class SeoMetaTest extends TestCase
         $result = \App\Support\Seo::absoluteUrl('/storage/image.jpg');
         $this->assertSame(config('app.url') . '/storage/image.jpg', $result);
     }
+
+    /* ------------------------------------------------------------------
+     * Страницы ошибок: noindex, nofollow
+     * ------------------------------------------------------------------ */
+
+    public function test_error_400_has_noindex(): void
+    {
+        $response = $this->get('/test-400');
+
+        $response->assertStatus(400);
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+    }
+
+    public function test_error_401_has_noindex(): void
+    {
+        $response = $this->get('/test-401');
+
+        $response->assertStatus(401);
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+    }
+
+    public function test_error_403_has_noindex(): void
+    {
+        $response = $this->get('/test-403');
+
+        $response->assertStatus(403);
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+    }
+
+    public function test_error_404_has_noindex(): void
+    {
+        $response = $this->get('/test-404');
+
+        $response->assertStatus(404);
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+    }
+
+    public function test_error_405_has_noindex(): void
+    {
+        $response = $this->get('/test-405');
+
+        $response->assertStatus(405);
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+    }
+
+    public function test_error_408_has_noindex(): void
+    {
+        $response = $this->get('/test-408');
+
+        $response->assertStatus(408);
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+    }
+
+    public function test_error_419_has_noindex(): void
+    {
+        $response = $this->get('/test-419');
+
+        $response->assertStatus(419);
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+    }
+
+    public function test_error_429_has_noindex(): void
+    {
+        $response = $this->get('/test-429');
+
+        $response->assertStatus(429);
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+    }
+
+    public function test_error_500_has_noindex(): void
+    {
+        $response = $this->get('/test-500');
+
+        $response->assertStatus(500);
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+    }
+
+    public function test_error_502_has_noindex(): void
+    {
+        $response = $this->get('/test-502');
+
+        $response->assertStatus(502);
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+    }
+
+    public function test_error_504_has_noindex(): void
+    {
+        $response = $this->get('/test-504');
+
+        $response->assertStatus(504);
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+    }
+
+    public function test_jsonld_not_rendered_on_error_pages(): void
+    {
+        $response = $this->get('/test-404');
+
+        $response->assertStatus(404);
+        $content = $response->getContent();
+        $this->assertStringNotContainsString('application/ld+json', $content);
+    }
 }

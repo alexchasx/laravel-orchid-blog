@@ -3,6 +3,7 @@
 @php
     $metaTitle = '419 — Страница устарела';
     $metaDesc = 'Сессия истекла, форма или страница устарела.';
+    $metaRobots = 'noindex, nofollow';
 @endphp
 
 @section('content')

@@ -3,6 +3,7 @@
 @php
     $metaTitle = '408 — Превышено время ожидания';
     $metaDesc = 'Сервер не успел ответить на запрос вовремя.';
+    $metaRobots = 'noindex, nofollow';
 @endphp
 
 @section('content')

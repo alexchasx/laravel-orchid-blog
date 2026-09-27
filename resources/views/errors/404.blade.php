@@ -3,6 +3,7 @@
 @php
     $metaTitle = '404 — Страница не найдена';
     $metaDesc = 'Страница не найдена. Возможно, она перемещена или никогда не существовала.';
+    $metaRobots = 'noindex, nofollow';
 @endphp
 
 @section('content')

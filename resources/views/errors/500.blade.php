@@ -3,6 +3,7 @@
 @php
     $metaTitle = '500 — Внутренняя ошибка сервера';
     $metaDesc = 'На сервере произошла непредвиденная ошибка.';
+    $metaRobots = 'noindex, nofollow';
 @endphp
 
 @section('content')

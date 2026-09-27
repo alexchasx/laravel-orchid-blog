@@ -3,6 +3,7 @@
 @php
     $metaTitle = '504 — Превышено время ожидания шлюза';
     $metaDesc = 'Промежуточный сервер слишком долго отвечал на запрос.';
+    $metaRobots = 'noindex, nofollow';
 @endphp
 
 @section('content')

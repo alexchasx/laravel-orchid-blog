@@ -36,7 +36,7 @@
 | 1 | `og:image`, `twitter:image`, JSON-LD image и `<image:url>` в sitemap используют `Storage::url()` → **относительный** `/storage/...` без домена; `og:image` из `config('seo.og_image')` тоже может быть относительным | [`techlog.blade.php`](resources/views/layouts/techlog.blade.php:47), [`jsonld.blade.php`](resources/views/includes/jsonld.blade.php:110), [`SitemapController.php`](app/Http/Controllers/SitemapController.php:43) | Open Graph, Twitter Card и structured data требуют абсолютных URL; без домена сниппеты и rich-результаты ломаются |
 | 2 | `og:url` = `url()->current()` — на `?search=`/`?page=` отличается от canonical | [`techlog.blade.php`](resources/views/layouts/techlog.blade.php:43) | Расхождение сигналов: OG показывает неканоничный URL |
 | 3 ~~|~~ ~~Нет RSS/Atom-ленты~~ ~~(в gzip уже включён `application/rss+xml` — фича была запланирована)~~ | ~~весь проект~~ | ~~Блог без ленты: теряется подписка читателей через фидридеры, меньше внешних ссылок~~ |
-| 4 | Страницы ошибок 4xx/5xx наследуют `index,follow` + self-canonical (robots не задан) | [`resources/views/errors/404.blade.php`](resources/views/errors/404.blade.php:3), остальные `errors/*` | Формально разрешают индексацию несуществующих/ошибочных URL (хотя статус 404/500 обычно не индексируется, мета должна быть явной) |
+| 4 ~~|~~ ~~Страницы ошибок 4xx/5xx наследуют `index,follow` + self-canonical (robots не задан)~~ ~~[`resources/views/errors/404.blade.php`](resources/views/errors/404.blade.php:3), остальные `errors/*`~~ | ~~Формально разрешают индексацию несуществующих/ошибочных URL (хотя статус 404/500 обычно не индексируется, мета должна быть явной)~~ |
 | 5 | Внешние шрифты Google Fonts (render-blocking CSS), нет `preload` | [`techlog.blade.php`](resources/views/layouts/techlog.blade.php:97) | LCP/FCP хуже, лишний запрос к стороннему домену |
 | 6 | Изображения в статьях/списках без `loading="lazy"` и размеров (когда фича загрузки картинок появится) | [`index.blade.php`](resources/views/index.blade.php:59), [`article.blade.php`](resources/views/article.blade.php:44) | CLS и лишняя загрузка изображений ниже первого экрана |
 | 7 | Нет `apple-touch-icon`; favicon только `.ico` | [`techlog.blade.php`](resources/views/layouts/techlog.blade.php:94) | Мелочь: iOS-закладки без иконки |
@@ -49,7 +49,7 @@
 | Абсолютные URL | Везде, где URL отдаётся в мета/структурированные данные/sitemap, приводить к абсолютному виду через `url()` (оборачивает относительный путь доменом из `APP_URL`). Единый helper `App\Support\Seo::absoluteUrl(?string $path): ?string` (или прямо `url()` в шаблонах — helper предпочтительнее для переиспользования и тестов). |
 | `og:url` | Использовать уже вычисленный `$canonicalUrl` вместо `url()->current()` в обоих ветках OG-разметки. |
 | RSS | Свой контроллер `App\Http\Controllers\FeedController` (без пакетов, по аналогии с `SitemapController`): маршруты `/feed` (Atom) или `/rss` (RSS 2.0) — выбрать RSS 2.0 как де-факто стандарт; кэш 1 час; последние 20 опубликованных статей; `link rel="alternate" type="application/rss+xml"` в `<head>`. |
-| Ошибки | В каждой `resources/views/errors/*.blade.php` задать `$metaRobots = 'noindex, nofollow'` (переменная из `@php` дочернего шаблона доступна layout — по аналогии с уже работающим `$metaTitle` в 404). Canonical на страницах ошибок не выводить или оставить self (по статусу HTTP роботы их не индексируют; мета — страховка). |
+| Ошибки ~~|~~ ~~В каждой `resources/views/errors/*.blade.php` задать `$metaRobots = 'noindex, nofollow'` (переменная из `@php` дочернего шаблона доступна layout — по аналогии с уже работающим `$metaTitle` в 404).~~ ~~Canonical на страницах ошибок не выводить или оставить self (по статусу HTTP роботы их не индексируют; мета — страховка).~~ |
 | Шрифты | Самохостинг `Inter` + `JetBrains Mono` (OFL-лицензии): woff2 в `public/fonts/`, `@font-face` в `resources/sass/techlog/_variables.scss` или отдельном файле, `preload` двух основных начертаний; убрать `<link>` на Google Fonts и preconnect. |
 | Изображения | Добавить `loading="lazy"` и `decoding="async"` для картинок в списках и статье; `width`/`height` (или CSS `aspect-ratio`) против CLS — применить сразу, чтобы фича загрузки картинок не требовала доработки. |
 | Favicon | Добавить `apple-touch-icon.png` (180×180) и `manifest.webmanifest` (опционально); подключить в `<head>`. |
@@ -62,7 +62,7 @@
 ```mermaid
 flowchart TD
     A[Фаза 1: абсолютные URL и og:url] --> B[Фаза 2: RSS-лента ✅]
-    B --> C[Фаза 3: noindex на страницах ошибок]
+    B --> C[Фаза 3: noindex на страницах ошибок ✅]
     C --> D[Фаза 4: шрифты и изображения CWV]
     D --> E[Фаза 5: favicon и политика страниц согласий]
     E --> F[Фаза 6: тесты, документация, валидация]
@@ -97,12 +97,13 @@ flowchart TD
 - robots.txt не блокирует `/rss` (уже так); sitemap-индексация ленты не нужна.
 - Тесты: [`tests/Feature/FeedTest.php`](tests/Feature/FeedTest.php) — валидный XML, 200, Content-Type, items, порядок по убыванию, лимит 20, enclosure, fallback description, кэширование, ссылка в `<head>`.
 
-### Фаза 3. noindex на страницах ошибок
+### Фаза 3. noindex на страницах ошибок ✅ выполнено
 
-- В каждой из [`resources/views/errors/`](resources/views/errors) страниц (400–504, maintenance):
-  `@php $metaRobots = 'noindex, nofollow'; @endphp` перед `@section('content')` —
-  по аналогии с уже работающим `$metaTitle` в [`errors/404.blade.php`](resources/views/errors/404.blade.php:3).
-- Проверить, что JSON-LD на ошибках не выводится (условие `str_contains($metaRobots,'noindex')` уже есть — сработает автоматически).
+- Во всех [`resources/views/errors/*.blade.php`](resources/views/errors/) (14 файлов: 400, 401, 403, 404, 405, 408, 419, 429, 500, 502, 503, 504, maintenance):
+  `$metaRobots = 'noindex, nofollow';` добавлен в `@php`-блок перед `@section('content')` —
+  по аналогии с уже работающим `$metaTitle` в [`errors/404.blade.php`](resources/views/errors/404.blade.php).
+- JSON-LD на ошибках не выводится автоматически: условие `str_contains($metaRobots,'noindex')` в [`includes/jsonld.blade.php`](resources/views/includes/jsonld.blade.php:6) сработает.
+- Canonical на страницах ошибок не трогать (self — корректно; HTTP-статус 4xx/5xx — сигнал для роботов; мета — страховка).
 
 ### Фаза 4. Core Web Vitals: шрифты и изображения
 
@@ -124,10 +125,11 @@ flowchart TD
 
 ### Фаза 6. Тесты, документация, валидация
 
-- Обновить [`tests/Feature/SeoMetaTest.php`](tests/Feature/SeoMetaTest.php):
+- ~~Обновить [`tests/Feature/SeoMetaTest.php`](tests/Feature/SeoMetaTest.php):~~ ~~✅~~
   - `og:image`/`twitter:image` — абсолютный URL (содержит `APP_URL`);
   - `og:url` совпадает с canonical на странице поиска (`/?search=...`);
-  - `GET /nonexistent` (404) — `<meta name="robots" content="noindex, nofollow">`.
+  - ~~`GET /nonexistent` (404) — `<meta name="robots" content="noindex, nofollow">`.~~ ~~✅~~
+- [`tests/Feature/SeoMetaTest.php`](tests/Feature/SeoMetaTest.php): добавлены 12 тестов — noindex на каждой тестовой странице ошибок (`/test-400`…`/test-504`) + проверка отсутствия JSON-LD на 404.
 - ~~Новый [`tests/Feature/FeedTest.php`](tests/Feature/FeedTest.php):~~ ~~✅~~
 - [`tests/Feature/SitemapTest.php`](tests/Feature/SitemapTest.php): `<image:url>` содержит абсолютный URL.
 - README: обновить раздел «SEO из коробки» (RSS-лента, noindex на ошибках, самохостинг шрифтов, политика страниц согласий).
@@ -140,6 +142,6 @@ flowchart TD
 - Все `og:image`/`twitter:image`/JSON-LD image/`<image:url>` в sitemap — абсолютные URL (`{APP_URL}/storage/...`).
 - `og:url` на каждой странице совпадает с `link rel="canonical"`.
 - ~~`GET /rss` отдаёт валидный RSS 2.0 с последними 20 статьями; в `<head>` есть `<link rel="alternate" type="application/rss+xml">`.~~ ~~✅~~
-- Страницы ошибок 4xx/5xx отдают `noindex, nofollow` без JSON-LD.
+- ~~Страницы ошибок 4xx/5xx отдают `noindex, nofollow` без JSON-LD.~~ ~~✅~~
 - Шрифты отдаются с домена сайта, без внешних запросов к Google Fonts; изображения с `loading="lazy"` и размерами.
 - `make test` и `make lint` зелёные; README/AGENTS.md/docs обновлены.

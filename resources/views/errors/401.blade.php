@@ -3,6 +3,7 @@
 @php
     $metaTitle = '401 — Требуется авторизация';
     $metaDesc = 'Для доступа к этой странице необходимо войти в аккаунт.';
+    $metaRobots = 'noindex, nofollow';
 @endphp
 
 @section('content')

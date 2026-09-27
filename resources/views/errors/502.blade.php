@@ -3,6 +3,7 @@
 @php
     $metaTitle = '502 — Плохой шлюз';
     $metaDesc = 'Сервер получил некорректный ответ от вышестоящего сервиса.';
+    $metaRobots = 'noindex, nofollow';
 @endphp
 
 @section('content')

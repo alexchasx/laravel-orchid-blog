@@ -3,6 +3,7 @@
 @php
     $metaTitle = '405 — Метод не разрешён';
     $metaDesc = 'Запрос выполнен недопустимым HTTP-методом.';
+    $metaRobots = 'noindex, nofollow';
 @endphp
 
 @section('content')
