@@ -3,14 +3,5 @@
   "instructions": [
     "AGENTS.md",
     "docs/architecture.md"
-  ],
-  "exclude": [
-    "vendor/**",
-    "node_modules/**",
-    "storage/**",
-    "bootstrap/cache/**",
-    ".env*",
-    "public/hot",
-    "compiled.php"
   ]
 }
