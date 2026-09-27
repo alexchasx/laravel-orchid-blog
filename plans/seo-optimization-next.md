@@ -64,8 +64,8 @@ flowchart TD
     A[Фаза 1: абсолютные URL и og:url] --> B[Фаза 2: RSS-лента ✅]
     B --> C[Фаза 3: noindex на страницах ошибок ✅]
     C --> D[Фаза 4: шрифты и изображения CWV]
-    D --> E[Фаза 5: favicon и политика страниц согласий]
-    E --> F[Фаза 6: тесты, документация, валидация]
+    D --> E[Фаза 5: favicon и политика страниц согласий ✅]
+    E --> F[Фаза 6: тесты, документация, валидация ✅]
 ```
 
 ### Фаза 1. Абсолютные URL изображений и `og:url`
@@ -117,31 +117,30 @@ flowchart TD
   - [`resources/views/index.blade.php`](resources/views/index.blade.php:59) — карточка статьи: `loading="lazy"`, `decoding="async"`, фиксированные размеры/CSS `aspect-ratio`;
   - [`resources/views/article.blade.php`](resources/views/article.blade.php:44) — hero-картинка: те же атрибуты + `fetchpriority="high"` для первой; заглушка-градиент не трогать.
 
-### Фаза 5. Favicon и политика страниц согласий
+### Фаза 5. Favicon и политика страниц согласий ✅ выполнено
 
-- Добавить `public/apple-touch-icon.png` (180×180) и подключить в [`techlog.blade.php`](resources/views/layouts/techlog.blade.php:93).
-- Опционально `public/site.webmanifest` (name, icons, theme_color).
-- Страницы `/consent/processing`, `/consent/distribution`: оставить индексируемыми, в sitemap не включать; зафиксировать решение в README (раздел SEO).
+- `public/apple-touch-icon.png` (180×180 PNG) — уже существует.
+- `public/favicon.ico` (48×48 ICO) — уже существует.
+- `public/site.webmanifest` — манифест с `name`, `short_name`, `icons` (apple-touch-icon + favicon), `theme_color`, `display: standalone`.
+- Ссылки в [`techlog.blade.php`](resources/views/layouts/techlog.blade.php:93–97): `rel="icon"`, `rel="apple-touch-icon"`, `rel="manifest"` — все подключены.
+- Страницы `/consent/processing`, `/consent/distribution`: индексируются роботами (юридические страницы), не включаются в sitemap (низкая навигационная ценность), не блокируются в robots.txt.
+- Зафиксировано в README (строки 32–33): раздел «SEO-разметка» описывает favicon и политику страниц согласий.
 
-### Фаза 6. Тесты, документация, валидация
+### Фаза 6. Тесты, документация, валидация ✅ выполнено
 
-- ~~Обновить [`tests/Feature/SeoMetaTest.php`](tests/Feature/SeoMetaTest.php):~~ ~~✅~~
-  - `og:image`/`twitter:image` — абсолютный URL (содержит `APP_URL`);
-  - `og:url` совпадает с canonical на странице поиска (`/?search=...`);
-  - ~~`GET /nonexistent` (404) — `<meta name="robots" content="noindex, nofollow">`.~~ ~~✅~~
-- [`tests/Feature/SeoMetaTest.php`](tests/Feature/SeoMetaTest.php): добавлены 12 тестов — noindex на каждой тестовой странице ошибок (`/test-400`…`/test-504`) + проверка отсутствия JSON-LD на 404.
-- ~~Новый [`tests/Feature/FeedTest.php`](tests/Feature/FeedTest.php):~~ ~~✅~~
-- [`tests/Feature/SitemapTest.php`](tests/Feature/SitemapTest.php): `<image:url>` содержит абсолютный URL.
-- README: обновить раздел «SEO из коробки» (RSS-лента, noindex на ошибках, самохостинг шрифтов, политика страниц согласий).
-- [`AGENTS.md`](AGENTS.md): gotcha про абсолютные URL в мета/JSON-LD/sitemap и про RSS.
-- [`docs/architecture.md`](docs/architecture.md): описать `FeedController`, `App\Support\Seo`.
+- [`tests/Feature/SeoMetaTest.php`](tests/Feature/SeoMetaTest.php): 12 тестов — `og:image`/`twitter:image` абсолютный URL (содержит `APP_URL`); `og:url` совпадает с canonical на поиске (`/?search=...`) и на статье; 6 тестов на `noindex` для служебных страниц (поиск, пагинация, `/notpublic`, `/unsubscribe`, `/consent/revoke`); 12 тестов на `noindex` для страниц ошибок (`/test-400`…`/test-504`); проверка отсутствия JSON-LD на error-страницах; 3 теста на `App\Support\Seo::absoluteUrl()`.
+- [`tests/Feature/FeedTest.php`](tests/Feature/FeedTest.php): 15 тестов — валидный XML, RSS 2.0, channel metadata, atom:link, порядок по убыванию, лимит 20, description приоритет, enclosure, кэширование, ссылка в `<head>`.
+- [`tests/Feature/SitemapTest.php`](tests/Feature/SitemapTest.php): `<image:url>` содержит абсолютный URL (`APP_URL`).
+- [`README.md`](README.md): раздел «SEO из коробки» обновлён — RSS-лента, noindex на ошибках, абсолютные URL в OG/Twitter/JSON-LD/sitemap, политика страниц согласий, favicon.
+- [`AGENTS.md`](AGENTS.md): gotcha про абсолютные URL в мета/JSON-LD/sitemap, RSS, noindex на страницах ошибок.
+- [`docs/architecture.md`](docs/architecture.md): `FeedController` (раздел 17.4), `App\Support\Seo`, `SitemapController` (17.5), `RobotsController` (17.6), перенумерация секций 17.7–17.10.
 - Ручная валидация (вне CI): Google Rich Results Test, PageSpeed Insights, валидатор Schema.org.
 
 ## 5. Критерии готовности
 
-- Все `og:image`/`twitter:image`/JSON-LD image/`<image:url>` в sitemap — абсолютные URL (`{APP_URL}/storage/...`).
-- `og:url` на каждой странице совпадает с `link rel="canonical"`.
-- ~~`GET /rss` отдаёт валидный RSS 2.0 с последними 20 статьями; в `<head>` есть `<link rel="alternate" type="application/rss+xml">`.~~ ~~✅~~
-- ~~Страницы ошибок 4xx/5xx отдают `noindex, nofollow` без JSON-LD.~~ ~~✅~~
+- Все `og:image`/`twitter:image`/JSON-LD image/`<image:url>` в sitemap — абсолютные URL (`{APP_URL}/storage/...`). ✅
+- `og:url` на каждой странице совпадает с `link rel="canonical"`. ✅
+- `GET /rss` отдаёт валидный RSS 2.0 с последними 20 статьями; в `<head>` есть `<link rel="alternate" type="application/rss+xml">`. ✅
+- Страницы ошибок 4xx/5xx отдают `noindex, nofollow` без JSON-LD. ✅
 - Шрифты отдаются с домена сайта, без внешних запросов к Google Fonts; изображения с `loading="lazy"` и размерами.
-- `make test` и `make lint` зелёные; README/AGENTS.md/docs обновлены.
+- `make test` и `make lint` зелёные; README/AGENTS.md/docs обновлены. ✅

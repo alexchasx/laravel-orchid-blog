@@ -34,7 +34,7 @@
 
 | Каталог | Назначение |
 |---|---|
-| `app/Http/Controllers/` | Публичная часть: `ArticleController`, `MainController`, `CommentController`, `ContactController`, `SubscriberController`, `ProfileController`, `Auth/` (Breeze) |
+| `app/Http/Controllers/` | Публичная часть: `ArticleController`, `MainController`, `CommentController`, `ContactController`, `SubscriberController`, `ProfileController`, `Auth/` (Breeze), `SitemapController`, `RobotsController`, `FeedController` |
 | `app/Http/Requests/` | FormRequest-валидация: `ArticleRequest`, `CommentRequest`, `ContactRequest`, `SubscribeRequest`, `ProfileUpdateRequest`, `Auth/*` |
 | `app/Http/Middleware/` | `Localize`, `GoogleRecaptcha` (отключён), кастомные `TrustProxies`/`VerifyCsrfToken`, стандартные Breeze |
 | `app/Models/` | Доменные модели: `Article`, `Rubric`, `Tag`, `ArticleTag`, `Comment`, `Contact`, `Subscriber`, `User` |
@@ -43,7 +43,7 @@
 | `app/Orchid/` | Админка: `Screens/`, `Layouts/`, `Filters/RoleFilter`, `Presenters/UserPresenter`, `PlatformProvider` |
 | `app/Mail/` | `NewArticleMail` — письмо подписчикам о новой статье |
 | `app/Console/Commands/` | `PublishScheduledArticles` — автопубликация по расписанию; `ProcessRevocations` — обработка просроченных отзывов согласий |
-| `app/Support/`, `app/Rules/` | `MathCaptcha`, `MathCaptchaRule` |
+| `app/Support/`, `app/Rules/` | `MathCaptcha`, `MathCaptchaRule`, `Seo` (хелпер `absoluteUrl()` для абсолютных URL в OG/Twitter/JSON-LD/sitemap) |
 | `app/helpers.php` | Глобальные функции `active_link()`, `alert()` (автозагрузка через composer `autoload-dev.files`) |
 
 Остальные стандартные каталоги (`database/`, `resources/`, `routes/`, `config/`, `tests/`, `docker/`) — по шаблону Laravel.
@@ -254,7 +254,17 @@ Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRub
 | `BreadcrumbList` | Если `$breadcrumbs` не пуст | itemListElement (position, name, item) |
 | `Article` | Только на `!empty($article)` | headline, description, datePublished, dateModified, mainEntityOfPage, author, publisher, image (ImageObject), inLanguage |
 
-### 17.4 Sitemap (`SitemapController`)
+### 17.4 RSS 2.0-лента (`FeedController`)
+
+- Маршрут: `GET /rss` → `FeedController::__invoke()`.
+- Кэширование: `Cache::remember('rss.feed', 3600)` — 1 час.
+- Выборка: `Article::query()->where('is_published', true)->where('published_at', '<=', now())->select(...)->orderByDesc('published_at')->limit(20)`.
+- RSS 2.0 + `<atom:link rel="self">`: `<channel>` (title, link, description, language `ru`, `lastBuildDate`), `<item>` (title, link, guid, pubDate RFC-2822, description `meta_desc` → `excert`, опционально `<enclosure>` с `length` и `type="image/jpeg"`).
+- `Content-Type: application/rss+xml; charset=utf-8`.
+- `<link rel="alternate" type="application/rss+xml">` в `<head>` (`techlog.blade.php`).
+- robots.txt не блокирует `/rss`; sitemap-индексация ленты не нужна.
+
+### 17.5 Sitemap (`SitemapController`)
 
 - Маршрут: `GET /sitemap.xml` → `SitemapController::__invoke()`.
 - Кэширование: `Cache::remember('sitemap.xml', 3600)` — 1 час.
@@ -266,7 +276,7 @@ Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRub
 - Для статей с изображениями — `<image:image>` (Google Image Sitemap).
 - Content-Type: `application/xml`, namespace `http://www.google.com/schemas/sitemap-image/1.1`.
 
-### 17.5 robots.txt
+### 17.6 robots.txt
 
 Отдаётся динамически через `RobotsController` (`GET /robots.txt`), статический
 `public/robots.txt` в репозитории отсутствует:
@@ -289,25 +299,25 @@ Sitemap: {APP_URL}/sitemap.xml
 
 `Sitemap:` формируется из `config('app.url')` — без привязки к конкретному домену.
 
-### 17.6 Slug-URL рубрик и тегов
+### 17.7 Slug-URL рубрик и тегов
 
 - `Rubric` и `Tag` имеют поле `slug` (auto-generated в `booted()` через `Str::slug()` + уникальность).
 - Маршруты: `GET /rubric/{rubric:slug}`, `GET /tag/{tag:slug}`.
 - Редиректы: `GET /rubric/{legacyId}` и `GET /tag/{legacyId}` → 301 на slug-URL (или 404, если запись удалена).
 
-### 17.7 H1-иерархия
+### 17.8 H1-иерархия
 
 - Главная: hero `<h1>`, список статей `<h2>`.
 - Рубрика/тег: `<h1>` с названием рубрики/тега.
 - Статья/about/contact/privacy: ровно один `<h1>`.
 
-### 17.8 Хлебные крошки
+### 17.9 Хлебные крошки
 
 - Партиал `includes/breadcrumbs.blade.php` — рендерится при `$breadcrumbs !== []`.
 - В layout: `@include('includes.breadcrumbs')` после `<main>`.
 - JSON-LD BreadcrumbList генерируется в `includes/jsonld.blade.php`.
 
-### 17.9 nginx gzip
+### 17.10 nginx gzip
 
 `docker/nginx/conf.d/nginx.conf`:
 

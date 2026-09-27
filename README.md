@@ -25,6 +25,8 @@
 - **JSON-LD** — структурированные данные Schema.org: Article, BreadcrumbList, WebSite+SearchAction, Organization (только на индексируемых страницах).
 - **sitemap.xml** — генерация через `SitemapController` с кэшированием (1 час); включает главную, статьи, рубрики, теги, статические страницы.
 - **robots.txt** — блокирует `/admin`, `/dashboard`, `/profile`, `/login`, `/register`, `/test-*`, `/notpublic`, `/unsubscribe`, `/consent/revoke`, `?search=`, `?page=`; содержит ссылку на sitemap.
+- **RSS 2.0-лента** — `GET /rss` (контроллер `FeedController`), кэш 1 час, последние 20 опубликованных статей; `<link rel="alternate" type="application/rss+xml">` в `<head>`.
+- **Абсолютные URL** в OG/Twitter/JSON-LD/sitemap — все пути к изображениям приводятся к абсолютным (`{APP_URL}/storage/...`) через `App\Support\Seo::absoluteUrl()`.
 - **Slug-URL рубрик и тегов** — `/rubric/{slug}` и `/tag/{slug}`; старые `/rubric/{id}` и `/tag/{id}` возвращают 301 на новый URL.
 - **H1-иерархия** — ровно один `<h1>` на страницу: на главной — hero-заголовок, на рубрике/теге — название рубрики/тега.
 - **Хлебные крошки** — навигационная цепочка Главная → Рубрика → Статья (или Метка) с JSON-LD BreadcrumbList.
