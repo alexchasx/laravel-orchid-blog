@@ -141,7 +141,7 @@ class SitemapController extends Controller
                 $q->where('is_published', true)
                     ->where('published_at', '<=', now());
             })
-            ->select('id', 'title')
+            ->select('id', 'slug', 'title')
             ->orderBy('title')
             ->get();
     }
@@ -159,7 +159,7 @@ class SitemapController extends Controller
                 $q->where('is_published', true)
                     ->where('published_at', '<=', now());
             })
-            ->select('id', 'title')
+            ->select('id', 'slug', 'title')
             ->orderBy('title')
             ->get();
     }

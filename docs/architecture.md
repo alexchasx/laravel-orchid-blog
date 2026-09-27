@@ -267,7 +267,8 @@ Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRub
 
 ### 17.5 robots.txt
 
-Файл `public/robots.txt`:
+Отдаётся динамически через `RobotsController` (`GET /robots.txt`), статический
+`public/robots.txt` в репозитории отсутствует:
 
 ```
 User-agent: *
@@ -276,14 +277,16 @@ Disallow: /dashboard
 Disallow: /profile
 Disallow: /login
 Disallow: /register
-Disallow: /test-*
+Disallow: /test-
 Disallow: /notpublic
 Disallow: /unsubscribe
 Disallow: /consent/revoke
 Disallow: /*?search=
 Disallow: /*?page=
-Sitemap: https://example.com/sitemap.xml
+Sitemap: {APP_URL}/sitemap.xml
 ```
+
+`Sitemap:` формируется из `config('app.url')` — без привязки к конкретному домену.
 
 ### 17.6 Slug-URL рубрик и тегов
 

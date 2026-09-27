@@ -92,6 +92,8 @@ final class SubscriberController extends Controller
                 'title' => __('Ссылка не сработала'),
                 'success' => false,
                 'message' => __('Ссылка недействительна или уже была использована.'),
+                // Служебная страница — не индексируем.
+                'metaRobots' => 'noindex, nofollow',
             ]);
         }
 
@@ -104,6 +106,7 @@ final class SubscriberController extends Controller
                 'title' => __('Вы отписались'),
                 'success' => true,
                 'message' => __('Вы отписались от рассылки. Новые статьи больше не будут приходить на этот email.'),
+                'metaRobots' => 'noindex, nofollow',
             ]);
         }
 
@@ -111,6 +114,7 @@ final class SubscriberController extends Controller
             'title' => __('Уже отписаны'),
             'success' => false,
             'message' => __('Этот email уже отписан от рассылки.'),
+            'metaRobots' => 'noindex, nofollow',
         ]);
     }
 

@@ -84,4 +84,18 @@ class SitemapTest extends TestCase
 
         $response->assertSee('sitemap-image', false);
     }
+
+    public function test_sitemap_works_with_existing_rubrics_and_tags(): void
+    {
+        // Рубрики/теги выбираются без колонки slug — должна быть коррекция,
+        // иначе route() падает с UrlGenerationException (500).
+        $this->createPublishedArticle(['title' => 'Статья для рубрики в sitemap']);
+
+        $response = $this->get('/sitemap.xml');
+
+        $response->assertStatus(200);
+        $content = $response->getContent();
+        $this->assertStringContainsString('/rubric/', $content);
+        $this->assertStringContainsString('/tag/', $content);
+    }
 }

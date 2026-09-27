@@ -49,7 +49,9 @@ Route::get('consent/distribution', [ConsentController::class, 'distribution'])
     ->name('consent.distribution');
 
 // Отзыв согласия на обработку/распространение ПДн.
-Route::get('consent/revoke', fn () => view('consent.revoke'))
+Route::get('consent/revoke', fn () => view('consent.revoke', [
+    'metaRobots' => 'noindex, nofollow',
+]))
     ->name('consent.revoke.form');
 Route::post('consent/revoke', [ConsentController::class, 'revoke'])
     ->middleware('throttle:10,1')

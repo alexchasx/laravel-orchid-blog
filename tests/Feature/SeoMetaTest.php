@@ -44,11 +44,11 @@ class SeoMetaTest extends TestCase
         $response = $this->get('/');
 
         $response->assertOk();
-        // На главной metaTitle=null, поэтому используется config('seo.default_title').
-        // Значение содержит {app_name} — это известный баг шаблона (str_replace не срабатывает),
-        // но title непустой и содержит имя приложения.
+        // На главной metaTitle=null, поэтому используется config('seo.default_title')
+        // с подстановкой плейсхолдера {app_name} → config('app.name').
         $content = $response->getContent();
-        $this->assertMatchesRegularExpression('/<title>.*ИТ-блог.*<\/title>/', $content);
+        $this->assertStringNotContainsString('{app_name}', $content);
+        $this->assertMatchesRegularExpression('/<title>.+ИТ-блог<\/title>/', $content);
     }
 
     public function test_home_page_has_canonical(): void
@@ -264,6 +264,26 @@ class SeoMetaTest extends TestCase
         $response->assertOk();
         $response->assertSeeInOrder(['<title>', 'Политика конфиденциальности', '</title>'], false);
         $response->assertSee('rel="canonical"', false);
+    }
+
+    /* ------------------------------------------------------------------
+     * Служебные страницы: noindex
+     * ------------------------------------------------------------------ */
+
+    public function test_consent_revoke_page_has_noindex(): void
+    {
+        $response = $this->get('/consent/revoke');
+
+        $response->assertOk();
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
+    }
+
+    public function test_unsubscribe_page_has_noindex(): void
+    {
+        $response = $this->get('/unsubscribe/invalid-token');
+
+        $response->assertOk();
+        $response->assertSee('<meta name="robots" content="noindex, nofollow">', false);
     }
 
     /* ------------------------------------------------------------------

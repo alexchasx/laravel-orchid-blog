@@ -6,12 +6,17 @@
     <meta name="theme-color" content="#0a0a0a">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    @php
+        // Дефолтный title с подстановкой имени приложения (в config хранится плейсхолдер {app_name}).
+        $seoDefaultTitle = str_replace('{app_name}', config('app.name'), config('seo.default_title'));
+    @endphp
+
     {{-- Title & Description --}}
     @if(request()->routeIs('articleShow') && !empty($article))
         <title>{{ $article->title }} — {{ config('app.name') }}</title>
         <meta name="description" content="{{ $article->meta_desc ?: config('seo.default_description') }}">
     @else
-        <title>{{ ($metaTitle ?? '') ?: config('seo.default_title', str_replace('{app_name}', config('app.name'), config('seo.default_title'))) }}</title>
+        <title>{{ ($metaTitle ?? '') ?: $seoDefaultTitle }}</title>
         <meta name="description" content="{{ ($metaDesc ?? '') ?: config('seo.default_description') }}">
     @endif
 
@@ -43,7 +48,7 @@
         @endif
     @else
         <meta property="og:type" content="website">
-        <meta property="og:title" content="{{ ($metaTitle ?? '') ?: str_replace('{app_name}', config('app.name'), config('seo.default_title')) }}">
+        <meta property="og:title" content="{{ ($metaTitle ?? '') ?: $seoDefaultTitle }}">
         <meta property="og:description" content="{{ ($metaDesc ?? '') ?: config('seo.default_description') }}">
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:locale" content="{{ config('seo.og_locale', 'ru_RU') }}">
@@ -68,7 +73,7 @@
         @endif
     @else
         <meta name="twitter:card" content="{{ config('seo.twitter_card', 'summary') }}">
-        <meta name="twitter:title" content="{{ ($metaTitle ?? '') ?: str_replace('{app_name}', config('app.name'), config('seo.default_title')) }}">
+        <meta name="twitter:title" content="{{ ($metaTitle ?? '') ?: $seoDefaultTitle }}">
         <meta name="twitter:description" content="{{ ($metaDesc ?? '') ?: config('seo.default_description') }}">
         @if(!empty(config('seo.og_image')))
             <meta name="twitter:image" content="{{ config('seo.og_image') }}">
