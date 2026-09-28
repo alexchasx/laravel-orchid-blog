@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\ContentImageUploadController;
 use App\Orchid\Screens\Article\ArticleListScreen;
 use App\Orchid\Screens\Comment\CommentListScreen;
 use App\Orchid\Screens\Comment\CommentScreen;
@@ -149,3 +150,8 @@ Route::screen('example-cards', ExampleCardsScreen::class)->name('platform.exampl
 Route::screen('example-advanced', ExampleFieldsAdvancedScreen::class)->name('platform.example.advanced');
 
 //Route::screen('idea', Idea::class, 'platform.screens.idea');
+
+// Загрузка изображений для вставки в контент статьи (markdown).
+Route::post('articles/{article}/upload-content-image', ContentImageUploadController::class)
+    ->middleware(['auth', 'access:platform.custom.articles'])
+    ->name('platform.content-image.upload');

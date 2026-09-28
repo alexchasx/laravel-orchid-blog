@@ -324,3 +324,21 @@ Sitemap: {APP_URL}/sitemap.xml
 - `gzip on; gzip_comp_level 6; gzip_min_length 256;`
 - `gzip_types`: text/plain, text/css, text/javascript, application/javascript, application/json, application/xml, application/rss+xml, image/svg+xml.
 - HTML сжимается по умолчанию (nginx включает gzip для text/html автоматически).
+
+### 17.11 Изображения статей
+
+- **Загрузка:** админ выбирает файл в поле `Upload` (`CreateOrUpdateArticle.php`); Orchid AJAX-ом загружает в `/admin/systems/files`, запись в `attachments`, файл в `storage/app/public`.
+- **Сервис:** `ArticleImageService::store(Article, Attachment)` — валидация mime/размера, копирование оригинала, генерация 3 WebP-вариантов 16:9 (`large` 1600×900, `medium` 800×450, `thumbnail` 400×225), запись `Article::image = 'articles/{id}/medium.webp'`, удаление вложения `attachments`.
+- **Хранение:** `storage/app/public/articles/{id}/` — `original.{ext}`, `large.webp`, `medium.webp`, `thumbnail.webp`. Дефолтный диск `local` — **везде** явный `Storage::disk('public')`.
+- **Accessors:** `Article::image_large` → `large.webp`, `Article::image_thumbnail` → `thumbnail.webp`.
+- **SEO:** `og:image`/`twitter:image` — `thumbnail.webp`; JSON-LD `image` — `large.webp`; sitemap — `<image:url>` + `<image:caption>` = `image_alt ?: title`; RSS `<enclosure>` — `medium.webp`, `type="image/webp"`.
+- **Удаление:** `ArticleObserver::forceDeleted()` → `ArticleImageService::removeFor()` удаляет `articles/{id}`; `deleted()`/`restored()` файлы не трогают.
+- **Пермишен:** Upload требует `platform.systems.attachment` (выдать роли админа).
+
+### 17.12 Изображения внутри контента
+
+- **Маршрут:** `POST /admin/articles/{article}/upload-content-image` → `ContentImageUploadController::__invoke()`, миддлвары `auth` + `access:platform.custom.articles`.
+- **Приём:** поле `file` (jpeg/png/webp ≤ 5 МБ); 422 при невалидном файле с JSON `{"error": "..."}`.
+- **Сохранение:** конвертация в WebP 16:9 (1600×900, q80) через `Intervention\Image`; файл в `public/articles/{id}/content/{timestamp}.webp`.
+- **Ответ:** `{ "url": "абсолютный URL" }` — генерируется через `Seo::absoluteUrl(Storage::disk('public')->url($path))`.
+- **Использование:** админ вставляет в markdown `![alt](url)`; SimpleMDE-кнопку не делаем.
