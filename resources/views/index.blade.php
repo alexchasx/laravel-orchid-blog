@@ -56,9 +56,17 @@
     <div class="masonry">
         @forelse($articles as $index => $article)
             <article class="post {{ $index === 0 ? 'featured' : '' }} reveal">
-                @if($article->image && $index === 0)
-                    <div class="post-image image-one">
-                        <span>{{ $article->rubric->title ?? 'ARTICLE' }} / {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                @if($article->image)
+                    <div class="post-image">
+                        <img class="post-image-img"
+                             src="{{ \App\Support\Seo::absoluteUrl(\Illuminate\Support\Facades\Storage::disk('public')->url($article->image)) }}"
+                             alt="{{ $article->image_alt ?: $article->title }}"
+                             width="800" height="450"
+                             loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                             decoding="async">
+                        @if($index === 0)
+                            <span>{{ $article->rubric->title ?? 'ARTICLE' }} / {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                        @endif
                     </div>
                 @endif
                 <div class="post-body">

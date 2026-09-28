@@ -22,8 +22,8 @@ class FeedController extends Controller
             $siteName = config('app.name');
             $siteDesc = config('seo.default_description', 'IT-блог TECH//LOG');
             $lastBuildDate = $articles->isNotEmpty()
-                ? $articles->first()->updated_at?->format_rss()
-                : now()->format_rss();
+                ? $articles->first()->updated_at?->toRssString()
+                : now()->toRssString();
 
             $xml = '<?xml version="1.0" encoding="UTF-8"?>'
                 . "\n"
@@ -48,11 +48,11 @@ class FeedController extends Controller
                 $articleUrl = route('articleShow', $article);
                 $enclosure = '';
 
-                if (!empty($article->image) && Storage::exists($article->image)) {
-                    $imageUrl = e(\App\Support\Seo::absoluteUrl(Storage::url($article->image)));
-                    $fileSize = (int) Storage::size($article->image);
+                if (!empty($article->image) && Storage::disk('public')->exists($article->image)) {
+                    $imageUrl = e(\App\Support\Seo::absoluteUrl(Storage::disk('public')->url($article->image)));
+                    $fileSize = (int) Storage::disk('public')->size($article->image);
                     $enclosure = sprintf(
-                        '    <enclosure url="%s" length="%d" type="image/jpeg"/>' . "\n",
+                        '    <enclosure url="%s" length="%d" type="image/webp"/>' . "\n",
                         $imageUrl,
                         max(0, $fileSize)
                     );
@@ -64,7 +64,7 @@ class FeedController extends Controller
                     . '      <title>' . e($article->title) . '</title>' . "\n"
                     . '      <link>' . e($articleUrl) . '</link>' . "\n"
                     . '      <guid>' . e($articleUrl) . '</guid>' . "\n"
-                    . '      <pubDate>' . e((string) $article->published_at?->format_rss()) . '</pubDate>' . "\n"
+                    . '      <pubDate>' . e((string) $article->published_at?->toRssString()) . '</pubDate>' . "\n"
                     . '      <description>' . e($description) . '</description>' . "\n"
                     . $enclosure
                     . '    </item>' . "\n";

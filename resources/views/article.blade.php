@@ -42,6 +42,12 @@
         <div class="prose reveal">
             {{-- Hero Image --}}
             @if($article->image)
+                <img class="article-hero-img"
+                     src="{{ \App\Support\Seo::absoluteUrl(\Illuminate\Support\Facades\Storage::disk('public')->url($article->image_large)) }}"
+                     alt="{{ $article->image_alt ?: $article->title }}"
+                     width="1600" height="900"
+                     loading="eager" fetchpriority="high" decoding="async">
+            @else
                 <div class="article-hero" style="background: linear-gradient(135deg, #003322, #08120e 45%, #00ff88 180%); background-size: cover; background-position: center;"></div>
             @endif
 

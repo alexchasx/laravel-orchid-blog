@@ -107,9 +107,11 @@
             "image": {
                 "{{ $typ }}": "ImageObject",
                 "{{ $oid }}": "{{ url()->current() }}/primary/#image",
-                "url": "{{ \App\Support\Seo::absoluteUrl(Storage::url($article->image)) }}",
-                "contentUrl": "{{ \App\Support\Seo::absoluteUrl(Storage::url($article->image)) }}",
-                "caption": "{{ $article->title }}"
+                "url": "{{ \App\Support\Seo::absoluteUrl(\Illuminate\Support\Facades\Storage::disk('public')->url($article->image_large)) }}",
+                "contentUrl": "{{ \App\Support\Seo::absoluteUrl(\Illuminate\Support\Facades\Storage::disk('public')->url($article->image_large)) }}",
+                "width": 1600,
+                "height": 900,
+                "caption": "{{ $article->image_alt ?: $article->title }}"
             },
             @endif
             "inLanguage": "{{ $locale }}"

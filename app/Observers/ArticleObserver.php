@@ -6,6 +6,7 @@ use App\Mail\NewArticleMail;
 use App\Models\Article;
 use App\Models\Subscriber;
 use App\Models\Tag;
+use App\Services\ArticleImageService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -96,5 +97,6 @@ class ArticleObserver
     public function forceDeleted(Article $article)
     {
         Tag::updateCountArticles($article);
+        app(ArticleImageService::class)->removeFor($article);
     }
 }

@@ -34,14 +34,16 @@ class SitemapController extends Controller
             foreach ($articles as $article) {
                 $loc = route('articleShow', $article);
                 $image = '';
-                if (!empty($article->image) && Storage::exists($article->image)) {
+                if (!empty($article->image) && Storage::disk('public')->exists($article->image)) {
                     $image = sprintf(
                         '    <image:image>'
                         . '<image:url>%s</image:url>'
                         . '<image:title>%s</image:title>'
+                        . '<image:caption>%s</image:caption>'
                         . '</image:image>',
-                        e(\App\Support\Seo::absoluteUrl(Storage::url($article->image))),
-                        e($article->title)
+                        e(\App\Support\Seo::absoluteUrl(Storage::disk('public')->url($article->image_thumbnail))),
+                        e($article->title),
+                        e($article->image_alt ?: $article->title)
                     );
                 }
                 $xml .= $this->urlEntry(
@@ -124,7 +126,7 @@ class SitemapController extends Controller
         return Article::query()
             ->where('is_published', true)
             ->where('published_at', '<=', now())
-            ->select('id', 'slug', 'updated_at', 'image')
+            ->select('id', 'slug', 'title', 'updated_at', 'image', 'image_alt')
             ->orderBy('updated_at', 'desc')
             ->get();
     }

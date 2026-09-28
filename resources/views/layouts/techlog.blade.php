@@ -44,7 +44,9 @@
         <meta property="og:locale" content="{{ config('seo.og_locale', 'ru_RU') }}">
         <meta property="og:site_name" content="{{ str_replace('{app_name}', config('app.name'), config('seo.og_site_name')) }}">
         @if(!empty($article->image))
-            <meta property="og:image" content="{{ \App\Support\Seo::absoluteUrl(Storage::url($article->image)) }}">
+            <meta property="og:image" content="{{ \App\Support\Seo::absoluteUrl(\Illuminate\Support\Facades\Storage::disk('public')->url($article->image_thumbnail)) }}">
+            <meta property="og:image:width" content="400">
+            <meta property="og:image:height" content="225">
         @else
             @if(!empty(config('seo.og_image')))
                 <meta property="og:image" content="{{ \App\Support\Seo::absoluteUrl(config('seo.og_image')) }}">
@@ -68,7 +70,7 @@
         <meta name="twitter:title" content="{{ $article->title }}">
         <meta name="twitter:description" content="{{ $article->meta_desc ?: config('seo.default_description') }}">
         @if(!empty($article->image))
-            <meta name="twitter:image" content="{{ \App\Support\Seo::absoluteUrl(Storage::url($article->image)) }}">
+            <meta name="twitter:image" content="{{ \App\Support\Seo::absoluteUrl(\Illuminate\Support\Facades\Storage::disk('public')->url($article->image_thumbnail)) }}">
         @elseif(!empty(config('seo.og_image')))
             <meta name="twitter:image" content="{{ \App\Support\Seo::absoluteUrl(config('seo.og_image')) }}">
         @endif

@@ -8,6 +8,7 @@ use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class FeedTest extends TestCase
@@ -140,7 +141,7 @@ class FeedTest extends TestCase
         $posNewer = strpos($content, 'Статья 2 (новая)');
         $this->assertNotFalse($posNewer);
         $this->assertNotFalse($posOlder);
-        $this->assertLessThan($posNewer, $posOlder, 'Новые статьи должны идти раньше');
+        $this->assertLessThan($posOlder, $posNewer, 'Новые статьи должны идти раньше');
     }
 
     public function test_rss_limits_to_20_articles(): void
@@ -214,6 +215,10 @@ class FeedTest extends TestCase
 
     public function test_rss_item_has_enclosure_with_image(): void
     {
+        // Изображения статей хранятся на диске public — создаём файл, иначе <enclosure> не попадёт в ленту.
+        Storage::fake('public');
+        Storage::disk('public')->put('articles/cover.jpg', 'fake-image');
+
         $this->createPublishedArticle([
             'title' => 'Статья с картинкой',
             'image' => 'articles/cover.jpg',
@@ -223,7 +228,8 @@ class FeedTest extends TestCase
 
         $content = $response->getContent();
         $this->assertStringContainsString('<enclosure', $content);
-        $this->assertStringContainsString('type="image/jpeg"', $content);
+        // Варианты изображений генерируются в WebP → тип в <enclosure> — image/webp.
+        $this->assertStringContainsString('type="image/webp"', $content);
         $this->assertStringContainsString('length="', $content);
     }
 

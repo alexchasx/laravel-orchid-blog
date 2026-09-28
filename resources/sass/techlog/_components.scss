@@ -346,36 +346,28 @@
 }
 
 .post-image {
-    height: 220px;
-    padding: 18px;
-    display: flex;
-    align-items: flex-end;
-    background-size: cover;
-    background-position: center;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
 
     span {
+        position: absolute;
+        bottom: 12px;
+        left: 12px;
         font: 600 var(--fs-xs) "JetBrains Mono";
         color: #07140e;
         background: var(--green);
         padding: 5px 8px;
         border-radius: 6px;
     }
-}
-
-.image-one {
-    background-image: linear-gradient(135deg, #003322, #08120e 45%, #00ff88 180%);
-}
-
-.image-two {
-    background-image: linear-gradient(135deg, #101414, #063b29 55%, #18221e);
-}
-
-.image-three {
-    background-image: linear-gradient(135deg, #071b15, #01291b 50%, #09110e);
-}
-
-.image-four {
-    background-image: linear-gradient(135deg, #111, #003322 55%, #00ff88 200%);
 }
 
 .post-body {
@@ -499,6 +491,16 @@
     height: 320px;
     border-radius: 20px;
     margin-bottom: 55px;
+}
+
+.article-hero-img {
+    width: 100%;
+    height: auto;
+    max-height: 560px;
+    object-fit: cover;
+    border-radius: 20px;
+    margin-bottom: 55px;
+    display: block;
 }
 
 .prose h2,
