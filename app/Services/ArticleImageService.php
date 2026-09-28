@@ -61,6 +61,9 @@ class ArticleImageService
         $extension = $attachment->extension;
         $articleDir = "articles/{$article->id}";
 
+        // Удаляем «висячие» вложения статьи (например, фейковые превью).
+        $this->deleteStaleAttachments($article);
+
         // Если у статьи уже есть изображение — удаляем старую папку.
         if (!empty($article->image)) {
             $this->removeFor($article);
@@ -76,12 +79,14 @@ class ArticleImageService
         foreach (self::SIZES as $sizeName => [$width, $height, $quality]) {
             $image = $manager->read(file_get_contents($file));
             $image->cover($width, $height);
-            $webpPath = "{$articleDir}/{$sizeName}.webp";
-            Storage::disk('public')->put($webpPath, (string) $image->toWebp($quality));
+            Storage::disk('public')->put(
+                $this->variantPath($article, $sizeName),
+                (string) $image->toWebp($quality)
+            );
         }
 
         // Записываем путь к medium.webp в статью.
-        $article->update(['image' => "{$articleDir}/medium.webp"]);
+        $article->update(['image' => $this->variantPath($article, 'medium')]);
 
         // Удаляем вложение из таблицы и физический файл (чтобы не плодить дубликаты).
         $attachment->delete();
@@ -96,11 +101,28 @@ class ArticleImageService
             return;
         }
 
-        $articleDir = Str::before($article->image, '/');
-        $articleId  = $article->id;
-        $directory  = "articles/{$articleId}";
+        Storage::disk('public')->deleteDirectory("articles/{$article->id}");
+        $this->deleteStaleAttachments($article);
+    }
 
-        Storage::disk('public')->deleteDirectory($directory);
+    /**
+     * Относительный путь к WebP-варианту изображения статьи.
+     */
+    private function variantPath(Article $article, string $size): string
+    {
+        return "articles/{$article->id}/{$size}.webp";
+    }
+
+    /**
+     * Удаляет записи Attachment, относящиеся к каталогу изображения статьи
+     * (фейковые превью из previewAttachment), чтобы не накапливать мусор в attachments.
+     */
+    private function deleteStaleAttachments(Article $article): void
+    {
+        Attachment::query()
+            ->where('disk', 'public')
+            ->where('path', 'articles/' . $article->id)
+            ->delete();
     }
 
     /**
