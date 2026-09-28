@@ -4,10 +4,10 @@ namespace App\Orchid\Screens\Article;
 
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
-use App\Models\Attachment;
 use App\Orchid\Layouts\Article\ArticleListTable;
 use App\Orchid\Layouts\CreateOrUpdateArticle;
 use App\Services\ArticleImageService;
+use Orchid\Attachment\Models\Attachment;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Layouts\Modal;

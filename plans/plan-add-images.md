@@ -175,6 +175,8 @@ Input::make('article.image_alt')->title('Alt-текст изображения')
 
 ### Этап 8. Тесты
 
+> ✅ Выполнен. Создан `tests/Feature/ArticleImageTest.php` (8 тестов), попутно исправлен импорт `Orchid\Attachment\Models\Attachment` в `ArticleListScreen.php`. `make test`: 224 теста зелёные; `SitemapTest`/`SeoMetaTest` обновлений не потребовали.
+
 8.1. Новый `tests/Feature/ArticleImageTest.php` (паттерн — как `ArticleListScreenTest`, прямой вызов `createOrUpdateArticle`):
 - загрузка: `Storage::fake('public')`, создать `Article` + `Attachment` с PNG-файлом, вызвать метод экрана с `article[image][]=id` → `assertExists` всех 4 файлов, `article.image === articles/{id}/medium.webp`;
 - невалидный тип/размер (txt, >5 МБ) → изображение не сохранено;
