@@ -8,6 +8,7 @@ use App\Models\Rubric;
 use App\Models\Tag;
 use App\Models\User;
 use App\Orchid\Screens\Article\ArticleListScreen;
+use App\Services\ArticleImageService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
@@ -33,7 +34,7 @@ class ArticleListScreenTest extends TestCase
     {
         $request = ArticleRequest::create('/admin/articles', 'POST', $payload);
 
-        (new ArticleListScreen())->createOrUpdateArticle($request);
+        (new ArticleListScreen())->createOrUpdateArticle($request, app(ArticleImageService::class));
     }
 
     public function test_create_or_update_article_creates_article_with_tags(): void

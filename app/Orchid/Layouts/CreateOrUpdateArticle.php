@@ -11,6 +11,7 @@ use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\SimpleMDE;
+use Orchid\Screen\Fields\Upload;
 use Orchid\Screen\Layouts\Rows;
 
 class CreateOrUpdateArticle extends Rows
@@ -66,6 +67,16 @@ class CreateOrUpdateArticle extends Rows
                     ->required(),
 
             SimpleMDE::make('article.content_raw')->title('Контент'),
+
+            Upload::make('article.image')
+                ->storage('public')
+                ->title('Изображение статьи')
+                ->accept('image/*')
+                ->maxFiles(1),
+
+            Input::make('article.image_alt')
+                ->title('Alt-текст изображения')
+                ->placeholder('Опишите изображение для скринридеров и SEO'),
 
             Group::make([
                 Input::make('article.slug')

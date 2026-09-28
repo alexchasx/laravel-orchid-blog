@@ -93,6 +93,8 @@ Schema::table('articles', function (Blueprint $table) {
 
 ### Этап 4. Админка Orchid
 
+> ✅ Выполнен. Изменены 4 файла: `CreateOrUpdateArticle.php`, `ArticleRequest.php`, `ArticleListScreen.php`, `ArticleListScreenTest.php`.
+
 4.1. `app/Orchid/Layouts/CreateOrUpdateArticle.php` — добавить в `fields()`:
 
 ```php

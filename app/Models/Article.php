@@ -27,6 +27,7 @@ use League\CommonMark\CommonMarkConverter;
  * @property bool $is_published
  * @property \Illuminate\Support\Carbon|null $published_at
  * @property string|null $image
+ * @property string|null $image_alt
  * @property int|null $viewed Кол-во просмотров
  * @property string|null $keywords
  * @property string|null $meta_desc
@@ -119,6 +120,7 @@ class Article extends Model
         'user_id',
         'rubric_id',
         'image',
+        'image_alt',
         'slug',
         'title',
         'excert',
@@ -141,6 +143,30 @@ class Article extends Model
     protected $allowedSorts = [
         'published_at', 'id', 'rubric_id'
     ];
+
+    /**
+     * URL варианта large.webp (hero 1600×900).
+     */
+    public function getImageLargeAttribute(): ?string
+    {
+        if (empty($this->image)) {
+            return null;
+        }
+
+        return Str::replace('medium.webp', 'large.webp', $this->image);
+    }
+
+    /**
+     * URL варианта thumbnail.webp (OG/Twitter, 400×225).
+     */
+    public function getImageThumbnailAttribute(): ?string
+    {
+        if (empty($this->image)) {
+            return null;
+        }
+
+        return Str::replace('medium.webp', 'thumbnail.webp', $this->image);
+    }
 
     /**
      * Возращает категорию данной статьи.

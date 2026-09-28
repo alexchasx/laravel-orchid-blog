@@ -33,6 +33,9 @@ class ArticleRequest extends FormRequest
             'article.slug' => ['nullable', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'],
             'article.tags' => ['nullable', 'array'],
             'article.tags.*' => ['integer', 'exists:tags,id'],
+            'article.image' => ['nullable', 'array'],
+            'article.image.*' => ['integer', 'exists:attachments,id'],
+            'article.image_alt' => ['nullable', 'string', 'max:255'],
         ];
     }
 

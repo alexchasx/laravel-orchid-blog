@@ -4,8 +4,10 @@ namespace App\Orchid\Screens\Article;
 
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
+use App\Models\Attachment;
 use App\Orchid\Layouts\Article\ArticleListTable;
 use App\Orchid\Layouts\CreateOrUpdateArticle;
+use App\Services\ArticleImageService;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Layouts\Modal;
@@ -73,7 +75,7 @@ class ArticleListScreen extends Screen
         ];
     }
 
-    public function asyncGetArticle(/* Article $article */): array
+    public function asyncGetArticle(ArticleImageService $service): array
     {
         /*
          * В async-запросе Orchid параметр кнопки (article=<id>) передаётся в query-строке.
@@ -83,6 +85,8 @@ class ArticleListScreen extends Screen
          */
         parse_str((string) parse_url((string) request()->getRequestUri(), PHP_URL_QUERY), $query);
         $article = Article::with(['rubric', 'tags'])->findOrFail((int) ($query['article'] ?? 0));
+
+        $preview = $service->previewAttachment($article);
 
         return [
             'article' => [
@@ -99,11 +103,13 @@ class ArticleListScreen extends Screen
                 'content_html' => $article->content_html,
                 'keywords'     => $article->keywords,
                 'meta_desc'    => $article->meta_desc,
+                'image'        => $preview ? [$preview->id] : [],
+                'image_alt'    => $article->image_alt,
             ],
         ];
     }
 
-    public function createOrUpdateArticle(ArticleRequest $request): void
+    public function createOrUpdateArticle(ArticleRequest $request, ArticleImageService $service): void
     {
         $articleId = $request->input('article.id');
         $article = Article::updateOrCreate([
@@ -120,9 +126,29 @@ class ArticleListScreen extends Screen
             'meta_desc' => $request->input('article.meta_desc'),
             'is_published' => $request->boolean('article.is_published'),
             'published_at' => $request->input('article.published_at'),
+            'image_alt' => $request->input('article.image_alt'),
         ]);
 
         $article->tags()->sync($request->input('article.tags'));
+
+        // --- Обработка изображения ---
+        $newIds    = $request->input('article.image', []);
+        $registered = $service->previewAttachment($article);
+        $registeredId = $registered ? $registered->id : null;
+
+        if (!empty($newIds)) {
+            // Выбрано новое вложение — отличается от текущего → сохраняем.
+            $newId = (int) $newIds[0];
+            if ($newId !== $registeredId) {
+                $attachment = Attachment::findOrFail($newId);
+                $service->store($article, $attachment);
+            }
+            // Если id совпадает — ничего не делаем (только image_alt обновлён выше).
+        } elseif (empty($newIds) && !empty($article->image)) {
+            // Изображение удалено → чистим файлы.
+            $service->removeFor($article);
+            $article->update(['image' => null]);
+        }
 
         is_null($articleId) ? Toast::info('Статья создана') : Toast::info('Статья обновлена');
     }
