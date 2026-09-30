@@ -7,6 +7,7 @@ use App\Models\Article;
 use App\Orchid\Layouts\Article\ArticleListTable;
 use App\Orchid\Layouts\CreateOrUpdateArticle;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Layouts\Modal;
 use Orchid\Support\Facades\Layout;
@@ -97,8 +98,8 @@ class ArticleListScreen extends Screen
                     : null,
                 'content_raw'  => $article->content_raw,
                 'content_html' => $article->content_html,
-                'keywords'     => $article->keywords,
                 'meta_desc'    => $article->meta_desc,
+                'image'        => $article->image,
             ],
         ];
     }
@@ -106,6 +107,32 @@ class ArticleListScreen extends Screen
     public function createOrUpdateArticle(ArticleRequest $request): void
     {
         $articleId = $request->input('article.id');
+        $imagePath = null;
+
+        // Загрузка/удаление изображения.
+        $image = $request->input('article.image');
+
+        // Если изображение уже было — запоминаем путь для удаления при замене.
+        $oldImagePath = null;
+        if (!empty($articleId)) {
+            $oldArticle = Article::withoutGlobalScopes()->find($articleId);
+            if ($oldArticle && $oldArticle->image) {
+                $oldImagePath = $oldArticle->image;
+            }
+        }
+
+        if (!empty($image)) {
+            // Picture-поле Orchid: если это загруженный файл — сохраняем.
+            if ($image instanceof \Illuminate\Http\UploadedFile && $image->isValid()) {
+                $imagePath = $image->store('articles', 'public');
+            } elseif (is_string($image) && $image !== '') {
+                // Изображение уже сохранено (например, из медиабиблиотеки),
+                // но если это новый файл — нужно проверить.
+                // В остальных случаях используем как есть.
+                $imagePath = $image;
+            }
+        }
+
         $article = Article::updateOrCreate([
             'id' => $articleId,
         ], [
@@ -120,9 +147,15 @@ class ArticleListScreen extends Screen
             'meta_desc' => $request->input('article.meta_desc'),
             'is_published' => $request->boolean('article.is_published'),
             'published_at' => $request->input('article.published_at'),
+            'image' => $imagePath,
         ]);
 
         $article->tags()->sync($request->input('article.tags'));
+
+        // Удаляем старое изображение при замене.
+        if ($imagePath && $oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
+            Storage::disk('public')->delete($oldImagePath);
+        }
 
         is_null($articleId) ? Toast::info('Статья создана') : Toast::info('Статья обновлена');
     }

@@ -69,11 +69,7 @@
 - **Docker Compose** — nginx, PHP-FPM 8.5, Node.js, MySQL 8, phpMyAdmin, MailHog, а также воркеры `schedule` и `queue`; всё поднимается через `make`.
 - **Тесты** — PHPUnit: feature-тесты публичных страниц, комментариев, контактов, подписки, профиля и unit-тесты моделей/сервисов (`make test`).
 
-> **Чего пока нет (легко добавить самостоятельно):** загрузка изображений к статьям.
-> В Orchid уже есть готовые поля `Upload`/`Picture`, а в таблице `articles` — колонка `image`,
-> но в форме статьи поле не подключено, а в шаблоне статьи стоит заглушка-градиент
-> (`resources/views/article.blade.php`). Чтобы включить: добавьте `Picture::make('article.image')`
-> в `app/Orchid/Layouts/CreateOrUpdateArticle.php` и выведите значение в шаблоне.
+> **Чего пока нет (легко добавить самостоятельно):**
 > Свои favicon, apple-touch-icon и логотип также нужно заменить — см. раздел «Что нужно поменять».
 >
 > **Настройка оператора ПДн:** заполните переменные `OPERATOR_NAME`, `OPERATOR_ADDRESS`,
@@ -227,7 +223,7 @@ docker compose -f docker/docker-compose.yml exec node npm run build
 | `favicon.ico` | `public/favicon.ico` | Заглушка Laravel. Подключается в `techlog` — замените на свой |
 | `apple-touch-icon.png` | `public/apple-touch-icon.png` | Иконка для iOS-закладок (180×180), заглушка-акцент |
 | `site.webmanifest` | `public/site.webmanifest` | PWA-манифест (name, icons, theme_color), опционально |
-| Логотип / OG-изображение | `public/` | Не поставляются: OG-картинка статей не загружается, в `article.blade.php` стоит заглушка-градиент |
+| Логотип / OG-изображение | `public/` | Не поставляются: OG-картинка генерируется из загруженного изображения статьи |
 
 Ассеты Orchid (`public/vendor/orchid/`) — это опубликованная копия ассетов пакета,
 она нужна для работы админки. После обновления `orchid/platform` переопубликуйте их:

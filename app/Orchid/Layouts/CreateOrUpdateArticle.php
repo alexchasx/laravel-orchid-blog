@@ -9,6 +9,7 @@ use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Picture;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\SimpleMDE;
 use Orchid\Screen\Layouts\Rows;
@@ -41,6 +42,10 @@ class CreateOrUpdateArticle extends Rows
                     ->sendTrueOrFalse()
                     ->title('Опубликована?'),
             ]),
+
+            Picture::make('article.image')
+                ->title('Изображение')
+                ->help('Рекомендуемый размер: 1200×630 (1.9:1), JPG/PNG/WEBP до 2 МБ'),
 
             Group::make([
 

@@ -42,7 +42,9 @@
         <div class="prose reveal">
             {{-- Hero Image --}}
             @if($article->image)
-                <div class="article-hero" style="background: linear-gradient(135deg, #003322, #08120e 45%, #00ff88 180%); background-size: cover; background-position: center;"></div>
+                <div class="article-hero">
+                    <img src="{{ Storage::url($article->image) }}" alt="{{ $article->title }}">
+                </div>
             @endif
 
             {{-- Article Content (HTML from markdown, с id у подзаголовков) --}}
