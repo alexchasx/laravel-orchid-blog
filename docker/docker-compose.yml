@@ -1,26 +1,37 @@
 services:
   nginx:
-    image: nginx
+    image: nginx:1.27-alpine
+    restart: unless-stopped
     volumes:
       - ./../:/var/www
       - ./nginx/conf.d/:/etc/nginx/conf.d
     ports:
       - 8080:80
     depends_on:
-      - app
+      app:
+        condition: service_healthy
     container_name: blog_nginx
 
   app:
     image: blog_app
     build:
       context: .
-      dockerfile: ./app/DockerFile
+      dockerfile: ./app/Dockerfile
     volumes:
       - ./../:/var/www
     depends_on:
-      - db
-      - mailhog
+      db:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "ps -ef | grep 'php-fpm' | grep -v grep || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
     container_name: blog_app
+    restart: unless-stopped
 
   node:
     image: node:22-alpine
@@ -35,8 +46,11 @@ services:
 
   schedule:
     image: blog_app
+    user: "www-data"
+    restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - ./../:/var/www
     command: php artisan schedule:work
@@ -46,15 +60,19 @@ services:
   # NewArticleMail не блокирует веб-запрос, а выполняется этим воркером.
   queue:
     image: blog_app
+    user: "www-data"
+    restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - ./../:/var/www
     command: php artisan queue:work --sleep=1 --tries=3
     container_name: blog_queue
 
   mailhog:
-    image: mailhog/mailhog
+    image: mailhog/mailhog:v1.0.1
+    restart: unless-stopped
     ports:
       - "8026:8025"
     container_name: blog_mailhog
@@ -69,16 +87,25 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - 8101:3306
-    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     container_name: blog_db
 
   phpmyadmin:
-    image: phpmyadmin
-    restart: always
+    image: phpmyadmin:5.2
+    restart: unless-stopped
     ports:
       - 8899:80
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
-      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=root
     container_name: blog_phpmyadmin
