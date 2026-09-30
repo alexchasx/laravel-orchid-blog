@@ -153,7 +153,7 @@ Docker Hub → ошибка `pull access denied / manifest not found`, и вся
   - `make test` — **216 passed (547 assertions)** после исправления багов шаблона
     (см. ниже);
   - сайт отвечает: `/`→200, `/rss`→200, `/sitemap.xml`→200, `/robots.txt`→200,
-    `/admin`→302 (редирект на логин); планировщик реально выполняет
+    `/nexus`→302 (редирект на логин); планировщик реально выполняет
     `articles:publish-scheduled` каждую минуту.
 
 ---

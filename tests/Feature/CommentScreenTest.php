@@ -48,7 +48,7 @@ class CommentScreenTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->adminWithPlatformAccess())
-            ->get("/admin/comment/{$comment->id}");
+            ->get("/nexus/comment/{$comment->id}");
 
         $response->assertOk();
         $response->assertSee('conia111');
@@ -68,10 +68,10 @@ class CommentScreenTest extends TestCase
 
         $admin = $this->adminWithPlatformAccess();
 
-        $this->actingAs($admin)->post("/admin/comment/{$comment->id}/approve");
+        $this->actingAs($admin)->post("/nexus/comment/{$comment->id}/approve");
 
         $this->assertDatabaseHas('comments', ['id' => $comment->id, 'active' => true]);
-        $response = $this->actingAs($admin)->get("/admin/comment/{$comment->id}");
+        $response = $this->actingAs($admin)->get("/nexus/comment/{$comment->id}");
 
         $response->assertOk();
         $response->assertSee('Опубликован');

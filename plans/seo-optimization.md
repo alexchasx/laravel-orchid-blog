@@ -118,7 +118,7 @@ flowchart TD
 - [`public/robots.txt`](../../public/robots.txt):
   ```
   User-agent: *
-  Disallow: /admin
+  Disallow: /nexus
   Disallow: /dashboard
   Disallow: /profile
   Disallow: /login

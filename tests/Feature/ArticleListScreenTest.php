@@ -31,7 +31,7 @@ class ArticleListScreenTest extends TestCase
      */
     private function callCreateOrUpdate(array $payload): void
     {
-        $request = ArticleRequest::create('/admin/articles', 'POST', $payload);
+        $request = ArticleRequest::create('/nexus/articles', 'POST', $payload);
 
         (new ArticleListScreen())->createOrUpdateArticle($request);
     }

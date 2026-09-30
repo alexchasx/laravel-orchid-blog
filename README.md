@@ -24,7 +24,7 @@
 - **noindex** — для поиска (`?search=`), пагинации `page>=2`, `/notpublic`, `/dashboard`, `/profile`, `/unsubscribe`, `/consent/revoke` и тестовых страниц — роботы не индексируют.
 - **JSON-LD** — структурированные данные Schema.org: Article, BreadcrumbList, WebSite+SearchAction, Organization (только на индексируемых страницах).
 - **sitemap.xml** — генерация через `SitemapController` с кэшированием (1 час); включает главную, статьи, рубрики, теги, статические страницы.
-- **robots.txt** — блокирует `/admin`, `/dashboard`, `/profile`, `/login`, `/register`, `/test-*`, `/notpublic`, `/unsubscribe`, `/consent/revoke`, `?search=`, `?page=`; содержит ссылку на sitemap.
+- **robots.txt** — блокирует `/nexus`, `/dashboard`, `/profile`, `/login`, `/register`, `/test-*`, `/notpublic`, `/unsubscribe`, `/consent/revoke`, `?search=`, `?page=`; содержит ссылку на sitemap.
 - **RSS 2.0-лента** — `GET /rss` (контроллер `FeedController`), кэш 1 час, последние 20 опубликованных статей; `<link rel="alternate" type="application/rss+xml">` в `<head>`.
 - **Абсолютные URL** в OG/Twitter/JSON-LD/sitemap — все пути к изображениям приводятся к абсолютным (`{APP_URL}/storage/...`) через `App\Support\Seo::absoluteUrl()`.
 - **Slug-URL рубрик и тегов** — `/rubric/{slug}` и `/tag/{slug}`; старые `/rubric/{id}` и `/tag/{id}` возвращают 301 на новый URL.
@@ -54,7 +54,7 @@
 
 - Форма `/contact` с валидацией (`ContactRequest`), заявки сохраняются в `contacts` и видны в админке; гостем — по имени и email.
 
-### Админ-панель Orchid (`/admin`)
+### Админ-панель Orchid (`/nexus`)
 
 - **CRUD статей** — список с пагинацией, модальные окна создания/редактирования, Markdown-редактор, автогенерация уникального `slug`, черновик/публикация, планирование даты, ключевые слова и мета-описание.
 - **CRUD рубрик и меток** — счётчик статей у меток пересчитывается автоматически (`ArticleObserver`).
@@ -145,7 +145,7 @@ make setup
 
 Доступ после установки:
 - Сайт: [http://localhost:8080](http://localhost:8080)
-- Админ-панель Orchid: [http://localhost:8080/admin](http://localhost:8080/admin) — пользователь `admin@localhost.ru` / `123456`
+- Админ-панель Orchid: [http://localhost:8080/nexus](http://localhost:8080/nexus) — пользователь `admin@localhost.ru` / `123456`
 - phpMyAdmin: [http://localhost:8899](http://localhost:8899)
 - MailHog: [http://localhost:8026](http://localhost:8026)
 
@@ -237,7 +237,7 @@ docker compose -f docker/docker-compose.yml exec node npm run build
 
 | Параметр | Env-переменная | По умолчанию | Зачем менять |
 |---|---|---|---|
-| `prefix` | `PLATFORM_PREFIX` | `/admin` | Адрес админки (например `/panel`) |
+| `prefix` | `PLATFORM_PREFIX` | `/nexus` | Адрес админки (например `/panel`) |
 | `domain` | `PLATFORM_DOMAIN` | — | Домен, если админка на отдельном поддомене |
 | `middleware` | — | стандартный стек | Дополнительные middleware админки |
 | `template.header` / `template.footer` | — | `''` | Свои header/footer-шаблоны Orchid |

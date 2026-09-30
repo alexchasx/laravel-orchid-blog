@@ -33,7 +33,7 @@ make down           # остановить
 make shell          # войти в контейнер app
 ```
 
-Сайт: `http://localhost:8080`, админка: `http://localhost:8080/admin` (`admin@localhost.ru` / `123456`), phpMyAdmin: `http://localhost:8899`, MailHog: `http://localhost:8026`. Конфигурация — `docker/docker-compose.yml` (не в корне репозитория).
+Сайт: `http://localhost:8080`, админка: `http://localhost:8080/nexus` (`admin@localhost.ru` / `123456`), phpMyAdmin: `http://localhost:8899`, MailHog: `http://localhost:8026`. Конфигурация — `docker/docker-compose.yml` (не в корне репозитория).
 
 > ⚠️ `make migrate` (входит в `make install`) выполняет **`migrate:fresh --seed`** — команда **разрушает** базу данных. Не запускайте её на данных, которые нужно сохранить.
 

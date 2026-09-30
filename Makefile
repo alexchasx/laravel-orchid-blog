@@ -26,7 +26,7 @@ define PRINT_SERVICE_LINKS
 	@echo ""
 	@echo "$(GREEN)✓ $(1)$(RESET)"
 	@echo "$(GREEN)  Site:        http://localhost:8080$(RESET)"
-	@echo "$(GREEN)  Admin:       http://localhost:8080/admin$(RESET)"
+	@echo "$(GREEN)  Admin:       http://localhost:8080/nexus$(RESET)"
 	@echo "$(GREEN)  phpMyAdmin:  http://localhost:8899$(RESET)"
 	@echo "$(GREEN)  MailHog:     http://localhost:8026$(RESET)"
 endef

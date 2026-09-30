@@ -61,7 +61,7 @@ SUB_LOGO=
 - [x] форма обратной связи;
 - [x] подписка на новые статьи с рассылкой по email;
 - [x] автопубликация запланированных статей;
-- [x] Blade-фронтенд + админ-панель Orchid на `/admin`;
+- [x] Blade-фронтенд + админ-панель Orchid на `/nexus`;
 - [x] медиа-загрузка (Orchid) — **уточнено**: поля `Upload`/`Picture` в Orchid есть, но к статьям не подключены (нет поля в `CreateOrUpdateArticle`, в шаблоне — заглушка-градиент). Задокументировано в README как «чего пока нет» + инструкция по включению; gotcha добавлена в AGENTS.md.
 - [x] Дополнительно в README описаны: лента с поиском и оглавлением, страницы рубрик/меток, черновики `/notpublic`, тёмная/светлая тема, SEO/OG-разметка, двуязычность (ru/en), модерация комментариев, отписка по токену, Docker-инфраструктура и тесты.
 - [x] Отредактирован `AGENTS.md`: добавлены раздел «Статус репозитория» (правила публичного шаблона), ссылка на раздел возможностей в README и gotcha про неподключённую загрузку изображений.
@@ -128,7 +128,7 @@ SUB_LOGO=
 Выполнено: аудит всех 16 файлов в `config/`. Правки в код **не потребовались** — конфиги уже шаблонные; изменён только этот документ.
 
 - [x] Проверены `config/platform.php` и остальные конфиги на захардкоженные значения (URL сайта, имя проекта, email администратора) — **не найдено**. Ни одного литерала домена/имени/email проекта вне `env()`.
-- [x] `config/platform.php` (253 строки) целиком на `env()`/дефолтах Orchid: `domain` → `env('PLATFORM_DOMAIN', env('DASHBOARD_DOMAIN'))`, `prefix` → `env('PLATFORM_PREFIX', env('DASHBOARD_PREFIX', '/admin'))`, `guard` → `env('AUTH_GUARD', 'web')`, `attachment.disk` → `env('PLATFORM_FILESYSTEM_DISK', 'public')`. `template.header`/`template.footer` — пустые строки, `search` — пустой массив с закомментированным примером. Захардкоженных `APP_URL`, имени проекта и email админа нет.
+- [x] `config/platform.php` (253 строки) целиком на `env()`/дефолтах Orchid: `domain` → `env('PLATFORM_DOMAIN', env('DASHBOARD_DOMAIN'))`, `prefix` → `env('PLATFORM_PREFIX', env('DASHBOARD_PREFIX', '/nexus'))`, `guard` → `env('AUTH_GUARD', 'web')`, `attachment.disk` → `env('PLATFORM_FILESYSTEM_DISK', 'public')`. `template.header`/`template.footer` — пустые строки, `search` — пустой массив с закомментированным примером. Захардкоженных `APP_URL`, имени проекта и email админа нет.
 - [x] `config/my_config.php` (10 строк) — все 6 ключей уже на `env()` с пустым дефолтом: `sub_logo`/`slogan`/`my_github`/`my_email`/`my_telegram`/`contact_email` → `env(..., '')`. Переводить не на что; в `.env.example` соответствующие `MY_*`, `SLOGAN`, `CONTACT_EMAIL`, `SUB_LOGO` тоже пустые. Вывод в шаблонах — только через `config('my_config.*')` (`layouts/techlog.blade.php`, `layouts/base.blade.php`, `privacy.blade.php`).
 - [x] Проверены остальные 14 конфигов (`app`, `auth`, `cache`, `cors`, `database`, `filesystems`, `hashing`, `logging`, `mail`, `queue`, `sanctum`, `services`, `session`, `view`) — стоковые значения Laravel с `env()` и нейтральными плейсхолдерами. Единственные «домены» — дефолты фреймворка: `config/app.php:18` `env('APP_NAME', 'Laravel')`, `config/app.php:57` `env('APP_URL', 'http://localhost')`, `config/mail.php:94` `env('MAIL_FROM_ADDRESS', 'hello@example.com')`, `config/queue.php:58` `env('SQS_PREFIX', 'https://sqs.us-east-1.amazonaws.com/your-account-id')`; в `.env.example` эти переменные заданы явно, поэтому дефолты конфигов не применяются.
 - [x] Проектных значений в `docker/` нет: в nginx-конфигах отсутствует `server_name` (используется `_`), единственное упоминание домена — `getcomposer.org` в `docker/app/DockerFile:30` (официальный установщик Composer).
@@ -169,7 +169,7 @@ SUB_LOGO=
 - [x] `migrate:fresh --seed` — 25 миграций (Orchid + доменные + `jobs`) прошли без ошибок, сидер отработал без ошибок.
 - [x] Данные после сида: `users` 1, `roles` 0, `rubrics` 6, `tags` 21, `articles` 25 (все `is_published=1` и `published_at <= now()`), `article_tags` 66, `jobs` 0.
 - [x] **Поправка README:** в разделе «Демо-контент» было написано «5 статей» — фактически сидер создаёт 25 (два цикла по 5 и 20). Цифра исправлена, добавлен email тестового автора `author@example.test`.
-- [x] Смоук-тест работающего сайта (`http://localhost:8080`): `/` → 200, `/contact` → 200, `/admin/login` → 200, `/up` → 200, `/article/<реальный slug>` → 200, несуществующие `/article` и `/rubric/nonexistent` → 404, `GET /subscribe` → 405 (метод не тот — корректно).
+- [x] Смоук-тест работающего сайта (`http://localhost:8080`): `/` → 200, `/contact` → 200, `/nexus/login` → 200, `/up` → 200, `/article/<реальный slug>` → 200, несуществующие `/article` и `/rubric/nonexistent` → 404, `GET /subscribe` → 405 (метод не тот — корректно).
 - [x] `make test` — **122 теста, 291 assertion, все зелёные** (6.16 с).
 - [x] `make lint` — синтаксических ошибок нет. Единственное замечание: `Deprecated: App\Orchid\Presenters\UserPresenter::searchQuery(): Implicitly marking parameter $query as nullable` (`app/Orchid/Presenters/UserPresenter.php:78`) — это PHP 8.5 deprecation, не ошибка линтера.
 

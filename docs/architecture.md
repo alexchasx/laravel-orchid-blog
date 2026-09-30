@@ -8,7 +8,7 @@
 Русскоязычный IT-блог «TECH//LOG». Состоит из **двух поверхностей**:
 
 1. **Публичный сайт** — Blade/Vite, дизайн «TECH//LOG», шаблон `layouts.techlog`.
-2. **Админ-панель Orchid** — `/admin`, экраны в `app/Orchid/`, собственная аутентификация Orchid (та же таблица `users`).
+2. **Админ-панель Orchid** — `/nexus`, экраны в `app/Orchid/`, собственная аутентификация Orchid (та же таблица `users`).
 
 Бэкенд — **Laravel 13 (PHP ^8.5)**, админка — **Orchid Platform ^14**. Авторизация Breeze (Blade), комментарии и подписка — только Blade (без SPA/API-контроллеров).
 
@@ -214,7 +214,7 @@ Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRub
 - `make test` = `php artisan test` внутри `blog_app` (PHPUnit: `tests/Feature/`, `tests/Unit/`).
 - `make lint` = `php -l` (без phpstan/Pint) внутри `blog_app`.
 - `make frontend-build` / `make frontend-dev` = `npm run build` / Vite dev server внутри `blog_node`.
-- Доступ: сайт `:8080`, админка `:8080/admin`, phpMyAdmin `:8899`, MailHog `:8026`, Vite dev `:5173`; БД `laraorchid`/`root`/`root`.
+- Доступ: сайт `:8080`, админка `:8080/nexus`, phpMyAdmin `:8899`, MailHog `:8026`, Vite dev `:5173`; БД `laraorchid`/`root`/`root`.
 - CI отсутствует.
 
 ## 16. Известные ограничения и заметки
@@ -283,7 +283,7 @@ Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRub
 
 ```
 User-agent: *
-Disallow: /admin
+Disallow: /nexus
 Disallow: /dashboard
 Disallow: /profile
 Disallow: /login

@@ -15,7 +15,7 @@ class RobotsController extends Controller
 
         $content = <<<TXT
 User-agent: *
-Disallow: /admin
+Disallow: /nexus
 Disallow: /dashboard
 Disallow: /profile
 Disallow: /login

@@ -303,7 +303,7 @@ class SeoMetaTest extends TestCase
         $response = $this->get('/robots.txt');
 
         $content = $response->getContent();
-        $this->assertStringContainsString('Disallow: /admin', $content);
+        $this->assertStringContainsString('Disallow: /nexus', $content);
         $this->assertStringContainsString('Disallow: /dashboard', $content);
         $this->assertStringContainsString('Disallow: /profile', $content);
     }
