@@ -34,3 +34,4 @@ package-lock.json
 
 # Данные Docker-контейнеров (не попадут в шаблон)
 /docker/tmp
+docker/tmp/

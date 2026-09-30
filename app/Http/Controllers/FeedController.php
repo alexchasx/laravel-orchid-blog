@@ -22,8 +22,8 @@ class FeedController extends Controller
             $siteName = config('app.name');
             $siteDesc = config('seo.default_description', 'IT-блог TECH//LOG');
             $lastBuildDate = $articles->isNotEmpty()
-                ? $articles->first()->updated_at?->format_rss()
-                : now()->format_rss();
+                ? $articles->first()->updated_at?->toRssString()
+                : now()->toRssString();
 
             $xml = '<?xml version="1.0" encoding="UTF-8"?>'
                 . "\n"
@@ -64,7 +64,7 @@ class FeedController extends Controller
                     . '      <title>' . e($article->title) . '</title>' . "\n"
                     . '      <link>' . e($articleUrl) . '</link>' . "\n"
                     . '      <guid>' . e($articleUrl) . '</guid>' . "\n"
-                    . '      <pubDate>' . e((string) $article->published_at?->format_rss()) . '</pubDate>' . "\n"
+                    . '      <pubDate>' . e((string) $article->published_at?->toRssString()) . '</pubDate>' . "\n"
                     . '      <description>' . e($description) . '</description>' . "\n"
                     . $enclosure
                     . '    </item>' . "\n";

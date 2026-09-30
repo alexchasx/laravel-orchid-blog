@@ -7,6 +7,7 @@ use App\Models\Rubric;
 use App\Models\Tag;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class SitemapTest extends TestCase
@@ -101,6 +102,8 @@ class SitemapTest extends TestCase
 
     public function test_sitemap_image_url_is_absolute(): void
     {
+        Storage::put('articles/test.jpg', 'fake-jpeg-bytes');
+
         $this->createPublishedArticle([
             'image' => 'articles/test.jpg',
         ]);

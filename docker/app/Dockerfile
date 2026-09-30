@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
       libpq-dev \
       libpng-dev \
       libzip-dev \
+      procps \
       zip unzip \
       git && \
       docker-php-ext-install pdo_mysql && \
@@ -17,6 +18,10 @@ RUN apt-get update && apt-get install -y \
       rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
       mkdir -p /var/www && chown -R www-data:www-data /var/www && \
       chmod -R 755 /var/www
+
+# Предпочитать IPv4 при резолве имён (иначе getaddrinfo возвращает IPv6 первым,
+# а маршрута IPv6 в Docker-сети нет — curl/composer упираются в таймаут).
+RUN sed -i 's|^#\s*precedence ::ffff:0:0/96  100|precedence ::ffff:0:0/96  100|' /etc/gai.conf
 
 COPY ./app/php.ini /usr/local/etc/php/conf.d/php.ini
 COPY ./app/entrypoint.sh /usr/local/bin/docker-entrypoint.sh
