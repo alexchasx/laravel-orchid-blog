@@ -9,6 +9,8 @@ use App\Models\Tag;
 use App\Models\User;
 use App\Orchid\Screens\Article\ArticleListScreen;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
@@ -29,11 +31,32 @@ class ArticleListScreenTest extends TestCase
      * Вызывает метод экрана напрямую с сформированным запросом модалки
      * (поля вида article[title], article[tags] и т.п.).
      */
-    private function callCreateOrUpdate(array $payload): void
+    private function callCreateOrUpdate(array $payload, array $files = []): void
     {
-        $request = ArticleRequest::create('/nexus/articles', 'POST', $payload);
+        // Сигнатура create(): uri, method, parameters, cookies, files, server,
+        // поэтому файлы передаются 5-м аргументом.
+        $request = ArticleRequest::create('/nexus/articles', 'POST', $payload, [], $files);
 
         (new ArticleListScreen())->createOrUpdateArticle($request);
+    }
+
+    /**
+     * Базовый payload статьи без изображения (для переиспользования в тестах).
+     */
+    private function basePayload(int $rubricId, array $overrides = []): array
+    {
+        return ['article' => array_merge([
+            'id' => null,
+            'title' => 'Новая тестовая статья',
+            'slug' => null,
+            'rubric_id' => $rubricId,
+            'tags' => [],
+            'content_raw' => "# Заголовок\n\nТекст абзаца.",
+            'is_published' => true,
+            'published_at' => now()->format('Y-m-d'),
+            'keywords' => '',
+            'meta_desc' => '',
+        ], $overrides)];
     }
 
     public function test_create_or_update_article_creates_article_with_tags(): void
@@ -142,5 +165,180 @@ class ArticleListScreenTest extends TestCase
         ], $rules);
 
         $this->assertTrue($validator->passes(), implode(PHP_EOL, $validator->errors()->all()));
+    }
+
+    public function test_create_or_update_article_uploads_image_file(): void
+    {
+        $this->actingAs($this->admin());
+        Storage::fake('public');
+
+        $rubric = Rubric::factory()->create();
+        // fake()->image() требует GD-расширение в контейнере, поэтому используем
+        // обычный fake-файл с MIME image/jpeg — ветку UploadedFile он покрывает полностью.
+        $file = UploadedFile::fake()->create('cover.jpg', 1024, 'image/jpeg');
+
+        $this->callCreateOrUpdate(
+            $this->basePayload($rubric->id, ['title' => 'Статья с изображением']),
+            ['article' => ['image' => $file]]
+        );
+
+        $article = Article::where('title', 'Статья с изображением')->first();
+
+        $this->assertNotNull($article);
+        $this->assertNotNull($article->image);
+        $this->assertStringStartsWith('articles/', $article->image);
+        $this->assertTrue(Storage::disk('public')->exists($article->image));
+    }
+
+    public function test_create_or_update_article_normalizes_image_relative_url(): void
+    {
+        $this->actingAs($this->admin());
+
+        $rubric = Rubric::factory()->create();
+
+        $this->callCreateOrUpdate($this->basePayload($rubric->id, [
+            'title' => 'Статья с relativeUrl картинки',
+            'image' => '/storage/articles/cover.jpg',
+        ]));
+
+        $article = Article::where('title', 'Статья с relativeUrl картинки')->first();
+
+        $this->assertNotNull($article);
+        $this->assertSame('articles/cover.jpg', $article->image);
+    }
+
+    public function test_create_or_update_article_normalizes_image_full_url(): void
+    {
+        $this->actingAs($this->admin());
+
+        $rubric = Rubric::factory()->create();
+
+        $this->callCreateOrUpdate($this->basePayload($rubric->id, [
+            'title' => 'Статья с полным URL картинки',
+            'image' => 'http://localhost:8080/storage/articles/cover.jpg',
+        ]));
+
+        $article = Article::where('title', 'Статья с полным URL картинки')->first();
+
+        $this->assertNotNull($article);
+        $this->assertSame('articles/cover.jpg', $article->image);
+    }
+
+    public function test_update_article_with_cleared_image_deletes_old_file(): void
+    {
+        $admin = $this->admin();
+        $this->actingAs($admin);
+        Storage::fake('public');
+        Storage::disk('public')->put('articles/old.jpg', 'fake-content');
+
+        $rubric = Rubric::factory()->create();
+        $article = Article::factory()->create([
+            'rubric_id' => $rubric->id,
+            'user_id' => $admin->id,
+            'title' => 'Статья для очистки картинки',
+            'image' => 'articles/old.jpg',
+        ]);
+
+        $this->callCreateOrUpdate($this->basePayload($rubric->id, [
+            'id' => $article->id,
+            'title' => 'Статья для очистки картинки',
+            'image' => '',
+        ]));
+
+        $article->refresh();
+
+        $this->assertNull($article->image);
+        $this->assertFalse(Storage::disk('public')->exists('articles/old.jpg'));
+    }
+
+    public function test_update_article_replacing_image_deletes_old_file(): void
+    {
+        $admin = $this->admin();
+        $this->actingAs($admin);
+        Storage::fake('public');
+        Storage::disk('public')->put('articles/old.jpg', 'fake-content');
+
+        $rubric = Rubric::factory()->create();
+        $article = Article::factory()->create([
+            'rubric_id' => $rubric->id,
+            'user_id' => $admin->id,
+            'title' => 'Статья для замены картинки',
+            'image' => 'articles/old.jpg',
+        ]);
+
+        $this->callCreateOrUpdate($this->basePayload($rubric->id, [
+            'id' => $article->id,
+            'title' => 'Статья для замены картинки',
+            'image' => '/storage/articles/new.jpg',
+        ]));
+
+        $article->refresh();
+
+        $this->assertSame('articles/new.jpg', $article->image);
+        $this->assertFalse(Storage::disk('public')->exists('articles/old.jpg'));
+    }
+
+    public function test_update_article_with_same_image_keeps_file(): void
+    {
+        $admin = $this->admin();
+        $this->actingAs($admin);
+        Storage::fake('public');
+        Storage::disk('public')->put('articles/same.jpg', 'fake-content');
+
+        $rubric = Rubric::factory()->create();
+        $article = Article::factory()->create([
+            'rubric_id' => $rubric->id,
+            'user_id' => $admin->id,
+            'title' => 'Статья без изменения картинки',
+            'image' => 'articles/same.jpg',
+        ]);
+
+        $this->callCreateOrUpdate($this->basePayload($rubric->id, [
+            'id' => $article->id,
+            'title' => 'Статья без изменения картинки',
+            'image' => '/storage/articles/same.jpg',
+        ]));
+
+        $article->refresh();
+
+        $this->assertSame('articles/same.jpg', $article->image);
+        $this->assertTrue(Storage::disk('public')->exists('articles/same.jpg'));
+    }
+
+    public function test_article_request_image_rules_accept_string_and_reject_non_image_file(): void
+    {
+        $rules = (new ArticleRequest())->rules();
+
+        $rubric = Rubric::factory()->create();
+        $tag = Tag::factory()->create(['active' => true]);
+
+        $base = [
+            'title' => 'Заголовок',
+            'content_raw' => 'Контент',
+            'rubric_id' => $rubric->id,
+            'published_at' => now()->format('Y-m-d'),
+            'tags' => [$tag->id],
+        ];
+
+        // Относительный путь от Picture-поля — валиден.
+        $relative = Validator::make(
+            ['article' => $base + ['image' => '/storage/articles/cover.jpg']],
+            $rules
+        );
+        $this->assertTrue($relative->passes(), implode(PHP_EOL, $relative->errors()->all()));
+
+        // Полный URL от Picture-поля — валиден.
+        $absolute = Validator::make(
+            ['article' => $base + ['image' => 'https://example.com/storage/articles/cover.jpg']],
+            $rules
+        );
+        $this->assertTrue($absolute->passes(), implode(PHP_EOL, $absolute->errors()->all()));
+
+        // Файл-не-изображение — отклоняется.
+        $notImage = Validator::make(
+            ['article' => $base + ['image' => UploadedFile::fake()->create('doc.txt', 100)]],
+            $rules
+        );
+        $this->assertTrue($notImage->fails());
     }
 }

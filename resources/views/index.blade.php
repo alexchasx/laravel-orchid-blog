@@ -58,6 +58,7 @@
             <article class="post {{ $index === 0 ? 'featured' : '' }} reveal">
                 @if($article->image && $index === 0)
                     <div class="post-image image-one">
+                        <img src="{{ Storage::url($article->image) }}" alt="{{ $article->title }}" loading="lazy">
                         <span>{{ $article->rubric->title ?? 'ARTICLE' }} / {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</span>
                     </div>
                 @endif

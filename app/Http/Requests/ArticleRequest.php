@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Validator;
 
 class ArticleRequest extends FormRequest
 {
@@ -33,7 +36,27 @@ class ArticleRequest extends FormRequest
             'article.slug' => ['nullable', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'],
             'article.tags' => ['nullable', 'array'],
             'article.tags.*' => ['integer', 'exists:tags,id'],
-            'article.image'  => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            // Поле Picture Orchid присылает НЕ файл, а строку с путём/URL изображения
+            // (сам файл загружается отдельным AJAX-запросом). Поэтому валидируем строку,
+            // а для прямых отправок файла (API/тесты) применяем правила изображения.
+            'article.image' => ['nullable', function (string $attribute, mixed $value, Closure $fail): void {
+                if ($value instanceof UploadedFile) {
+                    $validator = Validator::make(
+                        ['image' => $value],
+                        ['image' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:2048']]
+                    );
+
+                    foreach ($validator->errors()->get('image') as $message) {
+                        $fail($message);
+                    }
+
+                    return;
+                }
+
+                if (!is_string($value) || mb_strlen($value) > 2048) {
+                    $fail('Изображение должно быть файлом JPG/PNG/WEBP до 2 МБ или путём к нему.');
+                }
+            }],
         ];
     }
 

@@ -43,8 +43,12 @@ class CreateOrUpdateArticle extends Rows
                     ->title('Опубликована?'),
             ]),
 
+            // targetRelativeUrl(): поле отправляет относительный путь (/storage/...),
+            // а не полный URL или id attachment — путь затем нормализуется на сервере.
             Picture::make('article.image')
                 ->title('Изображение')
+                ->storage('public')
+                ->targetRelativeUrl()
                 ->help('Рекомендуемый размер: 1200×630 (1.9:1), JPG/PNG/WEBP до 2 МБ'),
 
             Group::make([

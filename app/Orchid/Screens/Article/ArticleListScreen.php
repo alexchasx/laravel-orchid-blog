@@ -6,6 +6,7 @@ use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use App\Orchid\Layouts\Article\ArticleListTable;
 use App\Orchid\Layouts\CreateOrUpdateArticle;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Orchid\Screen\Actions\ModalToggle;
@@ -99,7 +100,10 @@ class ArticleListScreen extends Screen
                 'content_raw'  => $article->content_raw,
                 'content_html' => $article->content_html,
                 'meta_desc'    => $article->meta_desc,
-                'image'        => $article->image,
+                // Поле Picture для превью ожидает ссылку (relativeUrl), а не путь в storage.
+                'image'        => $article->image
+                    ? $this->toPublicRelativeUrl($article->image)
+                    : null,
             ],
         ];
     }
@@ -107,30 +111,27 @@ class ArticleListScreen extends Screen
     public function createOrUpdateArticle(ArticleRequest $request): void
     {
         $articleId = $request->input('article.id');
+        // input() не извлекает файлы (они живут в $request->files), поэтому
+        // берём значение из файлов, если поле пришло как upload.
+        $image = $request->input('article.image') ?? $request->file('article.image');
+
+        // Путь к изображению относительно диска public (null — изображения нет).
         $imagePath = null;
 
-        // Загрузка/удаление изображения.
-        $image = $request->input('article.image');
-
-        // Если изображение уже было — запоминаем путь для удаления при замене.
-        $oldImagePath = null;
-        if (!empty($articleId)) {
-            $oldArticle = Article::withoutGlobalScopes()->find($articleId);
-            if ($oldArticle && $oldArticle->image) {
-                $oldImagePath = $oldArticle->image;
-            }
+        // Прямая отправка файла (например, из API/тестов): сохраняем в storage/app/public/articles/.
+        if ($image instanceof UploadedFile && $image->isValid()) {
+            $imagePath = $image->store('articles', 'public');
+        } elseif (is_string($image) && $image !== '') {
+            // Picture-поле Orchid присылает строку: относительный путь (/storage/...),
+            // полный URL или уже готовый путь (articles/...) — приводим к единому виду.
+            $imagePath = $this->normalizeImagePath($image);
         }
 
-        if (!empty($image)) {
-            // Picture-поле Orchid: если это загруженный файл — сохраняем.
-            if ($image instanceof \Illuminate\Http\UploadedFile && $image->isValid()) {
-                $imagePath = $image->store('articles', 'public');
-            } elseif (is_string($image) && $image !== '') {
-                // Изображение уже сохранено (например, из медиабиблиотеки),
-                // но если это новый файл — нужно проверить.
-                // В остальных случаях используем как есть.
-                $imagePath = $image;
-            }
+        // Если изображение уже было — запоминаем путь, чтобы удалить файл
+        // при замене ИЛИ очистке поля.
+        $oldImagePath = null;
+        if (!empty($articleId)) {
+            $oldImagePath = Article::withoutGlobalScopes()->find($articleId)?->image;
         }
 
         $article = Article::updateOrCreate([
@@ -152,11 +153,59 @@ class ArticleListScreen extends Screen
 
         $article->tags()->sync($request->input('article.tags'));
 
-        // Удаляем старое изображение при замене.
-        if ($imagePath && $oldImagePath && Storage::disk('public')->exists($oldImagePath)) {
+        // Удаляем прежний файл, если он изменён (замена или очистка) и существует на диске.
+        if ($oldImagePath && $oldImagePath !== $imagePath && Storage::disk('public')->exists($oldImagePath)) {
             Storage::disk('public')->delete($oldImagePath);
         }
 
         is_null($articleId) ? Toast::info('Статья создана') : Toast::info('Статья обновлена');
+    }
+
+    /**
+     * Приводит значение поля Picture к пути относительно диска public.
+     *
+     * Поле Picture Orchid может прислать:
+     *  - относительный путь вида "/storage/articles/x.jpg" (targetRelativeUrl);
+     *  - полный URL вида "https://host/storage/articles/x.jpg" (targetUrl по умолчанию);
+     *  - уже готовый путь "articles/x.jpg".
+     * Все варианты нормализуются к "articles/x.jpg".
+     */
+    private function normalizeImagePath(string $value): ?string
+    {
+        $value = trim($value);
+
+        if ($value === '') {
+            return null;
+        }
+
+        // Полный URL → путь без хоста.
+        if (preg_match('#^https?://#i', $value)) {
+            $value = (string) parse_url($value, PHP_URL_PATH);
+        }
+
+        // Отрезаем публичный префикс диска (по умолчанию /storage).
+        $diskPath = rtrim((string) parse_url(
+            (string) config('filesystems.disks.public.url'),
+            PHP_URL_PATH
+        ), '/') . '/';
+
+        if ($diskPath !== '/' && str_starts_with($value, $diskPath)) {
+            $value = substr($value, strlen($diskPath));
+        } elseif (str_starts_with($value, '/')) {
+            $value = ltrim($value, '/');
+        }
+
+        return $value === '' ? null : $value;
+    }
+
+    /**
+     * Возвращает относительный URL файла для превью в поле Picture
+     * (например, "/storage/articles/x.jpg"), отбрасывая хост.
+     */
+    private function toPublicRelativeUrl(string $path): ?string
+    {
+        $url = Storage::disk('public')->url($path);
+
+        return parse_url($url, PHP_URL_PATH) ?: $url;
     }
 }
