@@ -68,17 +68,6 @@
         grid-template-columns: 1fr;
     }
 
-    .toc {
-        position: static;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 14px;
-
-        strong {
-            width: 100%;
-        }
-    }
-
     .article-hero {
         height: 240px;
     }
@@ -93,6 +82,24 @@
 
     .footer a:first-child {
         margin-left: 0;
+    }
+}
+
+/* Десктоп — скрываем inline-блок */
+@media (max-width: 819px) {
+    .article-layout {
+        display: block;
+    }
+    .toc {
+        display: flex;
+        position: static;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+
+        strong {
+            width: 100%;
+        }
     }
 }
 
