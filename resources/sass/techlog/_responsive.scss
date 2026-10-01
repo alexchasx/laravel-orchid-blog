@@ -101,6 +101,10 @@
             width: 100%;
         }
     }
+
+    .related-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 // Mobile
@@ -137,6 +141,10 @@
 
     .article-head h1 {
         font-size: clamp(1.95rem, 8.5vw, 2.45rem);
+    }
+
+    .related-grid {
+        grid-template-columns: 1fr;
     }
 
     // Cookie-баннер на мобильных: баннер на всю ширину экрана
