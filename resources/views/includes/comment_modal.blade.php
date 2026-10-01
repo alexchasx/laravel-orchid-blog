@@ -2,9 +2,10 @@
 @php
     $commentFlash = session('success');
     $captchaError = $errors->has('captcha');
+    $validationErrors = $errors->all();
 @endphp
 
-@if($commentFlash || $captchaError)
+@if($commentFlash || $captchaError || count($validationErrors) > 0)
 <div class="modal is-open" id="comment-modal" role="dialog" aria-modal="true" aria-labelledby="comment-modal-title">
     <div class="modal-overlay" data-modal-close></div>
 
@@ -15,6 +16,14 @@
             <span class="modal-icon modal-icon--error" aria-hidden="true">!</span>
             <h3 class="modal-title" id="comment-modal-title">Неверно набрано проверочное число</h3>
             <p class="modal-text">{{ $errors->first('captcha') }} Попробуйте ещё раз.</p>
+        @elseif(count($validationErrors) > 0)
+            <span class="modal-icon modal-icon--error" aria-hidden="true">!</span>
+            <h3 class="modal-title" id="comment-modal-title">Ошибка при отправке</h3>
+            <ul class="modal-text modal-errors">
+                @foreach($validationErrors as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         @else
             <span class="modal-icon modal-icon--ok" aria-hidden="true">&#10003;</span>
             <h3 class="modal-title" id="comment-modal-title">Комментарий отправлен</h3>

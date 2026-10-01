@@ -1076,6 +1076,18 @@
     line-height: 1.6;
 }
 
+.modal-errors {
+    margin: 0 0 26px;
+    padding-left: 1.25rem;
+    color: var(--error);
+    font-size: var(--fs-base);
+    line-height: 1.8;
+
+    li {
+        margin-bottom: 4px;
+    }
+}
+
 .modal-action {
     min-width: 140px;
 }

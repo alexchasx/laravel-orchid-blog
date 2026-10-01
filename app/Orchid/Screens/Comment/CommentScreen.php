@@ -102,6 +102,13 @@ class CommentScreen extends Screen
                     return $comment->content;
                 }),
 
+                Sight::make('distribution_conditions', 'Доп. условия распространения')
+                    ->render(function (Comment $comment) {
+                        return $comment->distribution_conditions
+                            ? $comment->distribution_conditions
+                            : '<span style="color:#999;">Не указаны</span>';
+                    }),
+
                 Sight::make('created_at', 'Дата')->render(function (Comment $comment) {
                     $carbon = Carbon::create($comment->created_at);
 

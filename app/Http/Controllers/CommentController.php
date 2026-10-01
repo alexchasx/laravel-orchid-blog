@@ -47,6 +47,7 @@ class CommentController extends Controller
             'content' => $request->input('comment'),
             'article_id' => $article->id,
             'ip' => $ip,
+            'distribution_conditions' => $conditions,
         ];
 
         if (Auth::check()) {
