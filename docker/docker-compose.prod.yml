@@ -1,8 +1,14 @@
 # ============================================================
 # Продакшн-конфигурация Docker Compose
 # ============================================================
-# Использовать: docker compose -f docker/docker-compose.prod.yml up -d
-# Шаблон переменных: docker/.env.prod.example (заполнить и переименовать в .env.prod)
+# Шаблон переменных: docker/.env.prod.example → скопировать в docker/.env.prod
+# и заполнить (chmod 600).
+#
+# Контекст сборки — корень репозитория (build.context: ..), поэтому запускать
+# из корня репо. --env-file нужен, чтобы интерполяция ${DB_*} в сервисе db
+# брала значения из файла, а не дефолты:
+#
+#   docker compose -f docker/docker-compose.prod.yml --env-file docker/.env.prod up -d --build
 # ============================================================
 
 services:
@@ -10,10 +16,18 @@ services:
   # nginx — обратный прокси + раздача статики
   # ---------------------------------------------------------------------------
   nginx:
-    image: nginx:1.27-alpine
+    image: blog_nginx
+    build:
+      # Контекст — корень репозитория, чтобы COPY ./ клал в образ код Laravel,
+      # а не каталог docker/. Файлы docker/ указываются как ./docker/app/...
+      context: ..
+      dockerfile: docker/app/Dockerfile.prod
+      target: nginx
     restart: unless-stopped
     volumes:
-      - ./../:/var/www
+      # Статика public/ уже в образе (стадия nginx). Медиа из публичного диска
+      # берём из того же volume, что и app, — единая файловая модель.
+      - app_storage:/var/www/storage:ro
       - ./nginx/conf.d/:/etc/nginx/conf.d
     ports:
       - "80:80"
@@ -21,7 +35,7 @@ services:
       app:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost/ || exit 1"]
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost/ || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -39,11 +53,14 @@ services:
   app:
     image: blog_app
     build:
-      context: .
-      dockerfile: ./app/Dockerfile.prod
-    user: "www-data"
+      # Контекст — корень репозитория (код Laravel), а не каталог docker/.
+      context: ..
+      dockerfile: docker/app/Dockerfile.prod
+      target: app
+    # user: НЕ задаём — entrypoint выполняется от root (нужен chown на свежем
+    # volume storage/), а php-fpm сам сбрасывает workers в пул www-data.
     env_file:
-      - ../.env.prod
+      - .env.prod
     environment:
       - APP_ENV=production
       - APP_DEBUG=false
@@ -54,7 +71,7 @@ services:
       db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "php-fpm8.5 -t || exit 1"]
+      test: ["CMD-SHELL", "php-fpm -t || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -75,12 +92,14 @@ services:
     user: "www-data"
     restart: unless-stopped
     env_file:
-      - ../.env.prod
+      - .env.prod
     environment:
       - TZ=Europe/Moscow
     volumes:
       - app_storage:/var/www/storage
     depends_on:
+      app:
+        condition: service_healthy
       db:
         condition: service_healthy
     command: php artisan schedule:work
@@ -99,12 +118,14 @@ services:
     user: "www-data"
     restart: unless-stopped
     env_file:
-      - ../.env.prod
+      - .env.prod
     environment:
       - TZ=Europe/Moscow
     volumes:
       - app_storage:/var/www/storage
     depends_on:
+      app:
+        condition: service_healthy
       db:
         condition: service_healthy
     command: php artisan queue:work --sleep=1 --tries=3
@@ -128,7 +149,7 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     env_file:
-      - ../.env.prod
+      - .env.prod
     environment:
       - MYSQL_DATABASE=${DB_DATABASE:-laraorchid}
       - MYSQL_USER=${DB_USERNAME:-laravel}

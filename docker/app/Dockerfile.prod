@@ -1,14 +1,28 @@
-# ---- STAGE 1: build ----
+# ============================================================
+# Продакшн-образ приложения (PHP-FPM + nginx), многоступенчатый
+# ============================================================
+# Контекст сборки — КОРЕНЬ репозитория (context: .. в compose).
+# Пути к файлам внутри docker/ указываются как ./docker/app/...
+#
+# Цели (target):
+#   app   — PHP-FPM с vendor/ и собранными ассетами (основной образ)
+#   nginx — nginx, получающий public/ из стадии app (та же файловая модель)
+# ============================================================
+
+# ---- STAGE 1: сборка фронтенда (Vite) -------------------------------------
 FROM node:22-alpine AS node_builder
 
 WORKDIR /tmp/build
 
-COPY package.json package-lock.json* vite.config.js resources/ ./
+# lock-файл не коммитится, поэтому npm install (не npm ci)
+COPY package.json package-lock.json* ./
+COPY vite.config.js tailwind.config.js postcss.config.js ./
+COPY resources/ ./resources/
 
-RUN npm ci && npm run build
+RUN npm install --no-audit --no-fund && npm run build
 
-# ---- STAGE 2: final ----
-FROM php:8.5.2-fpm-bookworm
+# ---- STAGE 2: PHP-FPM 8.5 (final: app) ------------------------------------
+FROM php:8.5.2-fpm-bookworm AS app
 
 LABEL maintainer="alexchasx"
 
@@ -25,21 +39,14 @@ RUN apt-get update && apt-get install -y \
       docker-php-ext-install zip && \
       docker-php-ext-install pcntl && \
       apt-get clean && \
-      rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-      mkdir -p /var/www && chown -R www-data:www-data /var/www && \
-      chmod -R 755 /var/www
+      rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Предпочитать IPv4 при резолве имён (иначе getaddrinfo возвращает IPv6 первым,
 # а маршрута IPv6 в Docker-сети нет — curl/composer упираются в таймаут).
 RUN sed -i 's|^#\s*precedence ::ffff:0:0/96  100|precedence ::ffff:0:0/96  100|' /etc/gai.conf
 
 # Копируем продакшн-конфиг PHP (OPcache + продакшн-значения)
-COPY ./app/php.ini.prod /usr/local/etc/php/conf.d/php.ini
-
-# Код приложения, vendor и собранные ассеты
-COPY ./ /var/www
-
-COPY --from=node_builder /tmp/build/public/build /var/www/public/build
+COPY ./docker/app/php.ini.prod /usr/local/etc/php/conf.d/php.ini
 
 # Composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
@@ -47,11 +54,47 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
     --filename=composer \
     --install-dir=/usr/local/bin
 
-# Entrypoint
-COPY ./app/entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+WORKDIR /var/www
+
+# Код приложения (vendor/ и node_modules/ исключены через .dockerignore)
+COPY ./ /var/www
+
+# Каталоги, обязательные для записи в рантайме, до запуска artisan-скриптов
+RUN mkdir -p /var/www/bootstrap/cache \
+      /var/www/storage/app/public \
+      /var/www/storage/framework/cache/data \
+      /var/www/storage/framework/sessions \
+      /var/www/storage/framework/views \
+      /var/www/storage/logs
+
+# Продакшн-зависимости без dev и без пост-скриптов (контроль порядка ниже)
+RUN composer install \
+      --no-dev \
+      --no-scripts \
+      --no-interaction \
+      --no-progress \
+      --prefer-dist \
+      --optimize-autoloader
+
+# Собранные Vite-ассеты из стадии node_builder
+COPY --from=node_builder /tmp/build/public/build /var/www/public/build
+
+# Кэш автообнаружения пакетов + симлинк публичного диска (best-effort).
+# Если не удастся на сборке — bootstrap/cache доступен www-data на запись,
+# Laravel сгенерирует манифест при первом запросе.
+RUN php artisan package:discover --no-ansi || true && \
+    php artisan storage:link --no-ansi || true && \
+    chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache && \
+    chmod -R ug+rwx /var/www/storage /var/www/bootstrap/cache
+
+# Entrypoint (общий с dev-образом)
+COPY ./docker/app/entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["php-fpm"]
 
-WORKDIR /var/www
+# ---- STAGE 3: nginx со статикой из стадии app (final: nginx) --------------
+FROM nginx:1.27-alpine AS nginx
+
+COPY --from=app /var/www/public /var/www/public
