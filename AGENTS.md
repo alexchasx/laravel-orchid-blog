@@ -39,6 +39,8 @@ UI-тексты, комментарии в коде и вся документа
 
 Контейнеры (`blog_*`): `nginx`, `app`, `node`, **`schedule`** (`php artisan schedule:work` — автопубликация статей), **`queue`** (`php artisan queue:work` — обработка очереди писем рассылки), `mailhog`, `db` (MySQL 8.0), `phpmyadmin`.
 
+Прод-стек — `docker/docker-compose.prod.yml` (Dockerfile `docker/app/Dockerfile.prod`) с **отдельными тегами образов** `blog_app_prod` (app/schedule/queue) и `blog_nginx_prod` (nginx); dev использует `blog_app`/`blog_nginx`. Разделение обязательно: dev-образ содержит только PHP-рантайм (код из bind-mount), поэтому запуск prod на общем теге давал пустой `/var/www` (нет `vendor/` и `artisan`).
+
 Дефолтные адреса: сайт `:8080`, админ `:8080/nexus`, phpMyAdmin `:8899`, MailHog `:8026`, Vite dev `:5173`; MySQL — внутри сети `3306`, наружу `:8101`. Контейнер `db` создаёт БД `laraorchid`/`root`/`root` (`docker/docker-compose.yml`); в `.env.example` значения БД пустые — их заполняет разработчик при настройке проекта.
 
 ## Тесты

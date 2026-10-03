@@ -16,7 +16,9 @@ services:
   # nginx — обратный прокси + раздача статики
   # ---------------------------------------------------------------------------
   nginx:
-    image: blog_nginx
+    # Отдельный тег от dev-образа (docker-compose.yml → blog_nginx): prod и dev
+    # не должны переиспользовать и перезаписывать образы друг друга.
+    image: blog_nginx_prod
     build:
       # Контекст — корень репозитория, чтобы COPY ./ клал в образ код Laravel,
       # а не каталог docker/. Файлы docker/ указываются как ./docker/app/...
@@ -51,7 +53,10 @@ services:
   # app — PHP-FPM 8.5
   # ---------------------------------------------------------------------------
   app:
-    image: blog_app
+    # Отдельный тег от dev-образа (docker-compose.yml → blog_app). Dev-образ
+    # содержит только PHP-рантайм (код приходит из bind-mount), поэтому запуск
+    # prod на общем теге без --build давал пустой /var/www — без vendor/ и artisan.
+    image: blog_app_prod
     build:
       # Контекст — корень репозитория (код Laravel), а не каталог docker/.
       context: ..
@@ -88,7 +93,7 @@ services:
   # schedule — `php artisan schedule:work` (автопубликация, отзывы)
   # ---------------------------------------------------------------------------
   schedule:
-    image: blog_app
+    image: blog_app_prod
     user: "www-data"
     restart: unless-stopped
     env_file:
@@ -114,7 +119,7 @@ services:
   # queue — `php artisan queue:work` (рассылка подписчикам)
   # ---------------------------------------------------------------------------
   queue:
-    image: blog_app
+    image: blog_app_prod
     user: "www-data"
     restart: unless-stopped
     env_file:
@@ -150,16 +155,19 @@ services:
     restart: unless-stopped
     env_file:
       - .env.prod
-    environment:
-      - MYSQL_DATABASE=${DB_DATABASE:-laraorchid}
-      - MYSQL_USER=${DB_USERNAME:-laravel}
-      - MYSQL_PASSWORD=${DB_PASSWORD:-changeme}
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-changeme_root}
+    # Переменные MYSQL_* берутся из env_file (DB_DATABASE, DB_USERNAME,
+    # DB_PASSWORD, DB_ROOT_PASSWORD).  Не используем ${VAR:-default}
+    # в environment:, иначе Docker Compose интерполирует их из shell-
+    # окружения (проектового .env) и фолбэки changeme/changeme_root
+    # перебивают реальные креды из docker/.env.prod.
     volumes:
       - mysql_data:/var/lib/mysql
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-changeme_root}"]
+      # ${DB_ROOT_PASSWORD} берётся из env_file — без дефолтного фолбэка,
+      # иначе при отсутствии переменной в shell/env_file подставится
+      # «changeme_root» вместо реального пароля.
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
       interval: 5s
       timeout: 5s
       retries: 10

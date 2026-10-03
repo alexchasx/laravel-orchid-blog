@@ -168,6 +168,11 @@ make shell  # войти в контейнер app (bash)
 | phpMyAdmin  | `blog_phpmyadmin`| 8899 → 80              |
 | MailHog     | `blog_mailhog`   | 8026 → 8025            |
 
+> **Продакшн-образы — отдельные теги.** Прод-стек описан в
+> `docker/docker-compose.prod.yml` и собирает образы `blog_app_prod`
+> (app/schedule/queue) и `blog_nginx_prod` (nginx), чтобы не переиспользовать
+> и не перезаписывать dev-образы `blog_app`/`blog_nginx`.
+
 Полный список команд Makefile — `make help`.
 
 ### Ручной запуск (без `make`)
