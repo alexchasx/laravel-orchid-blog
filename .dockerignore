@@ -1,45 +1,47 @@
-# ============================================================
-# Контекст сборки Docker (контекст — корень репозитория)
-# ============================================================
-# Файлы и каталоги ниже НЕ попадают в образ. Задача — не тащить в
-# продакшн-образ мусор сборки и секреты. Пути относительные корня репо.
+# ---------------------------------------------------------------------------
+# .dockerignore — что НЕ попадает в контекст сборки продакшн-образа.
+# Dockerfile.prod выполняет COPY ./ /var/www с контекстом = корень репозитория,
+# поэтому без этого файла в образ уедут .git, .env и docker/.env.prod (секреты),
+# vendor/, node_modules/ (сотни МБ) и runtime-данные storage/.
+# ---------------------------------------------------------------------------
 
-# Система контроля версий и служебное
+# VCS и инструменты разработки
 .git
-.gitignore
-.gitattributes
-.styleci.yml
+.github
+.idea
+.vscode
+.codeassistant
+.gigacode*
+opencode.json
 
-# Локальные настройки и секреты (в образ не попадают, приходят через env_file)
+# Секреты и окружение: в образе не нужны (переменные рантайма приходят
+# через env_file из docker/.env.prod на сервере)
 .env
 .env.*
-.phpunit.result.cache
-phpunit.xml
-phpunit.xml.dist
+docker/env.prod*
 
-# Зависимости ставятся внутри образа (composer install / npm ci)
+# Зависимости — устанавливаются на этапе сборки образа
 vendor
 node_modules
-**/node_modules
 
-# Артефакты сборки фронтенда — пересобираются в стадии node_builder
+# Локальные данные и кэши (runtime-данные живут в volume app_storage;
+# public/build собирается стадией node_builder, public/storage создаёт
+# `php artisan storage:link` на этапе сборки)
+storage
+docker/tmp
 public/build
 public/hot
+public/storage
 
-# Логи, кэш и загруженные пользователями данные рантайма — в проде живут в
-# volume app_storage, в образ не попадают (нужные каталоги создаёт Dockerfile).
-# Игнорируем всё дерево storage/: отдельные подкаталоги вроде
-# storage/app/articles могут иметь режим 0700 и ронять сборку контекста.
-storage/*
-bootstrap/cache/*
-
-# Тесты, скриншоты, рабочие документы — не нужны в проде
+# Dev-артефакты и документация
 tests
-screenshots
 docs
 plans
 prompts
-
-# Docker-специфичное (в код приложения не входит; сами Dockerfile читаются
-# из контекста, поэтому каталог docker/ НЕ исключаем целиком)
-docker/tmp
+screenshots
+.phpunit.result.cache
+npm-debug.log
+yarn-error.log
+composer.phar
+Homestead.json
+Homestead.yaml

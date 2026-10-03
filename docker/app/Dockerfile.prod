@@ -14,12 +14,12 @@ FROM node:22-alpine AS node_builder
 
 WORKDIR /tmp/build
 
-# lock-файл не коммитится, поэтому npm install (не npm ci)
+# package-lock.json закоммичен — воспроизводимая установка npm ci
 COPY package.json package-lock.json* ./
 COPY vite.config.js tailwind.config.js postcss.config.js ./
 COPY resources/ ./resources/
 
-RUN npm install --no-audit --no-fund && npm run build
+RUN npm ci --no-audit --no-fund && npm run build
 
 # ---- STAGE 2: PHP-FPM 8.5 (final: app) ------------------------------------
 FROM php:8.5.2-fpm-bookworm AS app

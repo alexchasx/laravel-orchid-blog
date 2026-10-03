@@ -167,3 +167,74 @@ ide-helper: ## Обновить IDE Helper (для IDE автодополнен�
 lint: ## Запустить PHP lint (php -l на всех .php файлах)
 	@echo "$(GREEN)→ Running PHP lint...$(RESET)"
 	$(COMPOSE) exec app sh -c 'find app database routes -name "*.php" -exec php -l {} \; 2>&1 | grep -v "No syntax errors" || true'
+
+# =============================================================================
+# Продакшн-цели (docker/docker-compose.prod.yml + docker/.env.prod)
+# =============================================================================
+#
+# Перед первым запуском:
+#   make prod-env        # скопирует docker/env.prod.example → docker/.env.prod
+#   # заполнить docker/.env.prod реальными значениями (chmod 600 уже сделан)
+#
+# Все команды идут с --env-file docker/.env.prod — без него интерполяция
+# ${DB_*} в prod-compose даст пустые значения (см. шапку prod-файла).
+
+COMPOSE_PROD := docker compose -f docker/docker-compose.prod.yml --env-file docker/.env.prod
+
+.PHONY: prod-check-env
+prod-check-env: ## Проверить наличие docker/.env.prod
+	@test -f docker/.env.prod || { echo "$(RED)docker/.env.prod не найден — выполните make prod-env и заполните файл.$(RESET)"; exit 1; }
+
+.PHONY: prod-env
+prod-env: ## Скопировать docker/env.prod.example → docker/.env.prod (если нет)
+	@if [ ! -f docker/.env.prod ]; then \
+		cp docker/env.prod.example docker/.env.prod; \
+		chmod 600 docker/.env.prod; \
+		echo "$(GREEN)→ docker/.env.prod создан — заполните его реальными значениями.$(RESET)"; \
+	else \
+		echo "$(YELLOW)  docker/.env.prod уже существует, пропускаю.$(RESET)"; \
+	fi
+
+.PHONY: prod-build
+prod-build: prod-check-env ## Собрать продакшн-образы (app + nginx, multi-stage)
+	$(COMPOSE_PROD) build
+
+.PHONY: prod-up
+prod-up: prod-check-env ## Собрать образы и поднять прод-стек (nginx, app, schedule, queue, db)
+	$(COMPOSE_PROD) up -d --build
+
+.PHONY: prod-down
+prod-down: prod-check-env ## Остановить прод-стек (данные в volumes сохраняются)
+	$(COMPOSE_PROD) down
+
+.PHONY: prod-status
+prod-status: prod-check-env ## Статус прод-контейнеров
+	$(COMPOSE_PROD) ps
+
+.PHONY: prod-logs
+prod-logs: prod-check-env ## Логи прод-контейнеров (follow)
+	$(COMPOSE_PROD) logs -f
+
+.PHONY: prod-shell
+prod-shell: prod-check-env ## Войти в контейнер app (bash)
+	$(COMPOSE_PROD) exec app bash
+
+.PHONY: prod-migrate
+prod-migrate: prod-check-env ## Миграции в проде (migrate --force, НЕ migrate:fresh)
+	$(COMPOSE_PROD) exec -T app php artisan migrate --force
+
+.PHONY: prod-optimize
+prod-optimize: prod-check-env ## Кэш конфигов и представлений в проде (без route:cache)
+	$(COMPOSE_PROD) exec -T app php artisan config:cache
+	$(COMPOSE_PROD) exec -T app php artisan view:cache
+
+.PHONY: prod-backup
+prod-backup: prod-check-env ## Бэкап БД и storage в /var/backups/blog (ротация 14 дней)
+	@mkdir -p /var/backups/blog
+	@$(COMPOSE_PROD) exec -T db sh -c 'exec mysqldump --single-transaction --quick -u"$$MYSQL_USER" -p"$$MYSQL_PASSWORD" "$$MYSQL_DATABASE"' | gzip > /var/backups/blog/db_$$(date +%F_%H-%M).sql.gz
+	@find /var/backups/blog -name 'db_*.sql.gz' -mtime +14 -delete
+	@echo "$(GREEN)→ Бэкап БД готов: /var/backups/blog/db_$$(ls /var/backups/blog | grep '^db_' | tail -1)$(RESET)"
+
+.PHONY: prod-deploy
+prod-deploy: prod-check-env ## Полный деплой: бэкап + git pull + сборка + миграции + кэш (./deploy.sh)
+	@bash deploy.sh

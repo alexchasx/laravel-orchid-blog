@@ -43,10 +43,13 @@ flowchart LR
 - Альтернатива: продолжать ставить «свежие» версии, но тогда фиксировать версии основных пакетов в `composer.json` и тестировать на сервере после каждой установки.
 
 ### 2.2. Продакшн-шаблон окружения
-- Добавить `.env.production.example` (или раздел в README) — шаблон переменных для прода с плейсхолдерами:
+- Добавить шаблон переменных для прода с плейсхолдерами:
   `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://домен`,
   `DB_*`, `MAIL_*`, `OPERATOR_*`, `HOSTING_PROVIDER`, `SEO_*`, `MY_GITHUB`,
   `CONTACT_EMAIL`, `SLOGAN`, `SUB_LOGO`, `PLATFORM_PREFIX=/nexus`.
+- **Реализовано:** `docker/env.prod.example` → копируется в `docker/.env.prod`.
+  Имя без ведущей точки — иначе правило `.env.*` в `.gitignore` не пропустит
+  шаблон в git (исключение есть только для `.env.example`).
 
 ### 2.3. Продакшн-compose
 - Создать `docker/docker-compose.prod.yml` (или отдельный каталог `deploy/`):
@@ -243,14 +246,19 @@ protected $proxies = '*'; // или: protected $proxies = env('TRUSTED_PROXIES',
 
 ## 13. Автоматизация обновлений (после первого деплоя)
 
-- Скрипт `deploy.sh` на сервере (последовательность):
-  1. бэкап БД и `storage`;
-  2. `git pull` (или обновление образа) + `docker compose up -d --build`;
-  3. `composer install --no-dev --optimize-autoloader` (если не в образе);
-  4. `npm ci && npm run build` (если не в образе);
-  5. `php artisan migrate --force`;
-  6. `php artisan config:cache && php artisan view:cache` (без `route:cache`);
-  7. `docker compose restart app queue schedule nginx`.
+- **Реализовано:** [`deploy.sh`](../deploy.sh) в корне репозитория (запускать на сервере
+  из корня репо; `chmod +x deploy.sh`). Последовательность:
+  1. бэкап БД (`mysqldump`) и `storage/` (tar) в `/var/backups/blog` с ротацией 14 дней;
+  2. `git pull --ff-only`;
+  3. `docker compose up -d --build` (с `--env-file docker/.env.prod`);
+  4. `php artisan migrate --force`;
+  5. `php artisan config:cache && php artisan view:cache` (без `route:cache` по умолчанию);
+  6. `docker compose restart app schedule queue nginx`;
+  7. healthcheck `http://localhost/up` через контейнер nginx.
+  Флаги: `--skip-backup`, `--skip-migrate`, `--no-pull`.
+- **Реализовано:** прод-цели в [`Makefile`](../Makefile): `prod-env`, `prod-build`,
+  `prod-up`, `prod-down`, `prod-status`, `prod-logs`, `prod-shell`, `prod-migrate`,
+  `prod-optimize`, `prod-backup`, `prod-deploy` (обёртка над `./deploy.sh`).
 - (Опционально) GitHub Actions: запуск тестов на push + деплой по SSH.
 
 ## 14. Риски и «грабли»

@@ -1,12 +1,13 @@
 # ============================================================
 # Продакшн-конфигурация Docker Compose
 # ============================================================
-# Шаблон переменных: docker/.env.prod.example → скопировать в docker/.env.prod
-# и заполнить (chmod 600).
+# Шаблон переменных: docker/env.prod.example → скопировать в docker/.env.prod
+# и заполнить (chmod 600). Имя без ведущей точки: правило `.env.*` в .gitignore
+# иначе не пропустит шаблон в git.
 #
 # Контекст сборки — корень репозитория (build.context: ..), поэтому запускать
 # из корня репо. --env-file нужен, чтобы интерполяция ${DB_*} в сервисе db
-# брала значения из файла, а не дефолты:
+# (MYSQL_DATABASE и др.) брала значения из файла, а не пустые строки:
 #
 #   docker compose -f docker/docker-compose.prod.yml --env-file docker/.env.prod up -d --build
 # ============================================================
@@ -155,18 +156,24 @@ services:
     restart: unless-stopped
     env_file:
       - .env.prod
-    # Переменные MYSQL_* берутся из env_file (DB_DATABASE, DB_USERNAME,
-    # DB_PASSWORD, DB_ROOT_PASSWORD).  Не используем ${VAR:-default}
-    # в environment:, иначе Docker Compose интерполирует их из shell-
-    # окружения (проектового .env) и фолбэки changeme/changeme_root
-    # перебивают реальные креды из docker/.env.prod.
+    # MySQL ждёт переменные с префиксом MYSQL_*. Собираем их из значений
+    # docker/.env.prod (DB_DATABASE, DB_USERNAME, DB_PASSWORD, DB_ROOT_PASSWORD)
+    # через интерполяцию ${DB_*} — источник значений задаётся --env-file
+    # docker/.env.prod (см. команду запуска в шапке). Без --env-file переменные
+    # будут пустыми, и контейнер db не стартует — громкая ошибка вместо
+    # тихого фолбэка на дефолтные креды.
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     healthcheck:
-      # ${DB_ROOT_PASSWORD} берётся из env_file — без дефолтного фолбэка,
-      # иначе при отсутствии переменной в shell/env_file подставится
-      # «changeme_root» вместо реального пароля.
+      # ${DB_ROOT_PASSWORD} интерполируется на этапе разбора compose из
+      # --env-file docker/.env.prod (не из env_file сервиса). Без дефолтного
+      # фолбэка, чтобы не подставить «changeme_root» вместо реального пароля.
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
       interval: 5s
       timeout: 5s
