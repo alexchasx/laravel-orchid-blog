@@ -1,7 +1,7 @@
 {
-  "name": "TECH//LOG — IT-блог",
-  "short_name": "TECHLOG",
-  "description": "IT-блог о технологиях и разработке",
+  "name": "APP_NAME - блог",
+  "short_name": "APP_NAME",
+  "description": "блог",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0a",

@@ -1,13 +1,13 @@
-# Архитектура: IT-блог на Laravel + Orchid
+# Архитектура: блог на Laravel + Orchid
 
 > Целевой документ: общее устройство приложения, слои, связи и договорённости.
 > Точки входа для новичков — `AGENTS.md`, `Makefile`, `routes/`.
 
 ## 1. Обзор
 
-Русскоязычный IT-блог «TECH//LOG». Состоит из **двух поверхностей**:
+Шаблонный блог. Состоит из **двух поверхностей**:
 
-1. **Публичный сайт** — Blade/Vite, дизайн «TECH//LOG», шаблон `layouts.techlog`.
+1. **Публичный сайт** — Blade/Vite, шаблон `layouts.techlog`.
 2. **Админ-панель Orchid** — `/nexus`, экраны в `app/Orchid/`, собственная аутентификация Orchid (та же таблица `users`).
 
 Бэкенд — **Laravel 13 (PHP ^8.5)**, админка — **Orchid Platform ^14**. Авторизация Breeze (Blade), комментарии и подписка — только Blade (без SPA/API-контроллеров).
@@ -168,7 +168,7 @@ Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRub
 
 **Особенность async-модалок:** в `asyncGetArticle/asyncGetRubric/asyncGetTag` id сущности извлекается напрямую из query-строки (`parse_str(parse_url(...))`), т.к. при восстановлении состояния экрана он не попадает ни в `request()->query()`, ни в route-параметры.
 
-## 10. Публичный фронтенд (Blade/Vite «TECH//LOG»)
+## 10. Публичный фронтенд (Blade/Vite)
 
 - **Layout** `resources/views/layouts/techlog.blade.php` — шапка с навигацией (в т.ч. выпадающее меню «Темы» на клик, список рубрик внедряется `RubricsComposer`) и переключателем темы, `<main>`, футер, кнопка «наверх»; OG-разметка и SEO-мета (`metaTitle`/`metaDesc` или meta статьи).
 - **Страницы**: `index.blade.php` (hero, masonry-сетка постов, newsletter-модалка), `about.blade.php`, `privacy.blade.php`, `article.blade.php` (шапка статьи, aside TOC, prose-контент, hero-image, теги, комментарии), `contact.blade.php`, `unsubscribe.blade.php`, `dashboard.blade.php`, `errors/*` (кастомные страницы ошибок), `emails/new-article.blade.php`.

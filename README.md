@@ -213,7 +213,7 @@ docker compose -f docker/docker-compose.yml exec node npm run build
 | `composer.json` → `name` | корневой файл | Имя пакета (по умолчанию `laravel/laravel`) |
 | `composer.json` → `description`, `keywords` | корневой файл | Описание пакета (по умолчанию «The Laravel Framework.», ключи Laravel) |
 | `package.json` → `name` | корневой файл | Имя npm-пакета (в шаблоне — `laravel-blog-template`; пакет помечен `private`, менять необязательно) |
-| Название в шапке | `resources/views/layouts/techlog.blade.php:44` | Логотип-текст `TECH//LOG` задан вручную, а не через `APP_NAME` |
+| Название в шапке | `resources/views/layouts/techlog.blade.php:44`  задан вручную, а не через `APP_NAME` |
 | `robots.txt` | `GET /robots.txt` → `RobotsController` | Динамический: блокирует служебные пути и содержит `Sitemap: {APP_URL}/sitemap.xml` |
 
 ### Логотип и favicon

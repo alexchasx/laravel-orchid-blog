@@ -73,7 +73,7 @@ SUB_LOGO=
 - [x] `APP_NAME`, `APP_URL` в `.env` (описано влияние: `<title>`/OG-теги, футер, URL в письмах, префиксы кэша/сессий/Redis; рекомендация `make clear` после смены `APP_NAME`).
 - [x] `SUB_LOGO` — подзаголовок сайта; рядом `SLOGAN`, `MY_GITHUB`/`MY_TELEGRAM`, `CONTACT_EMAIL`, `MAIL_FROM_ADDRESS` (таблица переменных → где используются, с указанием, что `config/my_config.php` править не нужно).
 - [x] Название проекта в `composer.json` (`name`, `description`, `keywords` — сейчас дефолтные `laravel/laravel` / «The Laravel Framework.» / ключи Laravel) и `package.json` (поля `name` нет, пакет `private` — добавлять необязательно).
-- [x] Favicon и логотип в `public/`: `favicon.ico` задан дефолтом Laravel и подключается только в legacy-layout `base.blade.php` (в `techlog` нужно добавить `<link rel="icon">`); логотип-текст `TECH//LOG` захардкожен в `layouts/techlog.blade.php:41`; OG-изображения не загружаются (заглушка-градиент).
+- [x] Favicon и логотип в `public/`: `favicon.ico` задан дефолтом Laravel и подключается только в legacy-layout `base.blade.php` (в `techlog` нужно добавить `<link rel="icon">`); OG-изображения не загружаются (заглушка-градиент).
 - [x] Настройки Orchid в `config/platform.php`: `prefix` (`PLATFORM_PREFIX`), `domain` (`PLATFORM_DOMAIN`), `middleware`, `template.header`/`template.footer`, `notifications.enabled`, `search`, `attachment.disk` + ссылка на `app/Orchid/PlatformProvider.php` (меню, `platform.custom.*`).
 - [x] Дополнительно в том же разделе: смена пароля админа Orchid (`123456`) и тестового автора сида (`author@example.test`/`password`), демо-контент сидера (6 рубрик/21 метка/25 статей — цифра уточнена в секции 12), `robots.txt`, чеклист «Перед деплоем» (nginx-конфиг, SMTP, `queue:work`, `schedule:work`, `APP_DEBUG=false`, права `www-data`, `make frontend-build`).
 
@@ -116,7 +116,7 @@ SUB_LOGO=
 
 Выполнено: инвентаризация `public/` (26 файлов, ~9,6 МБ) и удаление мёртвого наследия.
 
-- [x] Проверен `public/` на специфичные файлы: favicon, логотипы, загрузки, скриншоты. Скриншотов и кастомных логотипов в `public/` нет; логотип — текстовый (`TECH//LOG` в шапке, не файл), OG-изображений нет (заглушка-градиент в `article.blade.php`).
+- [x] Проверен `public/` на специфичные файлы: favicon, логотипы, загрузки, скриншоты. Скриншотов и кастомных логотипов в `public/` нет; логотип — текстовый, OG-изображений нет (заглушка-градиент в `article.blade.php`).
 - [x] Удалён `public/config.rb` — конфиг Compass из старой темы блога: в зависимостях нет ни `compass`, ни gulp, в SCSS нет ни одного `@use/@import "compass"`, ссылок на файл в проекте нет.
 - [x] Удалён каталог `public/fonts/` (FontAwesome, Glyphicons Halflings, GreatVibes — 11 файлов): в `resources/` нет ни одного `@font-face`/`url(...fonts...)`, Orchid CSS использует системные стери шрифтов, единственные классы `glyphicon` были в неподключаемом `includes/donate.blade.php` (файл удалён позже, в секции 12).
 - [x] Оставлены только дефолтные/компилируемые файлы: `index.php`, `.htaccess`, `robots.txt`, `favicon.ico`; сгенерированные `build/` (нужны, чтобы сайт работал сразу после клона без `npm run build`) и `public/vendor/orchid/` (опубликованные ассеты Orchid — без них админка не рендерится, переопубликация — `php artisan orchid:publish`, добавлена заметка в README).

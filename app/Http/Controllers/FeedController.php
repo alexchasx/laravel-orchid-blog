@@ -20,7 +20,7 @@ class FeedController extends Controller
             $articles = $this->publishedArticles();
             $siteUrl = config('app.url');
             $siteName = config('app.name');
-            $siteDesc = config('seo.default_description', 'IT-блог TECH//LOG');
+            $siteDesc = config('seo.default_description', '');
             $lastBuildDate = $articles->isNotEmpty()
                 ? $articles->first()->updated_at?->toRssString()
                 : now()->toRssString();

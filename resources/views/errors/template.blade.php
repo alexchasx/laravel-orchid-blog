@@ -1,4 +1,4 @@
-{{-- Общий шаблон страниц ошибок в дизайне «TECH//LOG» (см. errors/404.blade.php) --}}
+{{-- Общий шаблон страниц ошибок (см. errors/404.blade.php) --}}
 
 @php
     $tocLinks = $tocLinks ?? [

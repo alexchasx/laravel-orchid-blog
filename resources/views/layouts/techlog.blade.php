@@ -113,7 +113,7 @@
 <header class="site-header" id="top">
     <nav class="nav container" aria-label="Основная навигация">
         <a class="brand" href="{{ route('home') }}" aria-label="{{ config('app.name') }} — главная">
-            <span>TECH</span><b>//</b>LOG
+            {{ config('app.name') }}
         </a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-menu">
             <span></span><span></span><span></span>

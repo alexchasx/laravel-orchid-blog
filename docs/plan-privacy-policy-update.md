@@ -70,7 +70,7 @@
 | `[URL страницы отписки]` (§ 22.2) | `route('subscribe.unsubscribe', ['token' => …])` (ссылка в каждом письме) |
 | `[e-mail для запросов по ПДн]` (§ 21, § 22.1) | `config('operator.email')` |
 | Реквизиты оператора (§ 1.3) | `config('operator.*')`: `name`, `address`, `inn`, `ogrn`, `phone`, `email` |
-| Название блога «TECH//LOG» в заголовке | `config('app.name')` |
+| Название блога в заголовке | `config('app.name')` |
 
 Текущая страница уже содержит ссылки на согласия и форму отзыва ([`privacy.blade.php:64`](../resources/views/privacy.blade.php:64)) — их сохранить и дополнить ссылкой на `route('consent.revoke.form')` в разделе об отзыве.
 
