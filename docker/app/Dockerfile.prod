@@ -1,0 +1,57 @@
+# ---- STAGE 1: build ----
+FROM node:22-alpine AS node_builder
+
+WORKDIR /tmp/build
+
+COPY package.json package-lock.json* vite.config.js resources/ ./
+
+RUN npm ci && npm run build
+
+# ---- STAGE 2: final ----
+FROM php:8.5.2-fpm-bookworm
+
+LABEL maintainer="alexchasx"
+
+RUN apt-get update && apt-get install -y \
+      libpq-dev \
+      libpng-dev \
+      libzip-dev \
+      procps \
+      zip unzip \
+      git && \
+      docker-php-ext-install pdo_mysql && \
+      docker-php-ext-install bcmath && \
+      docker-php-ext-install gd && \
+      docker-php-ext-install zip && \
+      docker-php-ext-install pcntl && \
+      apt-get clean && \
+      rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+      mkdir -p /var/www && chown -R www-data:www-data /var/www && \
+      chmod -R 755 /var/www
+
+# Предпочитать IPv4 при резолве имён (иначе getaddrinfo возвращает IPv6 первым,
+# а маршрута IPv6 в Docker-сети нет — curl/composer упираются в таймаут).
+RUN sed -i 's|^#\s*precedence ::ffff:0:0/96  100|precedence ::ffff:0:0/96  100|' /etc/gai.conf
+
+# Копируем продакшн-конфиг PHP (OPcache + продакшн-значения)
+COPY ./app/php.ini.prod /usr/local/etc/php/conf.d/php.ini
+
+# Код приложения, vendor и собранные ассеты
+COPY ./ /var/www
+
+COPY --from=node_builder /tmp/build/public/build /var/www/public/build
+
+# Composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN curl -sS https://getcomposer.org/installer | php -- \
+    --filename=composer \
+    --install-dir=/usr/local/bin
+
+# Entrypoint
+COPY ./app/entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["php-fpm"]
+
+WORKDIR /var/www

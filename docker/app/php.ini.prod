@@ -1,0 +1,15 @@
+; docker/app/php.ini (prod)
+cgi.fix_pathinfo=0
+max_execution_time=60
+max_input_time=60
+memory_limit=256M
+upload_max_filesize=4M
+post_max_size=8M
+date.timezone=Europe/Moscow
+
+; OPcache — обязателен в проде (в официальном образе PHP выключен)
+opcache.enable=1
+opcache.memory_consumption=128
+opcache.max_accelerated_files=10000
+opcache.validate_timestamps=1
+opcache.revalidate_freq=60

@@ -18,6 +18,7 @@ use App\Models\ConsentLog;
 use App\Services\ConsentTextBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class ConsentController extends Controller
 {
@@ -53,6 +54,16 @@ class ConsentController extends Controller
             'text'          => $result['text'],
             'version'       => $result['version'],
             'effectiveDate' => ConsentTextBuilder::CONSENT_EFFECTIVE_DATE,
+        ]);
+    }
+
+    /**
+     * Показать форму отзыва согласия.
+     */
+    public function revokeForm(): View
+    {
+        return view('consent.revoke', [
+            'metaRobots' => 'noindex, nofollow',
         ]);
     }
 

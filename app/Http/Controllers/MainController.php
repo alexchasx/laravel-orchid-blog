@@ -30,4 +30,12 @@ class MainController extends Controller
             'metaDesc' => __('Как :app собирает, хранит и защищает персональные данные посетителей.', ['app' => config('app.name')]),
         ]);
     }
+
+    /**
+     * Личная зона (Breeze dashboard).
+     */
+    public function dashboard(): View
+    {
+        return view('dashboard');
+    }
 }

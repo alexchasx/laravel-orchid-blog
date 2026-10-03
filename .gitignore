@@ -28,9 +28,7 @@ yarn-error.log
 
 __*
 
-# Lock-файлы исключены: в шаблоне зависимости ставятся свежими (см. docs/public-template-plan.md, п. 2)
-composer.lock
-package-lock.json
+# Lock-файлы включены для детерминированного деплоя (см. plans/deployment-plan-vps-docker.md, п. 2.1)
 
 # Данные Docker-контейнеров (не попадут в шаблон)
 /docker/tmp
