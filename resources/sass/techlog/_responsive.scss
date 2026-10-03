@@ -68,17 +68,6 @@
         grid-template-columns: 1fr;
     }
 
-    .toc {
-        position: static;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 14px;
-
-        strong {
-            width: 100%;
-        }
-    }
-
     .article-hero {
         height: 240px;
     }
@@ -93,6 +82,28 @@
 
     .footer a:first-child {
         margin-left: 0;
+    }
+}
+
+/* Десктоп — скрываем inline-блок */
+@media (max-width: 819px) {
+    .article-layout {
+        display: block;
+    }
+    .toc {
+        display: flex;
+        position: static;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+
+        strong {
+            width: 100%;
+        }
+    }
+
+    .related-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -130,6 +141,10 @@
 
     .article-head h1 {
         font-size: clamp(1.95rem, 8.5vw, 2.45rem);
+    }
+
+    .related-grid {
+        grid-template-columns: 1fr;
     }
 
     // Cookie-баннер на мобильных: баннер на всю ширину экрана

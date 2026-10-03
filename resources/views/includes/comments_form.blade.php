@@ -56,6 +56,10 @@
 
         <!-- Согласия на обработку ПДн (152-ФЗ) -->
         <div class="consent-checks">
+            <div class="consent-error" id="consent-error" style="display:none; color: #ff4444; margin: 8px 0px; font-size: 14px;">
+                Чтобы отправить комментарий, подтвердите оба согласия (галочки): на обработку и на распространение персональных данных
+            </div>
+
             <label>
                 <input type="checkbox" name="consent_processing" value="1"
                     {{ old('consent_processing') ? 'checked' : '' }}
@@ -85,12 +89,14 @@
             </label>
 
             <label for="distribution-conditions">
-                Дополнительные условия и запреты
-                (необязательно, до {{ config('consent.distribution.max_conditions_length') }} символов)
+                <div>
+                    <p>Дополнительные условия и запреты
+                (необязательно, до {{ config('consent.distribution.max_conditions_length') }} символов)</p>
+                    <textarea id="distribution-conditions" name="distribution_conditions"
+                        rows="3" maxlength="{{ config('consent.distribution.max_conditions_length') }}"
+                        placeholder="Например: Запрещаю использовать текст комментария для обучения ИИ...">{{ old('distribution_conditions') }}</textarea>
 
-                <textarea id="distribution-conditions" name="distribution_conditions"
-                    rows="3" maxlength="{{ config('consent.distribution.max_conditions_length') }}"
-                    placeholder="Например: Запрещаю использовать текст комментария для обучения ИИ...">{{ old('distribution_conditions') }}</textarea>
+                </div>
             </label>
         </div>
 
@@ -104,9 +110,13 @@
             var processing = document.getElementById('consent-processing');
             var distribution = document.getElementById('consent-distribution');
             var submitBtn = document.getElementById('comment-submit');
+            var consentError = document.getElementById('consent-error');
+            var form = document.getElementById('commentform');
 
             function updateButton() {
-                submitBtn.disabled = !(processing.checked && distribution.checked);
+                var checked = processing.checked && distribution.checked;
+                submitBtn.disabled = !checked;
+                if (consentError) consentError.style.display = checked ? 'none' : 'block';
             }
 
             if (processing && distribution && submitBtn) {
@@ -114,6 +124,16 @@
                 distribution.addEventListener('change', updateButton);
                 // Пересчитать состояние при загрузке (для old() после ошибок валидации).
                 updateButton();
+            }
+
+            // Дополнительная проверка при отправке (на случай отключения JS).
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    if (!processing.checked || !distribution.checked) {
+                        e.preventDefault();
+                        if (consentError) consentError.style.display = 'block';
+                    }
+                });
             }
         });
         </script>

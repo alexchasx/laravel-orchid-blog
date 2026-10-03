@@ -92,6 +92,59 @@ class ArticleService
     }
 
     /**
+     * Возвращает похожие статьи: сначала по тегам, затем добор по рубрике.
+     *
+     * @param  \Illuminate\Support\Collection<int, \App\Models\Tag>  $tagIds
+     * @return \Illuminate\Database\Eloquent\Collection<int, Article>
+     */
+    public function getRelated(Article $article, int $limit = 3): \Illuminate\Database\Eloquent\Collection
+    {
+        /** @var \Illuminate\Database\Eloquent\Collection<int, Article> $results */
+        $results = new \Illuminate\Database\Eloquent\Collection();
+        $tagIds = $article->tags->pluck('id');
+
+        // Шаг 1 — по тегам (если теги есть).
+        if ($tagIds->isNotEmpty()) {
+            $results = Article::query()
+                ->where('is_published', true)
+                ->where('published_at', '<=', now())
+                ->where('id', '!=', $article->id)
+                ->whereHas('tags', function (Builder $q) use ($tagIds) {
+                    $q->whereIn('tags.id', $tagIds);
+                })
+                ->select(self::SELECT_COLUMNS)
+                ->with(['tags', 'rubric'])
+                ->orderByDesc('published_at')
+                ->take($limit)
+                ->get();
+        }
+
+        // Шаг 2 — добор по рубрике, если набрано меньше лимита.
+        if ($results->count() < $limit && $article->rubric_id) {
+            $alreadyIds = $results->pluck('id')->toArray();
+            $remaining = $limit - $results->count();
+
+            $byRubric = Article::query()
+                ->where('is_published', true)
+                ->where('published_at', '<=', now())
+                ->where('rubric_id', $article->rubric_id)
+                ->where('id', '!=', $article->id)
+                ->when(!empty($alreadyIds), function (Builder $q) use ($alreadyIds) {
+                    $q->whereNotIn('id', $alreadyIds);
+                })
+                ->select(self::SELECT_COLUMNS)
+                ->with(['tags', 'rubric'])
+                ->orderByDesc('published_at')
+                ->take($remaining)
+                ->get();
+
+            $results = $results->merge($byRubric)->unique('id')->take($limit);
+        }
+
+        return $results;
+    }
+
+    /**
      * Извлекает подзаголовки (h2/h3) из HTML-контента статьи,
      * добавляет каждому уникальный id-якорь и возвращает:
      *  - contentHtml — HTML с проставленными id у заголовков;

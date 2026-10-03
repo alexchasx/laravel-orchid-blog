@@ -342,4 +342,58 @@ class PublicPagesTest extends TestCase
         $response->assertRedirect('/');
         $this->assertSame('ru', session('user_locale'));
     }
+
+    // ------------------------------------------------------------------------
+    // Похожие статьи
+    // ------------------------------------------------------------------------
+
+    public function test_article_page_shows_related_articles_block(): void
+    {
+        $tag = Tag::factory()->create(['active' => true]);
+
+        $target = $this->createPublishedArticle([
+            'title' => 'Целевая статья',
+        ]);
+        $target->tags()->attach($tag->id);
+
+        $related = $this->createPublishedArticle([
+            'title' => 'Похожая статья',
+        ]);
+        $related->tags()->attach($tag->id);
+
+        $response = $this->get("/article/{$target->slug}");
+
+        $response->assertOk();
+        $response->assertSee('Похожие статьи', false);
+        $response->assertSee($related->title);
+    }
+
+    public function test_article_page_hides_related_articles_block_when_none(): void
+    {
+        $article = $this->createPublishedArticle();
+
+        $response = $this->get("/article/{$article->slug}");
+
+        $response->assertOk();
+        $response->assertDontSee('Похожие статьи', false);
+    }
+
+    public function test_unpublished_article_does_not_appear_in_related(): void
+    {
+        $tag = Tag::factory()->create(['active' => true]);
+
+        $target = $this->createPublishedArticle();
+        $target->tags()->attach($tag->id);
+
+        $draft = $this->createPublishedArticle([
+            'is_published' => false,
+            'title' => 'Черновик',
+        ]);
+        $draft->tags()->attach($tag->id);
+
+        $response = $this->get("/article/{$target->slug}");
+
+        $response->assertOk();
+        $response->assertDontSee('Черновик');
+    }
 }

@@ -121,6 +121,7 @@ Laravel 13-стиль: ядро без `Http/Kernel.php`.
 
 - `getPublic()` — пагинация 12, колонки `[id, title, published_at]`.
 - `getNotPublic()`, `getByRubric()`, `getByTag()` — выборки черновиков/по рубрике/по метке.
+- `getRelated(Article $article, int $limit = 3)` — похожие статьи: сначала по тегам, затем добор по рубрике; возвращает коллекцию до `$limit` элементов (по умолчанию 3), только опубликованные, без текущей статьи.
 - `checkAccess()` — 403 для неопубликованной статьи, если пользователь не админ (`app/Services/ArticleService.php:25`).
 - `withToc()` — парсит `content_html`, проставляет `id` заголовкам `<h2>/<h3>` и возвращает `[contentHtml, tocItems]` для оглавления в `article.blade.php`.
 
@@ -172,7 +173,7 @@ Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRub
 
 - **Layout** `resources/views/layouts/techlog.blade.php` — шапка с навигацией (в т.ч. выпадающее меню «Темы» на клик, список рубрик внедряется `RubricsComposer`) и переключателем темы, `<main>`, футер, кнопка «наверх»; OG-разметка и SEO-мета (`metaTitle`/`metaDesc` или meta статьи).
 - **Страницы**: `index.blade.php` (hero, masonry-сетка постов, newsletter-модалка), `about.blade.php`, `privacy.blade.php`, `article.blade.php` (шапка статьи, aside TOC, prose-контент, hero-image, теги, комментарии), `contact.blade.php`, `unsubscribe.blade.php`, `dashboard.blade.php`, `errors/*` (кастомные страницы ошибок), `emails/new-article.blade.php`.
-- **Инклюды**: `includes/comment_modal`, `comments_form`, `comments_list`, `cookie_banner`, `jsonld`, `breadcrumbs`, `locale_links`, `newsletter_modal`, `publication_date` (не подключается), `sidebar` (legacy). Инклюды `includes/donate` и `includes/meta_tags` удалены (секция 12 плана-шаблона и секция 17 соответственно).
+- **Инклюды**: `includes/comment_modal`, `comments_form`, `comments_list`, `cookie_banner`, `jsonld`, `breadcrumbs`, `locale_links`, `newsletter_modal`, `publication_date` (не подключается), `sidebar` (legacy), `related_articles` (блок «Похожие статьи» на странице статьи). Инклюды `includes/donate` и `includes/meta_tags` удалены (секция 12 плана-шаблона и секция 17 соответственно).
 - **Стили**: `resources/sass/techlog/index.scss` (SCSS-модули `_variables`, `_reset`, `_base`, `_components`, `_forms`, `_utilities`, `_responsive`), CSS-переменные, тёмная темы через `html.light` + `localStorage`.
 - **JS**: `resources/js/techlog.js` — мобильное меню, выпадающее меню «Темы», тема, scroll-reveal, to-top, валидация форм, модалки. `resources/js/app.js` — legacy/Alpine.
 - **Breeze**: `layouts/app.blade.php`, `layouts/guest.blade.php` — используются auth-страницами и `dashboard`/`profile` (отдают `noindex, nofollow`).

@@ -53,6 +53,9 @@
     </div>
 </article>
 
+{{-- Похожие статьи --}}
+@include('includes.related_articles')
+
 {{-- Comments --}}
 <section class="section comments container" id="comments">
     @include('includes.comments_list')

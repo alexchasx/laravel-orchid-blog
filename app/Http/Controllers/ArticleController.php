@@ -50,13 +50,17 @@ final class ArticleController extends Controller
         // Оглавление (якоря на подзаголовки) и контент с проставленными id.
         ['contentHtml' => $contentHtml, 'tocItems' => $tocItems] = $this->service->withToc($article);
 
+        // Похожие статьи.
+        $relatedArticles = $this->service->getRelated($article);
+
         return view('article', [
-            'article'     => $article,
-            'contentHtml' => $contentHtml,
-            'tocItems'    => $tocItems,
-            'captcha'     => Auth::guest() ? MathCaptcha::question() : null,
-            'metaTitle'   => $article->title,
-            'metaDesc'    => $article->meta_desc,
+            'article'         => $article,
+            'contentHtml'     => $contentHtml,
+            'tocItems'        => $tocItems,
+            'captcha'         => Auth::guest() ? MathCaptcha::question() : null,
+            'metaTitle'       => $article->title,
+            'metaDesc'        => $article->meta_desc,
+            'relatedArticles' => $relatedArticles,
         ]);
     }
 

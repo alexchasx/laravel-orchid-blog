@@ -71,6 +71,7 @@ class Comment extends Model
         'article_id',
         'content',
         'active',
+        'distribution_conditions',
         'consent_processing_log_id',
         'consent_distribution_log_id',
         'is_anonymized',

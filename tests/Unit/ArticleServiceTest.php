@@ -267,4 +267,244 @@ class ArticleServiceTest extends TestCase
         $this->assertInstanceOf(Collection::class, $article->tags);
         $this->assertTrue($article->tags->contains('id', $tag->id));
     }
+
+    // ------------------------------------------------------------------------
+    // getRelated()
+    // ------------------------------------------------------------------------
+
+    public function test_get_related_returns_articles_with_matching_tags(): void
+    {
+        $tag = Tag::factory()->create(['active' => true]);
+
+        $target = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+        $target->tags()->attach($tag->id);
+
+        $related = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+        $related->tags()->attach($tag->id);
+
+        $result = $this->service->getRelated($target);
+
+        $this->assertTrue($result->contains('id', $related->id));
+        $this->assertFalse($result->contains('id', $target->id));
+    }
+
+    public function test_get_related_prioritizes_tags_over_rubric(): void
+    {
+        $tag = Tag::factory()->create(['active' => true]);
+        $rubric = Rubric::factory()->create();
+
+        $target = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+            'rubric_id' => $rubric->id,
+        ]);
+        $target->tags()->attach($tag->id);
+
+        // Три статьи с общим тегом — лимит 3 покрывается тегами полностью.
+        $taggedOne = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+        $taggedOne->tags()->attach($tag->id);
+
+        $taggedTwo = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+        $taggedTwo->tags()->attach($tag->id);
+
+        $taggedThree = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+        $taggedThree->tags()->attach($tag->id);
+
+        // Статья без тега, но с той же рубрикой.
+        $rubricArticle = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+            'rubric_id' => $rubric->id,
+        ]);
+
+        $result = $this->service->getRelated($target, 3);
+
+        // Тег-статьи должны быть в результате.
+        $this->assertTrue($result->contains('id', $taggedOne->id));
+        $this->assertTrue($result->contains('id', $taggedTwo->id));
+        $this->assertTrue($result->contains('id', $taggedThree->id));
+        // Рубрика не попадает, так как по тегам уже набрано 3.
+        $this->assertFalse($result->contains('id', $rubricArticle->id));
+        $this->assertCount(3, $result);
+    }
+
+    public function test_get_related_fills_by_rubric_when_tags_not_enough(): void
+    {
+        $tag = Tag::factory()->create(['active' => true]);
+        $rubric = Rubric::factory()->create();
+
+        $target = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+            'rubric_id' => $rubric->id,
+        ]);
+        $target->tags()->attach($tag->id);
+
+        // Одна статья с общим тегом.
+        $tagged = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+        $tagged->tags()->attach($tag->id);
+
+        // Две статьи без тега, но с той же рубрикой.
+        $rubricOne = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+            'rubric_id' => $rubric->id,
+        ]);
+        $rubricTwo = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+            'rubric_id' => $rubric->id,
+        ]);
+
+        $result = $this->service->getRelated($target, 3);
+
+        $this->assertTrue($result->contains('id', $tagged->id));
+        $this->assertTrue($result->contains('id', $rubricOne->id));
+        $this->assertTrue($result->contains('id', $rubricTwo->id));
+        $this->assertCount(3, $result);
+    }
+
+    public function test_get_related_excludes_current_article(): void
+    {
+        $article = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+
+        $result = $this->service->getRelated($article);
+
+        $this->assertFalse($result->contains('id', $article->id));
+    }
+
+    public function test_get_related_excludes_drafts_and_future(): void
+    {
+        $tag = Tag::factory()->create(['active' => true]);
+
+        $target = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+        $target->tags()->attach($tag->id);
+
+        $draft = $this->createArticle([
+            'is_published' => false,
+            'published_at' => now(),
+        ]);
+        $draft->tags()->attach($tag->id);
+
+        $future = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now()->addDay(),
+        ]);
+        $future->tags()->attach($tag->id);
+
+        $result = $this->service->getRelated($target);
+
+        $this->assertFalse($result->contains('id', $draft->id));
+        $this->assertFalse($result->contains('id', $future->id));
+    }
+
+    public function test_get_related_limits_result(): void
+    {
+        $tag = Tag::factory()->create(['active' => true]);
+
+        $target = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+        $target->tags()->attach($tag->id);
+
+        for ($i = 0; $i < 5; $i++) {
+            $article = $this->createArticle([
+                'is_published' => true,
+                'published_at' => now(),
+            ]);
+            $article->tags()->attach($tag->id);
+        }
+
+        $result = $this->service->getRelated($target, 3);
+
+        $this->assertCount(3, $result);
+    }
+
+    public function test_get_related_sorted_by_published_at_desc(): void
+    {
+        $tag = Tag::factory()->create(['active' => true]);
+
+        $target = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+        $target->tags()->attach($tag->id);
+
+        $older = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now()->subDays(5),
+        ]);
+        $older->tags()->attach($tag->id);
+
+        $newer = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now()->subDays(1),
+        ]);
+        $newer->tags()->attach($tag->id);
+
+        $result = $this->service->getRelated($target);
+
+        $ids = $result->pluck('id')->toArray();
+        $this->assertGreaterThan(array_search($newer->id, $ids), array_search($older->id, $ids));
+    }
+
+    public function test_get_related_returns_empty_when_no_related(): void
+    {
+        $article = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+
+        $result = $this->service->getRelated($article);
+
+        $this->assertCount(0, $result);
+    }
+
+    public function test_get_related_works_for_article_without_tags(): void
+    {
+        $rubric = Rubric::factory()->create();
+
+        $target = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+            'rubric_id' => $rubric->id,
+        ]);
+        // У target нет тегов.
+
+        $sameRubric = $this->createArticle([
+            'is_published' => true,
+            'published_at' => now(),
+            'rubric_id' => $rubric->id,
+        ]);
+
+        $result = $this->service->getRelated($target);
+
+        $this->assertTrue($result->contains('id', $sameRubric->id));
+        $this->assertFalse($result->contains('id', $target->id));
+    }
 }
