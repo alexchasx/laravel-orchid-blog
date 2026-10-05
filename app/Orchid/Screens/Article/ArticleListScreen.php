@@ -6,6 +6,7 @@ use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use App\Orchid\Layouts\Article\ArticleListTable;
 use App\Orchid\Layouts\CreateOrUpdateArticle;
+use App\Orchid\Layouts\Html;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -71,7 +72,9 @@ class ArticleListScreen extends Screen
             Layout::modal('editArticle', CreateOrUpdateArticle::class)
                 ->title('Редактирование статьи')
                 ->size(Modal::SIZE_LG)
-                ->async('asyncGetArticle')
+                ->async('asyncGetArticle'),
+
+            new Html(),
         ];
     }
 
