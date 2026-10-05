@@ -12,8 +12,10 @@
     --muted: #8b9992;
 
     // Цвета: акцент
-    --green: #00ff88;
-    --green-dark: #003322;
+    // --green: #00ff88;
+    --green: #10b981;
+    --primary-hover: #059669;
+    --green-dark: #10b981;
     --line: rgba(0, 255, 136, .15);
 
     // Тени: неоморфизм
@@ -38,7 +40,7 @@ html.light {
     --surface-2: #edf2ee;
     --text: #112018;
     --muted: #53645b;
-    --green: green;
+    --green: #10b981;
     --line: rgba(0, 105, 58, .18);
     --shadow: 10px 10px 25px rgba(91, 110, 99, .18), -8px -8px 22px rgba(255, 255, 255, .85);
 }
