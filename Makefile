@@ -66,6 +66,11 @@ down: ## Остановить контейнеры (docker compose down)
 	@echo "$(YELLOW)→ Stopping Docker containers...$(RESET)"
 	$(COMPOSE) down
 
+.PHONY: restart
+restart: ## Перезапустить контейнеры (docker compose restart)
+	@echo "$(GREEN)→ Restarting Docker containers...$(RESET)"
+	$(COMPOSE) restart
+
 .PHONY: setup
 setup: composer-install key-generate migrate orchid-admin storage-link frontend-install frontend-build ## Полная установка в уже запущенный Docker (composer, ключ, миграции, админ, фронтенд)
 	$(call PRINT_SERVICE_LINKS,Setup complete!)
@@ -173,6 +178,11 @@ ide-helper: ## Обновить IDE Helper (для IDE автодополнен�
 lint: ## Запустить PHP lint (php -l на всех .php файлах)
 	@echo "$(GREEN)→ Running PHP lint...$(RESET)"
 	$(COMPOSE) exec app sh -c 'find app database routes -name "*.php" -exec php -l {} \; 2>&1 | grep -v "No syntax errors" || true'
+
+.PHONY: import-articles
+import-articles: ## Импортировать статьи из _import_articles (php artisan articles:import $(ARGS))
+	@echo "$(GREEN)→ Importing articles from _import_articles...$(RESET)"
+	$(COMPOSE) exec app php artisan articles:import $(ARGS)
 
 # =============================================================================
 # Продакшн-цели (docker/docker-compose.prod.yml + docker/.env.prod)
