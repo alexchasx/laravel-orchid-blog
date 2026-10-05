@@ -564,6 +564,15 @@
     margin: 8px 0;
 }
 
+.prose a {
+    font-weight: 700;
+    transition: color .2s ease;
+
+    &:hover {
+        color: var(--green);
+    }
+}
+
 .prose pre {
     background: #050805;
     border: 1px solid var(--line);

@@ -103,8 +103,14 @@ key-generate: ## Сгенерировать APP_KEY (php artisan key:generate)
 
 .PHONY: migrate
 migrate: ## Запустить миграции и сиды (migrate:fresh --seed; разрушает данные)
+	@echo "$(GREEN)→ Stopping queue workers...$(RESET)"
+	$(COMPOSE) stop queue schedule
 	@echo "$(GREEN)→ Running migrations and seeders...$(RESET)"
 	$(COMPOSE) exec app php artisan migrate:fresh --seed
+	@echo "$(GREEN)→ Restarting queue workers...$(RESET)"
+	$(COMPOSE) start queue schedule
+	@echo "$(GREEN)→ Creating Orchid admin user...$(RESET)"
+	$(COMPOSE) exec app php artisan orchid:admin admin admin@localhost.ru 123456
 
 .PHONY: orchid-admin
 orchid-admin: ## Создать администратора Orchid (admin@localhost.ru / 123456)

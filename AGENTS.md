@@ -36,6 +36,7 @@ UI-тексты, комментарии в коде и вся документа
 - `make test` — `php artisan test` **внутри `blog_app`**; `make test-coverage` — c HTML-отчётом в `tests/coverage`
 - `make lint` — только `php -l` по `app database routes` (нет phpstan и Pint)
 - `make ide-helper` — `ide:model` + `ide:optimize` для автодополнения в IDE
+- [`provision-server.sh`](provision-server.sh) — разовая подготовка Ubuntu 24.04 LTS (VDS/VPS) к первому деплою: Docker Engine + Compose plugin, пользователь деплоя с SSH-ключом, ужесточение sshd, ufw (22/80/443), swap, таймзона, опционально fail2ban/autoupgrade; алгоритм деплоя — в [`README.md`](README.md), раздел «Деплой на продакшн (Ubuntu 24.04 VPS)»
 
 Контейнеры (`blog_*`): `nginx`, `app`, `node`, **`schedule`** (`php artisan schedule:work` — автопубликация статей), **`queue`** (`php artisan queue:work` — обработка очереди писем рассылки), `mailhog`, `db` (MySQL 8.0), `phpmyadmin`.
 
