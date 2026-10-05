@@ -431,6 +431,27 @@
     }
 }
 
+.read {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font: 600 var(--fs-sm) "JetBrains Mono";
+    color: var(--green);
+    transition: color .2s ease, gap .2s ease;
+
+    &:hover {
+        gap: 8px;
+    }
+
+    span {
+        transition: transform .2s ease;
+    }
+
+    &:hover span {
+        transform: translate(2px, -2px);
+    }
+}
+
 // ---------------------------------------------------------------------------
 // About & Newsletter
 // ---------------------------------------------------------------------------
