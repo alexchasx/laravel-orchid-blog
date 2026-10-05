@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
-use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 
 /**
  * App\Models\Article
@@ -91,11 +91,12 @@ class Article extends Model
                 //  - 'html_input' => 'strip' вырезает сырой HTML, вставленный в Markdown;
                 //  - 'allow_unsafe_links' => false запрещает опасные схемы URL (javascript: и т.п.).
                 //    (в league/commonmark 2.10 по умолчанию true — ключ пишется во множественном числе).
+                // GithubFlavoredMarkdownConverter включает таблицы, зачёркивание, task-lists и др. GFM-расширения.
                 $config = [
                     'html_input'        => 'strip',
                     'allow_unsafe_links' => false,
                 ];
-                $article->content_html = (new CommonMarkConverter($config))
+                $article->content_html = (new GithubFlavoredMarkdownConverter($config))
                     ->convert((string) $article->content_raw)
                     ->getContent();
             }
