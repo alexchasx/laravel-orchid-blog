@@ -155,16 +155,21 @@
 </main>
 
 <footer class="footer">
-    <div class="container footer-inner">
-        <span>&copy; 2026 {{ config('app.name') }}. {{ config('my_config.slogan') }}.</span>
+    <div class="container footer-inner" style="display: flex;">
+        <div>&copy; 2026 {{ config('app.name') }}. {{ config('my_config.slogan') }}.</div>
+        <div>На базе
+            <a href="https://github.com/alexchasx/laravel-orchid-blog" target="_blank" rel="noopener noreferrer">
+                laravel-orchid-blog
+            </a> ⭐ GitHub
+        </div>
         <div>
             @if(config('my_config.my_github'))
-                <a href="{{ config('my_config.my_github') }}" target="_blank" rel="noopener">GitHub</a>
+                <a href="{{ config('my_config.my_github') }}" target="_blank" rel="noopener" style="margin-right: 25px;">GitHub</a>
             @endif
             @if(config('my_config.my_telegram'))
-                <a href="{{ config('my_config.my_telegram') }}" target="_blank" rel="noopener">Telegram</a>
+                <a href="{{ config('my_config.my_telegram') }}" target="_blank" rel="noopener" style="margin-right: 25px;">Telegram</a>
             @endif
-            <a href="{{ route('contact') }}">Контакты</a>
+            <a href="{{ route('contact') }}" style="margin-right: 25px;">Контакты</a>
             <a href="{{ route('privacy') }}">Конфиденциальность</a>
         </div>
     </div>

@@ -14,10 +14,6 @@
             {!! $text !!}
         </div>
     </div>
-
-    <div class="text-center" style="margin-top: 2rem;">
-        <a href="{{ route('home') }}" class="btn">Вернуться на главную</a>
-    </div>
 </section>
 
 @endsection

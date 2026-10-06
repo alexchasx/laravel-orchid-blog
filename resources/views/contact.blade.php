@@ -2,11 +2,11 @@
 
 @section('content')
 
-<section class="contact container">
+<section class="contact container" style="display: block; margin-bottom: 24px; max-width: 700px;">
     {{-- Contact Intro --}}
     <div class="contact-intro reveal">
-        <h1>Давайте обсудим<br><em>технологии</em></h1>
-        <p>Есть тема для статьи, идея сотрудничества или нашли неточность? Напишите — читаем каждое сообщение</p>
+        <!-- <h1>Давайте обсудим<br><em>технологии</em></h1> -->
+        <p>Есть тема для статьи, идея сотрудничества или нашли неточность? Напишите</p>
         @if(config('my_config.contact_email') || config('my_config.my_github'))
             {{-- Контакты берутся из .env (CONTACT_EMAIL, MY_GITHUB), см. config/my_config.php --}}
             <div class="contact-links">

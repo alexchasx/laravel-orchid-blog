@@ -12,10 +12,6 @@
             <a class="button primary" href="#articles">Читать статьи <span>→</span></a>
             <button class="button ghost" type="button" data-modal-open="newsletter">Подписаться</button>
         </div>
-        <div class="terminal-note">
-            <span>$</span> cat /etc/techlog/mission.txt<br>
-            <strong>ship better software.</strong>
-        </div>
     </div>
     <div class="hero-visual">
         <div class="glow"></div>
@@ -66,7 +62,7 @@
                     <div class="meta">
                         {{ \Carbon\Carbon::parse($article->published_at)->locale('ru')->isoFormat('D MMM YYYY') }} · {{ $article->reading_minutes }} МИН
                     </div>
-                    <h3><a href="{{ route('articleShow', ['article' => $article->slug]) }}">{{ $article->title }}</a></h3>
+                    <h3><a href="{{ route('articleShow', ['article' => $article->slug]) }}" class="article_title">{{ $article->title }}</a></h3>
                     <p>{{ Str::limit($article->excerpt ?? '', 150) }}</p>
                     <a class="read" href="{{ route('articleShow', ['article' => $article->slug]) }}">
                         Читать <span>↗</span>

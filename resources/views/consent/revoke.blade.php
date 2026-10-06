@@ -1,7 +1,7 @@
 @extends('layouts.techlog')
 
 @section('content')
-<div class="container" style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
+<div class="container" style="max-width: 800px; margin: 40px auto; padding: 0 20px; margin-top: 100px;">
     <div class="card reveal">
         <div class="section-head">
             <div>

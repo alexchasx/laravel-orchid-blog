@@ -17,6 +17,15 @@ h3 em {
     color: var(--green);
 }
 
+a {
+    transition: .2s;
+    color: var(--green);
+
+    &:hover {
+        color: var(--primary-hover) !important;
+    }
+}
+
 // Lead-текст
 .lead {
     color: var(--muted);

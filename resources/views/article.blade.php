@@ -31,7 +31,7 @@
         @if(!empty($tocItems))
         <aside class="toc">
             @foreach($tocItems as $item)
-                <a href="#{{ $item['id'] }}">{{ $item['text'] }}</a>
+                <a href="#{{ $item['id'] }}" class="toc_link">{{ $item['text'] }}</a>
             @endforeach
         </aside>
         @endif

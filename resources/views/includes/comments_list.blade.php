@@ -18,27 +18,27 @@
                 </div>
 
                 <p class="comment-text">{{ $comment->content }}</p>
-
-                {{-- Ссылка на отзыв согласия для владельца комментария (по e-mail). --}}
-                @if($comment->email)
-                    <p style="font-size: 0.85em; color: #888;">
-                        <a href="{{ route('consent.revoke.form') }}?comment_id={{ $comment->id }}&email={{ urlencode($comment->email) }}"
-                           target="_blank" rel="noopener">
-                            Отозвать согласие на обработку ПДн
-                        </a>
-                    </p>
-                @endif
-
-                @auth
-                    @if (Auth::user()->hasAccess('platform.index') || Auth::user()->id == $comment->user_id)
-                        <form action="{{ route('commentDelete', $comment) }}" method="post" class="comment-delete">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="button">Удалить</button>
-                        </form>
-                    @endif
-                @endauth
             </article>
+
+            {{-- Ссылка на отзыв согласия для владельца комментария (по e-mail). --}}
+            @if($comment->email)
+                <p style="font-size: 0.85em; color: #888;">
+                    <a href="{{ route('consent.revoke.form') }}?comment_id={{ $comment->id }}&email={{ urlencode($comment->email) }}"
+                        target="_blank" rel="noopener" class="link">
+                        Отозвать согласие на обработку ПДн
+                    </a>
+                </p>
+            @endif
+
+            @auth
+                @if (Auth::user()->hasAccess('platform.index') || Auth::user()->id == $comment->user_id)
+                    <form action="{{ route('commentDelete', $comment) }}" method="post" class="comment-delete">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="button">Удалить</button>
+                    </form>
+                @endif
+            @endauth
         @endforeach
     </div>
 @endif
