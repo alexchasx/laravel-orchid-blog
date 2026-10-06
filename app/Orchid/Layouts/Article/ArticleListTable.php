@@ -8,6 +8,7 @@ use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
+use Illuminate\Support\Str;
 
 class ArticleListTable extends Table
 {
@@ -20,6 +21,11 @@ class ArticleListTable extends Table
      * @var string
      */
     protected $target = 'articles';
+
+    /**
+     * Обёртка таблицы в responsive-контейнер для резиновой ширины.
+     */
+    protected $tableResponsive = true;
 
     protected function striped(): bool
     {
@@ -34,7 +40,8 @@ class ArticleListTable extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('id', 'ID')->sort(),
+            TD::make('id', 'ID')->sort()
+                ->width(55),
 
             TD::make('is_published', 'Видна?')->render(function (Article $article) {
                 return CheckBox::make('articles[]')
@@ -55,7 +62,13 @@ class ArticleListTable extends Table
 
             TD::make('title', 'Заголовок'),
 
-            TD::make('excerpt', 'Краткое описание'),
+            TD::make('excerpt', 'Краткое описание')
+                ->width('50')
+                ->render(fn (Article $article) => Str::limit($article->excerpt, 20)),
+
+            TD::make('meta_desc', 'meta_desc')
+                ->width('50')
+                ->render(fn (Article $article) => Str::limit($article->excerpt, 20)),
 
             TD::make('rubric_id', 'ID_К.')
                 ->alignRight()
@@ -64,7 +77,7 @@ class ArticleListTable extends Table
 
             TD::make('rubric_title', 'Категория')->alignLeft()->render(
                 fn (Article $article) => $article->rubric?->title ?? '—'
-            )->width(300),
+            )->width(200),
 
             TD::make('published_at', 'Дата публикации')->render(
                 fn (Article $article) => $article->published_at?->format('d.m.Y') ?? ''
