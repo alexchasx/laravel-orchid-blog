@@ -10,7 +10,7 @@ class ArticleFileParser
      * Парсит markdown-файл статьи и извлекает поля.
      *
      * @param  \SplFileInfo  $file  Файл .md из директории _import_articles
-     * @return array{prefix: string, title: string, excert: ?string, content_raw: string, meta_desc: ?string}
+     * @return array{prefix: string, title: string, excerpt: ?string, content_raw: string, meta_desc: ?string}
      *
      * @throws \InvalidArgumentException  Если файл битый или не найден.
      */
@@ -55,22 +55,22 @@ class ArticleFileParser
             $contentRaw = $content;
         }
 
-        // 6. Excert: первая непустая строка из content_raw.
-        $excert = $this->extractExcert($contentRaw);
+        // 6. Excerpt: первая непустая строка из content_raw.
+        $excerpt = $this->extractExcerpt($contentRaw);
 
         return [
             'prefix'      => $prefix,
             'title'       => $title,
-            'excert'      => $excert,
+            'excerpt'     => $excerpt,
             'content_raw' => $contentRaw,
             'meta_desc'   => $metaDesc,
         ];
     }
 
     /**
-     * Извлекает excert из первой непустой строки content_raw.
+     * Извлекает excerpt из первой непустой строки content_raw.
      */
-    private function extractExcert(string $contentRaw): ?string
+    private function extractExcerpt(string $contentRaw): ?string
     {
         $lines = explode("\n", $contentRaw);
 

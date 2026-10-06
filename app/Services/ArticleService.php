@@ -15,7 +15,7 @@ class ArticleService
 
     // content_raw нужен для Article::reading_minutes (в списках content_html не загружается).
     private const SELECT_COLUMNS = [
-        'id', 'title', 'slug', 'excert', 'image', 'published_at', 'rubric_id', 'is_published', 'content_raw',
+        'id', 'title', 'slug', 'excerpt', 'image', 'published_at', 'rubric_id', 'is_published', 'content_raw',
     ];
 
     public function getPublic(?string $search): LengthAwarePaginator

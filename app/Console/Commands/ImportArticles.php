@@ -177,7 +177,7 @@ class ImportArticles extends Command
                         'user_id'     => $authorId,
                         'rubric_id'   => $rubricId,
                         'title'       => $data['title'],
-                        'excert'      => $data['excert'],
+                        'excerpt'     => $data['excerpt'],
                         'content_raw' => $data['content_raw'],
                         'slug'        => $slug,
                         'image'       => $imageDbPath,

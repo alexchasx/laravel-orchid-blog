@@ -7,8 +7,8 @@
         <a href="{{ $url }}" style="color: #0057ff; text-decoration: none;">{{ $article->title }}</a>
     </h3>
 
-    @if($article->excert)
-        <p style="color: #555;">{{ Str::limit($article->excert, 300) }}</p>
+    @if($article->excerpt)
+        <p style="color: #555;">{{ Str::limit($article->excerpt, 300) }}</p>
     @endif
 
     <p style="margin: 20px 0;">

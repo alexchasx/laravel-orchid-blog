@@ -102,7 +102,7 @@ flowchart TD
 ### Фаза 3. JSON-LD
 
 - Партиал `resources/views/includes/jsonld.blade.php`:
-  - **Article**: headline, description (`meta_desc` или `excert`), datePublished, dateModified,
+  - **Article**: headline, description (`meta_desc` или `excerpt`), datePublished, dateModified,
     author (User или из config), publisher Organization, mainEntityOfPage, image (если есть).
   - **BreadcrumbList** — см. фазу 7.
   - **WebSite** + SearchAction (`/ ?search={search_term_string}`) — на всех публичных страницах.

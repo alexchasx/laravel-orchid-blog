@@ -180,7 +180,7 @@ class FeedTest extends TestCase
         $article = $this->createPublishedArticle([
             'title' => 'Описание из meta_desc',
             'meta_desc' => 'Тестовое описание из meta_desc',
-            'excert' => 'Тестовое описание из excert',
+            'excerpt' => 'Тестовое описание из excerpt',
         ]);
 
         $response = $this->get('/rss');
@@ -192,19 +192,19 @@ class FeedTest extends TestCase
         );
     }
 
-    public function test_rss_item_description_falls_back_to_excert(): void
+    public function test_rss_item_description_falls_back_to_excerpt(): void
     {
         $article = $this->createPublishedArticle([
-            'title' => 'Описание из excert',
+            'title' => 'Описание из excerpt',
             'meta_desc' => '',
-            'excert' => 'Тестовое описание из excert',
+            'excerpt' => 'Тестовое описание из excerpt',
         ]);
 
         $response = $this->get('/rss');
 
         $content = $response->getContent();
         $this->assertStringContainsString(
-            '<description>Тестовое описание из excert</description>',
+            '<description>Тестовое описание из excerpt</description>',
             $content
         );
     }
@@ -279,5 +279,4 @@ class FeedTest extends TestCase
         $this->assertStringContainsString('rel="alternate"', $content);
         $this->assertStringContainsString('type="application/rss+xml"', $content);
         $this->assertStringContainsString(route('feed'), $content);
-    }
-}
+        

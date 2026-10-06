@@ -58,7 +58,7 @@ class FeedController extends Controller
                     );
                 }
 
-                $description = $article->meta_desc ?: $article->excert ?: '';
+                $description = $article->meta_desc ?: $article->excerpt ?: '';
 
                 $xml .= '    <item>' . "\n"
                     . '      <title>' . e($article->title) . '</title>' . "\n"
@@ -91,7 +91,7 @@ class FeedController extends Controller
         return Article::query()
             ->where('is_published', true)
             ->where('published_at', '<=', now())
-            ->select('id', 'slug', 'title', 'excert', 'meta_desc', 'published_at', 'updated_at', 'image')
+            ->select('id', 'slug', 'title', 'excerpt', 'meta_desc', 'published_at', 'updated_at', 'image')
             ->orderByDesc('published_at')
             ->limit(20)
             ->get();

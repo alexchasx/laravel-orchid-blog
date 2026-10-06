@@ -271,7 +271,7 @@ protected $proxies = '*'; // или: protected $proxies = env('TRUSTED_PROXIES',
 | MailHog не доставляет почту наружу | Только реальный SMTP; проверять `MAIL_*` и SPF/DKIM |
 | `TrustProxies::$proxies = null` — за reverse proxy ломается https/URL | Настроить через env (см. 2.5) |
 | Таймзоны: контейнеры UTC, приложение Europe/Moscow | `TZ=Europe/Moscow` в контейнерах; `date.timezone` в php.ini |
-| Колонка БД `excert` (опечатка, сохранена намеренно) | Не «чинить» без миграции данных |
+| Колонка БД `excerpt` (исправлена из `excert`) | Миграция `2026_10_06_000000_rename_excert_to_excerpt_in_articles_table.php` |
 | В `php.ini` dev-значения (memory 4G, exec 1000s) | Заменить продакшн-настройками (см. 2.4) |
 | OPcache выключен в официальном образе PHP | Включить в php.ini (см. 2.4) |
 | Согласия 152-ФЗ требуют реальных данных оператора | Заполнить `OPERATOR_*` и `HOSTING_PROVIDER` до запуска |

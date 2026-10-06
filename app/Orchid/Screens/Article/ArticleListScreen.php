@@ -142,7 +142,7 @@ class ArticleListScreen extends Screen
         ], [
             'title' => $request->input('article.title'),
             'slug' => $request->input('article.slug'),
-            // 'excert' => $request->input('article.excert'),
+            // 'excerpt' => $request->input('article.excerpt'),
             'content_raw' => $request->input('article.content_raw'),
             // content_html не принимается из запроса — генерируется из content_raw в Article::booted().
             'user_id' => Auth::id(),

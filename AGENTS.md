@@ -66,7 +66,7 @@ UI-тексты, комментарии в коде и вся документа
 
 ## Gotchas
 
-- **Колонка БД называется `excert` (опечатка, сохранена).** На неё ссылаются `Article` model и `ArticleService` (список `SELECT_COLUMNS`). Не «чинить» без миграции данных.
+- **Колонка БД называется `excerpt`.** На неё ссылаются `Article` model и `ArticleService` (список `SELECT_COLUMNS`).
 - **Обсерверов ровно один — `ArticleObserver`** (события created/updated/deleted/restored/forceDeleted). Его задачи: пересчёт `Tag::updateCountArticles()` (поле `count_articles`) и **рассылка подписчикам** (`NewArticleMail`) для опубликованных статей с наступившей датой выхода. Никаких кэш-ключей и инвалидации кэша нет; паттерн Events/Listeners не используется — держись обсерверов.
 - `Article::published()` = `is_published === true` && `published_at <= now` (сравнение **по полному timestamp**, а не по дате — запланированная на сегодня «будущая» статья не показывается). `ArticleService::checkAccess()` отдаёт 403, если статья не опубликована, а текущий пользователь не админ. Отдельная страница «неопубликованные» — роут `notpublic` под `auth` + `access:platform.custom.articles`.
 - `Article::booted()`: на `saving` конвертирует markdown `content_raw` → `content_html` через `league/commonmark` (санитизация: `html_input => strip`, `allow_unsafe_links => false`) и авто-генерирует уникальный `slug` из заголовка.

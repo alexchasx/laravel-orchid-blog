@@ -55,7 +55,7 @@ flowchart TD
   - `Article::published()->where('rubric_id', $article->rubric_id)->where('id', '!=', $article->id)->whereNotIn('id', $alreadyIds)->select(self::SELECT_COLUMNS)->with(['tags', 'rubric'])->take($limit - $count)->get()`.
 - [ ] Объединить результат: `->merge($byRubric)->unique('id')->take($limit)`.
 - [ ] Только опубликованные статьи: `Article::published()` сам фильтрует черновики и «будущие» записи (сравнение по полному timestamp) и сортирует `published_at desc`.
-- [ ] Ограничение полей: переиспользовать существующую константу `SELECT_COLUMNS` (id, title, slug, excert, image, published_at, rubric_id, is_published, content_raw) + `with(['tags', 'rubric'])` — без N+1.
+- [ ] Ограничение полей: переиспользовать существующую константу `SELECT_COLUMNS` (id, title, slug, excerpt, image, published_at, rubric_id, is_published, content_raw) + `with(['tags', 'rubric'])` — без N+1.
 - [ ] Крайний случай: похожих нет → возвращаем пустую коллекцию (блок в шаблоне скрывается).
 - [ ] Пустая коллекция тегов у текущей статьи → сразу запрос по рубрике.
 
@@ -82,7 +82,7 @@ $relatedArticles = $this->service->getRelated($article);
     - изображение: `@if($related->image) <img src="{{ Storage::url($related->image) }}" ... loading="lazy">`;
     - дата: `{{ \Carbon\Carbon::parse($related->published_at)->locale('ru')->isoFormat('D MMM YYYY') }}` (как на главной в [`index.blade.php`](resources/views/index.blade.php:67));
     - заголовок-ссылка: `route('articleShow', ['article' => $related->slug])`;
-    - при желании — короткий `excert` (`Str::limit`).
+    - при желании — короткий `excerpt` (`Str::limit`).
 - [ ] Условие вывода: `@if(($relatedArticles ?? collect())->isNotEmpty())` — блок скрыт при пустой выборке.
 - [ ] Без JS.
 

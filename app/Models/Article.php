@@ -21,7 +21,7 @@ use League\CommonMark\GithubFlavoredMarkdownConverter;
  * @property int $user_id
  * @property string|null $slug
  * @property string $title
- * @property string|null $excert
+ * @property string|null $excerpt
  * @property string $content_raw
  * @property string|null $content_html
  * @property bool $is_published
@@ -122,7 +122,7 @@ class Article extends Model
         'image',
         'slug',
         'title',
-        'excert',
+        'excerpt',
         // 'content_html' — производное поле, генерируется из content_raw в booted(),
         // массово не назначается (защита от прямой инъекции HTML из запроса).
         'content_raw',

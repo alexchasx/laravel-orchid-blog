@@ -89,7 +89,7 @@
             "{{ $ctx }}": "https://schema.org",
             "{{ $typ }}": "Article",
             "headline": "{{ $article->title }}",
-            "description": "{{ $article->meta_desc ?: ($article->excert ?: config('seo.default_description')) }}",
+            "description": "{{ $article->meta_desc ?: ($article->excerpt ?: config('seo.default_description')) }}",
             "datePublished": "{{ $article->published_at->toIso8601String() }}",
             "dateModified": "{{ $article->updated_at->toIso8601String() }}",
             "mainEntityOfPage": {

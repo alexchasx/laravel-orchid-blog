@@ -28,7 +28,7 @@ class ArticleRequest extends FormRequest
     {
         return [
             'article.title' => ['required', 'string', 'max:255'],
-            // 'article.excert' => ['required'],
+            // 'article.excerpt' => ['required'],
             // Без подчёркиваний в числе: 'max:1_000_000' парсится Laravel как лимит 1.
             'article.content_raw' => ['required', 'string', 'max:1000000'],
             'article.rubric_id' => ['required', 'integer', 'exists:rubrics,id'],

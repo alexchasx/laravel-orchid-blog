@@ -21,7 +21,7 @@ class ArticleFactory extends Factory
             'user_id' => $this->faker->numberBetween(1, 5),
             'slug' => $this->faker->slug(),
             'title' => $this->faker->text(80),
-            'excert' => $this->faker->text(400),
+            'excerpt' => $this->faker->text(400),
             'content_raw' => $this->faker->text(3000),
             // 'content_html' — производное поле, генерируется из content_raw в Article::booted().
             // 'image' => $this->faker->image('public/storage/posts', 640, 520, null, false),

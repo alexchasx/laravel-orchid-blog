@@ -63,7 +63,7 @@ make shell          # войти в контейнер app
 Проект следует стилю Laravel (Pint-конфигурации нет, `php -l` — единственный линтер). Обязательно учитывайте следующее:
 
 - **Инвалидация кэша — только через model observers** (`ArticleObserver`, `RubricObserver`, `TagObserver`) и `Tag::updateCountArticles()`. Событийная модель (Events/Listeners) в проекте **не используется** — не добавляйте её.
-- **Не «чините» колонку `excert`** (опечатка вместо «excerpt»). Она сохранена во всех слоях: `Article`, `ArticleService`, `ArticleResource`, шаблоны.
+- Колонка `excerpt` переименована из `excert` миграцией `2026_10_06_000000_rename_excert_to_excerpt_in_articles_table.php`.
 - Опечатка в названии — единственное такое исключение; свои поля/колонки называйте правильно.
 - Ключи кэша (`Tag::SIDEBAR_CACHE_KEY`, `Rubric::SIDEBAR_CACHE_KEY`) живут на моделях.
 - Модель `Article` автоматически генерирует `slug` и конвертирует markdown `content_raw` → `content_html` в `booted()` — не дублируйте эту логику в контроллерах.

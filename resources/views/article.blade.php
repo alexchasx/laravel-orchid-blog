@@ -9,8 +9,8 @@
 
         <h1>{{ $article->title }}</h1>
 
-        @if($article->excert)
-            <p class="lead">{{ $article->excert }}</p>
+        @if($article->excerpt)
+            <p class="lead">{{ $article->excerpt }}</p>
         @endif
 
         <div class="article-meta">

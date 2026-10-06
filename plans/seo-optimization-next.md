@@ -90,7 +90,7 @@ flowchart TD
 - [`app/Http/Controllers/FeedController.php`](app/Http/Controllers/FeedController.php) — реализован:
   - кэш `Cache::remember('rss.feed', 3600, ...)` (как в `SitemapController`);
   - выборка: `Article::query()->where('is_published', true)->where('published_at', '<=', now())->select(...)->orderByDesc('published_at')->limit(20)`;
-  - RSS 2.0 + Atom `<atom:link rel="self">`: `<channel>` (title, link, description, language `ru`, `lastBuildDate`), `<item>` (title, link, guid, pubDate RFC-2822, description `meta_desc` → `excert`, опционально `<enclosure>` с `length` и `type="image/jpeg"`);
+  - RSS 2.0 + Atom `<atom:link rel="self">`: `<channel>` (title, link, description, language `ru`, `lastBuildDate`), `<item>` (title, link, guid, pubDate RFC-2822, description `meta_desc` → `excerpt`, опционально `<enclosure>` с `length` и `type="image/jpeg"`);
   - `Content-Type: application/rss+xml; charset=utf-8`.
 - [`resources/views/layouts/techlog.blade.php`](resources/views/layouts/techlog.blade.php:97):
   `<link rel="alternate" type="application/rss+xml" title="..." href="{{ route('feed') }}">` в `<head>`.

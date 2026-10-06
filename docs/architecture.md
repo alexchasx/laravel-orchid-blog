@@ -260,7 +260,7 @@ Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRub
 - Маршрут: `GET /rss` → `FeedController::__invoke()`.
 - Кэширование: `Cache::remember('rss.feed', 3600)` — 1 час.
 - Выборка: `Article::query()->where('is_published', true)->where('published_at', '<=', now())->select(...)->orderByDesc('published_at')->limit(20)`.
-- RSS 2.0 + `<atom:link rel="self">`: `<channel>` (title, link, description, language `ru`, `lastBuildDate`), `<item>` (title, link, guid, pubDate RFC-2822, description `meta_desc` → `excert`, опционально `<enclosure>` с `length` и `type="image/jpeg"`).
+- RSS 2.0 + `<atom:link rel="self">`: `<channel>` (title, link, description, language `ru`, `lastBuildDate`), `<item>` (title, link, guid, pubDate RFC-2822, description `meta_desc` → `excerpt`, опционально `<enclosure>` с `length` и `type="image/jpeg"`).
 - `Content-Type: application/rss+xml; charset=utf-8`.
 - `<link rel="alternate" type="application/rss+xml">` в `<head>` (`techlog.blade.php`).
 - robots.txt не блокирует `/rss`; sitemap-индексация ленты не нужна.
@@ -324,4 +324,4 @@ Sitemap: {APP_URL}/sitemap.xml
 
 - `gzip on; gzip_comp_level 6; gzip_min_length 256;`
 - `gzip_types`: text/plain, text/css, text/javascript, application/javascript, application/json, application/xml, application/rss+xml, image/svg+xml.
-- HTML сжимается по умолчанию (nginx включает gzip для text/html автоматически).
+- HTML сжимается по умолчанию (nginx включает g                                                  
