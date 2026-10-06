@@ -97,7 +97,7 @@ Laravel 13-стиль: ядро без `Http/Kernel.php`.
 
 | Сущность | Таблица | Связи | Особенности |
 |---|---|---|---|
-| `Article` | `articles` | belongsTo `Rubric`, belongsTo `User`, belongsToMany `Tag` (через `article_tags`), hasMany `Comment` | `softDeletes`; поле **`excert`** (опечатка, сохранена); `slug` уникален; в `booted()` на `saving` — markdown `content_raw` → `content_html` (CommonMark) и автогенерация слага |
+| `Article` | `articles` | belongsTo `Rubric`, belongsTo `User`, belongsToMany `Tag` (через `article_tags`), hasMany `Comment` | `softDeletes`; поле **`excerpt`**; `slug` уникален; в `booted()` на `saving` — markdown `content_raw` → `content_html` (CommonMark) и автогенерация слага |
 | `Rubric` | `rubrics` | hasMany `Article` | `softDeletes`; `$timestamps=false`; `parent_id`, `slug`, `title`, `description` |
 | `Tag` | `tags` | belongsToMany `Article`, hasMany `ArticleTag` | `softDeletes`; `$timestamps=false`; `active`, `popular`, `count_articles` (поддерживается вручную) |
 | `ArticleTag` | `article_tags` | belongsToMany-связка | без timestamps |
