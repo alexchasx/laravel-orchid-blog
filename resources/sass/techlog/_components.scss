@@ -216,6 +216,7 @@
 .hero {
     // min-height: 760px;
     // padding-top: 145px;
+    margin-top: 100px;
     margin-bottom: 40px;
     display: grid;
     grid-template-columns: 1.05fr .95fr;
@@ -481,7 +482,8 @@
 // ---------------------------------------------------------------------------
 
 .article {
-    // padding-top: 100px;
+    padding-top: 40px;
+    padding-bottom: 40px;
 }
 
 .article-head {
