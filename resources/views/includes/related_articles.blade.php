@@ -18,7 +18,7 @@
                     <div class="meta">
                         {{ \Carbon\Carbon::parse($related->published_at)->locale('ru')->isoFormat('D MMM YYYY') }} · {{ $related->reading_minutes }} МИН
                     </div>
-                    <h3><a href="{{ route('articleShow', ['article' => $related->slug]) }}">{{ $related->title }}</a></h3>
+                    <h3><a href="{{ route('articleShow', ['article' => $related->slug]) }}" class="article_title">{{ $related->title }}</a></h3>
                     <p>{{ Str::limit($related->excerpt ?? '', 150) }}</p>
                     <a class="read" href="{{ route('articleShow', ['article' => $related->slug]) }}">
                         Читать <span>↗</span>

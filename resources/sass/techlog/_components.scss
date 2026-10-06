@@ -341,7 +341,7 @@
     transition: transform .25s, border-color .25s;
 
     &:hover {
-        transform: translateY(-5px);
+        // transform: translateY(-5px);
         border-color: rgba(0, 255, 136, .38);
     }
 }
@@ -442,6 +442,7 @@
 
     &:hover {
         gap: 8px;
+        color: var(--primary-hover) !important;
     }
 
     span {
