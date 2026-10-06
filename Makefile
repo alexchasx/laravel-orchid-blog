@@ -124,7 +124,7 @@ migrate-fresh: ## Запустить миграции и сиды (migrate:fresh
 	@echo "$(GREEN)→ Restarting queue workers...$(RESET)"
 	$(COMPOSE) start queue schedule
 	@echo "$(GREEN)→ Creating Orchid admin user...$(RESET)"
-	$(COMPOSE) exec app php artisan orchid:admin admin admin@localhost.ru 123456
+	$(COMPOSE) exec app php artisan orchid:admin alexchasx a.s.chasovnikov@yandex.ru 123456
 
 .PHONY: orchid-admin
 orchid-admin: ## Создать администратора Orchid (admin@localhost.ru / 123456)

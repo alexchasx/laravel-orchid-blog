@@ -279,4 +279,5 @@ class FeedTest extends TestCase
         $this->assertStringContainsString('rel="alternate"', $content);
         $this->assertStringContainsString('type="application/rss+xml"', $content);
         $this->assertStringContainsString(route('feed'), $content);
-        
+    }
+}

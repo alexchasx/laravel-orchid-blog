@@ -83,8 +83,16 @@ class CreateOrUpdateArticle extends Rows
                     ->title('Slug (URL)')
                     ->placeholder('Оставьте пустым — сгенерируется автоматически'),
                 Input::make('article.keywords')->title('Ключевые слова'),
-                Input::make('article.meta_desc')->title('Мета деск'),
             ]),
+
+            // Счётчик символов для meta_desc реализован в
+            // resources/views/orchid/includes/meta-desc-counter.blade.php
+            // (класс .js-meta-desc-counter, логика — в том же партиале).
+            Input::make('article.meta_desc')
+                ->title('Мета деск')
+                ->maxlength(255)
+                ->placeholder('Описание для поисковых систем')
+                ->help('<span class="js-meta-desc-counter">0 / 150</span>'),
         ];
     }
 }

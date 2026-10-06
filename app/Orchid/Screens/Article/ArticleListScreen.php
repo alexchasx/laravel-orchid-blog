@@ -75,6 +75,9 @@ class ArticleListScreen extends Screen
                 ->async('asyncGetArticle'),
 
             new Html(),
+
+            // JS-счётчик символов для поля «Мета деск» (meta_desc).
+            Layout::view('orchid.includes.meta-desc-counter'),
         ];
     }
 

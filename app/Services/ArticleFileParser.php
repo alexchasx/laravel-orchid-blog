@@ -56,7 +56,8 @@ class ArticleFileParser
         }
 
         // 6. Excerpt: первая непустая строка из content_raw.
-        $excerpt = $this->extractExcerpt($contentRaw);
+        // $excerpt = $this->extractExcerpt($contentRaw);
+        $excerpt = '';
 
         return [
             'prefix'      => $prefix,

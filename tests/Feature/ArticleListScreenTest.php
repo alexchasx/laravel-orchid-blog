@@ -341,4 +341,18 @@ class ArticleListScreenTest extends TestCase
         );
         $this->assertTrue($notImage->fails());
     }
+
+    public function test_articles_screen_renders_meta_desc_counter(): void
+    {
+        $this->actingAs($this->admin());
+
+        $response = $this->get('/nexus/articles');
+
+        $response->assertOk();
+        // Поле и его счётчик присутствуют в модалке «Создать статью».
+        $response->assertSee('article[meta_desc]', false);
+        $response->assertSee('js-meta-desc-counter', false);
+        // Скрипт подсчёта символов подключён.
+        $response->assertSee('counter.textContent', false);
+    }
 }
