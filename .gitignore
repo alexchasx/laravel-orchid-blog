@@ -30,3 +30,4 @@ yarn-error.log
 # Данные Docker-контейнеров (не попадут в шаблон)
 /docker/tmp
 docker/tmp/
+database_dump*.sql

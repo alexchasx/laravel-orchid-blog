@@ -107,7 +107,16 @@ key-generate: ## Сгенерировать APP_KEY (php artisan key:generate)
 	$(COMPOSE) exec app php artisan key:generate
 
 .PHONY: migrate
-migrate: ## Запустить миграции и сиды (migrate:fresh --seed; разрушает данные)
+migrate: ## Запустить миграции
+	@echo "$(GREEN)→ Stopping queue workers...$(RESET)"
+	$(COMPOSE) stop queue schedule
+	@echo "$(GREEN)→ Running migrations...$(RESET)"
+	$(COMPOSE) exec app php artisan migrate
+	@echo "$(GREEN)→ Restarting queue workers...$(RESET)"
+	$(COMPOSE) start queue schedule
+
+.PHONY: migrate-fresh
+migrate-fresh: ## Запустить миграции и сиды (migrate:fresh --seed; разрушает данные)
 	@echo "$(GREEN)→ Stopping queue workers...$(RESET)"
 	$(COMPOSE) stop queue schedule
 	@echo "$(GREEN)→ Running migrations and seeders...$(RESET)"
@@ -250,6 +259,19 @@ prod-backup: prod-check-env ## Бэкап БД и storage в /var/backups/blog (
 	@$(COMPOSE_PROD) exec -T db sh -c 'exec mysqldump --single-transaction --quick -u"$$MYSQL_USER" -p"$$MYSQL_PASSWORD" "$$MYSQL_DATABASE"' | gzip > /var/backups/blog/db_$$(date +%F_%H-%M).sql.gz
 	@find /var/backups/blog -name 'db_*.sql.gz' -mtime +14 -delete
 	@echo "$(GREEN)→ Бэкап БД готов: /var/backups/blog/db_$$(ls /var/backups/blog | grep '^db_' | tail -1)$(RESET)"
+
+.PHONY: db-dump
+db-dump: ## Сохранить дамп БД в database_dump.sql (docker compose exec db mysqldump)
+	@echo "$(GREEN)→ Dumping database to database_dump.sql...$(RESET)"
+	$(COMPOSE) exec -T db mysqldump -u"root" -p"root" "laraorchid" > database_dump.sql
+	@echo "$(GREEN)  Database dump saved: database_dump.sql$(RESET)"
+
+.PHONY: db-restore
+db-restore: ## Восстановить БД из database_dump.sql (разрушает данные!)
+	@echo "$(YELLOW)→ Restoring database from database_dump.sql...$(RESET)"
+	@echo "$(YELLOW)  WARNING: all data will be replaced!$(RESET)"
+	$(COMPOSE) exec -T db mysql -u"root" -p"root" "laraorchid" < database_dump.sql
+	@echo "$(GREEN)  Database restored from database_dump.sql$(RESET)"
 
 .PHONY: prod-deploy
 prod-deploy: prod-check-env ## Полный деплой: бэкап + git pull + сборка + миграции + кэш (./deploy.sh)

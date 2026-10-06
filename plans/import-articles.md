@@ -15,8 +15,8 @@
 |---|---|
 | **Title** | Имя файла без расширения `.md`, срезан ведущий номер с разделителем. Пример: `01 - Кода, GigaCode, OpenCode: сравнение код-агентов для VS Code.md` → «Кода, GigaCode, OpenCode: сравнение код-агентов для VS Code» |
 | **Excerpt** | Первая непустая строка файла (курсивный подзаголовок), снимается markdown-разметка `*...*`; если строка — разделитель `---`, берётся следующая. Полю `excerpt` |
-| **Content (`content_raw`)** | Весь текст файла **до** секции `## meta_description` (включая строку-excerpt, она часть файла) |
-| **Meta description (`meta_desc`)** | Всё, что после строки `## meta_description` (regex `^##\s+meta_description\s*$`, без учёта регистра) и до конца файла → `meta_desc`. Сам заголовок и текст секции из `content_raw` **вырезаются**. Если секции нет — `meta_desc = null`, контент = весь файл |
+| **Content (`content_raw`)** | Весь текст файла **до** секции `## meta_desc` (включая строку-excerpt, она часть файла) |
+| **Meta description (`meta_desc`)** | Всё, что после строки `## meta_desc` (regex `/^meta_desc:\s*$/i`, без учёта регистра) и до конца файла → `meta_desc`. Сам заголовок и текст секции из `content_raw` **вырезаются**. Если секции нет — `meta_desc = null`, контент = весь файл |
 | **Картинка** | Префикс = ведущие цифры имени файла (`01`). В `_import_articles/images/` ищем файл, чьё имя **без расширения строго равно** префиксу (`01.png`). Допустимые расширения: `jpg, jpeg, png, webp, gif, avif`. Найдено несколько — берём первый + warning; ни одного — warning, статья импортируется без картинки |
 | **Хранение картинки** | Копируется в `storage/app/public/articles/{оригинальное имя}`, в БД путь `articles/...` (та же логика, что в [`ArticleListScreen::createOrUpdateArticle()`](../../app/Orchid/Screens/Article/ArticleListScreen.php)) |
 | **Рубрика** | Обязательная опция `--rubric=ID`; валидация существования рубрики |
@@ -35,7 +35,7 @@ flowchart TD
     C --> D[prefix из первых цифр имени]
     C --> E[title из имени файла]
     C --> F[excerpt из первой строки]
-    C --> G[content_raw до секции meta_description]
+    C --> G[content_raw до секции meta_desc]
     C --> H[meta_desc из хвоста файла]
     B --> I[Поиск картинки images/prefix.ext]
     I -->|найдена| J[Копирование в storage public articles]
@@ -58,7 +58,7 @@ flowchart TD
     'prefix'      => string, // ведущие цифры имени файла («01») или '' если цифр нет
     'title'       => string, // имя файла без .md и без номера-префикса
     'excerpt'     => ?string,
-    'content_raw' => string, // текст до секции ## meta_description
+    'content_raw' => string, // текст до секции ## meta_desc
     'meta_desc'   => ?string, // текст после заголовка до конца файла, trim
 ]
 ```
@@ -69,7 +69,7 @@ flowchart TD
 2. `preg_match('/^\d+/', $basename, $m)` → `$prefix`.
 3. Title: убрать префикс и следующий за ним разделитель: regex `^\d+\s*[-–—._]?\s*` (поддержка кириллического дефиса). Если результат пустой — файл считается битым (ошибка, `error`).
 4. Чтение содержимого, унификация переводов строк (`\r\n` → `\n`), разбивка на строки.
-5. Поиск индекса строки-заголовка: `preg_match('/^##\s+meta_description\s*$/i', $line)`.
+5. Поиск индекса строки-заголовка: `preg_match('/^##\s+meta_desc\s*$/i', $line)`.
    - Найдено: `meta_desc = trim(implode("\n", строки_после_индекса))`; `content_raw = implode("\n", строки_до_индекса)` (без строки заголовка).
    - Не найдено: `meta_desc = null`; `content_raw = весь файл`.
 6. Excerpt: первая непустая строка из `content_raw`; если начинается и заканчивается `*` или `_` — снять разметку (`preg_match('/^\*+(.*)\*+$/s'` и `/_+(.*)_+$/s`); если строка — горизонтальный разделитель (`---`, `***`, `___`) — взять следующую; иначе `null`.
@@ -120,7 +120,7 @@ import-articles: ## Импортировать статьи из _import_article
 
 Фикстуры создаются в временной директории внутри теста (например, `storage/app/testing-import`), чтобы не трогать реальную `_import_articles`:
 
-- `test_import_creates_article_with_all_fields`: файл с секцией `## meta_description` + `images/01.png` → статья создана: title/excerpt/meta_desc/content_raw без секции, `image = articles/01.png`, `is_published = false`, `published_at = null`, `rubric_id` задан; файл скопирован на диск `public`.
+- `test_import_creates_article_with_all_fields`: файл с секцией `## meta_desc` + `images/01.png` → статья создана: title/excerpt/meta_desc/content_raw без секции, `image = articles/01.png`, `is_published = false`, `published_at = null`, `rubric_id` задан; файл скопирован на диск `public`.
 - `test_import_without_meta_section`: `meta_desc = null`, контент содержит весь текст.
 - `test_import_without_image`: warning, статья создана с `image = null`.
 - `test_import_skips_duplicates`: повторный запуск — количество статей не изменилось, статус `skipped`.
