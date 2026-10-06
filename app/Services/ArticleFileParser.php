@@ -34,13 +34,13 @@ class ArticleFileParser
         }
 
         // 3. Читаем содержимое, унифицируем переводы строк.
-        $content = str_replace("\r\n", "\n", $file->getContents());
+        $content = str_replace("\r\n", "\n", file_get_contents($file->getPathname()));
         $lines = explode("\n", $content);
 
-        // 4. Ищем строку-заголовок «## meta_description».
+        // 4. Ищем строку-заголовок «meta_desc: ».
         $metaIndex = null;
         foreach ($lines as $i => $line) {
-            if (preg_match('/^##\s+meta_description\s*$/i', trim($line))) {
+            if (preg_match('/^meta_desc:\s*$/i', trim($line))) {
                 $metaIndex = $i;
                 break;
             }

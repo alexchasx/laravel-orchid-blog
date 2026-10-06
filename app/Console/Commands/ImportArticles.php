@@ -21,7 +21,7 @@ class ImportArticles extends Command
      */
     protected $signature = 'articles:import
                             {--dir= : Директория с md-файлами статей (по умолчанию base_path("_import_articles"))}
-                            {--rubric= : ID рубрики для всех статей (обязательно)}
+                            {--rubric= : ID рубрики для всех статей}
                             {--user= : ID автора (по умолчанию первый админ)}
                             {--dry-run : Показать, что будет импортировано, без записи в БД и копирования файлов}';
 
@@ -43,25 +43,25 @@ class ImportArticles extends Command
     public function handle(): int
     {
         $dir = $this->option('dir') ?: base_path('_import_articles');
-        $rubricId = $this->option('rubric');
+        $rubricId = $this->option('rubric') ?? 1;
         $userId = $this->option('user');
         $dryRun = $this->option('dry-run');
 
         // 1. Валидация рубрики.
-        if (empty($rubricId)) {
-            $this->error('Опция --rubric обязательна. Пример: --rubric=1');
+        // if (empty($rubricId)) {
+        //     $this->error('Опция --rubric обязательна. Пример: --rubric=1');
 
-            return self::FAILURE;
-        }
+        //     return self::FAILURE;
+        // }
 
-        if (!Rubric::withTrashed()->where('id', $rubricId)->exists()) {
-            $this->error("Рубрика с ID {$rubricId} не найдена.");
+        // if (!Rubric::withTrashed()->where('id', $rubricId)->exists()) {
+        //     $this->error("Рубрика с ID {$rubricId} не найдена.");
 
-            return self::FAILURE;
-        }
+        //     return self::FAILURE;
+        // }
 
         // 2. Определение автора.
-        $authorId = $this->resolveAuthorId($userId);
+        $authorId = $this->resolveAuthorId($userId) ?? 1 ?? 2;
         if ($authorId === null) {
             $this->error('Невозможно определить автора: пользователи не найдены.');
 
