@@ -74,6 +74,8 @@ class CreateOrUpdateArticle extends Rows
                     ->allowInput()
                     ->required(),
 
+            Input::make('article.excerpt')->required()->title('Краткое описание'),
+
             SimpleMDE::make('article.content_raw')->title('Контент'),
 
             Group::make([

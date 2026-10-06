@@ -55,6 +55,8 @@ class ArticleListTable extends Table
 
             TD::make('title', 'Заголовок'),
 
+            TD::make('excerpt', 'Краткое описание'),
+
             TD::make('rubric_id', 'ID_К.')
                 ->alignRight()
                 ->popover('ID Категории (для сортировки по категориям)')

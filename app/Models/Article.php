@@ -54,7 +54,6 @@ use League\CommonMark\GithubFlavoredMarkdownConverter;
  * @method static Builder|Article whereContentRaw($value)
  * @method static Builder|Article whereCreatedAt($value)
  * @method static Builder|Article whereDeletedAt($value)
- * @method static Builder|Article whereExcert($value)
  * @method static Builder|Article whereId($value)
  * @method static Builder|Article whereImage($value)
  * @method static Builder|Article whereIsPublished($value)

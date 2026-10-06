@@ -56,6 +56,7 @@ class DatabaseSeeder extends Seeder
             'SOLID',
             'SQL',
             'Source Craft',
+            'Testing',
             'VueJS',
             'Архитектура',
             'Инструменты веб-разработки',
