@@ -9,7 +9,7 @@
 
         <h1>{{ $article->title }}</h1>
 
-            <p class="lead">{{ $article->excerpt }} Сравнение трёх ИИ-ассистентов для разработки — от российского флагмана Сбера до опенсорс-комьюнити. Разбираем модели, тарифы, агентские режимы и доступность из РФ.</p>
+            <p class="lead">{{ $article->excerpt }}</p>
 
         <div class="article-meta">
             {{ $article->reading_minutes }} минут чтения · Автор: {{ $article->user->name ?? config('app.name') }}

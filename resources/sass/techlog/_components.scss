@@ -325,20 +325,27 @@
 // ---------------------------------------------------------------------------
 
 .masonry {
-    columns: 3 280px;
-    column-gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+
+    @media (max-width: 1024px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 640px) {
+        grid-template-columns: 1fr;
+    }
 }
 
 .post {
-    display: inline-block;
     width: 100%;
-    margin: 0 0 20px;
+    margin: 0;
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     overflow: hidden;
-    break-inside: avoid;
     transition: transform .25s, border-color .25s;
 
     &:hover {
