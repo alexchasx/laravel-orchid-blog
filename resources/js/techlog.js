@@ -311,4 +311,70 @@
   modals.forEach(modal => {
     if (modal.classList.contains('is-open')) openModal(modal);
   });
+
+  // =========================================================================
+  // Кнопка «Копировать» у блоков кода в `.prose pre`
+  // =========================================================================
+
+  const initCodeCopy = () => {
+    document.querySelectorAll('.prose pre').forEach((pre) => {
+      if (pre.parentElement.classList.contains('code-block')) return;
+
+      const codeEl = pre.querySelector('code');
+      const text = (codeEl?.textContent ?? pre.textContent).replace(/\n$/, '');
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'code-copy';
+      btn.setAttribute('aria-label', 'Скопировать код');
+      btn.textContent = 'Копировать';
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-block';
+      pre.parentNode.insertBefore(wrapper, pre);
+      wrapper.appendChild(pre);
+      wrapper.appendChild(btn);
+
+      const setState = (label, cls) => {
+        clearTimeout(btn._timer);
+        btn.textContent = label;
+        btn.classList.toggle('is-copied', !!cls);
+        btn._timer = setTimeout(() => {
+          btn.textContent = 'Копировать';
+          btn.classList.remove('is-copied');
+        }, 2000);
+      };
+
+      const copy = async () => {
+        try {
+          await navigator.clipboard.writeText(text);
+          setState('Скопировано', true);
+        } catch {
+          // Фолбэк: временный textarea
+          try {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.setAttribute('readonly', '');
+            ta.style.cssText = 'position:fixed;top:-9999px;opacity:0';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            setState('Скопировано', true);
+          } catch (e) {
+            console.warn('[code-copy] буфер обмена недоступен', e);
+            setState('Не удалось', false);
+          }
+        }
+      };
+
+      btn.addEventListener('click', copy);
+    });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCodeCopy);
+  } else {
+    initCodeCopy();
+  }
 })();

@@ -148,6 +148,18 @@
         grid-template-columns: 1fr;
     }
 
+    // Кнопка «Копировать» на мобильных — компактнее
+    .code-copy {
+        padding: 4px 8px;
+        font-size: 11px;
+        top: 6px;
+        right: 6px;
+    }
+
+    .prose pre {
+        padding: 18px;
+    }
+
     // Cookie-баннер на мобильных: баннер на всю ширину экрана
     .cookie-banner {
         left: 12px;
