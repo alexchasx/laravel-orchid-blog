@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class ArticleService
 {
-    private const PAGINATE = 6;
+    private const PAGINATE = 9;
 
     // content_raw нужен для Article::reading_minutes (в списках content_html не загружается).
     private const SELECT_COLUMNS = [

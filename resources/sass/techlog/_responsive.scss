@@ -50,7 +50,7 @@
 
     .hero {
         grid-template-columns: 1fr;
-        padding-top: 125px;
+        // padding-top: 125px;
         min-height: auto;
     }
 
@@ -91,15 +91,16 @@
         display: block;
     }
     .toc {
-        display: flex;
-        position: static;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 14px;
+        display: none;
+        // display: flex;
+        // position: static;
+        // display: flex;
+        // flex-wrap: wrap;
+        // gap: 14px;
 
-        strong {
-            width: 100%;
-        }
+        // strong {
+        //     width: 100%;
+        // }
     }
 
     .related-grid {
