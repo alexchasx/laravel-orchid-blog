@@ -121,6 +121,18 @@
         </button>
         <div class="nav-links" id="primary-menu">
             <a href="{{ route('home') }}#articles">Статьи</a>
+            <form class="nav-search" role="search" method="GET" action="{{ route('home') }}">
+                <label class="sr-only" for="nav-search-input">{{ __('Поиск по статьям') }}</label>
+                <input id="nav-search-input"
+                       type="search"
+                       name="search"
+                       value="{{ request()->routeIs('home') ? request('search') : '' }}"
+                       placeholder="{{ __('Поиск по статьям') }} …"
+                       autocomplete="off">
+                <button type="submit" aria-label="{{ __('Найти') }}">
+                    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" class="DocSearch-Search-Icon"><circle cx="11" cy="11" r="8" stroke="currentColor" fill="none" stroke-width="1.4"></circle><path d="m21 21-4.3-4.3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                </button>
+            </form>
             @if(($rubrics ?? collect())->isNotEmpty())
             <div class="nav-dropdown">
                 <button class="nav-dropdown-toggle" type="button" aria-expanded="false" aria-controls="nav-topics-menu">

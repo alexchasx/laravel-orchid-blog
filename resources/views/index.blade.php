@@ -2,8 +2,10 @@
 
 @section('content')
 
+@php($isSearch = request()->routeIs('home') && request()->filled('search'))
+
 {{-- Hero Section (не показывается на главной и на странице статей рубрики) --}}
-@if ($showHero ?? true)
+@if (($showHero ?? true) && !$isSearch)
 <section class="hero container reveal">
     <div class="hero-copy">
         <h1>Инструменты, архитектура, решения: <em>всё для современного разработчика.</em></h1>
@@ -40,13 +42,16 @@
 
     <div class="section-head reveal">
         <div>
-            @unless ($showHero ?? true)
-                <h1>{{ $sectionTitle ?? 'Свежие статьи' }}</h1>
-            @else
+            @if ($isSearch)
+                <h1>Результаты поиска по запросу «{{ request('search') }}»</h1>
+                <span class="search-count">Найдено: {{ $articles->total() }}</span>
+            @elseif ($showHero ?? true)
                 <h2>{{ $sectionTitle ?? 'Свежие статьи' }}</h2>
-            @endunless
+            @else
+                <h1>{{ $sectionTitle ?? 'Свежие статьи' }}</h1>
+            @endif
         </div>
-        <a class="text-link" href="{{ route('home') }}">Все статьи →</a>
+        <a class="text-link" href="{{ route('home') }}">{{ $isSearch ? 'Сбросить поиск' : 'Все статьи →' }}</a>
     </div>
 
     <div class="masonry">
@@ -72,7 +77,12 @@
         @empty
             <article class="post reveal">
                 <div class="post-body">
-                    <p>Ничего не нашлось</p>
+                    @if ($isSearch)
+                        <p>По запросу «{{ request('search') }}» ничего не найдено. Попробуйте изменить запрос.</p>
+                        <a class="text-link" href="{{ route('home') }}">Ко всем статьям →</a>
+                    @else
+                        <p>Ничего не нашлось</p>
+                    @endif
                 </div>
             </article>
         @endforelse
@@ -80,7 +90,7 @@
 
     {{-- Pagination --}}
     @if($articles->hasPages())
-        {{ $articles->links() }}
+        {{ $articles->withQueryString()->links() }}
     @endif
 </section>
 

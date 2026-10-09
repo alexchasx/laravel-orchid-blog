@@ -27,7 +27,8 @@ class ArticleService
         if ($search) {
             $query->where(function (Builder $q) use ($search) {
                 $q->where('title', 'LIKE', "%{$search}%")
-                    ->orWhereRaw('content_html LIKE ?', ["%{$search}%"]);
+                    ->orWhereRaw('excerpt LIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('content_raw LIKE ?', ["%{$search}%"]);
             });
         }
 

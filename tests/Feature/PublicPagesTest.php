@@ -396,4 +396,62 @@ class PublicPagesTest extends TestCase
         $response->assertOk();
         $response->assertDontSee('Черновик');
     }
+
+    // ------------------------------------------------------------------------
+    // Поиск: фронтенд (форма в шапке, страница результатов)
+    // ------------------------------------------------------------------------
+
+    public function test_search_form_exists_in_header(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertSee('name="search"', false);
+        $response->assertSee('role="search"', false);
+    }
+
+    public function test_search_results_page_shows_heading(): void
+    {
+        $this->createPublishedArticle(['title' => 'Laravel в проде']);
+
+        $response = $this->get('/?search=Laravel');
+
+        $response->assertOk();
+        $response->assertSee('Результаты поиска', false);
+        $response->assertSee('Laravel', false);
+    }
+
+    public function test_search_hides_hero_section(): void
+    {
+        $this->createPublishedArticle();
+
+        $response = $this->get('/?search=Laravel');
+
+        $response->assertOk();
+        $response->assertDontSee('class="hero container', false);
+    }
+
+    public function test_search_pagination_preserves_query(): void
+    {
+        // Создаём 12 статей с одинаковым словом в заголовке (пагинация по 9)
+        for ($i = 1; $i <= 12; $i++) {
+            $this->createPublishedArticle([
+                'title' => "Поиск тест {$i}",
+            ]);
+        }
+
+        $response = $this->get('/?search=Поиск');
+
+        $response->assertOk();
+        // Ссылки пагинации должны содержать search=
+        $response->assertSee('search=', false);
+    }
+
+    public function test_search_empty_state_shows_message(): void
+    {
+        $response = $this->get('/?search=неттакоготекста');
+
+        $response->assertOk();
+        $response->assertSee('ничего не найдено', false);
+    }
 }

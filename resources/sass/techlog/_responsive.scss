@@ -48,6 +48,15 @@
         margin-top: 10px;
     }
 
+    .nav-search {
+        width: 100%;
+
+        input {
+            width: 100%;
+            flex: 1;
+        }
+    }
+
     .hero {
         grid-template-columns: 1fr;
         // padding-top: 125px;
