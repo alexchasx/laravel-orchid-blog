@@ -10,6 +10,9 @@
 
 return [
 
+    // включен режим сбора персональных данных
+    // 'personal_data_enabled' => env('PERSONAL_DATA_ENABLED', true),
+
     'name' => env('OPERATOR_NAME', ''),
 
     'address' => env('OPERATOR_ADDRESS', ''),

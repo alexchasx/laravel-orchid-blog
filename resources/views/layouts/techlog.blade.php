@@ -168,7 +168,7 @@
 
 <footer class="footer">
     <div class="container footer-inner" style="display: flex;">
-        <div>&copy; 2026 {{ config('app.name') }}. {{ config('my_config.slogan') }}.</div>
+        <div>&copy; 2026 {{ config('app.name') }}</div>
         <div>На базе
             <a href="https://github.com/alexchasx/laravel-orchid-blog" target="_blank" rel="noopener noreferrer">
                 laravel-orchid-blog
