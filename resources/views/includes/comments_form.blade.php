@@ -65,7 +65,7 @@
                     {{ old('consent_processing') ? 'checked' : '' }}
                     id="consent-processing" style="max-width: 16px; cursor: pointer;" required>
                 <span>Я даю согласие на обработку персональных данных
-                    в соответствии с <a href="{{ route('consent.processing') }}" target="_blank" style="color: #00ff88;">Политикой конфиденциальности</a>.
+                    в соответствии с <a href="{{ route('consent.processing') }}" target="_blank" style="color: #00ff88;">Согласием об обработке персональных данных</a>.
                 </span>
                 @error('consent_processing')
                     <span class="comment-error">{{ $message }}</span>
@@ -80,7 +80,7 @@
                     отображение) моих данных — имени/никнейма и текста
                     комментария на сайте.
                     <a href="{{ route('consent.distribution') }}" target="_blank" rel="noopener" style="color: #00ff88;">
-                        Текст согласия
+                        Согласие на распространение персональных данных
                     </a>.
                 </span>
                 @error('consent_distribution')
