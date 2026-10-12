@@ -24,16 +24,19 @@ class SubscribeRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required', 'email', 'max:255'],
+            'email'             => ['required', 'email', 'max:255'],
+            'consent_processing' => 'required|accepted',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'email.required' => 'Поле "Email" обязательно.',
-            'email.email' => 'Введите корректный email.',
-            'email.max' => 'Email слишком длинный.',
+            'email.required'             => 'Поле "Email" обязательно.',
+            'email.email'                => 'Введите корректный email.',
+            'email.max'                  => 'Email слишком длинный.',
+            'consent_processing.required' => 'Необходимо дать согласие на обработку персональных данных.',
+            'consent_processing.accepted' => 'Необходимо дать согласие на обработку персональных данных.',
         ];
     }
 }

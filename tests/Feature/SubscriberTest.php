@@ -20,6 +20,7 @@ class SubscriberTest extends TestCase
     {
         $response = $this->postJson(route('subscribe.store'), [
             'email' => 'developer@example.com',
+            'consent_processing' => 1,
         ]);
 
         $response->assertOk();
@@ -33,8 +34,8 @@ class SubscriberTest extends TestCase
 
     public function test_email_is_normalized_and_duplicate_is_idempotent(): void
     {
-        $this->postJson(route('subscribe.store'), ['email' => 'Dev@Example.com'])->assertOk();
-        $this->postJson(route('subscribe.store'), ['email' => 'dev@example.com'])->assertOk();
+        $this->postJson(route('subscribe.store'), ['email' => 'Dev@Example.com', 'consent_processing' => 1])->assertOk();
+        $this->postJson(route('subscribe.store'), ['email' => 'dev@example.com', 'consent_processing' => 1])->assertOk();
 
         $this->assertDatabaseCount('subscribers', 1);
         $this->assertDatabaseHas('subscribers', ['email' => 'dev@example.com']);
@@ -79,7 +80,7 @@ class SubscriberTest extends TestCase
             'token' => null,
         ]);
 
-        $this->postJson(route('subscribe.store'), ['email' => 'sub@example.com'])
+        $this->postJson(route('subscribe.store'), ['email' => 'sub@example.com', 'consent_processing' => 1])
             ->assertOk()
             ->assertJson(['success' => true]);
 
