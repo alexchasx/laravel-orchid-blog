@@ -34,8 +34,10 @@ class ProcessRevocations extends Command
         $deleteDays  = Config::get('consent.revocation_days', 7);
 
         // Только отозванные и ещё не обработанные согласия.
+        // Фильтруем по subject_type = comment, чтобы не трогать логи подписчиков.
         $revokedLogs = ConsentLog::whereNotNull('revoked_at')
             ->whereNull('processed_at')
+            ->where('subject_type', ConsentLog::SUBJECT_COMMENT)
             ->with('comment')
             ->get();
 

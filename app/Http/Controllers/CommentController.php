@@ -80,6 +80,8 @@ class CommentController extends Controller
             // 2. Создаём логи согласий.
             $processingLog = ConsentLog::create([
                 'comment_id' => $comment->id,
+                'subject_type' => ConsentLog::SUBJECT_COMMENT,
+                'subject_id' => $comment->id,
                 'consent_type' => ConsentLog::TYPE_PROCESSING,
                 'consent_text' => $processingResult['text'],
                 'consent_version' => $processingResult['version'],
@@ -91,6 +93,8 @@ class CommentController extends Controller
 
             $distributionLog = ConsentLog::create([
                 'comment_id' => $comment->id,
+                'subject_type' => ConsentLog::SUBJECT_COMMENT,
+                'subject_id' => $comment->id,
                 'consent_type' => ConsentLog::TYPE_DISTRIBUTION,
                 'consent_text' => $distributionResult['text'],
                 'consent_version' => $distributionResult['version'],

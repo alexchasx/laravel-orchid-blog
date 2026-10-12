@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SubscribeRequest;
+use App\Models\ConsentLog;
 use App\Models\Subscriber;
+use App\Services\ConsentTextBuilder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -39,17 +41,25 @@ final class SubscriberController extends Controller
                     return true;
                 }
 
+                $created = false;
+
                 if ($subscriber === null) {
-                    Subscriber::create([
+                    $subscriber = Subscriber::create([
                         'user_id' => Auth::id(),
                         'email' => $email,
                     ]);
+                    $created = true;
                 } else {
                     // Повторная подписка после отписки: активируем и обновляем токен.
                     $subscriber->status = Subscriber::STATUS_ACTIVE;
                     $subscriber->token = Str::random(64);
                     $subscriber->user_id = Auth::id();
                     $subscriber->save();
+                }
+
+                // Создаём лог согласия на обработку ПДн, если его ещё нет.
+                if ($created) {
+                    $this->createConsentLog($subscriber);
                 }
 
                 return false;
@@ -98,6 +108,17 @@ final class SubscriberController extends Controller
         }
 
         if ($subscriber->isActive()) {
+            // Отзываем активное согласие на обработку ПДн.
+            $activeLog = ConsentLog::where('subject_type', ConsentLog::SUBJECT_SUBSCRIBER)
+                ->where('subject_id', $subscriber->id)
+                ->where('consent_type', ConsentLog::TYPE_PROCESSING)
+                ->active()
+                ->first();
+
+            if ($activeLog) {
+                $activeLog->revoke();
+            }
+
             $subscriber->status = Subscriber::STATUS_UNSUBSCRIBED;
             $subscriber->token = null; // ссылка одноразовая
             $subscriber->save();
@@ -115,6 +136,40 @@ final class SubscriberController extends Controller
             'success' => false,
             'message' => __('Этот email уже отписан от рассылки.'),
             'metaRobots' => 'noindex, nofollow',
+        ]);
+    }
+
+    /**
+     * Создать лог согласия на обработку ПДн для подписчика.
+     */
+    private function createConsentLog(Subscriber $subscriber): void
+    {
+        // Не создаём дубль, если активное согласие уже есть.
+        $exists = ConsentLog::where('subject_type', ConsentLog::SUBJECT_SUBSCRIBER)
+            ->where('subject_id', $subscriber->id)
+            ->where('consent_type', ConsentLog::TYPE_PROCESSING)
+            ->active()
+            ->exists();
+
+        if ($exists) {
+            return;
+        }
+
+        $builder = new ConsentTextBuilder();
+        $result = $builder->processingText([
+            'subject_purpose' => 'отправка информационных и рекламных материалов по адресу электронной почты',
+        ]);
+
+        ConsentLog::create([
+            'subject_type'    => ConsentLog::SUBJECT_SUBSCRIBER,
+            'subject_id'      => $subscriber->id,
+            'consent_type'    => ConsentLog::TYPE_PROCESSING,
+            'consent_text'    => $result['text'],
+            'consent_version' => $result['version'],
+            'ip_address'      => request()->ip(),
+            'user_agent'      => request()->userAgent(),
+            'page_url'        => url()->current(),
+            'consented_at'    => now(),
         ]);
     }
 

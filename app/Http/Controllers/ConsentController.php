@@ -15,9 +15,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RevokeConsentRequest;
 use App\Models\Comment;
 use App\Models\ConsentLog;
+use App\Models\Subscriber;
 use App\Services\ConsentTextBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class ConsentController extends Controller
@@ -74,11 +76,17 @@ class ConsentController extends Controller
      */
     public function revoke(RevokeConsentRequest $request): RedirectResponse
     {
-        $commentId  = $request->input('comment_id');
+        $subjectType = $request->input('subject_type');
         $consentType = $request->input('consent_type');
-        $email      = $request->input('email');
+        $email       = $request->input('email');
 
-        // Находим комментарий.
+        // Отзыв для подписчика.
+        if ($subjectType === ConsentLog::SUBJECT_SUBSCRIBER) {
+            return $this->revokeForSubscriber($email, $consentType);
+        }
+
+        // Отзыв для комментария.
+        $commentId  = $request->input('comment_id');
         /** @var \App\Models\Comment|null $comment */
         $comment = Comment::withTrashed()->find($commentId);
 
@@ -131,6 +139,55 @@ class ConsentController extends Controller
         } else {
             $message = "Согласие на распространение ПДн отозвано. Распространение будет прекращено в течение {$stopDays} рабочих дней, обезличивание комментария — в течение {$deleteDays} рабочих дней.";
         }
+
+        session()->flash('success', $message);
+
+        return back();
+    }
+
+    /**
+     * Отзыв согласия для подписчика.
+     */
+    private function revokeForSubscriber(string $email, string $consentType): RedirectResponse
+    {
+        // Для подписчика доступен только тип «processing».
+        if ($consentType !== ConsentLog::TYPE_PROCESSING) {
+            return back()->with('error', 'Для подписки доступен только отзыв согласия на обработку ПДн.');
+        }
+
+        /** @var \App\Models\Subscriber|null $subscriber */
+        $subscriber = Subscriber::where('email', $email)->first();
+
+        if (!$subscriber) {
+            return back()->with('error', 'Подписчик с таким e-mail не найден.');
+        }
+
+        // Находим активную запись согласия.
+        $log = ConsentLog::where('subject_type', ConsentLog::SUBJECT_SUBSCRIBER)
+            ->where('subject_id', $subscriber->id)
+            ->where('consent_type', ConsentLog::TYPE_PROCESSING)
+            ->active()
+            ->first();
+
+        if (!$log) {
+            return back()->with('error', 'Согласие уже отозвано или не найдено.');
+        }
+
+        // Выполняем отзыв в транзакции.
+        DB::transaction(function () use ($log, $subscriber) {
+            $log->revoke();
+
+            // Отзыв согласия на обработку → отписка.
+            if ($subscriber->isActive()) {
+                $subscriber->status = Subscriber::STATUS_UNSUBSCRIBED;
+                $subscriber->token = null;
+                $subscriber->save();
+            }
+        });
+
+        $deleteDays = config('consent.revocation_days', 7);
+
+        $message = "Согласие на обработку ПДн отозвано. Подписка отменена, данные будут удалены в течение {$deleteDays} рабочих дней.";
 
         session()->flash('success', $message);
 

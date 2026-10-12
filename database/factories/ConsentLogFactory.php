@@ -18,6 +18,8 @@ class ConsentLogFactory extends Factory
     {
         return [
             'comment_id' => Comment::factory(),
+            'subject_type' => ConsentLog::SUBJECT_COMMENT,
+            'subject_id' => fn (array $attributes) => $attributes['comment_id'],
             'consent_type' => $this->faker->randomElement([
                 ConsentLog::TYPE_PROCESSING,
                 ConsentLog::TYPE_DISTRIBUTION,

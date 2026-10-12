@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\Comment;
 use App\Models\ConsentLog;
 use App\Models\Rubric;
+use App\Models\Subscriber;
 use App\Models\User;
 use App\Support\MathCaptcha;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -132,7 +133,7 @@ class ConsentTest extends TestCase
             'consent_type' => ConsentLog::TYPE_DISTRIBUTION,
         ]);
 
-        // Логи содержат IP, UA, URL, версию.
+        // Логи содержат IP, UA, URL, версию, subject_type.
         $processingLog = ConsentLog::where('comment_id', $comment->id)
             ->where('consent_type', ConsentLog::TYPE_PROCESSING)
             ->first();
@@ -141,6 +142,8 @@ class ConsentTest extends TestCase
         $this->assertStringContainsString('127.0.0.1', $processingLog->ip_address);
         $this->assertEquals('1.0', $processingLog->consent_version);
         $this->assertNotNull($processingLog->consented_at);
+        $this->assertEquals(ConsentLog::SUBJECT_COMMENT, $processingLog->subject_type);
+        $this->assertEquals($comment->id, $processingLog->subject_id);
     }
 
     /**
@@ -259,6 +262,7 @@ class ConsentTest extends TestCase
         ]);
 
         $response = $this->post(route('consent.revoke'), [
+            'subject_type' => ConsentLog::SUBJECT_COMMENT,
             'comment_id' => $comment->id,
             'consent_type' => ConsentLog::TYPE_DISTRIBUTION,
             'email' => 'ivan@example.com',
@@ -298,6 +302,7 @@ class ConsentTest extends TestCase
         ]);
 
         $response = $this->post(route('consent.revoke'), [
+            'subject_type' => ConsentLog::SUBJECT_COMMENT,
             'comment_id' => $comment->id,
             'consent_type' => ConsentLog::TYPE_PROCESSING,
             'email' => 'maria@example.com',
@@ -334,6 +339,7 @@ class ConsentTest extends TestCase
         ]);
 
         $response = $this->post(route('consent.revoke'), [
+            'subject_type' => ConsentLog::SUBJECT_COMMENT,
             'comment_id' => $comment->id,
             'consent_type' => ConsentLog::TYPE_DISTRIBUTION,
             'email' => 'hacker@example.com', // чужой e-mail
@@ -365,6 +371,7 @@ class ConsentTest extends TestCase
         ]);
 
         $response = $this->post(route('consent.revoke'), [
+            'subject_type' => ConsentLog::SUBJECT_COMMENT,
             'comment_id' => $comment->id,
             'consent_type' => ConsentLog::TYPE_DISTRIBUTION,
             'email' => 'test@example.com',
@@ -385,6 +392,7 @@ class ConsentTest extends TestCase
     public function test_revoke_with_nonexistent_comment_id_fails(): void
     {
         $response = $this->post(route('consent.revoke'), [
+            'subject_type' => ConsentLog::SUBJECT_COMMENT,
             'comment_id' => 999999,
             'consent_type' => ConsentLog::TYPE_DISTRIBUTION,
             'email' => 'test@example.com',
@@ -402,6 +410,7 @@ class ConsentTest extends TestCase
     public function test_revoke_with_invalid_consent_type_fails_validation(): void
     {
         $response = $this->post(route('consent.revoke'), [
+            'subject_type' => ConsentLog::SUBJECT_COMMENT,
             'comment_id' => 1,
             'consent_type' => 'invalid_type',
             'email' => 'test@example.com',
@@ -425,7 +434,7 @@ class ConsentTest extends TestCase
     }
 
     /**
-     * Тест 13: страница отзыва принимает query-параметры из ссылки в комментарии.
+     * Тест 13: форма отзыва принимает query-параметры из ссылки в комментарии.
      */
     public function test_revoke_form_accepts_query_parameters(): void
     {
@@ -442,5 +451,81 @@ class ConsentTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('query@example.com');
+    }
+
+    /**
+     * Тест 14: форма отзыва рендерит select subject_type и поле comment_id.
+     */
+    public function test_revoke_form_renders_subject_type_select(): void
+    {
+        $response = $this->get(route('consent.revoke.form'));
+
+        $response->assertOk();
+        $response->assertSee('subject_type');
+        $response->assertSee('comment');
+        $response->assertSee('subscriber');
+        $response->assertSee('revoke-comment-id');
+    }
+
+    /**
+     * Тест 15: отзыв согласия для подписчика отписывает его.
+     */
+    public function test_revoke_subscriber_consent_unsubscribes(): void
+    {
+        $subscriber = \App\Models\Subscriber::factory()->create([
+            'email' => 'sub-revoke@example.com',
+            'status' => Subscriber::STATUS_ACTIVE,
+        ]);
+
+        $log = ConsentLog::factory()->create([
+            'subject_type' => ConsentLog::SUBJECT_SUBSCRIBER,
+            'subject_id' => $subscriber->id,
+            'comment_id' => null,
+            'consent_type' => ConsentLog::TYPE_PROCESSING,
+        ]);
+
+        $response = $this->post(route('consent.revoke'), [
+            'subject_type' => ConsentLog::SUBJECT_SUBSCRIBER,
+            'consent_type' => ConsentLog::TYPE_PROCESSING,
+            'email' => 'sub-revoke@example.com',
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        // Лог помечен отозванным.
+        $log->refresh();
+        $this->assertNotNull($log->revoked_at);
+
+        // Подписчик отписан.
+        $subscriber->refresh();
+        $this->assertEquals(Subscriber::STATUS_UNSUBSCRIBED, $subscriber->status);
+    }
+
+    /**
+     * Тест 16: отзыв на распространение для подписчика → ошибка.
+     */
+    public function test_revoke_distribution_for_subscriber_is_rejected(): void
+    {
+        $subscriber = \App\Models\Subscriber::factory()->create([
+            'email' => 'sub-dist@example.com',
+            'status' => Subscriber::STATUS_ACTIVE,
+        ]);
+
+        ConsentLog::factory()->create([
+            'subject_type' => ConsentLog::SUBJECT_SUBSCRIBER,
+            'subject_id' => $subscriber->id,
+            'comment_id' => null,
+            'consent_type' => ConsentLog::TYPE_PROCESSING,
+        ]);
+
+        $response = $this->post(route('consent.revoke'), [
+            'subject_type' => ConsentLog::SUBJECT_SUBSCRIBER,
+            'consent_type' => ConsentLog::TYPE_DISTRIBUTION,
+            'email' => 'sub-dist@example.com',
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('error');
     }
 }
