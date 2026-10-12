@@ -45,6 +45,9 @@
             <textarea id="message" name="message" rows="7" placeholder="Расскажите, чем можем помочь…" required minlength="10"></textarea>
         </label>
 
+        <p class="form-privacy">
+            Отправляя форму, вы соглашаетесь с <a href="{{ route('privacy') }}">Политикой конфиденциальности</a>.
+        </p>
         <button class="button primary" type="submit">Отправить сообщение →</button>
         <p class="form-message" aria-live="polite"></p>
     </form>

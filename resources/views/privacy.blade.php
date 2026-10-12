@@ -22,6 +22,8 @@
         ? 'email «' . config('my_config.contact_email') . '»'
         : 'адрес, указанный в разделе «Контакты»';
 
+    $effectiveDate = config('consent.effective_date', '26 сентября 2026 г.');
+
     $rknDate       = trim((string) config('operator.rkn_notification_date'));
     $rknNumber     = trim((string) config('operator.rkn_registry_number'));
     $commentsDays  = trim((string) config('operator.comment_retention_period'));
@@ -33,7 +35,7 @@
     <div class="article-head">
         <a class="back" href="{{ route('home') }}">← На главную</a>
         <h1>Политика конфиденциальности</h1>
-        <p class="lead">Как {{ config('app.name') }} собирает, использует и защищает ваши персональные данные. Дата последнего обновления: 26 сентября 2026 г.</p>
+        <p class="lead">Как {{ config('app.name') }} собирает, использует и защищает ваши персональные данные. Дата последнего обновления: {{ $effectiveDate }}.</p>
     </div>
 
     <div class="article-layout">
