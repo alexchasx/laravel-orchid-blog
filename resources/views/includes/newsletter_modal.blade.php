@@ -25,10 +25,10 @@
                 <label class="newsletter-consent">
                     <br />
                     <input type="checkbox" name="consent_processing" value="1"
-                        id="newsletter-consent" style="max-width: 16px; cursor: pointer;" required>
+                        id="newsletter-consent" class="consent-checkbox" required>
                     <span>Я даю согласие на обработку персональных данных
-                        в соответствии с <a href="{{ route('consent.processing') }}" target="_blank" style="color: #00ff88;">Согласием на обработку персональных данных</a>
-                        и <a href="{{ route('privacy') }}" target="_blank" style="color: #00ff88;">Политикой конфиденциальности</a>.
+                        в соответствии с <a href="{{ route('consent.processing') }}" target="_blank" class="consent-link">Согласием на обработку персональных данных</a>
+                        и <a href="{{ route('privacy') }}" target="_blank" class="consent-link">Политикой конфиденциальности</a>.
                     </span>
                 </label>
 

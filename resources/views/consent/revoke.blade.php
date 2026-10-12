@@ -1,7 +1,7 @@
 @extends('layouts.techlog')
 
 @section('content')
-<div class="container" style="max-width: 800px; margin: 40px auto; padding: 0 20px; margin-top: 100px;">
+<div class="consent-page-container">
     <div class="card reveal">
         <div class="section-head">
             <div>
@@ -33,7 +33,7 @@
             — Отзыв согласия на <strong>обработку</strong> ПДн для подписки → отписка от рассылки.
         </p>
 
-        <form action="{{ route('consent.revoke') }}" method="post" class="comment-form" style="margin-top: 20px;" id="revoke-form">
+        <form action="{{ route('consent.revoke') }}" method="post" class="comment-form consent-form" id="revoke-form">
             @csrf
 
             <label for="revoke-subject">

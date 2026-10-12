@@ -50,22 +50,22 @@
             @enderror
         </label>
 
-        <textarea id="comment" name="comment" rows="6" maxlength="65525" required placeholder="Поделитесь мыслями…">{{ old('comment') }}</textarea>
+        <textarea id="comment" name="comment" rows="6" maxlength="5000" required placeholder="Поделитесь мыслями…">{{ old('comment') }}</textarea>
 
         <input type="hidden" name="article_id" value="{{ $article->id }}">
 
         <!-- Согласия на обработку ПДн (152-ФЗ) -->
         <div class="consent-checks">
-            <div class="consent-error" id="consent-error" style="display:none; color: #ff4444; margin: 8px 0px; font-size: 14px;">
+            <div class="consent-error" id="consent-error">
                 Чтобы отправить комментарий, подтвердите оба согласия (галочки): на обработку и на распространение персональных данных
             </div>
 
             <label>
                 <input type="checkbox" name="consent_processing" value="1"
                     {{ old('consent_processing') ? 'checked' : '' }}
-                    id="consent-processing" style="max-width: 16px; cursor: pointer;" required>
+                    id="consent-processing" class="consent-checkbox" required>
                 <span>Я даю согласие на обработку персональных данных
-                    в соответствии с <a href="{{ route('consent.processing') }}" target="_blank" style="color: #00ff88;">Согласием об обработке персональных данных</a>.
+                    в соответствии с <a href="{{ route('consent.processing') }}" target="_blank" class="consent-link">Согласием об обработке персональных данных</a>.
                 </span>
                 @error('consent_processing')
                     <span class="comment-error">{{ $message }}</span>
@@ -75,11 +75,11 @@
             <label>
                 <input type="checkbox" name="consent_distribution" value="1"
                     {{ old('consent_distribution') ? 'checked' : '' }}
-                    id="consent-distribution" style="max-width: 16px; cursor: pointer;" required>
+                    id="consent-distribution" class="consent-checkbox" required>
                 <span>Я даю согласие на распространение (публичное
                     отображение) моих данных — имени/никнейма и текста
                     комментария на сайте.
-                    <a href="{{ route('consent.distribution') }}" target="_blank" rel="noopener" style="color: #00ff88;">
+                    <a href="{{ route('consent.distribution') }}" target="_blank" rel="noopener" class="consent-link">
                         Согласие на распространение персональных данных
                     </a>.
                 </span>

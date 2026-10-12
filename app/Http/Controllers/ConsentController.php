@@ -20,6 +20,7 @@ use App\Services\ConsentTextBuilder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ConsentController extends Controller
@@ -31,11 +32,15 @@ class ConsentController extends Controller
     {
         $result = $builder->processingText();
 
+        $effectiveDate = config('consent.effective_date', '26 сентября 2026 г.');
+
         return view('consent.processing', [
             'title'         => 'Согласие на обработку персональных данных',
+            'metaTitle'     => 'Согласие на обработку персональных данных',
+            'metaDesc'      => 'Текст согласия на обработку персональных данных в ' . config('app.name', '') . ' — версия ' . $result['version'] . '. Дата вступления в силу: ' . $effectiveDate . '.',
             'text'          => $result['text'],
             'version'       => $result['version'],
-            'effectiveDate' => ConsentTextBuilder::CONSENT_EFFECTIVE_DATE,
+            'effectiveDate' => $effectiveDate,
         ]);
     }
 
@@ -51,11 +56,15 @@ class ConsentController extends Controller
             'conditions'   => '',
         ]);
 
+        $effectiveDate = config('consent.effective_date', '26 сентября 2026 г.');
+
         return view('consent.distribution', [
             'title'         => 'Согласие на распространение персональных данных',
+            'metaTitle'     => 'Согласие на распространение персональных данных',
+            'metaDesc'      => 'Текст согласия на распространение персональных данных в ' . config('app.name', '') . ' — версия ' . $result['version'] . '. Дата вступления в силу: ' . $effectiveDate . '.',
             'text'          => $result['text'],
             'version'       => $result['version'],
-            'effectiveDate' => ConsentTextBuilder::CONSENT_EFFECTIVE_DATE,
+            'effectiveDate' => $effectiveDate,
         ]);
     }
 
@@ -95,7 +104,7 @@ class ConsentController extends Controller
         }
 
         // Проверяем e-mail — только владелец может отозвать согласие.
-        if ($comment->email !== $email) {
+        if (Str::lower($comment->email) !== Str::lower($email)) {
             return back()->with('error', 'Указанный e-mail не соответствует владельцу комментария.');
         }
 
@@ -113,6 +122,11 @@ class ConsentController extends Controller
         DB::transaction(function () use ($log, $comment, $consentType) {
             // 1. Помечаем лог как отозванный.
             $log->revoke();
+
+            // 1a. Мгновенная обработка (удаление/обезличивание) —
+            // фиксируем processed_at, чтобы фоновая команда не трогала лог.
+            $log->processed_at = now();
+            $log->save();
 
             if ($consentType === ConsentLog::TYPE_DISTRIBUTION) {
                 // 2a. Отзыв на распространение → обезличиваем комментарий.
@@ -176,6 +190,10 @@ class ConsentController extends Controller
         // Выполняем отзыв в транзакции.
         DB::transaction(function () use ($log, $subscriber) {
             $log->revoke();
+
+            // Мгновенная обработка — фиксируем processed_at.
+            $log->processed_at = now();
+            $log->save();
 
             // Отзыв согласия на обработку → отписка.
             if ($subscriber->isActive()) {
