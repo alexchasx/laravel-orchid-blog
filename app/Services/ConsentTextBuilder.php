@@ -31,6 +31,9 @@ class ConsentTextBuilder
         $operator     = Config::get('operator');
         $version      = Config::get('consent.versions.processing', '1.0');
         $appName      = config('app.name', '');
+        $url          = config('app.url', '');
+        $operatorName = config('operator.name', '');
+        $inn          = config('operator.inn', '');
         $siteUrl      = $operator['site_url'] ?? '';
         $days         = Config::get('consent.revocation_days', 7);
         $contactUrl   = route('contact');
@@ -66,7 +69,7 @@ class ConsentTextBuilder
         $text = <<<TEXT
 <h2>Согласие на обработку персональных данных</h2>
 
-<p>Настоящим я, <strong>{$name}</strong>, свободно, своей волей и в своём интересе даю согласие на обработку своих персональных данных {$appName} (далее — Оператор), расположенного по адресу: {$addr}, на следующих условиях:</p>
+<p>Используя сайт {$url}, я даю согласие на обработку моих персональных данных для {$operatorName} (ИНН $inn) (далее — Оператор), на следующих условиях:</p>
 
 <h3>1. Персональные данные, которые будут обработаны</h3>
 <ul>
@@ -112,6 +115,9 @@ TEXT;
         $operator     = Config::get('operator');
         $version      = Config::get('consent.versions.distribution', '1.0');
         $appName      = config('app.name', '');
+        $url          = config('app.url', '');
+        $operatorName = config('operator.name', '');
+        $inn          = config('operator.inn', '');
         $days         = Config::get('consent.revocation_days', 7);
         // Законный срок прекращения распространения ПДн после отзыва —
         // 3 рабочих дня (ч. 4 ст. 9 Федерального закона № 152-ФЗ).
@@ -136,7 +142,7 @@ TEXT;
         $text = <<<TEXT
 <h2>Согласие на распространение персональных данных</h2>
 
-<p>Настоящим я, <strong>{$subjectName}</strong>, свободно, своей волей и в своём интересе даю согласие на распространение своих персональных данных {$appName} (далее — Оператор), расположенного по адресу: {$addr}, на следующих условиях:</p>
+<p>Используя сайт {$url}, я даю согласие на обработку моих персональных данных для {$operatorName} (ИНН $inn) (далее — Оператор), на следующих условиях:</p>
 
 <h3>1. Цели распространения</h3>
 <p>Публикация комментариев на сайте {$appName} (размещение моего имени/никнейма и текста комментария в публичном доступе).</p>
