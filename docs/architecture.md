@@ -105,7 +105,7 @@ Laravel 13-стиль: ядро без `Http/Kernel.php`.
 | `Contact` | `contacts` | belongsTo `User` (nullable) | сообщения обратной связи; guest-поля `name`/`email` |
 | `Subscriber` | `subscribers` | belongsTo `User` (nullable) | `email` уникален; `token` (64) — одноразовая отписка; `status` = `active`/`unsubscribed`; в `booted()` — автогенерация токена/статуса |
 | `User` | `users` (Orchid) | hasMany `Article`, `Comment`, `Contact` | extends `Orchid\Platform\Models\User`; роли через `role_users`; `isAdmin()` = `hasAccess('platform.custom.articles')`; константы ролей `user`/`moderator`/`admin` |
-| `ConsentLog` | `consent_logs` | belongsTo `Comment` (nullable, `nullOnDelete`) | `TYPE_PROCESSING` / `TYPE_DISTRIBUTION`; `consent_text` (дословный текст), `consent_version`, `ip_address`, `user_agent`, `page_url`, `consented_at`, `revoked_at`, `processed_at` (nullable); `comment_id` nullable — лог сохраняется после полного удаления комментария; scope `active()`, метод `revoke()` |
+| `ConsentLog` | `consent_logs` | belongsTo `Comment` (nullable, `nullOnDelete`), morphTo `subject` | `TYPE_PROCESSING` / `TYPE_DISTRIBUTION`; `subject_type` + `subject_id` (полиморфная связь: `comment` / `subscriber`); `consent_text` (дословный текст), `consent_version`, `ip_address`, `user_agent`, `page_url`, `consented_at`, `revoked_at`, `processed_at` (nullable); `comment_id` nullable — лог сохраняется после полного удаления комментария; scope `active()`, метод `revoke()`, scope `forSubject($type, $id)` |
 
 ### Ключевые скоупы и методы
 
