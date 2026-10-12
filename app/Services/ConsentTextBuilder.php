@@ -126,12 +126,9 @@ TEXT;
 
         $conditionsBlock = '';
         if ($conditions !== '') {
-            $conditionsBlock = <<<HTML
-<h3>Дополнительные условия и запреты</h3>
-<p>Субъект указал следующие дополнительные условия и запреты на обработку:</p>
-<blockquote>__ESCAPED_CONDITIONS__</blockquote>
-HTML;
-            $conditionsBlock = str_replace('__ESCAPED_CONDITIONS__', e($conditions), $conditionsBlock);
+            $conditionsBlock = '<h3>Дополнительные условия и запреты</h3>'
+                . '<p>Субъект указал следующие дополнительные условия и запреты на обработку:</p>'
+                . '<blockquote>' . e($conditions) . '</blockquote>';
         } else {
             $conditionsBlock = '<p><strong>Запреты не указаны.</strong></p>';
         }

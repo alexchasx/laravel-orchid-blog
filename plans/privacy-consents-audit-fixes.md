@@ -1,12 +1,12 @@
 # План: доработка функционала политики конфиденциальности и согласий ПДн
 
-> Рабочий план по итогам аудита. Реализация ещё не начата.
+> Рабочий план по итогам аудита.
 > Аудированы: [`app/Services/ConsentTextBuilder.php`](../app/Services/ConsentTextBuilder.php),
 > [`resources/views/privacy.blade.php`](../resources/views/privacy.blade.php),
 > [`resources/views/consent/*`](../resources/views/consent/), `consent_logs`, `ConsentController`,
 > `CommentController`, `SubscriberController`, cookie-баннер, тесты.
 >
-> Статус: план (реализация не начата).
+> Статус: реализация завершена (все пункты выполнены; финальная проверка `make test` — по желанию).
 
 ---
 
@@ -159,11 +159,13 @@
 - [`comments_form.blade.php`](../resources/views/includes/comments_form.blade.php:53) — `maxlength="65525"`
   привести к серверному `max:5000` из [`CommentRequest`](../app/Http/Requests/CommentRequest.php:30).
 
-### 3.6. Нумерация разделов в `privacy.blade.php`
+### 3.6. Нумерация разделов в `privacy.blade.php` ✅
 - Разделы 19–20 (внутренние документы, инциденты) закомментированы, последующие не перенумерованы;
   `docs/privacy.md` (25 разделов) расходится с сайтом (23).
 - **Что делать:** либо раскомментировать разделы, либо перенумеровать и синхронизировать
   `docs/privacy.md` (зафиксировать решение).
+- **Выполнено:** выбран вариант «раскомментировать» — разделы 19–20 возвращены на сайт
+  (`privacy.blade.php`), сайт снова содержит 25 разделов и синхронизирован с `docs/privacy.md`.
 
 ### 3.7. Inline-стили → SCSS ✅
 - [`comments_form.blade.php`](../resources/views/includes/comments_form.blade.php),

@@ -939,6 +939,17 @@
     .form-label {
         margin-bottom: 8px;
     }
+
+    .form-privacy {
+        font-size: var(--fs-sm);
+        color: var(--muted);
+        margin: 0 0 16px;
+        line-height: 1.5;
+
+        a {
+            color: var(--green);
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------
