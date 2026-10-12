@@ -67,19 +67,30 @@ class SubscriberTest extends TestCase
 
         $this->assertDatabaseCount('consent_logs', 1);
 
-        // Отписка.
-        $subscriber = \App\Models\Subscriber::where('email', 'no-dup@example.com')->first();
-        $subscriber->status = Subscriber::STATUS_UNSUBSCRIBED;
-        $subscriber->token = null;
-        $subscriber->save();
+        // Отписка через реальный маршрут (отзывает согласие).
+        $subscriber = Subscriber::where('email', 'no-dup@example.com')->first();
+        $this->get(route('subscribe.unsubscribe', ['token' => $subscriber->token]))
+            ->assertViewHas('success', true);
 
-        // Повторная подписка — не дублирует лог.
+        // Согласие отозвано, активный лог исчезает.
+        $this->assertDatabaseMissing('consent_logs', [
+            'subject_id' => $subscriber->id,
+            'revoked_at' => null,
+        ]);
+
+        // Повторная подписка — создаёт новое активное согласие, старое (отозванное) остаётся.
         $this->postJson(route('subscribe.store'), [
             'email' => 'no-dup@example.com',
             'consent_processing' => 1,
         ])->assertOk();
 
-        $this->assertDatabaseCount('consent_logs', 1);
+        // Одно активное + одно отозванное = 2 записи.
+        $this->assertDatabaseCount('consent_logs', 2);
+
+        $activeLog = ConsentLog::where('subject_id', $subscriber->id)
+            ->where('revoked_at', null)
+            ->first();
+        $this->assertNotNull($activeLog);
     }
 
     public function test_email_is_normalized_and_duplicate_is_idempotent(): void
@@ -157,7 +168,7 @@ class SubscriberTest extends TestCase
 
     public function test_resubscribe_after_unsubscribe_reactivates_subscriber(): void
     {
-        Subscriber::factory()->create([
+        $subscriber = Subscriber::factory()->create([
             'email' => 'sub@example.com',
             'status' => Subscriber::STATUS_UNSUBSCRIBED,
             'token' => null,
@@ -171,6 +182,14 @@ class SubscriberTest extends TestCase
         $this->assertDatabaseHas('subscribers', [
             'email' => 'sub@example.com',
             'status' => Subscriber::STATUS_ACTIVE,
+        ]);
+
+        // Реактивация создаёт активное согласие на обработку ПДн.
+        $this->assertDatabaseHas('consent_logs', [
+            'subject_type' => ConsentLog::SUBJECT_SUBSCRIBER,
+            'subject_id' => $subscriber->id,
+            'consent_type' => ConsentLog::TYPE_PROCESSING,
+            'revoked_at' => null,
         ]);
     }
 

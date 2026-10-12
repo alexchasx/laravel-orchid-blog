@@ -9,7 +9,7 @@
         @csrf
 
         @guest
-            <div class="input-row" style="display: block">
+            <div class="input-row input-row--block">
                 <label for="c-name">
                     {{ __('Имя') }}
 

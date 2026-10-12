@@ -48,7 +48,6 @@ final class SubscriberController extends Controller
                         'user_id' => Auth::id(),
                         'email' => $email,
                     ]);
-                    $created = true;
                 } else {
                     // Повторная подписка после отписки: активируем и обновляем токен.
                     $subscriber->status = Subscriber::STATUS_ACTIVE;
@@ -57,10 +56,9 @@ final class SubscriberController extends Controller
                     $subscriber->save();
                 }
 
-                // Создаём лог согласия на обработку ПДн, если его ещё нет.
-                if ($created) {
-                    $this->createConsentLog($subscriber);
-                }
+                // Создаём лог согласия на обработку ПДн, если его ещё нет
+                // (работает и для нового подписчика, и для реактивации).
+                $this->createConsentLog($subscriber);
 
                 return false;
             });

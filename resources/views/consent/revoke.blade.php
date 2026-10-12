@@ -95,7 +95,7 @@
             <button class="button primary" type="submit">Отозвать согласие →</button>
         </form>
 
-        <p style="margin-top: 20px;">
+        <p class="revoke-back-link">
             <a href="{{ url()->previous() ?: route('home') }}">← Вернуться на предыдущую страницу</a>
         </p>
     </div>

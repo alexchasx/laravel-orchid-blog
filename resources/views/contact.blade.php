@@ -2,7 +2,7 @@
 
 @section('content')
 
-<section class="contact container" style="display: block; margin-bottom: 24px; max-width: 700px;">
+<section class="contact container contact--compact">
     {{-- Contact Intro --}}
     <div class="contact-intro reveal">
         <!-- <h1>Давайте обсудим<br><em>технологии</em></h1> -->
@@ -41,7 +41,7 @@
         @endauth
 
         <label for="message">
-            <div style="margin-bottom: 8px;">Сообщение</div>
+            <div class="form-label">Сообщение</div>
             <textarea id="message" name="message" rows="7" placeholder="Расскажите, чем можем помочь…" required minlength="10"></textarea>
         </label>
 

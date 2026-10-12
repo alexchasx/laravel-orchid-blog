@@ -873,6 +873,10 @@
     }
 }
 
+.input-row--block {
+    display: block;
+}
+
 // ---------------------------------------------------------------------------
 // Contact
 // ---------------------------------------------------------------------------
@@ -923,6 +927,17 @@
             width: 100%;
             margin-top: 4px;
         }
+    }
+
+    // Одноколоночный вариант: форма обратной связи на отдельной странице
+    &--compact {
+        display: block;
+        margin-bottom: 24px;
+        max-width: 700px;
+    }
+
+    .form-label {
+        margin-bottom: 8px;
     }
 }
 
@@ -1336,6 +1351,10 @@
 }
 
 .consent-form {
+    margin-top: 20px;
+}
+
+.revoke-back-link {
     margin-top: 20px;
 }
 

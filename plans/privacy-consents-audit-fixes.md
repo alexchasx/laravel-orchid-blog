@@ -126,11 +126,14 @@
     (`$data['subject_name']`, плейсхолдер по умолчанию);
   - `distributionText()`: добавить адрес оператора.
 
-### 2.4. Дата вступления в силу — в конфиг
+### 2.4. Дата вступления в силу — в конфиг ✅
 - **Где:** [`ConsentTextBuilder::CONSENT_EFFECTIVE_DATE`](../app/Services/ConsentTextBuilder.php:26)
   и дважды в [`privacy.blade.php`](../resources/views/privacy.blade.php:36).
 - **Что делать:** добавить `config/consent.php` → `effective_date` (например, `'26 сентября 2026 г.'`),
   читать из конфига; в `privacy.blade.php` заменить хардкод на `config('consent.effective_date')`.
+- **Статус:** `config/consent.php` уже содержит `effective_date`; `ConsentTextBuilder` и `ConsentController`
+  читают из конфига с fallback; **строка 488 `privacy.blade.php` исправлена** — теперь использует
+  `config('consent.effective_date', '26 сентября 2026 г.')`.
 
 ---
 
@@ -162,11 +165,17 @@
 - **Что делать:** либо раскомментировать разделы, либо перенумеровать и синхронизировать
   `docs/privacy.md` (зафиксировать решение).
 
-### 3.7. Inline-стили → SCSS
+### 3.7. Inline-стили → SCSS ✅
 - [`comments_form.blade.php`](../resources/views/includes/comments_form.blade.php),
   [`revoke.blade.php`](../resources/views/consent/revoke.blade.php),
   [`newsletter_modal.blade.php`](../resources/views/includes/newsletter_modal.blade.php) —
   вынести стили в `resources/sass/techlog/` (по конвенции проекта).
+- **Выполнено:**
+  - `comments_form.blade.php:12` — `style="display: block"` → класс `.input-row--block`;
+  - `revoke.blade.php:98` — `style="margin-top: 20px"` → класс `.revoke-back-link`;
+  - `contact.blade.php:5` — `style="display: block; margin-bottom: 24px; max-width: 700px"` → класс `.contact--compact`;
+  - `contact.blade.php:44` — `style="margin-bottom: 8px"` → класс `.form-label`;
+  - все классы добавлены в [`_components.scss`](../resources/sass/techlog/_components.scss).
 
 ---
 
