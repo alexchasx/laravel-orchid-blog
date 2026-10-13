@@ -42,9 +42,11 @@ sudo bash provision-server.sh \
 - `A`-запись домена (и `www`, если используется) на IP сервера — дождаться пропагации.
 - Для рассылки и формы обратной связи — почтовые записи `MX`, `SPF` (`TXT`), `DKIM`, `DMARC`, иначе письма попадают в спам.
 
-## Шаг 3. Клонирование репозитория и TLS
+## Шаг 3. Размещение проекта на сервере и TLS
 
-Скрипту [`../setup-tls.sh`](../setup-tls.sh) нужен проект на сервере (он вносит изменения в `docker/.env.prod`), поэтому сначала клонируем репозиторий:
+Скрипту [`../setup-tls.sh`](../setup-tls.sh) нужен проект на сервере (он вносит изменения в `docker/.env.prod`), поэтому сначала размещаем код в `/opt/blog` — любым из двух способов.
+
+**Способ 1 — клонирование из git** (сервер получает SSH-доступ к репозиторию):
 
 ```bash
 # войти на сервер под пользователем деплоя
@@ -53,6 +55,26 @@ sudo chown "$USER":"$USER" /opt/blog
 git clone git@github.com:alexchasx/laravel-orchid-blog.git /opt/blog
 cd /opt/blog
 ```
+
+**Способ 2 — копирование с локальной машины** (серверу не нужен доступ к вашему git). Прод-стек не требует git на сервере: [`../deploy.sh`](../deploy.sh) при отсутствии `.git` сам пропускает `git pull` (см. Шаг 5). Код доставляется скриптом [`../deploy-rsync.sh`](../deploy-rsync.sh), который исключает всё лишнее (зеркало `.dockerignore` + секреты и runtime-данные):
+
+```bash
+# подготовить каталог на сервере (один раз):
+ssh deploy@SERVER
+sudo mkdir -p /opt/blog
+sudo chown "$USER":"$USER" /opt/blog
+exit
+
+# на ЛОКАЛЬНОЙ машине (в корне проекта):
+chmod +x deploy-rsync.sh   # один раз
+./deploy-rsync.sh deploy@SERVER /opt/blog
+
+# затем войти на сервер:
+ssh deploy@SERVER
+cd /opt/blog
+```
+
+> Что исключается и почему: `.git` (иначе `deploy.sh` попытается сделать `git pull`), `vendor/`, `node_modules/`, `public/build` (собираются внутри образа — multi-stage [`../docker/app/Dockerfile.prod`](../docker/app/Dockerfile.prod)), `storage/` (runtime-данные живут в volume `app_storage`), `docker/.env.prod` (создаётся на сервере на Шаге 4 и переживает обновления — `--delete` исключённые файлы не трогает), `.env*`, dev-артефакты (`tests`, `docs`, `plans`, `prompts`, `screenshots`). Шаблон `docker/env.prod.example` копируется — из него на сервере создаётся `docker/.env.prod`.
 
 **Вариант A — хостовый reverse proxy (рекомендуется).** nginx на хосте терминирует TLS и проксирует на контейнер.
 
@@ -128,14 +150,44 @@ curl -I http://localhost/up   # 200 OK (или https://домен/up)
 
 ## Шаг 5. Обновления (последующие деплои)
 
+**Если проект клонирован из git (Способ 1):**
+
 ```bash
 cd /opt/blog
 ./deploy.sh          # или make prod-deploy
 ```
 
-[`../deploy.sh`](../deploy.sh:1) выполняет: бэкап БД (`mysqldump`) и `storage` (tar) с ротацией 14 дней → `git pull --ff-only` →
+**Если проект скопирован с локальной машины (Способ 2):**
+
+```bash
+# на ЛОКАЛЬНОЙ машине — обновить код на сервере:
+./deploy-rsync.sh deploy@SERVER /opt/blog
+
+# на сервере:
+cd /opt/blog
+./deploy.sh --no-pull
+```
+
+[`../deploy.sh`](../deploy.sh:1) выполняет: бэкап БД (`mysqldump`) и `storage` (tar) с ротацией 14 дней → обновление кода (`git pull --ff-only`; при отсутствии `.git` шаг пропускается с предупреждением) →
 `docker compose up -d --build` → `migrate --force` → `config:cache` + `view:cache` → рестарт контейнеров → healthcheck `/up`.
 Флаги: `--skip-backup`, `--skip-migrate`, `--no-pull`.
+
+### Смена настроек (`docker/.env.prod`)
+
+Файл с секретами исключён из [`../deploy-rsync.sh`](../deploy-rsync.sh) и git — его копируют отдельно:
+
+```bash
+# на ЛОКАЛЬНОЙ машине:
+scp docker/.env.prod deploy@SERVER:/opt/blog/docker/.env.prod
+
+# на сервере:
+cd /opt/blog
+chmod 600 docker/.env.prod
+docker compose -f docker/docker-compose.prod.yml --env-file docker/.env.prod up -d   # пересоздать контейнеры с новыми env
+make prod-optimize    # config:cache + view:cache — иначе Laravel отдаёт старый кэш
+```
+
+> `docker compose up -d` (без `--build`) пересоздаёт только контейнеры, чей конфиг изменился; `restart` новые значения env не подхватывает. Если контейнеры не пересоздались — добавьте `--force-recreate`. Смена `DB_*` после первого запуска не меняет реальные креды MySQL (они задаются только при инициализации пустого volume) — либо не меняйте их, либо правите через `ALTER USER` в контейнере `db`.
 
 ## Шаг 6. Очередь, планировщик и бэкапы
 

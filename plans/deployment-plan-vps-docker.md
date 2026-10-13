@@ -249,7 +249,7 @@ protected $proxies = '*'; // или: protected $proxies = env('TRUSTED_PROXIES',
 - **Реализовано:** [`deploy.sh`](../deploy.sh) в корне репозитория (запускать на сервере
   из корня репо; `chmod +x deploy.sh`). Последовательность:
   1. бэкап БД (`mysqldump`) и `storage/` (tar) в `/var/backups/blog` с ротацией 14 дней;
-  2. `git pull --ff-only`;
+  2. `git pull --ff-only` (пропускается, если на сервере нет `.git` — код доставляется rsync'ом с локальной машины, см. п. 6);
   3. `docker compose up -d --build` (с `--env-file docker/.env.prod`);
   4. `php artisan migrate --force`;
   5. `php artisan config:cache && php artisan view:cache` (без `route:cache` по умолчанию);

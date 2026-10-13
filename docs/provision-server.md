@@ -24,7 +24,7 @@
 - **Шаг 1.** Подготовка сервера скриптом (таблица шагов + флаги);
 - **Шаг 2.** Домен и DNS (A-запись, почтовые MX/SPF/DKIM/DMARC);
 - **Шаг 3.** TLS: вариант A (рекомендуемый — хостовый nginx + certbot, с готовым конфигом `proxy_pass http://127.0.0.1:8080` и правкой порта в compose), вариант B (TLS в контейнере), вариант C (Cloudflare);
-- **Шаг 4.** Первый деплой: клонирование в `/opt/blog`, `make prod-env`, заполнение `docker/.env.prod`, генерация `APP_KEY` на хосте (`openssl rand` — т.к. `key:generate` в контейнере пишет в неперсистентный `.env` образа), `make prod-up`, `make prod-migrate`, создание админа Orchid, `make prod-optimize`, healthcheck `/up`;
+- **Шаг 4.** Первый деплой: размещение кода в `/opt/blog` (git clone или rsync с локальной машины — [`deploy-rsync.sh`](deploy-rsync.sh)), `make prod-env`, заполнение `docker/.env.prod`, генерация `APP_KEY` на хосте (`openssl rand` — т.к. `key:generate` в контейнере пишет в неперсистентный `.env` образа), `make prod-up`, `make prod-migrate`, создание админа Orchid, `make prod-optimize`, healthcheck `/up`;
 - **Шаг 5.** Последующие деплои: [`deploy.sh`](deploy.sh:1) / `make prod-deploy`;
 - **Шаг 6.** Очередь/планировщик и бэкапы (cron-дамп БД — ссылка на план, раздел 9);
 - **Шаг 7.** Финальный smoke-тест (ссылка на чек-лист плана, раздел 12).
