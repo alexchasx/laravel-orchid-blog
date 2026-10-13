@@ -260,6 +260,34 @@ prod-backup: prod-check-env ## Бэкап БД и storage в /var/backups/blog (
 	@find /var/backups/blog -name 'db_*.sql.gz' -mtime +14 -delete
 	@echo "$(GREEN)→ Бэкап БД готов: /var/backups/blog/db_$$(ls /var/backups/blog | grep '^db_' | tail -1)$(RESET)"
 
+.PHONY: prod-restore
+prod-restore: prod-check-env ## Восстановить БД из бэкапа /var/backups/blog (по умолчанию последний; DUMP=/путь/к/файлу.sql.gz — конкретный)
+	@echo "$(YELLOW)→ Restoring database from backup...$(RESET)"
+	@echo "$(YELLOW)  WARNING: all data will be replaced!$(RESET)"
+	@if [ -n "$(DUMP)" ]; then \
+		DUMP="$(DUMP)"; \
+		[ -f "$$DUMP" ] || { echo "$(RED)  Файл не найден: $$DUMP$(RESET)"; exit 1; }; \
+	else \
+		DUMP=$$(ls -t /var/backups/blog/db_*.sql.gz 2>/dev/null | head -1); \
+		[ -n "$$DUMP" ] || { echo "$(RED)  Бэкапы не найдены в /var/backups/blog.$(RESET)"; exit 1; }; \
+	fi; \
+	echo "$(GREEN)→ Использую бэкап: $$DUMP$(RESET)"; \
+	gunzip -c "$$DUMP" | $(COMPOSE_PROD) exec -T db sh -c 'exec mysql -u"$$MYSQL_USER" -p"$$MYSQL_PASSWORD" "$$MYSQL_DATABASE"'
+	@echo "$(GREEN)→ БД восстановлена из бэкапа.$(RESET)"
+
+.PHONY: prod-restore-sql
+prod-restore-sql: prod-check-env ## Восстановить БД из несжатого .sql-дампа (DUMP=/путь/к/файлу.sql; разрушает данные!)
+	@echo "$(YELLOW)→ Restoring database from SQL dump...$(RESET)"
+	@echo "$(YELLOW)  WARNING: all data will be replaced!$(RESET)"
+	@if [ -z "$(DUMP)" ]; then \
+		echo "$(RED)  Укажите файл: make prod-restore-sql DUMP=/путь/к/файлу.sql$(RESET)"; \
+		exit 1; \
+	fi; \
+	[ -f "$(DUMP)" ] || { echo "$(RED)  Файл не найден: $(DUMP)$(RESET)"; exit 1; }; \
+	echo "$(GREEN)→ Использую дамп: $(DUMP)$(RESET)"; \
+	cat "$(DUMP)" | $(COMPOSE_PROD) exec -T db sh -c 'exec mysql -u"$$MYSQL_USER" -p"$$MYSQL_PASSWORD" "$$MYSQL_DATABASE"'
+	@echo "$(GREEN)→ БД восстановлена из SQL-дампа.$(RESET)"
+
 .PHONY: db-dump
 db-dump: ## Сохранить дамп БД в database_dump.sql (docker compose exec db mysqldump)
 	@echo "$(GREEN)→ Dumping database to database_dump.sql...$(RESET)"
