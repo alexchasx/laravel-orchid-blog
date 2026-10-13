@@ -18,7 +18,7 @@
   - стили — [`resources/sass/techlog/_components.scss`](resources/sass/techlog/_components.scss)
     (секция `Prose`) и при необходимости
     [`resources/sass/techlog/_responsive.scss`](resources/sass/techlog/_responsive.scss);
-  - документация — [`README.md`](README.md) (раздел «✨ Возможности из коробки»)
+  - документация — [`docs/features.md`](docs/features.md) (раздел «Публичная часть (Blade + Vite)»)
     и [`AGENTS.md`](AGENTS.md) (раздел Gotchas).
 - **Ключевые правила:**
   - кнопки навешиваются на `.prose pre`, поэтому фича автоматически работает
@@ -147,8 +147,8 @@
 
 ## 6. Документация
 
-- [ ] [`README.md`](README.md:9), раздел «✨ Возможности из коробки» → «Публичная
-  часть (Blade + Vite)»: добавить пункт о кнопке «Копировать» у блоков кода
+- [ ] [`docs/features.md`](docs/features.md), раздел «Публичная часть (Blade + Vite)»:
+  добавить пункт о кнопке «Копировать» у блоков кода
   (клиентская реализация, фолбэк буфера, без зависимостей).
 - [ ] [`AGENTS.md`](AGENTS.md), раздел Gotchas: короткая заметка о том, что
   копирование кода — чисто клиентское (в `resources/js/techlog.js`), бэкенд и

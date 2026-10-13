@@ -271,7 +271,7 @@
 
 ## 17. Документация и README
 
-17.1. Обновить [`README.md`](../README.md):
+17.1. Обновить [`docs/features.md`](../docs/features.md):
 - раздел «✨ Возможности "из коробки"» — добавить согласия 152-ФЗ;
 - раздел «чего пока нет» — убрать/дополнить упоминания;
 - инструкция по настройке `.env` (новые переменные оператора).
@@ -282,7 +282,7 @@
 
 17.4. Обновить [`prompts/pivacy_policy_promt.md`](../prompts/pivacy_policy_promt.md) или пометить его как выполненный, когда реализация завершена.
 
-> **Статус (план-consents-pdn.md):** п. 17 выполнен — `README.md`, `docs/architecture.md`, `AGENTS.md` обновлены в рамках аудита (полиморфная схема, согласие при подписке, отзыв для подписчиков).
+> **Статус (план-consents-pdn.md):** п. 17 выполнен — `docs/features.md`, `docs/architecture.md`, `AGENTS.md` обновлены в рамках аудита (полиморфная схема, согласие при подписке, отзыв для подписчиков).
 
 ---
 
@@ -328,7 +328,7 @@
 | изменить | [`resources/views/includes/comments_form.blade.php`](../resources/views/includes/comments_form.blade.php) |
 | изменить | [`.env.example`](../.env.example) |
 | изменить | [`tests/Feature/CommentTest.php`](../tests/Feature/CommentTest.php) |
-| изменить | [`README.md`](../README.md), [`docs/architecture.md`](../docs/architecture.md), [`AGENTS.md`](../AGENTS.md) |
+| изменить | [`docs/features.md`](../docs/features.md), [`docs/architecture.md`](../docs/architecture.md), [`AGENTS.md`](../AGENTS.md) |
 | опционально | `database/migrations/...`, [`routes/console.php`](../routes/console.php) — фоновая команда отзывов |
 
 ---

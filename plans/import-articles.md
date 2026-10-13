@@ -132,7 +132,7 @@ import-articles: ## Импортировать статьи из _import_article
 
 ### 4.5. Документация (опционально)
 
-Краткое описание в `README.md` (раздел про команды/возможности) или в `docs/public-template-plan.md` — только после согласования, так как это dev-инструмент, а не публичная фича шаблона.
+Краткое описание в `docs/features.md` (раздел «Импорт статей из Markdown») или в `docs/public-template-plan.md` — только после согласования, так как это dev-инструмент, а не публичная фича шаблона.
 
 ## 5. Затрагиваемые файлы
 
@@ -142,7 +142,7 @@ import-articles: ## Импортировать статьи из _import_article
 | `app/Console/Commands/ImportArticles.php` | создать |
 | `Makefile` | дополнить целью `import-articles` |
 | `tests/Feature/ImportArticlesCommandTest.php` | создать |
-| `README.md` / `docs/*` | опционально |
+| `docs/features.md` | опционально |
 
 ## 6. Ручная проверка
 

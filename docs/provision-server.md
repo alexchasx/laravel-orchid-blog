@@ -18,7 +18,7 @@
 
 Запуск: `sudo bash provision-server.sh --user deploy --ssh-key "ssh-ed25519 AAAA... your@host" --with-fail2ban --with-unattended`. В конце выводит сводку и предупреждает о необходимости reboot при обновлении ядра.
 
-### 2. [`README.md`](README.md:285) — новый раздел «🚀 Деплой на продакшн (Ubuntu 24.04 VPS)»
+### 2. [`docs/deployment.md`](docs/deployment.md) — раздел «🚀 Деплой на продакшн (Ubuntu 24.04 VPS)»
 
 Алгоритм из 7 шагов:
 - **Шаг 1.** Подготовка сервера скриптом (таблица шагов + флаги);

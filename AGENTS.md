@@ -4,7 +4,7 @@
 
 Ключевые функции блога: лента статей по рубрикам/тегам с поиском и оглавлением, гостевые комментарии с математической капчей, форма обратной связи, подписка на новые статьи с рассылкой по email, автопубликация запланированных статей.
 
-Архитектура приложения задокументирована в [`docs/architecture.md`](docs/architecture.md); список работающих «из коробки» возможностей — в [`README.md`](README.md) (раздел «✨ Возможности "из коробки"»); план подготовки публичного шаблона — [`docs/public-template-plan.md`](docs/public-template-plan.md) (рабочий документ, удаляется после завершения секций 6–12).
+Архитектура приложения задокументирована в [`docs/architecture.md`](docs/architecture.md); список работающих «из коробки» возможностей — в [`docs/features.md`](docs/features.md); план подготовки публичного шаблона — [`docs/public-template-plan.md`](docs/public-template-plan.md) (рабочий документ, удаляется после завершения секций 6–12).
 
 ## Статус репозитория
 
@@ -12,7 +12,7 @@
 
 - Никаких личных данных, ключей и паролей в репозитории: `.env.example` содержит только плейсхолдеры, `APP_KEY`/`DB_*` пустые, lock-файлы (`composer.lock`, `package-lock.json`) не коммитятся.
 - Миграции только создают структуру; стартовое наполнение — в `database/seeders/`.
-- Фичи, заявленные в README как работающие «из коробки», должны реально работать; если меняешь поведение — обнови README и этот файл.
+- Фичи, заявленные в `docs/features.md` как работающие «из коробки», должны реально работать; если меняешь поведение — обнови `docs/features.md` и этот файл.
 - Держи код, конфиги и документацию переносимыми: без привязки к конкретному сайту, домену, почте или соцсетям — всё через `config/my_config.php` и `.env`.
 
 ## Язык
@@ -36,7 +36,7 @@ UI-тексты, комментарии в коде и вся документа
 - `make test` — `php artisan test` **внутри `blog_app`**; `make test-coverage` — c HTML-отчётом в `tests/coverage`
 - `make lint` — только `php -l` по `app database routes` (нет phpstan и Pint)
 - `make ide-helper` — `ide:model` + `ide:optimize` для автодополнения в IDE
-- [`provision-server.sh`](provision-server.sh) — разовая подготовка Ubuntu 24.04 LTS (VDS/VPS) к первому деплою: Docker Engine + Compose plugin, пользователь деплоя с SSH-ключом, ужесточение sshd, ufw (22/80/443), swap, таймзона, опционально fail2ban/autoupgrade; алгоритм деплоя — в [`README.md`](README.md), раздел «Деплой на продакшн (Ubuntu 24.04 VPS)»
+- [`provision-server.sh`](provision-server.sh) — разовая подготовка Ubuntu 24.04 LTS (VDS/VPS) к первому деплою: Docker Engine + Compose plugin, пользователь деплоя с SSH-ключом, ужесточение sshd, ufw (22/80/443), swap, таймзона, опционально fail2ban/autoupgrade; алгоритм деплоя — в [`docs/deployment.md`](docs/deployment.md)
 
 Контейнеры (`blog_*`): `nginx`, `app`, `node`, **`schedule`** (`php artisan schedule:work` — автопубликация статей), **`queue`** (`php artisan queue:work` — обработка очереди писем рассылки), `mailhog`, `db` (MySQL 8.0), `phpmyadmin`.
 

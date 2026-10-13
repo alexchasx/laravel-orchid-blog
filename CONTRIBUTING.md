@@ -99,4 +99,4 @@ make lint   # php -l для всех .php в app, database, routes (внутри
 
 - `Makefile` — полный список команд (`make help`)
 - `docs/architecture.md` — детальная архитектура проекта
-- `README.md` — установка и общая информация
+- `README.md` — обзор и быстрый старт; `docs/installation.md` — установка

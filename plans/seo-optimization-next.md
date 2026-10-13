@@ -3,7 +3,7 @@
 > Статус: черновик для согласования.
 > Этап 1 (базовый SEO) реализован и задокументирован — см. исторический план
 > [`plans/seo-optimization.md`](plans/seo-optimization.md) и раздел «SEO» в
-> [`README.md`](README.md). Этот план описывает **следующий шаг**: устранение
+> [`docs/features.md`](docs/features.md). Этот план описывает **следующий шаг**: устранение
 > пробелов, найденных при аудите фактического кода. Все тексты на русском,
 > без привязки к доменам и личным данным (правила публичного шаблона).
 
@@ -131,7 +131,7 @@ flowchart TD
 - [`tests/Feature/SeoMetaTest.php`](tests/Feature/SeoMetaTest.php): 12 тестов — `og:image`/`twitter:image` абсолютный URL (содержит `APP_URL`); `og:url` совпадает с canonical на поиске (`/?search=...`) и на статье; 6 тестов на `noindex` для служебных страниц (поиск, пагинация, `/notpublic`, `/unsubscribe`, `/consent/revoke`); 12 тестов на `noindex` для страниц ошибок (`/test-400`…`/test-504`); проверка отсутствия JSON-LD на error-страницах; 3 теста на `App\Support\Seo::absoluteUrl()`.
 - [`tests/Feature/FeedTest.php`](tests/Feature/FeedTest.php): 15 тестов — валидный XML, RSS 2.0, channel metadata, atom:link, порядок по убыванию, лимит 20, description приоритет, enclosure, кэширование, ссылка в `<head>`.
 - [`tests/Feature/SitemapTest.php`](tests/Feature/SitemapTest.php): `<image:url>` содержит абсолютный URL (`APP_URL`).
-- [`README.md`](README.md): раздел «SEO из коробки» обновлён — RSS-лента, noindex на ошибках, абсолютные URL в OG/Twitter/JSON-LD/sitemap, политика страниц согласий, favicon.
+- [`docs/features.md`](docs/features.md): раздел «SEO» обновлён — RSS-лента, noindex на ошибках, абсолютные URL в OG/Twitter/JSON-LD/sitemap, политика страниц согласий, favicon.
 - [`AGENTS.md`](AGENTS.md): gotcha про абсолютные URL в мета/JSON-LD/sitemap, RSS, noindex на страницах ошибок.
 - [`docs/architecture.md`](docs/architecture.md): `FeedController` (раздел 17.4), `App\Support\Seo`, `SitemapController` (17.5), `RobotsController` (17.6), перенумерация секций 17.7–17.10.
 - Ручная валидация (вне CI): Google Rich Results Test, PageSpeed Insights, валидатор Schema.org.

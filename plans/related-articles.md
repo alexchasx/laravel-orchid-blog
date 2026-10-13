@@ -130,7 +130,7 @@ $relatedArticles = $this->service->getRelated($article);
 
 ## 9. Документация
 
-- [ ] `README.md`: добавить строку о блоке «Похожие статьи» в раздел «✨ Возможности из коробки».
+- [ ] `docs/features.md`: добавить строку о блоке «Похожие статьи» в раздел «Публичная часть (Blade + Vite)».
 - [ ] `docs/architecture.md`: описать метод `ArticleService::getRelated()` и партиал `includes/related_articles.blade.php`.
 
 ## 10. Проверка

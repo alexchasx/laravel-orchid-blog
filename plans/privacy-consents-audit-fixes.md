@@ -184,7 +184,7 @@
 ## 4. Документация
 
 - Обновить [`AGENTS.md`](../AGENTS.md) (gotcha про согласия: полиморфная схема, согласие при подписке).
-- Обновить [`README.md`](../README.md) при изменении поведения.
+- Обновить [`docs/features.md`](../docs/features.md) при изменении поведения.
 - Обновить [`docs/architecture.md`](../docs/architecture.md) (модель `ConsentLog`, полиморф).
 - Обновить [`docs/plan-consents-pdn.md`](../docs/plan-consents-pdn.md) или пометить выполненным.
 
