@@ -74,7 +74,7 @@ ssh deploy@SERVER
 cd /opt/blog
 ```
 
-> Что исключается и почему: `.git` (иначе `deploy.sh` попытается сделать `git pull`), `vendor/`, `node_modules/`, `public/build` (собираются внутри образа — multi-stage [`../docker/app/Dockerfile.prod`](../docker/app/Dockerfile.prod)), `storage/` (runtime-данные живут в volume `app_storage`), `docker/.env.prod` (создаётся на сервере на Шаге 4 и переживает обновления — `--delete` исключённые файлы не трогает), `.env*`, dev-артефакты (`tests`, `docs`, `plans`, `prompts`, `screenshots`). Шаблон `docker/env.prod.example` копируется — из него на сервере создаётся `docker/.env.prod`.
+> Что исключается и почему: `.git` (иначе `deploy.sh` попытается сделать `git pull`), `vendor/`, `node_modules/`, `public/build` (собираются внутри образа — multi-stage [`../docker/app/Dockerfile.prod`](../docker/app/Dockerfile.prod)), `storage/` (runtime-данные живут в volume `app_storage`), `bootstrap/cache/` (скомпилированные манифесты пакетов с dev-only провайдерами `laravel-lang` — ломают загрузку приложения; манифест генерирует `Dockerfile.prod` через `package:discover`), `docker/.env.prod` (создаётся на сервере на Шаге 4 и переживает обновления — `--delete` исключённые файлы не трогает), `.env*`, dev-артефакты (`tests`, `docs`, `plans`, `prompts`, `screenshots`). Шаблон `docker/env.prod.example` копируется — из него на сервере создаётся `docker/.env.prod`.
 
 **Вариант A — хостовый reverse proxy (рекомендуется).** nginx на хосте терминирует TLS и проксирует на контейнер.
 

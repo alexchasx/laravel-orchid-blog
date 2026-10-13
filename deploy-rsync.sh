@@ -41,6 +41,11 @@ EXCLUDES=(
   --exclude 'vendor'
   --exclude 'node_modules'
   --exclude 'storage'
+  # Скомпилированные кэши Laravel (bootstrap/cache/packages.php и services.php)
+  # содержат dev-only провайдеры (laravel-lang) — на сервере они не нужны и
+  # ломают загрузку приложения («Class "LaravelLang\Config\ServiceProvider" not
+  # found»). Зеркало .dockerignore; манифест генерирует Dockerfile.prod.
+  --exclude 'bootstrap/cache'
   --exclude 'docker/.env.prod'
   --exclude 'docker/tmp'
   --exclude '.env'

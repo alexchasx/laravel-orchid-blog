@@ -117,6 +117,16 @@ fi
 log "docker compose up -d --build"
 "${COMPOSE[@]}" up -d --build
 
+# ---------- 3.5. Проверка манифеста пакетов ----------------------------------
+# Страховка от рецидива «Class "LaravelLang\Config\ServiceProvider" not found»:
+# dev-провайдеры (laravel-lang) не должны попасть в прод-манифест bootstrap/cache
+# (см. .dockerignore и Dockerfile.prod). Если попали — приложение не загрузится
+# вообще, поэтому падаем с понятной ошибкой, а не с пустым healthcheck.
+log "Проверка bootstrap/cache/packages.php (dev-провайдеры LaravelLang)"
+if "${COMPOSE[@]}" exec -T app sh -c "grep -q 'LaravelLang' /var/www/bootstrap/cache/packages.php 2>/dev/null"; then
+  die "в манифесте bootstrap/cache/packages.php остались dev-провайдеры (LaravelLang). Пересоберите образ без кэша: ${COMPOSE[*]} build --no-cache app && ${COMPOSE[*]} up -d"
+fi
+
 # ---------- 4. Миграции ------------------------------------------------------
 
 if [ "$DO_MIGRATE" -eq 1 ]; then
