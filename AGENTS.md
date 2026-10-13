@@ -37,6 +37,7 @@ UI-тексты, комментарии в коде и вся документа
 - `make lint` — только `php -l` по `app database routes` (нет phpstan и Pint)
 - `make ide-helper` — `ide:model` + `ide:optimize` для автодополнения в IDE
 - [`provision-server.sh`](provision-server.sh) — разовая подготовка Ubuntu 24.04 LTS (VDS/VPS) к первому деплою: Docker Engine + Compose plugin, пользователь деплоя с SSH-ключом, ужесточение sshd, ufw (22/80/443), swap, таймзона, опционально fail2ban/autoupgrade; алгоритм деплоя — в [`docs/deployment.md`](docs/deployment.md)
+- [`setup-tls.sh`](setup-tls.sh) — настройка TLS (Шаг 3 [`docs/deployment.md`](docs/deployment.md), Вариант A): ставит nginx + certbot, добавляет `NGINX_PORTS=127.0.0.1:8080:80` в `docker/.env.prod`, создаёт хостовый reverse proxy и выпускает сертификат Let's Encrypt
 
 Контейнеры (`blog_*`): `nginx`, `app`, `node`, **`schedule`** (`php artisan schedule:work` — автопубликация статей), **`queue`** (`php artisan queue:work` — обработка очереди писем рассылки), `mailhog`, `db` (MySQL 8.0), `phpmyadmin`.
 

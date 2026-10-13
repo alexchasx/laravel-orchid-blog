@@ -42,12 +42,37 @@ sudo bash provision-server.sh \
 - `A`-запись домена (и `www`, если используется) на IP сервера — дождаться пропагации.
 - Для рассылки и формы обратной связи — почтовые записи `MX`, `SPF` (`TXT`), `DKIM`, `DMARC`, иначе письма попадают в спам.
 
-## Шаг 3. TLS
+## Шаг 3. Клонирование репозитория и TLS
 
-**Вариант A — хостовый reverse proxy (рекомендуется).** nginx на хосте терминирует TLS и проксирует на контейнер:
+Скрипту [`../setup-tls.sh`](../setup-tls.sh) нужен проект на сервере (он вносит изменения в `docker/.env.prod`), поэтому сначала клонируем репозиторий:
+
+```bash
+# войти на сервер под пользователем деплоя
+sudo mkdir -p /opt/blog
+sudo chown "$USER":"$USER" /opt/blog
+git clone git@github.com:alexchasx/laravel-orchid-blog.git /opt/blog
+cd /opt/blog
+```
+
+**Вариант A — хостовый reverse proxy (рекомендуется).** nginx на хосте терминирует TLS и проксирует на контейнер.
+
+Всё делает скрипт [`../setup-tls.sh`](../setup-tls.sh):
+
+```bash
+sudo bash setup-tls.sh --domain example.com --email admin@example.com --www
+```
+
+Скрипт (идемпотентен, повторный запуск безопасен):
+
+1. ставит `nginx`, `certbot`, `python3-certbot-nginx`;
+2. вносит изменения в проект: добавляет `NGINX_PORTS=127.0.0.1:8080:80` в `docker/.env.prod` — порт 80 контейнера привязывается к loopback, освобождая порт 80 для хостового nginx (файл в `.gitignore`, поэтому `git pull --ff-only` в [`../deploy.sh`](../deploy.sh) не конфликтует);
+3. создаёт `/etc/nginx/sites-available/blog` (`server_name` + `proxy_pass http://127.0.0.1:8080`) и включает сайт;
+4. выпускает сертификат Let's Encrypt (`certbot --nginx`, автообновление через systemd-timer).
+
+Вручную (если скрипт не подходит):
 
 1. Установить: `apt-get install nginx certbot python3-certbot-nginx`.
-2. Освободить порт 80 для хостового nginx — в [`../docker/docker-compose.prod.yml`](../docker/docker-compose.prod.yml:36) заменить `ports: ["80:80"]` на `ports: ["127.0.0.1:8080:80"]`.
+2. Освободить порт 80 для хостового nginx — задать `NGINX_PORTS=127.0.0.1:8080:80` в `docker/.env.prod` (по умолчанию в [`../docker/docker-compose.prod.yml`](../docker/docker-compose.prod.yml:36) — `80:80`).
 3. Конфиг `/etc/nginx/sites-available/blog` (затем `ln -s` в `sites-enabled` и `nginx -t && systemctl reload nginx`):
 
 ```nginx
@@ -75,13 +100,9 @@ server {
 ## Шаг 4. Первый деплой
 
 ```bash
-# войти на сервер под пользователем деплоя
-sudo mkdir -p /opt/blog
-sudo chown "$USER":"$USER" /opt/blog
-git clone git@github.com:alexchasx/laravel-orchid-blog.git /opt/blog
 cd /opt/blog
 
-make prod-env            # docker/env.prod.example → docker/.env.prod (права 600)
+make prod-env            # docker/env.prod.example → docker/.env.prod (права 600; если файл уже создан setup-tls.sh — пропустится)
 nano docker/.env.prod    # заполнить: APP_URL, DB_*, MAIL_*, OPERATOR_*, SEO_*, CONTACT_EMAIL...
 
 # APP_KEY генерируется НА ХОСТЕ и вписывается в docker/.env.prod:

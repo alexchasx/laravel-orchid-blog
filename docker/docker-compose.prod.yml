@@ -33,7 +33,10 @@ services:
       - app_storage:/var/www/storage:ro
       - ./nginx/conf.d/:/etc/nginx/conf.d
     ports:
-      - "80:80"
+      # Порт nginx. По умолчанию 80:80; при хостовом reverse proxy
+      # (setup-tls.sh, Вариант A) в docker/.env.prod задаётся
+      # NGINX_PORTS=127.0.0.1:8080:80 — порт 80 остаётся хостовому nginx.
+      - "${NGINX_PORTS:-80:80}"
     depends_on:
       app:
         condition: service_healthy
