@@ -84,8 +84,10 @@ if [ "$DO_BACKUP" -eq 1 ]; then
   # заданы в docker-compose.prod.yml (environment) и доступны внутри контейнера.
   if [ -n "$("${COMPOSE[@]}" ps --status running -q db 2>/dev/null || true)" ]; then
     log "Бэкап БД → $BACKUP_DIR/db_$STAMP.sql.gz"
+    # --no-tablespaces: у MYSQL_USER (не root) нет глобальной привилегии PROCESS,
+    # а mysqldump в MySQL 8.0 по умолчанию пытается снять дамп tablespaces.
     "${COMPOSE[@]}" exec -T db sh -c \
-      'exec mysqldump --single-transaction --quick -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE"' \
+      'exec mysqldump --single-transaction --quick --no-tablespaces -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE"' \
       | gzip > "$BACKUP_DIR/db_$STAMP.sql.gz"
   else
     warn "контейнер db не запущен — бэкап БД пропущен."

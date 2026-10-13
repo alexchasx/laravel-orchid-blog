@@ -256,7 +256,7 @@ prod-optimize: prod-check-env ## Кэш конфигов и представле
 .PHONY: prod-backup
 prod-backup: prod-check-env ## Бэкап БД и storage в /var/backups/blog (ротация 14 дней)
 	@mkdir -p /var/backups/blog
-	@$(COMPOSE_PROD) exec -T db sh -c 'exec mysqldump --single-transaction --quick -u"$$MYSQL_USER" -p"$$MYSQL_PASSWORD" "$$MYSQL_DATABASE"' | gzip > /var/backups/blog/db_$$(date +%F_%H-%M).sql.gz
+	@$(COMPOSE_PROD) exec -T db sh -c 'exec mysqldump --single-transaction --quick --no-tablespaces -u"$$MYSQL_USER" -p"$$MYSQL_PASSWORD" "$$MYSQL_DATABASE"' | gzip > /var/backups/blog/db_$$(date +%F_%H-%M).sql.gz
 	@find /var/backups/blog -name 'db_*.sql.gz' -mtime +14 -delete
 	@echo "$(GREEN)→ Бэкап БД готов: /var/backups/blog/db_$$(ls /var/backups/blog | grep '^db_' | tail -1)$(RESET)"
 

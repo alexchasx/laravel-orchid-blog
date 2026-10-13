@@ -155,7 +155,7 @@ services:
   # db — MySQL 8.0
   # ---------------------------------------------------------------------------
   db:
-    image: mysql:8.0
+    image: mysql:8.0.36
     restart: unless-stopped
     env_file:
       - .env.prod

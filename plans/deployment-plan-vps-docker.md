@@ -207,7 +207,7 @@ protected $proxies = '*'; // или: protected $proxies = env('TRUSTED_PROXIES',
 ```bash
 # /etc/cron.d/blog-backup
 30 3 * * * root cd /opt/blog && \
-  docker compose exec -T db mysqldump -u"$DB_USER" -p"$DB_PASSWORD" "$DB_DATABASE" \
+  docker compose exec -T db mysqldump --no-tablespaces -u"$DB_USER" -p"$DB_PASSWORD" "$DB_DATABASE" \
   | gzip > /var/backups/blog/db_$(date +\%F).sql.gz && \
   find /var/backups/blog -name 'db_*.sql.gz' -mtime +14 -delete
 ```
