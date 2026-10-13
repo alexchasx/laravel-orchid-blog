@@ -67,6 +67,12 @@ RUN mkdir -p /var/www/bootstrap/cache \
       /var/www/storage/framework/views \
       /var/www/storage/logs
 
+# Страховка от скомпилированных кэшей Laravel, попавших в контекст сборки
+# (bootstrap/cache исключён в .dockerignore). Устаревший packages.php с dev-only
+# провайдерами (laravel-lang) ломает загрузку приложения ДО запуска artisan —
+# тогда падает даже `php artisan package:discover`, а образ уезжает сломанным.
+RUN rm -f /var/www/bootstrap/cache/*.php
+
 # Продакшн-зависимости без dev и без пост-скриптов (контроль порядка ниже)
 RUN composer install \
       --no-dev \
@@ -79,11 +85,11 @@ RUN composer install \
 # Собранные Vite-ассеты из стадии node_builder
 COPY --from=node_builder /tmp/build/public/build /var/www/public/build
 
-# Кэш автообнаружения пакетов + симлинк публичного диска (best-effort).
-# Если не удастся на сборке — bootstrap/cache доступен www-data на запись,
-# Laravel сгенерирует манифест при первом запросе.
-RUN php artisan package:discover --no-ansi || true && \
-    php artisan storage:link --no-ansi || true && \
+# Кэш автообнаружения пакетов — обязателен: если манифест не собрался, образ
+# сломан (приложение не загрузится). Симлинк публичного диска — best-effort:
+# при неудаче Laravel обойдётся, а bootstrap/cache доступен www-data на запись.
+RUN php artisan package:discover --no-ansi && \
+    (php artisan storage:link --no-ansi || true) && \
     chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache && \
     chmod -R ug+rwx /var/www/storage /var/www/bootstrap/cache
 

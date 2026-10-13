@@ -28,6 +28,13 @@ node_modules
 # public/build собирается стадией node_builder, public/storage создаёт
 # `php artisan storage:link` на этапе сборки)
 storage
+
+# Скомпилированные кэши Laravel (bootstrap/cache/packages.php и services.php).
+# В dev-окружении в манифест попадают dev-only провайдеры (laravel-lang), а в
+# прод-образ зависимости ставятся с --no-dev: устаревший манифест ломает загрузку
+# приложения ещё до artisan («Class "LaravelLang\Config\ServiceProvider" not
+# found»). Каталог создаётся в Dockerfile.prod и наполняется `package:discover`.
+bootstrap/cache
 docker/tmp
 public/build
 public/hot
