@@ -25,6 +25,7 @@ use League\CommonMark\GithubFlavoredMarkdownConverter;
  * @property string $content_raw
  * @property string|null $content_html
  * @property bool $is_published
+ * @property bool $is_scheduled
  * @property \Illuminate\Support\Carbon|null $published_at
  * @property string|null $image
  * @property int|null $viewed Кол-во просмотров
@@ -112,6 +113,15 @@ class Article extends Model
 
                 $article->slug = $slug;
             }
+
+            // Автоустановка is_scheduled:
+            // true — только когда статья не опубликована, но дата выхода ещё не наступила
+            // (значит, ждёт автопубликации). Если дата уже прошла или статья опубликована — false.
+            if ($article->wasChanged('is_published') || $article->wasChanged('published_at')) {
+                $article->is_scheduled = ! $article->is_published
+                    && $article->published_at !== null
+                    && $article->published_at->isFuture();
+            }
         });
     }
 
@@ -126,6 +136,7 @@ class Article extends Model
         // массово не назначается (защита от прямой инъекции HTML из запроса).
         'content_raw',
         'is_published',
+        'is_scheduled',
         'published_at',
         'updated_at',
         'viewed',
@@ -135,6 +146,7 @@ class Article extends Model
 
     protected $casts = [
         'is_published' => 'boolean',
+        'is_scheduled' => 'boolean',
         'published_at' => 'datetime',
     ];
 

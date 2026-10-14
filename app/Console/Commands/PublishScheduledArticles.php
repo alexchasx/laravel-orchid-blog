@@ -29,13 +29,14 @@ class PublishScheduledArticles extends Command
         $count = 0;
 
         Article::query()
-            ->where('is_published', false)
+            ->where('is_scheduled', true)
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now())
             ->orderBy('published_at')
             ->each(function (Article $article) use (&$count) {
                 // Сохранение триггерит ArticleObserver::updated -> рассылка подписчикам.
                 $article->is_published = true;
+                $article->is_scheduled = false;
                 $article->save();
 
                 $count++;

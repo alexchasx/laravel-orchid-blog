@@ -28,6 +28,7 @@ class PublishScheduledArticlesTest extends TestCase
             'rubric_id' => $rubric->id,
             'user_id' => $user->id,
             'is_published' => false,
+            'is_scheduled' => true,
             'published_at' => now(),
         ], $attributes));
     }
