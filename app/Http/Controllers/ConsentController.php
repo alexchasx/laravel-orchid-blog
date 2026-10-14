@@ -32,7 +32,7 @@ class ConsentController extends Controller
     {
         $result = $builder->processingText();
 
-        $effectiveDate = config('consent.effective_date', '26 сентября 2026 г.');
+        $effectiveDate = config('consent.effective_date', '13 октября 2026 г.');
 
         return view('consent.processing', [
             'title'         => 'Согласие на обработку персональных данных',
@@ -56,7 +56,7 @@ class ConsentController extends Controller
             'conditions'   => '',
         ]);
 
-        $effectiveDate = config('consent.effective_date', '26 сентября 2026 г.');
+        $effectiveDate = config('consent.effective_date', '13 октября 2026 г.');
 
         return view('consent.distribution', [
             'title'         => 'Согласие на распространение персональных данных',

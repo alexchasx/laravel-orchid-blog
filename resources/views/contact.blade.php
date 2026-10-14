@@ -13,11 +13,8 @@
                 @if(config('my_config.contact_email'))
                     <a href="mailto:{{ config('my_config.contact_email') }}">{{ config('my_config.contact_email') }}</a>
                 @endif
-
-                @if(config('my_config.my_github'))
-                    <a href="{{ config('my_config.my_github') }}" target="_blank" rel="noopener">{{ preg_replace('#^https?://#', '', config('my_config.my_github')) }}</a>
-                @endif
             </div>
+            <br />
         @endif
     </div>
 

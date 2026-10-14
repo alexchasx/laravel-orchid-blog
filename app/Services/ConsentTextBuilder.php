@@ -37,7 +37,7 @@ class ConsentTextBuilder
         $siteUrl      = $operator['site_url'] ?? '';
         $days         = Config::get('consent.revocation_days', 7);
         $contactUrl   = route('contact');
-        $effectiveDate = Config::get('consent.effective_date', '26 сентября 2026 г.');
+        $effectiveDate = Config::get('consent.effective_date', '13 октября 2026 г.');
 
         $purpose  = $data['subject_purpose'] ?? 'модерация и идентификация комментариев';
         $name     = $data['subject_name'] ?? '[ФИО субъекта]';
@@ -124,7 +124,7 @@ TEXT;
         $stopDays     = Config::get('consent.distribution.stop_days', 3);
         $privacyUrl   = route('privacy');
         $contactUrl   = route('contact');
-        $effectiveDate = Config::get('consent.effective_date', '26 сентября 2026 г.');
+        $effectiveDate = Config::get('consent.effective_date', '13 октября 2026 г.');
         $addr         = $operator['address'] ?? '[Адрес оператора]';
 
         $subjectName = $data['subject_name'] ?? '[Имя субъекта]';

@@ -129,11 +129,11 @@
 ### 2.4. Дата вступления в силу — в конфиг ✅
 - **Где:** [`ConsentTextBuilder::CONSENT_EFFECTIVE_DATE`](../app/Services/ConsentTextBuilder.php:26)
   и дважды в [`privacy.blade.php`](../resources/views/privacy.blade.php:36).
-- **Что делать:** добавить `config/consent.php` → `effective_date` (например, `'26 сентября 2026 г.'`),
+- **Что делать:** добавить `config/consent.php` → `effective_date` (например, `'13 октября 2026 г.'`),
   читать из конфига; в `privacy.blade.php` заменить хардкод на `config('consent.effective_date')`.
 - **Статус:** `config/consent.php` уже содержит `effective_date`; `ConsentTextBuilder` и `ConsentController`
   читают из конфига с fallback; **строка 488 `privacy.blade.php` исправлена** — теперь использует
-  `config('consent.effective_date', '26 сентября 2026 г.')`.
+  `config('consent.effective_date', '13 октября 2026 г.')`.
 
 ---
 
