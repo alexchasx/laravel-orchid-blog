@@ -23,7 +23,6 @@
                 </div>
 
                 <label class="newsletter-consent">
-                    <br />
                     <input type="checkbox" name="consent_processing" value="1"
                         id="newsletter-consent" class="consent-checkbox" required>
                     <span>Я даю согласие на обработку персональных данных

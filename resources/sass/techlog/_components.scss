@@ -11,6 +11,7 @@
     z-index: 50;
     top: 0;
     width: 100%;
+    // width: 80%;
     background: color-mix(in srgb, var(--bg) 84%, transparent);
     backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--line);
@@ -228,7 +229,7 @@
         align-items: center;
         gap: 0 8px;
         color: var(--muted);
-        white-space: nowrap;
+        // white-space: nowrap;
 
         &:not(:last-child)::after {
             content: "";
@@ -815,6 +816,13 @@
         color: var(--muted);
     }
 
+    .comment-id {
+        font: 500 var(--fs-xs) "JetBrains Mono", monospace;
+        color: var(--muted);
+        opacity: 0.5;
+        margin-left: auto;
+    }
+
     .comment-text {
         color: var(--muted);
         font-size: var(--fs-base);
@@ -843,7 +851,7 @@
 }
 
 .comment-form-wrap {
-    margin-top: 70px;
+    // margin-top: 70px;
     max-width: 760px;
 
     .section-head {
@@ -990,7 +998,8 @@
 
 .to-top {
     position: fixed;
-    right: 25px;
+    // right: 25px;
+    right: 16px;
     bottom: 25px;
     z-index: 20;
     width: 42px;
@@ -1199,15 +1208,19 @@
 .modal-card {
     position: relative;
     width: 100%;
-    max-width: 440px;
+    // max-width: 440px;
+    max-width: 360px;
     padding: 44px 32px 30px;
     text-align: center;
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
-    transform: translateY(14px) scale(.98);
+    // transform: translateY(14px) scale(.98);
     transition: transform .25s ease;
+    @media (max-width: 480px) {
+        right: 30px;
+    }
 
     .modal.is-open & {
         transform: translateY(0) scale(1);

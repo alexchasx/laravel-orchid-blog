@@ -31,3 +31,4 @@ yarn-error.log
 /docker/tmp
 docker/tmp/
 database_dump*.sql
+*.sql.gz

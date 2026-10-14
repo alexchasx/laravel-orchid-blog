@@ -63,10 +63,6 @@
         min-height: auto;
     }
 
-    .hero-visual {
-        margin-top: 30px;
-    }
-
     .about,
     .contact {
         grid-template-columns: 1fr;
@@ -127,9 +123,9 @@
         font-size: clamp(2rem, 8.5vw, 2.35rem);
     }
 
-    .section {
-        padding: 65px 0;
-    }
+    // .section {
+    //     padding: 65px 0;
+    // }
 
     .input-row {
         flex-direction: column;
