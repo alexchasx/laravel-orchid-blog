@@ -273,6 +273,21 @@ db-restore: ## Восстановить БД из database_dump.sql (разру�
 	$(COMPOSE) exec -T db mysql -u"root" -p"root" "laraorchid" < database_dump.sql
 	@echo "$(GREEN)  Database restored from database_dump.sql$(RESET)"
 
+.PHONY: db-import
+db-import: ## Импортировать .sql.gz дамп в БД (первый аргумент — путь к файлу)
+	@if [ -z "$(FILE)" ]; then \
+		echo "$(RED)→ Укажите путь к файлу: make db-import FILE=path/to/dump.sql.gz$(RESET)"; \
+		exit 1; \
+	fi
+	@if [ ! -f "$(FILE)" ]; then \
+		echo "$(RED)→ Файл не найден: $(FILE)$(RESET)"; \
+		exit 1; \
+	fi
+	@echo "$(GREEN)→ Importing $(FILE) into database...$(RESET)"
+	$(COMPOSE) cp $(FILE) db:/tmp/$(notdir $(FILE))
+	$(COMPOSE) exec -T db sh -c "gunzip -c /tmp/$(notdir $(FILE)) | mysql -u root -proot laraorchid"
+	@echo "$(GREEN)  Database imported from $(FILE)$(RESET)"
+
 .PHONY: prod-deploy
 prod-deploy: prod-check-env ## Полный деплой: бэкап + git pull + сборка + миграции + кэш (./deploy.sh)
 	@bash deploy.sh
