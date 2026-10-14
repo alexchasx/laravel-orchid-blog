@@ -37,12 +37,16 @@
 }
 
 .input-row {
-    display: flex;
-    gap: 10px;
+    // display: flex;
+    // gap: 10px;
 
-    input {
-        flex: 1;
+    button {
+        margin: 16px 0px;
     }
+
+    // input {
+    //     flex: 1;
+    // }
 }
 
 .form-message {

@@ -49,7 +49,8 @@
                     id="contact-consent-processing" class="consent-checkbox" required
                     {{ old('consent_processing') ? 'checked' : '' }}>
                 <span>Я даю согласие на обработку персональных данных
-                    в соответствии с <a href="{{ route('consent.processing') }}" target="_blank" rel="noopener" class="consent-link">Согласием об обработке персональных данных</a>.
+                    в соответствии с <a href="{{ route('consent.processing') }}" target="_blank" rel="noopener" class="consent-link">Согласием об обработке персональных данных</a>
+                    и <a href="{{ route('privacy') }}" target="_blank" rel="noopener" class="consent-link">Политикой конфиденциальности</a>.
                 </span>
                 @error('consent_processing')
                     <span class="comment-error">{{ $message }}</span>
