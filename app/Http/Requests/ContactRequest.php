@@ -27,6 +27,7 @@ class ContactRequest extends FormRequest
             'name' => ['required', 'string', 'min:2', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'message' => ['required', 'string', 'min:10', 'max:5000'],
+            'consent_processing' => ['required', 'accepted'],
         ];
     }
 
@@ -40,6 +41,8 @@ class ContactRequest extends FormRequest
             'message.required' => 'Поле "Сообщение" обязательно.',
             'message.min' => 'Сообщение должно содержать не менее 10 символов.',
             'message.max' => 'Сообщение не должно превышать 5000 символов.',
+            'consent_processing.required' => 'Чтобы отправить сообщение, подтвердите согласие на обработку персональных данных.',
+            'consent_processing.accepted' => 'Чтобы отправить сообщение, подтвердите согласие на обработку персональных данных.',
         ];
     }
 }

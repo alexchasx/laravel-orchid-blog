@@ -34,10 +34,10 @@ class ProcessRevocations extends Command
         $deleteDays  = Config::get('consent.revocation_days', 7);
 
         // Только отозванные и ещё не обработанные согласия.
-        // Фильтруем по subject_type = comment, чтобы не трогать логи подписчиков.
+        // Фильтруем по subject_type = comment/contact, чтобы не трогать логи подписчиков.
         $revokedLogs = ConsentLog::whereNotNull('revoked_at')
             ->whereNull('processed_at')
-            ->where('subject_type', ConsentLog::SUBJECT_COMMENT)
+            ->whereIn('subject_type', [ConsentLog::SUBJECT_COMMENT, ConsentLog::SUBJECT_CONTACT])
             ->with('comment')
             ->get();
 
@@ -59,6 +59,21 @@ class ProcessRevocations extends Command
 
             if (!$dueAt || $dueAt->gt(now())) {
                 // Срок ещё не наступил — откладываем до следующего запуска.
+                continue;
+            }
+
+            // Обработка обращений.
+            if ($log->subject_type === ConsentLog::SUBJECT_CONTACT) {
+                $contact = \App\Models\Contact::find($log->subject_id);
+
+                if ($contact) {
+                    $contact->delete();
+                    $this->info("Обращение #{$contact->id} удалено.");
+                }
+
+                $log->update(['processed_at' => now()]);
+                $processed++;
+
                 continue;
             }
 

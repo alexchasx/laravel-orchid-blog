@@ -14,6 +14,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RevokeConsentRequest;
 use App\Models\Comment;
+use App\Models\Contact;
 use App\Models\ConsentLog;
 use App\Models\Subscriber;
 use App\Services\ConsentTextBuilder;
@@ -94,6 +95,11 @@ class ConsentController extends Controller
             return $this->revokeForSubscriber($email, $consentType);
         }
 
+        // Отзыв для обращения.
+        if ($subjectType === ConsentLog::SUBJECT_CONTACT) {
+            return $this->revokeForContact($request, $consentType);
+        }
+
         // Отзыв для комментария.
         $commentId  = $request->input('comment_id');
         /** @var \App\Models\Comment|null $comment */
@@ -153,6 +159,63 @@ class ConsentController extends Controller
         } else {
             $message = "Согласие на распространение ПДн отозвано. Распространение будет прекращено в течение {$stopDays} рабочих дней, обезличивание комментария — в течение {$deleteDays} рабочих дней.";
         }
+
+        session()->flash('success', $message);
+
+        return back();
+    }
+
+    /**
+     * Отзыв согласия для обращения.
+     */
+    private function revokeForContact(RevokeConsentRequest $request, string $consentType): RedirectResponse
+    {
+        // Для обращения доступен только тип «processing».
+        if ($consentType !== ConsentLog::TYPE_PROCESSING) {
+            return back()->with('error', 'Для обращения доступен только отзыв согласия на обработку ПДн.');
+        }
+
+        $contactId = $request->input('contact_id');
+        $email     = $request->input('email');
+
+        /** @var \App\Models\Contact|null $contact */
+        $contact = Contact::find($contactId);
+
+        if (!$contact) {
+            return back()->with('error', 'Обращение не найдено.');
+        }
+
+        // Проверяем e-mail — только владелец может отозвать согласие.
+        if (Str::lower($contact->email) !== Str::lower($email)) {
+            return back()->with('error', 'Указанный e-mail не соответствует владельцу обращения.');
+        }
+
+        // Находим активную запись согласия.
+        $log = ConsentLog::where('subject_type', ConsentLog::SUBJECT_CONTACT)
+            ->where('subject_id', $contact->id)
+            ->where('consent_type', ConsentLog::TYPE_PROCESSING)
+            ->active()
+            ->first();
+
+        if (!$log) {
+            return back()->with('error', 'Согласие уже отозвано или не найдено.');
+        }
+
+        // Выполняем отзыв в транзакции.
+        DB::transaction(function () use ($log, $contact) {
+            $log->revoke();
+
+            // Мгновенная обработка — фиксируем processed_at.
+            $log->processed_at = now();
+            $log->save();
+
+            // Отзыв согласия на обработку → удаление обращения.
+            $contact->delete();
+        });
+
+        $deleteDays = config('consent.revocation_days', 7);
+
+        $message = "Согласие на обработку ПДн отозвано. Обращение будет удалено в течение {$deleteDays} рабочих дней.";
 
         session()->flash('success', $message);
 

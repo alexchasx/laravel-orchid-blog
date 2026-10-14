@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Article;
 use App\Models\Comment;
+use App\Models\Contact;
 use App\Models\ConsentLog;
 use App\Models\Rubric;
 use App\Models\Subscriber;
@@ -523,6 +524,104 @@ class ConsentTest extends TestCase
             'subject_type' => ConsentLog::SUBJECT_SUBSCRIBER,
             'consent_type' => ConsentLog::TYPE_DISTRIBUTION,
             'email' => 'sub-dist@example.com',
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('error');
+    }
+
+    /**
+     * Тест 17: отзыв обработки для обращения → лог revoked_at + processed_at, contact удалён.
+     */
+    public function test_revoke_processing_consent_for_contact_deletes_contact(): void
+    {
+        $contact = Contact::create([
+            'name'  => 'Ольга Иванова',
+            'email' => 'olga@example.com',
+            'message' => 'Тестовое обращение.',
+        ]);
+
+        $log = ConsentLog::factory()->create([
+            'subject_type' => ConsentLog::SUBJECT_CONTACT,
+            'subject_id'   => $contact->id,
+            'comment_id'   => null,
+            'consent_type' => ConsentLog::TYPE_PROCESSING,
+        ]);
+
+        $response = $this->post(route('consent.revoke'), [
+            'subject_type' => ConsentLog::SUBJECT_CONTACT,
+            'contact_id'   => $contact->id,
+            'consent_type' => ConsentLog::TYPE_PROCESSING,
+            'email'        => 'olga@example.com',
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        // Лог помечен отозванным и обработанным.
+        $log->refresh();
+        $this->assertNotNull($log->revoked_at);
+        $this->assertNotNull($log->processed_at);
+
+        // Обращение удалено.
+        $this->assertDatabaseMissing('contacts', ['id' => $contact->id]);
+    }
+
+    /**
+     * Тест 18: отзыв чужим e-mail для обращения → отклонено.
+     */
+    public function test_revoke_contact_with_wrong_email_is_rejected(): void
+    {
+        $contact = Contact::create([
+            'name'  => 'Владелец',
+            'email' => 'owner@example.com',
+            'message' => 'Тест.',
+        ]);
+
+        ConsentLog::factory()->create([
+            'subject_type' => ConsentLog::SUBJECT_CONTACT,
+            'subject_id'   => $contact->id,
+            'comment_id'   => null,
+            'consent_type' => ConsentLog::TYPE_PROCESSING,
+        ]);
+
+        $response = $this->post(route('consent.revoke'), [
+            'subject_type' => ConsentLog::SUBJECT_CONTACT,
+            'contact_id'   => $contact->id,
+            'consent_type' => ConsentLog::TYPE_PROCESSING,
+            'email'        => 'hacker@example.com',
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('error');
+
+        // Обращение не удалено.
+        $this->assertDatabaseHas('contacts', ['id' => $contact->id]);
+    }
+
+    /**
+     * Тест 19: отзыв distribution для обращения → отклонено.
+     */
+    public function test_revoke_distribution_for_contact_is_rejected(): void
+    {
+        $contact = Contact::create([
+            'name'  => 'Тест',
+            'email' => 'test@example.com',
+            'message' => 'Тест.',
+        ]);
+
+        ConsentLog::factory()->create([
+            'subject_type' => ConsentLog::SUBJECT_CONTACT,
+            'subject_id'   => $contact->id,
+            'comment_id'   => null,
+            'consent_type' => ConsentLog::TYPE_PROCESSING,
+        ]);
+
+        $response = $this->post(route('consent.revoke'), [
+            'subject_type' => ConsentLog::SUBJECT_CONTACT,
+            'contact_id'   => $contact->id,
+            'consent_type' => ConsentLog::TYPE_DISTRIBUTION,
+            'email'        => 'test@example.com',
         ]);
 
         $response->assertRedirect();

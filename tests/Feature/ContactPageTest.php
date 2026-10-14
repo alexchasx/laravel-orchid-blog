@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Contact;
+use App\Models\ConsentLog;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -15,6 +16,7 @@ class ContactPageTest extends TestCase
         'name' => 'Алексей',
         'email' => 'alex@example.com',
         'message' => 'Хочу предложить тему для статьи.',
+        'consent_processing' => 1,
     ];
 
     public function test_contact_page_returns_ok(): void
@@ -80,5 +82,45 @@ class ContactPageTest extends TestCase
             'message',
             'read',
         ], $contact->getFillable());
+    }
+
+    public function test_store_without_consent_fails_validation(): void
+    {
+        $response = $this->post('/contact.store', [
+            'name' => 'Алексей',
+            'email' => 'alex@example.com',
+            'message' => 'Хочу предложить тему для статьи.',
+            // consent_processing не отмечен
+        ]);
+
+        $response->assertSessionHasErrors('consent_processing');
+        $this->assertDatabaseCount('contacts', 0);
+    }
+
+    public function test_store_with_consent_creates_consent_log(): void
+    {
+        $response = $this->post('/contact.store', self::VALID_DATA);
+
+        $response->assertRedirect();
+
+        $contact = Contact::where('email', 'alex@example.com')->first();
+        $this->assertNotNull($contact);
+
+        // Проверка consent_logs.
+        $this->assertDatabaseHas('consent_logs', [
+            'subject_type' => ConsentLog::SUBJECT_CONTACT,
+            'subject_id'   => $contact->id,
+            'consent_type' => ConsentLog::TYPE_PROCESSING,
+        ]);
+
+        $log = ConsentLog::where('subject_type', ConsentLog::SUBJECT_CONTACT)
+            ->where('subject_id', $contact->id)
+            ->first();
+
+        $this->assertNotNull($log);
+        $this->assertStringContainsString('127.0.0.1', $log->ip_address);
+        $this->assertNotNull($log->consented_at);
+        $this->assertNotNull($log->consent_text);
+        $this->assertEquals('1.0', $log->consent_version);
     }
 }

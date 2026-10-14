@@ -224,6 +224,17 @@
 
   // Contact form: отправка на backend
   const contactForm = document.querySelector('[data-contact-form]');
+  const contactSubmitBtn = contactForm?.querySelector('#contact-submit');
+  const contactConsent = contactForm?.querySelector('#contact-consent-processing');
+
+  function updateContactSubmitState() {
+    if (contactSubmitBtn && contactConsent) {
+      contactSubmitBtn.disabled = !contactConsent.checked;
+    }
+  }
+  contactConsent?.addEventListener('change', updateContactSubmitState);
+  updateContactSubmitState();
+
   contactForm?.addEventListener('submit', async e => {
     e.preventDefault();
 
@@ -280,9 +291,9 @@
       messageEl.classList.add('error');
     } finally {
       if (submitBtn) {
-        submitBtn.disabled = false;
         submitBtn.textContent = originalText;
       }
+      updateContactSubmitState();
     }
   });
 

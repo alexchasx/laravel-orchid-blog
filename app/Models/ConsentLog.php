@@ -55,6 +55,7 @@ class ConsentLog extends Model
 
     public const SUBJECT_COMMENT = 'comment';
     public const SUBJECT_SUBSCRIBER = 'subscriber';
+    public const SUBJECT_CONTACT = 'contact';
 
     protected $fillable = [
         'comment_id',
