@@ -15,6 +15,7 @@
                     <time class="comment-date" datetime="{{ $comment->created_at->toIso8601String() }}">
                         {{ \Carbon\Carbon::parse($comment->created_at)->locale('ru')->isoFormat('D MMM YYYY · HH:mm') }}
                     </time>
+                    <span class="comment-id">№{{ $comment->id }}</span>
                 </div>
 
                 <p class="comment-text">{{ $comment->content }}</p>

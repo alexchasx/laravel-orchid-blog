@@ -816,6 +816,13 @@
         color: var(--muted);
     }
 
+    .comment-id {
+        font: 500 var(--fs-xs) "JetBrains Mono", monospace;
+        color: var(--muted);
+        opacity: 0.5;
+        margin-left: auto;
+    }
+
     .comment-text {
         color: var(--muted);
         font-size: var(--fs-base);
