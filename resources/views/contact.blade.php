@@ -13,11 +13,8 @@
                 @if(config('my_config.contact_email'))
                     <a href="mailto:{{ config('my_config.contact_email') }}">{{ config('my_config.contact_email') }}</a>
                 @endif
-
-                @if(config('my_config.my_github'))
-                    <a href="{{ config('my_config.my_github') }}" target="_blank" rel="noopener">{{ preg_replace('#^https?://#', '', config('my_config.my_github')) }}</a>
-                @endif
             </div>
+            <br />
         @endif
     </div>
 
@@ -45,10 +42,22 @@
             <textarea id="message" name="message" rows="7" placeholder="Расскажите, чем можем помочь…" required minlength="10"></textarea>
         </label>
 
-        <p class="form-privacy">
-            Отправляя форму, вы соглашаетесь с <a href="{{ route('privacy') }}">Политикой конфиденциальности</a>.
-        </p>
-        <button class="button primary" type="submit">Отправить сообщение →</button>
+        {{-- Согласие на обработку ПДн (152-ФЗ) --}}
+        <div class="consent-checks">
+            <label>
+                <input type="checkbox" name="consent_processing" value="1"
+                    id="contact-consent-processing" class="consent-checkbox" required
+                    {{ old('consent_processing') ? 'checked' : '' }}>
+                <span>Я даю согласие на обработку персональных данных
+                    в соответствии с <a href="{{ route('consent.processing') }}" target="_blank" rel="noopener" class="consent-link">Согласием об обработке персональных данных</a>.
+                </span>
+                @error('consent_processing')
+                    <span class="comment-error">{{ $message }}</span>
+                @enderror
+            </label>
+        </div>
+
+        <button class="button primary" id="contact-submit" type="submit">Отправить сообщение →</button>
         <p class="form-message" aria-live="polite"></p>
     </form>
 </section>

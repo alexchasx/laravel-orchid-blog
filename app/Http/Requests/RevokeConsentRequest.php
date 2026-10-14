@@ -17,12 +17,17 @@ class RevokeConsentRequest extends FormRequest
             'email'       => 'required|email',
         ];
 
-        // subject_type: comment или subscriber.
-        $rules['subject_type'] = 'required|in:' . ConsentLog::SUBJECT_COMMENT . ',' . ConsentLog::SUBJECT_SUBSCRIBER;
+        // subject_type: comment, subscriber или contact.
+        $rules['subject_type'] = 'required|in:' . ConsentLog::SUBJECT_COMMENT . ',' . ConsentLog::SUBJECT_SUBSCRIBER . ',' . ConsentLog::SUBJECT_CONTACT;
 
         // comment_id обязателен только для комментариев.
         if ($this->input('subject_type') === ConsentLog::SUBJECT_COMMENT) {
             $rules['comment_id'] = 'required|integer|exists:comments,id';
+        }
+
+        // contact_id обязателен только для обращений.
+        if ($this->input('subject_type') === ConsentLog::SUBJECT_CONTACT) {
+            $rules['contact_id'] = 'required|integer|exists:contacts,id';
         }
 
         return $rules;
@@ -35,6 +40,7 @@ class RevokeConsentRequest extends FormRequest
     {
         return [
             'comment_id.exists'  => 'Комментарий не найден.',
+            'contact_id.exists'  => 'Обращение не найдено.',
             'consent_type.in'    => 'Некорректный тип согласия.',
             'email.required'     => 'Укажите e-mail.',
             'email.email'        => 'Некорректный формат e-mail.',
