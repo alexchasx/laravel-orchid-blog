@@ -32,3 +32,4 @@ yarn-error.log
 docker/tmp/
 database_dump*.sql
 *.sql.gz
+yandex_*.html
