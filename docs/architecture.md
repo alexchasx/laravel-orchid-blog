@@ -147,14 +147,15 @@ Laravel 13-стиль: ядро без `Http/Kernel.php`.
 
 ### `PlatformProvider`
 
-- **Меню** (`app/Orchid/PlatformProvider.php:44`): Главная, Обратная связь, Подписчики, Статьи, Рубрики, Метки, Комментарии, Пользователи, Роли — с бейджами-счётчиками (контакты, активные подписчики, статьи и т.д.).
+- **Меню** (`app/Orchid/PlatformProvider.php:44`): Главная, Обратная связь, Подписчики, Статьи, Корзина статей, Рубрики, Метки, Комментарии, Пользователи, Роли — с бейджами-счётчиками (контакты, активные подписчики, статьи, мягко удалённые).
 - **Права**: стандартные системные (`platform.systems.roles`, `platform.systems.users`) + кастомные (`platform.custom.articles`, `platform.custom.rubrics`, `platform.custom.comments`). Пункты меню ограничены через `->permission(...)`.
 
 ### Экраны
 
 | Экран | Что делает |
 |---|---|
-| `Screens/Article/ArticleListScreen` | Список статей (пагинация 24), модальные окна «Создать/Редактировать» на базе `CreateOrUpdateArticle`, async-загрузка статьи для редактирования, `updateOrCreate` + `sync` тегов |
+| `Screens/Article/ArticleListScreen` | Список статей (пагинация 24), модальные окна «Создать/Редактировать» на базе `CreateOrUpdateArticle`, async-загрузка статьи для редактирования, `updateOrCreate` + `sync` тегов, кнопка «Удалить» (мягкое удаление) |
+| `Screens/Article/ArticleTrashListScreen` | Корзина статей (`/nexus/articles/trash`): список мягко удалённых (`onlyTrashed`), действия «Восстановить» (`restore`) и «Удалить навсегда» (`forceDelete` с очисткой изображения и каскадным удалением комментариев) |
 | `Screens/Rubric/RubricListScreen` | Таблица рубрик, create/edit через модалки |
 | `Screens/Tag/TagListScreen` | Метки: `active`, `popular` (только просмотр), create/edit модалками |
 | `Screens/Comment/CommentListScreen` | Список комментариев со статусом модерации, ссылкой на статью |
@@ -165,7 +166,7 @@ Laravel 13-стиль: ядро без `Http/Kernel.php`.
 | `Screens/User/*`, `Screens/Role/*` | Стандартные экраны Orchid |
 | `Screens/Examples/*`, `PlatformScreen` | Демо-материал Orchid |
 
-Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRubric`, `CreateOrUpdateTag`, `ArticleListTable`, таблицы `User`/`Role`). Фильтры — `app/Orchid/Filters/RoleFilter`. Презентер — `app/Orchid/Presenters/UserPresenter`.
+Layout'ы — `app/Orchid/Layouts/` (`CreateOrUpdateArticle`, `CreateOrUpdateRubric`, `CreateOrUpdateTag`, `ArticleListTable`, `ArticleTrashTable`, таблицы `User`/`Role`). Фильтры — `app/Orchid/Filters/RoleFilter`. Презентер — `app/Orchid/Presenters/UserPresenter`.
 
 **Особенность async-модалок:** в `asyncGetArticle/asyncGetRubric/asyncGetTag` id сущности извлекается напрямую из query-строки (`parse_str(parse_url(...))`), т.к. при восстановлении состояния экрана он не попадает ни в `request()->query()`, ни в route-параметры.
 

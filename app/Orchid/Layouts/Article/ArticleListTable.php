@@ -4,6 +4,7 @@ namespace App\Orchid\Layouts\Article;
 
 use App\Models\Article;
 use App\Models\Rubric;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Layouts\Table;
@@ -58,7 +59,14 @@ class ArticleListTable extends Table
                     ])->icon('pencil');
             }),
 
-            // TD::make('delete', 'Удалить')->but,
+            TD::make('Удалить')
+                ->render(function (Article $article) {
+                    return Button::make('')
+                        ->icon('trash')
+                        ->method('remove')
+                        ->confirm('Удалить статью «' . $article->title . '»? Статья будет перемещена в корзину.')
+                        ->parameters(['article' => $article->id]);
+                }),
 
             TD::make('title', 'Заголовок'),
 
@@ -77,7 +85,7 @@ class ArticleListTable extends Table
 
             TD::make('rubric_title', 'Категория')->alignLeft()->render(
                 fn (Article $article) => $article->rubric?->title ?? '—'
-            )->width(200),
+            )->width(100),
 
             TD::make('published_at', 'Дата публикации')->render(
                 fn (Article $article) => $article->published_at?->format('d.m.Y') ?? ''

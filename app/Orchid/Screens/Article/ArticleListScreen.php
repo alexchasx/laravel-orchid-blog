@@ -7,6 +7,7 @@ use App\Models\Article;
 use App\Orchid\Layouts\Article\ArticleListTable;
 use App\Orchid\Layouts\CreateOrUpdateArticle;
 use App\Orchid\Layouts\Html;
+use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -166,6 +167,13 @@ class ArticleListScreen extends Screen
         }
 
         is_null($articleId) ? Toast::info('Статья создана') : Toast::info('Статья обновлена');
+    }
+
+    public function remove(Request $request): void
+    {
+        Article::findOrFail($request->integer('article'))->delete();
+
+        Toast::info('Статья перемещена в корзину.');
     }
 
     /**

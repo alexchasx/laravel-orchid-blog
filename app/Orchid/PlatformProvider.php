@@ -68,6 +68,14 @@ class PlatformProvider extends OrchidServiceProvider
                     return Article::count();
                 }),
 
+            Menu::make(__('Корзина статей'))
+                ->icon('bs.trash')
+                ->permission('platform.custom.articles')
+                ->route('platform.articles.trash')
+                ->badge(function () {
+                    return Article::onlyTrashed()->count();
+                }),
+
             Menu::make(__('Рубрики'))
                 ->icon('bs.list-ul')
                 ->permission('platform.custom.rubrics')

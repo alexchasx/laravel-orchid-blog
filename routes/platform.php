@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Orchid\Screens\Article\ArticleListScreen;
+use App\Orchid\Screens\Article\ArticleTrashListScreen;
 use App\Orchid\Screens\Comment\CommentListScreen;
 use App\Orchid\Screens\Comment\CommentScreen;
 use App\Orchid\Screens\Contact\ContactListScreen;
@@ -45,6 +46,9 @@ Route::screen('/main', PlatformScreen::class)
 
 Route::screen('/articles', ArticleListScreen::class)
     ->name('platform.articles');
+
+Route::screen('/articles/trash', ArticleTrashListScreen::class)
+    ->name('platform.articles.trash');
 
 Route::screen('contact/{id}', ContactScreen::class)
     ->name('platform.contact');
