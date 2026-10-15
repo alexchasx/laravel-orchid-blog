@@ -114,3 +114,7 @@ composer/npm install, `key:generate`, **`migrate:fresh --seed`**, создани
 ## 🤝 Вклад
 
 См. [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## 📄 Лицензия
+
+Проект распространяется под лицензией **MIT** — см. [LICENSE](LICENSE).
