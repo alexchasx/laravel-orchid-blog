@@ -49,4 +49,43 @@ class TagModelTest extends TestCase
 
         $this->assertFalse($tag->timestamps);
     }
+
+    public function test_creating_tag_without_description_gets_template_description(): void
+    {
+        $tag = Tag::create([
+            'title' => 'Laravel',
+            'active' => true,
+        ]);
+
+        $this->assertSame(
+            'Статьи по тегу «Laravel»: обзоры, гайды, примеры кода и не только',
+            $tag->description
+        );
+    }
+
+    public function test_creating_tag_with_custom_description_keeps_it(): void
+    {
+        $tag = Tag::create([
+            'title' => 'PHP',
+            'description' => 'Всё о PHP',
+            'active' => true,
+        ]);
+
+        $this->assertSame('Всё о PHP', $tag->description);
+    }
+
+    public function test_updating_tag_does_not_overwrite_description(): void
+    {
+        $tag = Tag::create([
+            'title' => 'Test',
+            'description' => 'Старое описание',
+            'active' => true,
+        ]);
+
+        $tag->title = 'Updated Title';
+        $tag->save();
+        $tag->refresh();
+
+        $this->assertSame('Старое описание', $tag->description);
+    }
 }

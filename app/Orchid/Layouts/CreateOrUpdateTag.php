@@ -34,7 +34,7 @@ class CreateOrUpdateTag extends Rows
             TextArea::make('tag.description')
                 ->title('Описание')
                 ->rows(3)
-                ->placeholder('Краткое описание метки — используется как meta description страницы метки'),
+                ->placeholder('Оставьте пустым — подставится шаблон: «Статьи по тегу …: обзоры, гайды, примеры кода и не только»'),
 
             // Input::make('tag.popular')->title('Популярность'),
 

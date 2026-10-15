@@ -61,6 +61,12 @@ class Tag extends Model
     protected static function booted(): void
     {
         static::saving(function (Tag $tag): void {
+            // Шаблонное описание подставляем только при создании и только если не задано вручную.
+            // См. также migration backfill: database/migrations/*_backfill_tag_descriptions.php.
+            if (! $tag->exists && empty($tag->description)) {
+                $tag->description = self::defaultDescription($tag->title);
+            }
+
             $wasDirty = $tag->isDirty('title');
 
             if (empty($tag->slug) || ($wasDirty && $tag->getOriginal('slug') === $tag->slug)) {
@@ -75,6 +81,14 @@ class Tag extends Model
                 $tag->slug = $slug;
             }
         });
+    }
+
+    /**
+     * Шаблонное описание метки (SEO: meta description страницы метки).
+     */
+    public static function defaultDescription(string $title): string
+    {
+        return sprintf('Статьи по тегу «%s»: обзоры, гайды, примеры кода и не только', $title);
     }
 
     public function articles(): BelongsToMany
