@@ -103,6 +103,7 @@ class RubricListScreen extends Screen
         $request->validate([
             'rubric.title' => ['required', 'min:3', 'max:254'],
             'rubric.description' => ['nullable', 'string', 'max:500'],
+            'rubric.slug' => ['nullable', 'string', 'max:254', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'],
         ]);
 
         $rubricId = $request->input('rubric.id');
@@ -111,6 +112,7 @@ class RubricListScreen extends Screen
         ], [
             'title' => $request->input('rubric.title'),
             'description' => $request->input('rubric.description'),
+            'slug' => $request->input('rubric.slug'),
         ]);
 
         is_null($rubricId) ? Toast::info('Рубрика создана') : Toast::info('Рубрика обновлена');

@@ -100,14 +100,18 @@ class TagListScreen extends Screen
         parse_str((string) parse_url((string) request()->getRequestUri(), PHP_URL_QUERY), $query);
         $tag = Tag::findOrFail((int) ($query['tag'] ?? 0));
 
-        return ['tag' => $tag];
+        // fresh() гарантирует, что данные читаются из БД, а не из кэша модели.
+        // Это исправляет проблему, когда после сохранения модалка подтягивала
+        // старое значение из внутреннего состояния Orchid.
+        return ['tag' => $tag->fresh()];
     }
 
     public function createOrUpdateTag(Request $request): void
     {
         $request->validate([
-            'tag.title' => ['required', 'min:3', 'max:254'],
+            'tag.title' => ['required', 'min:2', 'max:254'],
             'tag.description' => ['nullable', 'string', 'max:500'],
+            'tag.slug' => ['nullable', 'string', 'max:254', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'],
             'tag.popular' => ['min:0', 'numeric'],
             'tag.active' => ['required', 'boolean'],
         ]);
@@ -119,10 +123,11 @@ class TagListScreen extends Screen
         ], [
             'title' => $request->input('tag.title'),
             'description' => $request->input('tag.description'),
+            'slug' => $request->input('tag.slug'),
             'popular' => $request->input('tag.popular'),
             'active' => $request->boolean('tag.active'),
         ]);
 
-        is_null($tagId) ? Toast::info('Метка создана') : Toast::info('Метка обновлена');
+        Toast::info(is_null($tagId) ? 'Метка создана' : 'Метка обновлена');
     }
 }
