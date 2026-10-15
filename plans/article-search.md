@@ -28,7 +28,7 @@
     — `WebSite` + `SearchAction` уже указывает на `/?search=`.
 - **Куда встраиваем (конвенция проекта, см. AGENTS.md):**
   - форма поиска — [`resources/views/layouts/techlog.blade.php`](resources/views/layouts/techlog.blade.php)
-    (шапка, внутри `.nav-links`, рядом с выпадающим меню «Темы»);
+    (шапка, внутри `.nav-links`, рядом с выпадающим меню «Рубрики»);
   - состояние страницы результатов — [`resources/views/index.blade.php`](resources/views/index.blade.php);
   - стили — [`resources/sass/techlog/_components.scss`](resources/sass/techlog/_components.scss)
     и при необходимости [`_forms.scss`](resources/sass/techlog/_forms.scss) /

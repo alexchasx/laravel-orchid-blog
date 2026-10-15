@@ -7,6 +7,9 @@
     <div class="article-head reveal">
         <a class="back" href="{{ route('home') }}#articles">← Назад к статьям</a>
 
+        @if(Auth::user() && Auth::user()->isAdmin())
+            <small class="article-id">ID: {{ $article->id }}</small>
+        @endif
         <h1>{{ $article->title }}</h1>
 
             <p class="lead">{{ $article->excerpt }}</p>

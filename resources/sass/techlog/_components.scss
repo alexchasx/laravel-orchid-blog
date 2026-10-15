@@ -138,7 +138,7 @@
     display: none;
 }
 
-// Выпадающее меню «Темы» в хедере
+// Выпадающее меню «Рубрики» в хедере
 .nav-dropdown {
     position: relative;
     height: 76px;
@@ -553,6 +553,13 @@
 .article-head {
     max-width: 850px;
     margin-bottom: 32px;
+}
+
+.article-id {
+    display: block;
+    font: 400 var(--fs-xs) "JetBrains Mono";
+    color: var(--muted);
+    margin-bottom: 8px;
 }
 
 .article-head h1 {

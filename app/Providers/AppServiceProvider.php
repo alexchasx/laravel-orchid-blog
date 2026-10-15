@@ -45,7 +45,7 @@ class AppServiceProvider extends ServiceProvider
             return $user->hasAccess($value);
         });
 
-        // Рубрики с опубликованными статьями для выпадающего меню «Темы» в хедере.
+        // Рубрики с опубликованными статьями для выпадающего меню «Рубрики» в хедере.
         View::composer('layouts.techlog', RubricsComposer::class);
 
         // Хлебные крошки для публичных страниц.

@@ -136,7 +136,7 @@
             @if(($rubrics ?? collect())->isNotEmpty())
             <div class="nav-dropdown">
                 <button class="nav-dropdown-toggle" type="button" aria-expanded="false" aria-controls="nav-topics-menu">
-                    Темы <span class="nav-dropdown-caret" aria-hidden="true">▾</span>
+                    Рубрики <span class="nav-dropdown-caret" aria-hidden="true">▾</span>
                 </button>
                 <div class="nav-dropdown-menu" id="nav-topics-menu">
                     @foreach($rubrics as $navRubric)

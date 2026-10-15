@@ -53,7 +53,7 @@
   const savedTheme = localStorage.getItem('techlog-theme');
   if (savedTheme === 'light') root.classList.add('light');
 
-  // Выпадающее меню «Темы» в хедере
+  // Выпадающее меню «Рубрики» в хедере
   const dropdowns = document.querySelectorAll('.nav-dropdown');
 
   const closeDropdowns = () => {
